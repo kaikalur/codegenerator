@@ -174,10 +174,4 @@ public class OtherFilesGenCPP extends JavaCCGlobals implements JavaCCParserConst
    }
 
   static private java.io.PrintWriter ostr;
-
-  public static void reInit()
-  {
-    ostr = null;
-  }
-
 }

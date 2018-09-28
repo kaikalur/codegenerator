@@ -30,11 +30,10 @@
  */
 package org.javacc.java;
 
+import org.javacc.java.JavaFiles.JavaResourceTemplateLocations;
 import org.javacc.parser.JavaCCErrors;
 import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.JavaCCParserConstants;
-import org.javacc.parser.JavaFiles;
-import org.javacc.parser.JavaFiles.JavaResourceTemplateLocations;
 import org.javacc.parser.LexGen;
 import org.javacc.parser.MetaParseException;
 import org.javacc.parser.Options;

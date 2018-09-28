@@ -374,11 +374,6 @@ final class NodeFiles {
     ostr.println("};");
   }
 
-  public static void generateFile(OutputFile outputFile, String template, Map<String, Object> options) throws IOException
-  {
-    generateFile(outputFile, template, options, true);
-  }
-
   public static void generateFile(OutputFile outputFile, String template, Map<String, Object> options, boolean close) throws IOException
   {
     PrintWriter ostr = outputFile.getPrintWriter();

@@ -15,6 +15,7 @@
 
 package org.javacc.java;
 
+import org.javacc.parser.Options;
 
 /**
  * The {@link Types} class.
@@ -47,5 +48,9 @@ public abstract class Types {
       }
     }
     return retval;
+  }
+
+  public static String getTokenMgrErrorClass() {
+    return Options.isLegacyExceptionHandling() ? "TokenMgrError" : "TokenMgrException";
   }
 }

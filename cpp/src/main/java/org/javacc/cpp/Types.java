@@ -15,8 +15,6 @@
 
 package org.javacc.cpp;
 
-import org.javacc.parser.Options;
-
 /**
  * The {@link Types} class.
  */

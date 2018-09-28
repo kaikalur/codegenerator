@@ -133,12 +133,7 @@ public class CppCodeGenHelper extends CodeGenHelper {
     switchToMainFile();
   }
 
-  /**
-   * Generate annotation. @XX syntax for java, comments in C++
-   */
-  public void genAnnotation(String ann) {
-    genCode( "/*" + ann + "*/");
-  }
+  
 
   public void switchToStaticsFile() {
     outputBuffer = staticsBuffer;
@@ -189,5 +184,9 @@ public class CppCodeGenHelper extends CodeGenHelper {
         i++;
       }
     }
+  }
+
+  public String addUnicodeEscapes(String str) {
+    return str;
   }
 }

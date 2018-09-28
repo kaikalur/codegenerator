@@ -1,9 +1,8 @@
 
 package org.javacc.java;
 
+import org.javacc.java.JavaFiles.JavaResourceTemplateLocations;
 import org.javacc.parser.CodeGeneratorSettings;
-import org.javacc.parser.JavaFiles;
-import org.javacc.parser.JavaFiles.JavaResourceTemplateLocations;
 
 public class TokenCodeGenerator implements org.javacc.parser.TokenCodeGenerator {
 

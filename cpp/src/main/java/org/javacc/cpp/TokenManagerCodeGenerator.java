@@ -1314,12 +1314,6 @@ public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManager
     LexGenCPP.canReachOnMore = new boolean[LexGenCPP.maxLexStates];
   }
 
-  void AddCharToSkip(char c, int kind)
-  {
-    LexGenCPP.singlesToSkip[LexGenCPP.lexStateIndex].AddChar(c);
-    LexGenCPP.singlesToSkip[LexGenCPP.lexStateIndex].kind = kind;
-  }
-
   public void CheckEmptyStringMatch(TokenizerData tokenizerData)
   {
     int i, j, k, len;

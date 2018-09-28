@@ -43,6 +43,7 @@ import static org.javacc.parser.JavaCCGlobals.toolName;
 import static org.javacc.parser.JavaCCGlobals.toolNames;
 
 import org.javacc.cpp.CppCodeGenHelper;
+import org.javacc.cpp.Types;
 import org.javacc.parser.Action;
 import org.javacc.parser.CodeGenHelper;
 import org.javacc.parser.JavaCCErrors;
@@ -872,7 +873,7 @@ public class LexGenCPP extends CppCodeGenHelper implements JavaCCParserConstants
       genCodeLine(prefix + "   int error_line = input_stream.getEndLine();");
       genCodeLine(prefix + "   int error_column = input_stream.getEndColumn();");
       genCodeLine(prefix + "   String error_after = null;");
-      genCodeLine(prefix + "   " + Options.getBooleanType() + " EOFSeen = false;");
+      genCodeLine(prefix + "   " + Types.getBooleanType() + " EOFSeen = false;");
       genCodeLine(prefix + "   try { input_stream.readChar(); input_stream.backup(1); }");
       genCodeLine(prefix + "   catch (java.io.IOException e1) {");
       genCodeLine(prefix + "      EOFSeen = true;");

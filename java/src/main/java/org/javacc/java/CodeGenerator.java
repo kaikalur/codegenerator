@@ -1,9 +1,8 @@
 
 package org.javacc.java;
 
+import org.javacc.java.JavaFiles.JavaResourceTemplateLocations;
 import org.javacc.parser.CodeGeneratorSettings;
-import org.javacc.parser.JavaFiles;
-import org.javacc.parser.JavaFiles.JavaResourceTemplateLocations;
 import org.javacc.parser.Options;
 
 public class CodeGenerator implements org.javacc.parser.CodeGenerator {
