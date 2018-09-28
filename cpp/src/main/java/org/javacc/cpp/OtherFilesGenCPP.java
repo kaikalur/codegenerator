@@ -81,9 +81,9 @@ public class OtherFilesGenCPP extends JavaCCGlobals implements JavaCCParserConst
           printTokenSetup((cu_to_insertion_point_1.get(0)));
           for (int j = 0; j <= i; j++) {
             t = (cu_to_insertion_point_1.get(j));
-            printToken(t, ostr);
+            printToken(t, ostr, false);
           }
-          printTrailingComments(t, ostr);
+          printTrailingComments(t, ostr, false);
           ostr.println("");
           ostr.println("");
           break;

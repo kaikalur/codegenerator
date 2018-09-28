@@ -191,7 +191,7 @@ public class JavaFiles extends JavaCCGlobals implements JavaCCParserConstants
             cline = cu_to_insertion_point_1.get(0).beginLine;
             ccol = cu_to_insertion_point_1.get(0).beginColumn;
             for (int j = 0; j <= i; j++) {
-              printToken(cu_to_insertion_point_1.get(j), ostr);
+              printToken(cu_to_insertion_point_1.get(j), ostr, true);
             }
             ostr.println("");
             ostr.println("");
@@ -238,7 +238,7 @@ public class JavaFiles extends JavaCCGlobals implements JavaCCParserConstants
             cline = cu_to_insertion_point_1.get(0).beginLine;
             ccol = cu_to_insertion_point_1.get(0).beginColumn;
             for (int j = 0; j <= i; j++) {
-              printToken(cu_to_insertion_point_1.get(j), ostr);
+              printToken(cu_to_insertion_point_1.get(j), ostr, true);
             }
             ostr.println("");
             ostr.println("");
@@ -285,7 +285,7 @@ public class JavaFiles extends JavaCCGlobals implements JavaCCParserConstants
             cline = cu_to_insertion_point_1.get(0).beginLine;
             ccol = cu_to_insertion_point_1.get(0).beginColumn;
             for (int j = 0; j <= i; j++) {
-              printToken(cu_to_insertion_point_1.get(j), ostr);
+              printToken(cu_to_insertion_point_1.get(j), ostr, true);
             }
             ostr.println("");
             ostr.println("");
@@ -337,7 +337,7 @@ public class JavaFiles extends JavaCCGlobals implements JavaCCParserConstants
 	        cline = cu_to_insertion_point_1.get(0).beginLine;
 	        ccol = cu_to_insertion_point_1.get(0).beginColumn;
 	        for (int j = 0; j <= i; j++) {
-	          printToken(cu_to_insertion_point_1.get(j), ostr);
+	          printToken(cu_to_insertion_point_1.get(j), ostr, true);
 	        }
 	        ostr.println("");
 	        ostr.println("");
@@ -379,7 +379,7 @@ public class JavaFiles extends JavaCCGlobals implements JavaCCParserConstants
             cline = cu_to_insertion_point_1.get(0).beginLine;
             ccol = cu_to_insertion_point_1.get(0).beginColumn;
             for (int j = 0; j <= i; j++) {
-              printToken(cu_to_insertion_point_1.get(j), ostr);
+              printToken(cu_to_insertion_point_1.get(j), ostr, true);
             }
             ostr.println("");
             ostr.println("");
@@ -428,7 +428,7 @@ public class JavaFiles extends JavaCCGlobals implements JavaCCParserConstants
             cline = cu_to_insertion_point_1.get(0).beginLine;
             ccol = cu_to_insertion_point_1.get(0).beginColumn;
             for (int j = 0; j <= i; j++) {
-              printToken(cu_to_insertion_point_1.get(j), ostr);
+              printToken(cu_to_insertion_point_1.get(j), ostr, true);
             }
             ostr.println("");
             ostr.println("");
@@ -475,7 +475,7 @@ public class JavaFiles extends JavaCCGlobals implements JavaCCParserConstants
             cline = cu_to_insertion_point_1.get(0).beginLine;
             ccol = cu_to_insertion_point_1.get(0).beginColumn;
             for (int j = 0; j <= i; j++) {
-              printToken(cu_to_insertion_point_1.get(j), ostr);
+              printToken(cu_to_insertion_point_1.get(j), ostr, true);
             }
             ostr.println("");
             ostr.println("");
@@ -519,7 +519,7 @@ public class JavaFiles extends JavaCCGlobals implements JavaCCParserConstants
             cline = cu_to_insertion_point_1.get(0).beginLine;
             ccol = cu_to_insertion_point_1.get(0).beginColumn;
             for (int j = 0; j <= i; j++) {
-              printToken(cu_to_insertion_point_1.get(j), ostr);
+              printToken(cu_to_insertion_point_1.get(j), ostr, true);
             }
             ostr.println("");
             ostr.println("");

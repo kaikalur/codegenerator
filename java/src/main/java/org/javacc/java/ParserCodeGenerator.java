@@ -135,6 +135,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       codeGenerator.genCodeLine("/* " + getIdString(tn, cu_name + ".java") + " */");
 
       boolean implementsExists = false;
+      final boolean extendsExists = false;
 
       if (cu_to_insertion_point_1.size() != 0) {
         Object firstToken = cu_to_insertion_point_1.get(0);
@@ -1497,6 +1498,10 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     StringBuffer sig = new StringBuffer();
     String ret, params;
     Token t = null;
+    
+    String method_name = p.getLhs();
+    boolean void_ret = false;
+    boolean ptr_ret = false;
 
 //    codeGenerator.printTokenSetup(t); ccol = 1;
 //    String comment1 = codeGenerator.getLeadingComments(t);
@@ -1511,6 +1516,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       String s = CodeGenHelper.getStringToPrint(t);
       sig.append(t.toString());
       sig.append(" ");
+      if (t.kind == JavaCCParserConstants.VOID) void_ret = true;
+      if (t.kind == JavaCCParserConstants.STAR) ptr_ret = true;
     }
 
     String comment2 = "";
@@ -1537,6 +1544,66 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     return "";
   }
 
+  // Print method header and return the ERROR_RETURN string.
+  private String generateCPPMethodheader(BNFProduction p, Token t) {
+    StringBuffer sig = new StringBuffer();
+    String ret, params;
+
+    String method_name = p.getLhs();
+    boolean void_ret = false;
+    boolean ptr_ret = false;
+
+    codeGenerator.printTokenSetup(t); ccol = 1;
+    String comment1 = codeGenerator.getLeadingComments(t);
+    cline = t.beginLine;
+    ccol = t.beginColumn;
+    sig.append(t.image);
+    if (t.kind == JavaCCParserConstants.VOID) void_ret = true;
+    if (t.kind == JavaCCParserConstants.STAR) ptr_ret = true;
+
+    for (int i = 1; i < p.getReturnTypeTokens().size(); i++) {
+      t = p.getReturnTypeTokens().get(i);
+      sig.append(CodeGenHelper.getStringToPrint(t));
+      if (t.kind == JavaCCParserConstants.VOID) void_ret = true;
+      if (t.kind == JavaCCParserConstants.STAR) ptr_ret = true;
+    }
+
+    String comment2 = codeGenerator.getTrailingComments(t);
+    ret = sig.toString();
+
+    sig.setLength(0);
+    sig.append("(");
+    if (p.getParameterListTokens().size() != 0) {
+      codeGenerator.printTokenSetup(p.getParameterListTokens().get(0));
+      for (Iterator<Token> it = p.getParameterListTokens().iterator(); it.hasNext();) {
+        t = it.next();
+        sig.append(CodeGenHelper.getStringToPrint(t));
+      }
+      sig.append(codeGenerator.getTrailingComments(t));
+    }
+    sig.append(")");
+    params = sig.toString();
+
+    // For now, just ignore comments
+    codeGenerator.generateMethodDefHeader(ret, cu_name, p.getLhs()+params, sig.toString());
+
+    // Generate a default value for error return.
+    String default_return;
+    if (ptr_ret) default_return = "NULL";
+    else if (void_ret) default_return = "";
+    else default_return = "0";  // 0 converts to most (all?) basic types.
+
+    StringBuffer ret_val =
+        new StringBuffer("\n#if !defined ERROR_RET_" + method_name + "\n");
+    ret_val.append("#define ERROR_RET_" + method_name + " " +
+                   default_return + "\n");
+    ret_val.append("#endif\n");
+    ret_val.append("#define __ERROR_RET__ ERROR_RET_" + method_name + "\n");
+
+    return ret_val.toString();
+  }
+
+
   void genStackCheck(boolean voidReturn) {
     if (Options.getDepthLimit() > 0) {
       codeGenerator.genCodeLine("if(++jj_depth > " + Options.getDepthLimit() + ") {");
@@ -1561,7 +1628,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     if (t.kind == JavaCCParserConstants.VOID) {
       voidReturn = true;
     }
-
+    String error_ret = null;
     codeGenerator.printTokenSetup(t); ccol = 1;
     codeGenerator.printLeadingComments(t);
     codeGenerator.genCode("  " + staticOpt() + "final " +(p.getAccessMod() != null ? p.getAccessMod() : "public")+ " ");
@@ -1594,6 +1661,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     }
 
     codeGenerator.genCode(" {");
+
+    error_ret = null;
 
     genStackCheck(voidReturn);
 
