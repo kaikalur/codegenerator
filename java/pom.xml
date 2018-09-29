@@ -13,4 +13,5 @@
 
 	<name>JavaCC default java code generator</name>
 	<description>JavaCC default java code generator</description>
+	<groupId>org.javacc.codegen</groupId>
 </project>

@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.javacc</groupId>
+		<groupId>org</groupId>
 		<artifactId>javacc</artifactId>
 		<version>8.0.0</version>
 	</parent>
@@ -27,4 +27,5 @@
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
+	<groupId>org.javacc</groupId>
 </project>
