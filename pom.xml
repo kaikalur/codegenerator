@@ -4,13 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>net.java.dev</groupId>
+		<groupId>org.javacc</groupId>
 		<artifactId>javacc</artifactId>
 		<version>8.0.0</version>
 	</parent>
 
-	<groupId>net.java.dev.javacc</groupId>
-	<artifactId>codgen</artifactId>
+	<artifactId>codegen</artifactId>
 	<packaging>pom</packaging>
 
 	<name>JavaCC code generator</name>
@@ -23,9 +22,9 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>net.java.dev.javacc</groupId>
+			<groupId>org.javacc</groupId>
 			<artifactId>core</artifactId>
-			<version>8.0.0</version>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>
