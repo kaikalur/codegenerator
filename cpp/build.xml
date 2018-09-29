@@ -8,7 +8,7 @@ Copyright (c) 2017, Microsoft
 
 <project name="cppcodegenerator" default="jar" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
-	<property name="javacc-root" value="../../parser" />
+	<property name="javacc-root" value="../../core" />
 	<property name="java-src" value="src/main/java" />
 	<property name="resources-src" value="src/main/resources" />
 	<property name="target-folder" value="target" />
