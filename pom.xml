@@ -24,8 +24,11 @@
 		<dependency>
 			<groupId>org.javacc</groupId>
 			<artifactId>core</artifactId>
-			<version>${project.version}</version>
+			<version>${core}</version>
 		</dependency>
 	</dependencies>
 	<groupId>org.javacc</groupId>
+	<properties>
+		<core>8.0.0</core>
+	</properties>
 </project>
