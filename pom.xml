@@ -9,10 +9,15 @@
 		<version>8.0.0</version>
 	</parent>
 
+	<groupId>org.javacc</groupId>
 	<artifactId>codegen</artifactId>
 	<packaging>pom</packaging>
 
 	<name>JavaCC code generator</name>
+
+	<properties>
+		<core>8.0.0</core>
+	</properties>
 
 	<modules>
 		<module>cpp</module>
@@ -27,8 +32,4 @@
 			<version>${core}</version>
 		</dependency>
 	</dependencies>
-	<groupId>org.javacc</groupId>
-	<properties>
-		<core>8.0.0</core>
-	</properties>
 </project>
