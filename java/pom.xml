@@ -9,9 +9,9 @@
 		<version>8.0.0</version>
 	</parent>
 
+	<groupId>org.javacc.codegen</groupId>
 	<artifactId>java</artifactId>
 
 	<name>JavaCC default java code generator</name>
 	<description>JavaCC default java code generator</description>
-	<groupId>org.javacc.codegen</groupId>
 </project>
