@@ -109,7 +109,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       codeGenerator.genCodeLine(parserData.parserName + "Constants {");
       codeGenerator.genCodeLine(parserData.decls);
 
-       {
+      if (JavaCCGlobals.jjtreeGenerated)
+      {
         codeGenerator.genCodeLine("  JJT" + parserData.parserName + "State jjtree = new JJT" + parserData.parserName + "State();");
       }
 
