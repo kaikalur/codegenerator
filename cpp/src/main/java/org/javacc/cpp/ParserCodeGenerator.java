@@ -1360,7 +1360,6 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     if (Options.getDebugParser()) {
       codeGenerator.genCodeLine("    } catch(...) { }");
     }
-    codeGenerator.genCodeLine("assert(false);");
 
     if (error_ret != null) {
       codeGenerator.genCodeLine("\n#undef __ERROR_RET__\n");
