@@ -1360,7 +1360,6 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     if (Options.getDebugParser()) {
       codeGenerator.genCodeLine("    } catch(...) { }");
     }
-    codeGenerator.genCodeLine("assert(false);");
 
     if (error_ret != null) {
       codeGenerator.genCodeLine("\n#undef __ERROR_RET__\n");
@@ -1662,19 +1661,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
 
       if (seq instanceof RegularExpression)
       {
-          RegularExpression re = (RegularExpression)seq;
-          String jj_scan_token = "jj_scan_token";
-          if (re.label.equals("")) {
-              Object label = names_of_tokens.get(Integer.valueOf(re.ordinal));
-              if (label != null) {
-            	  jj_scan_token += "(" + (String)label + ")";
-              } else {
-            	  jj_scan_token += "(" + re.ordinal + ")";
-              }
-            } else {
-          	  jj_scan_token += "(" + re.label + ")";
-            }
-          internalNames.put(e, jj_scan_token);
+        internalNames.put(e, "jj_scan_token(" + ((RegularExpression)seq).ordinal + ")");
         return;
       }
 
@@ -2202,3 +2189,4 @@ class Phase3Data {
     count = c;
   }
 }
+
