@@ -25,12 +25,12 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.javacc.cpp.todo;
+package org.javacc.cpp.classic;
 
 /**
  * A Non-deterministic Finite Automaton.
  */
-public class Nfa
+class Nfa
 {
    public NfaState start;
    public NfaState end;

@@ -29,7 +29,7 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.javacc.cpp.todo;
+package org.javacc.cpp.classic;
 
 import org.javacc.cpp.Types;
 import org.javacc.parser.CodeGenHelper;

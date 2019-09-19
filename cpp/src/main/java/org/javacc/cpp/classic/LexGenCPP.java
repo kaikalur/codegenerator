@@ -29,7 +29,7 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.javacc.cpp.todo;
+package org.javacc.cpp.classic;
 
 import static org.javacc.parser.JavaCCGlobals.actForEof;
 import static org.javacc.parser.JavaCCGlobals.cu_name;
@@ -45,7 +45,6 @@ import static org.javacc.parser.JavaCCGlobals.toolNames;
 import org.javacc.cpp.CppCodeGenHelper;
 import org.javacc.cpp.Types;
 import org.javacc.parser.Action;
-import org.javacc.parser.CodeGenHelper;
 import org.javacc.parser.JavaCCErrors;
 import org.javacc.parser.JavaCCParserConstants;
 import org.javacc.parser.JavaFiles;
@@ -70,7 +69,7 @@ import java.util.Map;
 /**
  * Generate lexer.
  */
-public class LexGenCPP extends CppCodeGenHelper implements JavaCCParserConstants
+class LexGenCPP extends CppCodeGenHelper implements JavaCCParserConstants
 {  
   public static String staticString;
   public static String tokMgrClassName;
