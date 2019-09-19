@@ -1,5 +1,5 @@
 
-package org.javacc.cpp;
+package org.javacc.cpp.classic;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,24 +32,20 @@ import org.javacc.utils.OutputFileGenerator;
 
 import static org.javacc.parser.JavaCCGlobals.*;
 
-import org.javacc.cpp.todo.LexGenCPP;
-import org.javacc.cpp.todo.Nfa;
-import org.javacc.cpp.todo.NfaAdaptor;
-import org.javacc.cpp.todo.NfaState;
-import org.javacc.cpp.todo.RStringLiteralHelper;
+import org.javacc.cpp.CppCodeGenHelper;
+import org.javacc.cpp.Types;
 
 /**
  * Class that implements a table driven code generator for the token manager in
  * java.
  */
 public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGenerator {
+  
+  private final CodeGenHelper codeGenerator        = new CppCodeGenHelper();
 
   private String staticString;
   private String tokMgrClassName;
-  
-  private final CodeGenHelper codeGenerator   = new CppCodeGenHelper();
   private CodeGeneratorSettings settings;
-  
 
   @Override
   public void generateCode(CodeGeneratorSettings settings, TokenizerData tokenizerData) {
@@ -324,11 +320,11 @@ public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManager
 
   @Override
   public void finish(CodeGeneratorSettings settings, TokenizerData tokenizerData) {
-    if (!Options.getBuildTokenManager())
+    if (!Options.getBuildTokenManager()) {
       return;
-    // TODO :: CBA --  Require Unification of output language specific processing into a single Enum class
-    String fileName = Options.getOutputDirectory() + File.separator + cu_name + "TokenManager.cc";
-    codeGenerator.saveOutput(fileName);
+    }
+    String fileName = Options.getOutputDirectory() + File.separator + tokenizerData.parserName + "TokenManager.cc";
+    this.codeGenerator.saveOutput(fileName);
   }
 
   void PrintClassHead(TokenizerData tokenizerData)

@@ -1,5 +1,5 @@
 
-package org.javacc.cpp.todo;
+package org.javacc.cpp.classic;
 
 import org.javacc.parser.CharacterRange;
 import org.javacc.parser.JavaCCErrors;
@@ -20,7 +20,7 @@ import org.javacc.parser.SingleCharacter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NfaAdaptor {
+class NfaAdaptor {
 
   public static boolean transformed = false;
 
