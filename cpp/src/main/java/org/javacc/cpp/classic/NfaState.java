@@ -28,12 +28,11 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.javacc.cpp.todo;
+package org.javacc.cpp.classic;
 
 import org.javacc.cpp.Types;
 import org.javacc.parser.CodeGenHelper;
 import org.javacc.parser.JavaCCErrors;
-import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.Options;
 import org.javacc.parser.TokenizerData;
 
@@ -52,7 +51,7 @@ import java.util.Vector;
 /**
  * The state of a Non-deterministic Finite Automaton.
  */
-public class NfaState
+class NfaState
 {
    public static boolean unicodeWarningGiven = false;
    public static int generatedStates = 0;

@@ -2,6 +2,7 @@
 package org.javacc.cpp;
 
 import org.javacc.parser.CodeGeneratorSettings;
+import org.javacc.parser.TokenManagerCodeGenerator;
 import org.javacc.utils.OutputFileGenerator;
 
 public class CodeGenerator implements org.javacc.parser.CodeGenerator {
@@ -63,7 +64,7 @@ public class CodeGenerator implements org.javacc.parser.CodeGenerator {
    */
   @Override
   public TokenManagerCodeGenerator getTokenManagerCodeGenerator() {
-    return new TokenManagerCodeGenerator();
+    return new org.javacc.cpp.classic.TokenManagerCodeGenerator();
   }
 
   /**
