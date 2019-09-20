@@ -125,7 +125,11 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
           }
     }
 
-    codeGenerator.genCodeLine("#include \"" + cu_name + "Constants.h\"");
+    if (Options.getUserTokenManagerConstant().length() > 0) {
+    	codeGenerator.genCodeLine("#include \"" + Options.getUserTokenManagerConstant() +"\"");
+    } else {
+    	codeGenerator.genCodeLine("#include \"" + cu_name + "Constants.h\"");
+    }
 
     if (jjtreeGenerated) {
       codeGenerator.genCodeLine("#include \"JJT" + cu_name + "State.h\"");
@@ -411,7 +415,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     if (!Options.getStackLimit().equals("")) {
       codeGenerator.genCodeLine("    if (!jj_stack_error) {");
     }
-    codeGenerator.genCodeLine("    JJString image = kind >= 0 ? tokenImage[kind] : tokenImage[0];");
+    codeGenerator.genCodeLine("    JJString image = kind >= 0 ? " + getTokenImage() + "[kind] : " + getTokenImage() + "[0];");
     codeGenerator.genCodeLine("    errorHandler->handleUnexpectedToken(kind, image.substr(1, image.size() - 2), getToken(1), this);");
     if (!Options.getStackLimit().equals("")) {
       codeGenerator.genCodeLine("    }");
@@ -687,7 +691,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       codeGenerator.genCodeLine("  {");
       codeGenerator.genCodeLine("    if (trace_enabled()) {");
       codeGenerator.genCodeLine("      for (int i = 0; i < indent; i++) { printf(\" \"); }");
-      codeGenerator.genCodeLine("      printf(\"Consumed token: <kind: %d(%s), \\\"%s\\\"\", t->kind, addUnicodeEscapes(tokenImage[t->kind]).c_str(), addUnicodeEscapes(t->image).c_str());");
+      codeGenerator.genCodeLine("      printf(\"Consumed token: <kind: %d(%s), \\\"%s\\\"\", t->kind(), addUnicodeEscapes(" + getTokenImage() + "[t->kind()]).c_str(), addUnicodeEscapes(t->image()).c_str());");
       //codeGenerator.genCodeLine("      if (t->kind != 0 && !tokenImage[t->kind].equals(\"\\\"\" + t->image + \"\\\"\")) {");
       //codeGenerator.genCodeLine("        System.out.print(\": \\\"\" + t->image + \"\\\"\");");
       //codeGenerator.genCodeLine("      }");
@@ -701,11 +705,11 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       codeGenerator.genCodeLine("  {");
       codeGenerator.genCodeLine("    if (trace_enabled()) {");
       codeGenerator.genCodeLine("      for (int i = 0; i < indent; i++) { printf(\" \"); }");
-      codeGenerator.genCodeLine("      printf(\"Visited token: <Kind: %d(%s), \\\"%s\\\"\", t1->kind, addUnicodeEscapes(tokenImage[t1->kind]).c_str(), addUnicodeEscapes(t1->image).c_str());");
+      codeGenerator.genCodeLine("      printf(\"Visited token: <Kind: %d(%s), \\\"%s\\\"\", t1->kind(), addUnicodeEscapes(" + getTokenImage() + "[t1->kind()]).c_str(), addUnicodeEscapes(t1->image()).c_str());");
       //codeGenerator.genCodeLine("      if (t1->kind != 0 && !tokenImage[t1->kind].equals(\"\\\"\" + t1->image + \"\\\"\")) {");
       //codeGenerator.genCodeLine("        System.out.print(\": \\\"\" + t1->image + \"\\\"\");");
       //codeGenerator.genCodeLine("      }");
-      codeGenerator.genCodeLine("      printf(\" at line %d column %d>; Expected token: %s\\n\", t1->beginLine, t1->beginColumn, addUnicodeEscapes(tokenImage[t2]).c_str());");
+      codeGenerator.genCodeLine("      printf(\" at line %d column %d>; Expected token: %s\\n\", t1->beginLine(), t1->beginColumn(), addUnicodeEscapes(" + getTokenImage() + "[t2]).c_str());");
       codeGenerator.genCodeLine("    }");
       codeGenerator.genCodeLine("  }");
       codeGenerator.genCodeLine("");
@@ -1631,6 +1635,18 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     }
   }
 
+  private static String getUserTokenManagerConstantNamespace() {
+	  String namespace = "";
+      if (Options.getUserTokenManagerConstant().length() > 0 && Options.getUserTokenManagerConstantNamespace().length() > 0) {
+      	namespace += Options.getUserTokenManagerConstantNamespace() + "::";
+      }
+	  return namespace;
+  }
+  
+  private static String getTokenImage() {
+	  return getUserTokenManagerConstantNamespace() + "tokenImage";
+  }
+
   private void generate3R(Expansion e, Phase3Data inf)
   {
     Expansion seq = e;
@@ -1666,12 +1682,12 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
         if (re.label.equals("")) {
           Object label = names_of_tokens.get(Integer.valueOf(re.ordinal));
           if (label != null) {
-            jj_scan_token += "(" + (String)label + ")";
+            jj_scan_token += "(" + getUserTokenManagerConstantNamespace() + (String)label + ")";
           } else {
             jj_scan_token += "(" + re.ordinal + ")";
           }
         } else {
-          jj_scan_token += "(" + re.label + ")";
+          jj_scan_token += "(" + getUserTokenManagerConstantNamespace() + re.label + ")";
         }
         internalNames.put(e, jj_scan_token);
         return;
@@ -1786,12 +1802,12 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       if (e_nrw.label.equals("")) {
         Object label = names_of_tokens.get(Integer.valueOf(e_nrw.ordinal));
         if (label != null) {
-          codeGenerator.genCodeLine("    if (jj_scan_token(" + (String)label + ")) " + genReturn(true));
+          codeGenerator.genCodeLine("    if (jj_scan_token(" + getUserTokenManagerConstantNamespace() + (String)label + ")) " + genReturn(true));
         } else {
           codeGenerator.genCodeLine("    if (jj_scan_token(" + e_nrw.ordinal + ")) " + genReturn(true));
         }
       } else {
-        codeGenerator.genCodeLine("    if (jj_scan_token(" + e_nrw.label + ")) " + genReturn(true));
+        codeGenerator.genCodeLine("    if (jj_scan_token(" + getUserTokenManagerConstantNamespace() + e_nrw.label + ")) " + genReturn(true));
       }
       //codeGenerator.genCodeLine("    if (jj_la == 0 && jj_scanpos == jj_lastpos) " + genReturn(false));
     } else if (e instanceof NonTerminal) {
