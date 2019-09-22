@@ -1,5 +1,5 @@
-\#ifndef JAVACC_PARSE_EXCEPTION_H
-\#define JAVACC_PARSE_EXCEPTION_H
+\#ifndef JAVACC_${PARSER_NAME}_PARSE_EXCEPTION_H_
+\#define JAVACC_${PARSER_NAME}_PARSE_EXCEPTION_H_
 
 \#include "JavaCC.h"
 \#include "Token.h"

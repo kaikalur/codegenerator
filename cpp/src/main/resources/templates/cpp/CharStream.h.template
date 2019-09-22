@@ -1,5 +1,5 @@
-\#ifndef JAVACC_CHARSTREAM_H_
-\#define JAVACC_CHARSTREAM_H_
+\#ifndef JAVACC_${PARSER_NAME}_CHARSTREAM_H_
+\#define JAVACC_${PARSER_NAME}_CHARSTREAM_H_
 
 \#include "JavaCC.h"
 

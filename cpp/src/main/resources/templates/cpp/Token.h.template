@@ -1,5 +1,5 @@
-\#ifndef JAVACC_TOKEN_H
-\#define JAVACC_TOKEN_H
+\#ifndef JAVACC_${PARSER_NAME}_TOKEN_H_
+\#define JAVACC_${PARSER_NAME}_TOKEN_H_
 
 \#include "JavaCC.h"
 

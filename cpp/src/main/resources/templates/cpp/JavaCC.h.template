@@ -1,5 +1,5 @@
-\#ifndef JAVACC_JAVACC_H_
-\#define JAVACC_JAVACC_H_
+\#ifndef JAVACC_${PARSER_NAME}_JAVACC_H_
+\#define JAVACC_${PARSER_NAME}_JAVACC_H_
 
 \#include <string>
 \#include <memory>

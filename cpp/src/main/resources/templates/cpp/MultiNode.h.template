@@ -1,5 +1,5 @@
-\#ifndef JAVACC_${NODE_TYPE}_H
-\#define JAVACC_${NODE_TYPE}_H
+\#ifndef JAVACC_${PARSER_NAME}_${NODE_TYPE}_H_
+\#define JAVACC_${PARSER_NAME}_${NODE_TYPE}_H_
 
 \#include "JavaCC.h"
 
