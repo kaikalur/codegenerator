@@ -207,9 +207,10 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     codeGenerator.genCodeLine("  int           jj_gen;");
     codeGenerator.genCodeLine("  int           jj_la1[" + (maskindex + 1) + "];");
     codeGenerator.genCodeLine("  ErrorHandler *errorHandler = nullptr;");
-    codeGenerator.genCodeLine("  bool delete_eh = false;");
     codeGenerator.genCodeLine("");
     codeGenerator.genCodeLine("protected: ");
+    codeGenerator.genCodeLine("  bool          delete_eh     = false;");
+    codeGenerator.genCodeLine("  bool          delete_tokens = true;");
     codeGenerator.genCodeLine("  bool          hasError;");
     codeGenerator.genCodeLine("");
     int tokenMaskSize = (tokenCount-1)/32 + 1;
@@ -249,7 +250,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     codeGenerator.genCodeLine("  /** Constructor with user supplied TokenManager. */");
 
     codeGenerator.switchToIncludeFile(); // TEMP
-    codeGenerator.genCodeLine("  Token *head; ");
+    codeGenerator.genCodeLine("  Token        *head;");
+    codeGenerator.genCodeLine("");
     codeGenerator.genCodeLine("public: ");
     codeGenerator.generateMethodDefHeader(" ", cu_name, cu_name + "(TokenManager *tokenManager)");
     if (superClass != null)
@@ -319,7 +321,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     codeGenerator.genCodeLine("  //Since token manager was generate from outside,");
     codeGenerator.genCodeLine("  //parser should not take care of deleting");
     codeGenerator.genCodeLine("  //if (token_source) delete token_source;");
-    codeGenerator.genCodeLine("  if (head) {");
+    codeGenerator.genCodeLine("  if (delete_tokens && head) {");
     codeGenerator.genCodeLine("    Token *next, *t = head;");
     codeGenerator.genCodeLine("    while (t) {");
     codeGenerator.genCodeLine("      next = t->next;");
