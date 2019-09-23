@@ -26,6 +26,7 @@ namespace ${NAMESPACE_OPEN}
   Token::Token() :
   	beginLine(0), beginColumn(0), endLine(0), endColumn(0)
   {
+    this->kind = 0;
     this->next = nullptr;
     this->specialToken = nullptr;
   }
