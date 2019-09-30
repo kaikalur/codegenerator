@@ -567,7 +567,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       codeGenerator.generateMethodDefHeader("  virtual void ",  cu_name, "parseError()");
       codeGenerator.genCodeLine("   {");
       if (Options.getErrorReporting()) {
-        codeGenerator.genCodeLine("      fprintf(stderr, \"Parse error at: %d:%d, after token: %s encountered: %s\\n\", token->beginLine, token->beginColumn, addUnicodeEscapes(token->image).c_str(), addUnicodeEscapes(getToken(1)->image).c_str());");
+        codeGenerator.genCodeLine("      std::cerr << \"Parse error at : \" << token->beginLine << \":\" << token->beginColumn << \" after token: \" << addUnicodeEscapes(token->image) << \" encountered: \" << addUnicodeEscapes(getToken(1)->image) << std::endl;");
       }
       codeGenerator.genCodeLine("   }");
       /*generateMethodDefHeader("ParseException",  cu_name, "generateParseException()");
@@ -620,7 +620,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       codeGenerator.generateMethodDefHeader("virtual void ",  cu_name, "parseError()");
       codeGenerator.genCodeLine("   {");
       if (Options.getErrorReporting()) {
-        codeGenerator.genCodeLine("      fprintf(stderr, \"Parse error at: %d:%d, after token: %s encountered: %s\\n\", token->beginLine, token->beginColumn, addUnicodeEscapes(token->image).c_str(), addUnicodeEscapes(getToken(1)->image).c_str());");
+        codeGenerator.genCodeLine("      std::cerr << \"Parse error at : \" << token->beginLine << \":\" << token->beginColumn << \" after token: \" << addUnicodeEscapes(token->image) << \" encountered: \" << addUnicodeEscapes(getToken(1)->image)) << std::endl;");
       }
       codeGenerator.genCodeLine("   }");
       /*generateMethodDefHeader("ParseException",  cu_name, "generateParseException()");
@@ -670,8 +670,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       codeGenerator.generateMethodDefHeader("  void",  cu_name, "trace_call(const char *s)");
       codeGenerator.genCodeLine("  {");
       codeGenerator.genCodeLine("    if (trace_enabled()) {");
-      codeGenerator.genCodeLine("      for (int i = 0; i < indent; i++) { printf(\" \"); }");
-      codeGenerator.genCodeLine("      printf(\"Call:   %s\\n\", s);");
+      codeGenerator.genCodeLine("      for (int i = 0; i < indent; i++) { std::clog << \" \"; }");
+      codeGenerator.genCodeLine("      std::clog << \"Call:   \" << *s << std::endl;");
       codeGenerator.genCodeLine("    }");
       codeGenerator.genCodeLine("    indent = indent + 2;");
       codeGenerator.genCodeLine("  }");
@@ -682,8 +682,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       codeGenerator.genCodeLine("  {");
       codeGenerator.genCodeLine("    indent = indent - 2;");
       codeGenerator.genCodeLine("    if (trace_enabled()) {");
-      codeGenerator.genCodeLine("      for (int i = 0; i < indent; i++) { printf(\" \"); }");
-      codeGenerator.genCodeLine("      printf(\"Return: %s\\n\", s);");
+      codeGenerator.genCodeLine("      for (int i = 0; i < indent; i++) { std::clog << \" \"; }");
+      codeGenerator.genCodeLine("      std::clog << \"Return: \" << *s << std::endl;");
       codeGenerator.genCodeLine("    }");
       codeGenerator.genCodeLine("  }");
       codeGenerator.genCodeLine("");
@@ -692,12 +692,13 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       codeGenerator.generateMethodDefHeader("  void",  cu_name, "trace_token(Token *t, const char *where)");
       codeGenerator.genCodeLine("  {");
       codeGenerator.genCodeLine("    if (trace_enabled()) {");
-      codeGenerator.genCodeLine("      for (int i = 0; i < indent; i++) { printf(\" \"); }");
-      codeGenerator.genCodeLine("      printf(\"Consumed token: <kind: %d(%s), \\\"%s\\\"\", t->kind(), addUnicodeEscapes(" + getTokenImage() + "[t->kind()]).c_str(), addUnicodeEscapes(t->image()).c_str());");
+      codeGenerator.genCodeLine("      for (int i = 0; i < indent; i++) { std::clog << \" \"; }");
+      codeGenerator.genCodeLine("      std::clog << \"Consumed token: <kind: \" << t->kind << \"(\" << addUnicodeEscapes(tokenImage[t->kind]) << \"), \" << addUnicodeEscapes(t->image);");
       //codeGenerator.genCodeLine("      if (t->kind != 0 && !tokenImage[t->kind].equals(\"\\\"\" + t->image + \"\\\"\")) {");
       //codeGenerator.genCodeLine("        System.out.print(\": \\\"\" + t->image + \"\\\"\");");
       //codeGenerator.genCodeLine("      }");
-      codeGenerator.genCodeLine("      printf(\" at line %d column %d> %s\\n\", t->beginLine, t->beginColumn, where);");
+      codeGenerator.genCodeLine("      std::clog << \" at line \" << t->beginLine << \" column \" << t->beginColumn << *where << std::endl;");
+
       codeGenerator.genCodeLine("    }");
       codeGenerator.genCodeLine("  }");
       codeGenerator.genCodeLine("");
@@ -706,12 +707,13 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       codeGenerator.generateMethodDefHeader("  void",  cu_name, "trace_scan(Token *t1, int t2)");
       codeGenerator.genCodeLine("  {");
       codeGenerator.genCodeLine("    if (trace_enabled()) {");
-      codeGenerator.genCodeLine("      for (int i = 0; i < indent; i++) { printf(\" \"); }");
-      codeGenerator.genCodeLine("      printf(\"Visited token: <Kind: %d(%s), \\\"%s\\\"\", t1->kind(), addUnicodeEscapes(" + getTokenImage() + "[t1->kind()]).c_str(), addUnicodeEscapes(t1->image()).c_str());");
+      codeGenerator.genCodeLine("      for (int i = 0; i < indent; i++) { std::clog << \" \"; }");
+      codeGenerator.genCodeLine("      std::clog << \"Visited token: <Kind: \" << t1->kind << \"(\" << addUnicodeEscapes(tokenImage[t1->kind]) << \"), \" << addUnicodeEscapes(t1->image);");
+
       //codeGenerator.genCodeLine("      if (t1->kind != 0 && !tokenImage[t1->kind].equals(\"\\\"\" + t1->image + \"\\\"\")) {");
       //codeGenerator.genCodeLine("        System.out.print(\": \\\"\" + t1->image + \"\\\"\");");
       //codeGenerator.genCodeLine("      }");
-      codeGenerator.genCodeLine("      printf(\" at line %d column %d>; Expected token: %s\\n\", t1->beginLine(), t1->beginColumn(), addUnicodeEscapes(" + getTokenImage() + "[t2]).c_str());");
+      codeGenerator.genCodeLine("      std::clog << \" at line \" << t1->beginLine << \" column \" << t1->beginColumn << \"> Expected token: \" << addUnicodeEscapes(tokenImage[t2]) << std::endl;");
       codeGenerator.genCodeLine("    }");
       codeGenerator.genCodeLine("  }");
       codeGenerator.genCodeLine("");
