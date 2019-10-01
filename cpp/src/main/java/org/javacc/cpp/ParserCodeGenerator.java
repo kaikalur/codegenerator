@@ -671,7 +671,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       codeGenerator.genCodeLine("  {");
       codeGenerator.genCodeLine("    if (trace_enabled()) {");
       codeGenerator.genCodeLine("      for (int i = 0; i < indent; i++) { std::clog << \" \"; }");
-      codeGenerator.genCodeLine("      std::clog << \"Call:   \" << *s << std::endl;");
+      codeGenerator.genCodeLine("      std::clog << \"Call:   \" << s << std::endl;");
       codeGenerator.genCodeLine("    }");
       codeGenerator.genCodeLine("    indent = indent + 2;");
       codeGenerator.genCodeLine("  }");
@@ -683,7 +683,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       codeGenerator.genCodeLine("    indent = indent - 2;");
       codeGenerator.genCodeLine("    if (trace_enabled()) {");
       codeGenerator.genCodeLine("      for (int i = 0; i < indent; i++) { std::clog << \" \"; }");
-      codeGenerator.genCodeLine("      std::clog << \"Return: \" << *s << std::endl;");
+      codeGenerator.genCodeLine("      std::clog << \"Return: \" << s << std::endl;");
       codeGenerator.genCodeLine("    }");
       codeGenerator.genCodeLine("  }");
       codeGenerator.genCodeLine("");
