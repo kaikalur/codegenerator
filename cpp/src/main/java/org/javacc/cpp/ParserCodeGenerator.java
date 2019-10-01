@@ -693,7 +693,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       codeGenerator.genCodeLine("  {");
       codeGenerator.genCodeLine("    if (trace_enabled()) {");
       codeGenerator.genCodeLine("      for (int i = 0; i < indent; i++) { std::clog << \" \"; }");
-      codeGenerator.genCodeLine("      std::clog << \"Consumed token: <kind: \" << t->kind << \"(\" << addUnicodeEscapes(tokenImage[t->kind]) << \"), \" << addUnicodeEscapes(t->image);");
+      codeGenerator.genCodeLine("      std::clog << \"Consumed token: <kind: \" << t->kind << \"(\" << addUnicodeEscapes(" + getTokenImage() + "[t->kind]) << \"), \" << addUnicodeEscapes(t->image);");
       //codeGenerator.genCodeLine("      if (t->kind != 0 && !tokenImage[t->kind].equals(\"\\\"\" + t->image + \"\\\"\")) {");
       //codeGenerator.genCodeLine("        System.out.print(\": \\\"\" + t->image + \"\\\"\");");
       //codeGenerator.genCodeLine("      }");
@@ -708,12 +708,12 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       codeGenerator.genCodeLine("  {");
       codeGenerator.genCodeLine("    if (trace_enabled()) {");
       codeGenerator.genCodeLine("      for (int i = 0; i < indent; i++) { std::clog << \" \"; }");
-      codeGenerator.genCodeLine("      std::clog << \"Visited token: <Kind: \" << t1->kind << \"(\" << addUnicodeEscapes(tokenImage[t1->kind]) << \"), \" << addUnicodeEscapes(t1->image);");
+      codeGenerator.genCodeLine("      std::clog << \"Visited token: <Kind: \" << t1->kind << \"(\" << addUnicodeEscapes(" + getTokenImage() + "[t1->kind]) << \"), \" << addUnicodeEscapes(t1->image);");
 
       //codeGenerator.genCodeLine("      if (t1->kind != 0 && !tokenImage[t1->kind].equals(\"\\\"\" + t1->image + \"\\\"\")) {");
       //codeGenerator.genCodeLine("        System.out.print(\": \\\"\" + t1->image + \"\\\"\");");
       //codeGenerator.genCodeLine("      }");
-      codeGenerator.genCodeLine("      std::clog << \" at line \" << t1->beginLine << \" column \" << t1->beginColumn << \"> Expected token: \" << addUnicodeEscapes(tokenImage[t2]) << std::endl;");
+      codeGenerator.genCodeLine("      std::clog << \" at line \" << t1->beginLine << \" column \" << t1->beginColumn << \"> Expected token: \" << addUnicodeEscapes(" + getTokenImage() + "[t2]) << std::endl;");
       codeGenerator.genCodeLine("    }");
       codeGenerator.genCodeLine("  }");
       codeGenerator.genCodeLine("");
