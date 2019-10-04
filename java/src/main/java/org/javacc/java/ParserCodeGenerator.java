@@ -712,9 +712,13 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       codeGenerator.genCodeLine("");
       if (jj2index != 0) {
         codeGenerator.genCodeLine("  @SuppressWarnings(\"serial\")");
-        codeGenerator.genCodeLine("  static private final class LookaheadSuccess extends "+(Options.isLegacyExceptionHandling() ? "java.lang.Error" : "java.lang.RuntimeException")+" { }");
-        codeGenerator.genCodeLine("  " + staticOpt()
-            + "final private LookaheadSuccess jj_ls = new LookaheadSuccess();");
+        codeGenerator.genCodeLine("  static private final class LookaheadSuccess extends "+(Options.isLegacyExceptionHandling() ? "java.lang.Error" : "java.lang.RuntimeException")+" {");
+        codeGenerator.genCodeLine("    @Override");
+        codeGenerator.genCodeLine("    public Throwable fillInStackTrace() {");
+        codeGenerator.genCodeLine("      return this;");
+        codeGenerator.genCodeLine("    }");
+        codeGenerator.genCodeLine("  }");
+        codeGenerator.genCodeLine("  static private final LookaheadSuccess jj_ls = new LookaheadSuccess();");
         codeGenerator.genCodeLine("  " + staticOpt() + "private " + Types.getBooleanType()
             + " jj_scan_token(int kind) {");
         codeGenerator.genCodeLine("  if (jj_scanpos == jj_lastpos) {");
