@@ -60,7 +60,7 @@ final class JJTreeState {
   }
 
 
-  static void generateTreeState_java() {
+  static void generateTreeState() {
     File file = new File(JJTreeOptions.getJJTreeOutputDirectory(), JJTreeState.nameState() + ".java");
 
     try {

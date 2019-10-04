@@ -1,3 +1,6 @@
+#if NAMESPACE
+package ${NAMESPACE};
+#fi
 public class ${parserName}TokenManager ${superClass} implements ${parserName}Constants {
 
 protected ${STATIC?static :}boolean moveToNextChar() {
@@ -95,15 +98,15 @@ ${decls}
   }
 
 #if !NO_DFA
-private ${STATIC?static :}final int jjRunStringLiteralMatch() {
+private ${STATIC?static :} int jjRunStringLiteralMatch() {
   int curPos = 0;
-  final int key = (int)curLexState << 16 | curChar;
-  final int[] arr = startAndSize.get(key);
+  int key = (int)curLexState << 16 | curChar;
   int startState = jjInitStates[curLexState];
-  if (arr != null) {
+  if (startAndSize.containsKey(key)) {
+    int[] arr = startAndSize.get(key);
     int index = arr[0];
     for (int i = 0; i < arr[1]; i++) {
-      final int len = stringLiterals[index++];
+      int len = stringLiterals[index++];
 #if DEBUG_TOKEN_MANAGER
       System.err.println(
           "Looking for string literal match of kind: " +
@@ -157,7 +160,7 @@ private ${STATIC?static :}final int jjRunStringLiteralMatch() {
 
 private ${STATIC?static :}  int[] stateSet = new int[${generatedStates}];
 private ${STATIC?static :}  int[] newStateSet = new int[${generatedStates}];
-private ${STATIC?static :}  final long[] moved = new long[${generatedStates}];
+private ${STATIC?static :}  long[] moved = new long[${generatedStates}];
 private ${STATIC?static :} long moveIndex = 1L;
 
 private ${STATIC?static :}final int jjMoveNfa(int startState, int curPos) {
@@ -180,7 +183,6 @@ private ${STATIC?static :}final int jjMoveNfa(int startState, int curPos) {
   // We initialize the kind to MAX value so that when a match is found, we can
   // simply check if it's less than the current match and store it in that
   // case. This helps implement the 'first occurring' rule properly.
-  int kind = Integer.MAX_VALUE;
   int cnt = 0;
   stateSet[cnt++] = startState;
   moved[startState] = moveIndex;
@@ -203,15 +205,16 @@ private ${STATIC?static :}final int jjMoveNfa(int startState, int curPos) {
     System.err.println("Cur char: '" + (char)curChar + "'");
 #fi
     int newCnt = 0;
+    int kind = Integer.MAX_VALUE;
     if (++moveIndex == Long.MAX_VALUE) {
       for (int i = 0; i < ${generatedStates}; i++) moved[i] = 0L;
       moveIndex = 1L;
     }
 
-    final int vectorIndex = curChar >> 6;
-    final long bitpattern = (1L << (curChar & 077));
+    int vectorIndex = curChar >> 6;
+    long bitpattern = (1L << (curChar & 0x3f));
     do {
-      final int state = stateSet[--cnt];
+      int state = stateSet[--cnt];
 #if DEBUG_TOKEN_MANAGER
       // TODO(sreeni) : Fix it to give better error message instead of UNKNOWN.
       System.err.println(
@@ -229,9 +232,9 @@ private ${STATIC?static :}final int jjMoveNfa(int startState, int curPos) {
             moved[newState] = moveIndex;
           }
         }
-        final int newKind = jjmatchKinds[state];
+        int newKind = jjmatchKinds[state];
         if (kind > newKind) {
-          // It's a final state so store the matched kind if it's smaller than
+          // It's a state so store the matched kind if it's smaller than
           // what's already matched.
           kind = newKind;
 #if DEBUG_TOKEN_MANAGER
@@ -287,37 +290,37 @@ private ${STATIC?static :} int defaultLexState = ${defaultLexState};
 protected ${STATIC?static :} int curLexState = ${defaultLexState};
 private ${STATIC?static :} int jjmatchedPos;
 private ${STATIC?static :} int jjmatchedKind;
-private ${STATIC?static :}final StringBuilder jjimage = new StringBuilder();
+private ${STATIC?static :} StringBuilder jjimage = new StringBuilder();
 private ${STATIC?static :}StringBuilder image = jjimage;
 private ${STATIC?static :}int jjimageLen;
 private ${STATIC?static :}int lengthOfMatch;
 protected ${STATIC?static :}int curChar;
 protected ${STATIC?static :} ${charStreamName} input_stream;
 
-public static final boolean isToken(int kind) {
-  return (jjtoToken[kind >> 6] & (1L << (kind & 077))) != 0L;
+public static boolean isToken(int kind) {
+  return (jjtoToken[kind >> 6] & (1L << (kind & 0x3f))) != 0L;
 }
 
 public static final boolean isSkip(int kind) {
-  return (jjtoSkip[kind >> 6] & (1L << (kind & 077))) != 0L;
+  return (jjtoSkip[kind >> 6] & (1L << (kind & 0x3f))) != 0L;
 }
 
-public static final boolean isSpecial(int kind) {
-  return (jjtoSpecial[kind >> 6] & (1L << (kind & 077))) != 0L;
+public static boolean isSpecial(int kind) {
+  return (jjtoSpecial[kind >> 6] & (1L << (kind & 0x3f))) != 0L;
 }
 
-public static final boolean isMore(int kind) {
-  return (jjtoMore[kind >> 6] & (1L << (kind & 077))) != 0L;
+public static boolean isMore(int kind) {
+  return (jjtoMore[kind >> 6] & (1L << (kind & 0x3f))) != 0L;
 }
 
 protected ${STATIC?static :} Token jjFillToken() {
-  final Token t;
-  final String curTokenImage;
+  Token t;
+  String curTokenImage;
 #if KEEP_LINE_COLUMN
-  final int beginLine;
-  final int endLine;
-  final int beginColumn;
-  final int endColumn;
+  int beginLine;
+  int endLine;
+  int beginColumn;
+  int endColumn;
 #fi
   if (jjmatchedPos < 0) {
     if (image == null) {
@@ -330,7 +333,7 @@ protected ${STATIC?static :} Token jjFillToken() {
     beginColumn = endColumn = input_stream.getEndColumn();
 #fi
   } else {
-    String im = jjstrLiteralImages[jjmatchedKind];
+    String im = tokenImage[jjmatchedKind];
     curTokenImage = (im == null) ? input_stream.GetImage() : im;
 #if KEEP_LINE_COLUMN
     beginLine = input_stream.getBeginLine();
@@ -419,7 +422,7 @@ public ${STATIC?static :} Token getNextToken() {
 #if !NO_DFA
       lastReadPosition = jjRunStringLiteralMatch();
 #else
-      lastReadPosition = jjMoveNfa(0, 0);
+      lastReadPosition = jjMoveNfa(jjInitStates[curLexState], 0);
 #fi
       if (jjmatchedPos == 0 && jjmatchedKind > canMatchAnyChar[curLexState]) {
         jjmatchedKind = canMatchAnyChar[curLexState];
@@ -481,9 +484,12 @@ public ${STATIC?static :} Token getNextToken() {
           curLexState = jjnewLexState[jjmatchedKind];
         }
         lastReadPosition = 0;
-        jjmatchedKind = 0x7fffffff;
+        jjmatchedKind = Integer.MAX_VALUE;
         try {
           curChar = input_stream.readChar();
+#if IGNORE_CASE
+          curChar = (int)Character.toLowerCase((char)curChar)
+#fi
           continue;
         }
         catch (java.io.IOException e1) { }
@@ -517,4 +523,23 @@ protected ${STATIC?static :} void reportError(int lastReadPosition) {
   }
   throw new ${LEGACY_EXCEPTION_HANDLING?TokenMgrError:TokenMgrException}(EOFSeen, curLexState, error_line, error_column,
                           error_after, curChar, ${LEGACY_EXCEPTION_HANDLING?TokenMgrError:TokenMgrException}.LEXICAL_ERROR);
+}
+
+private static final java.util.Map<Integer, int[]> startAndSize =
+    new java.util.HashMap<Integer, int[]>();
+
+
+private static final long[][] jjChars = new long[${nfaSize}][];
+private static void InitNfaData() {
+  for (int i = 0; i < ${nfaSize}; i++) {
+    jjChars[i] = new long[${charsVectorSize}];
+    int ind = 0;
+    // We originally generate something like RLE for the static arrays and
+    // we actually expannd them here.
+    for (int j = 0; j < jjCharData[i].length; j += 2) {
+      for (int k = 0; k < (int)jjCharData[i][j]; k++) {
+        jjChars[i][ind++] = jjCharData[i][j + 1];
+      }
+    }
+  }
 }

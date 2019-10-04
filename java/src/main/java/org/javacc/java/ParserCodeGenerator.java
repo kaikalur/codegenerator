@@ -23,7 +23,6 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package org.javacc.java;
 
 
@@ -102,7 +101,6 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
    */
 
   private CodeGenHelper                 codeGenerator;
-  private ParserData                    parserData;
 
   private int cline, ccol;
   
@@ -110,9 +108,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       new HashMap<Expansion, String>();
   private final Map<Expansion, Integer> internalIndexes = 
       new HashMap<Expansion, Integer>();
-//public abstract class Expression/*@bgen(jjtree)*/implements ExpressionTreeConstants, ExpressionConstants /*@egen*/
-//  {/*@bgen(jjtree)*/
-//    protected JJTExpressionState jjtree = new JJTExpressionState();
+  private ParserData parserData;
+ 
   @Override
   public void generateCode(CodeGeneratorSettings settings, ParserData parserData) {
     this.parserData = parserData;
@@ -130,13 +127,17 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     if (Options.getBuildParser()) {
       final List<String> tn = new ArrayList<String>(toolNames);
       tn.add(toolName);
-      
+
+      if (Options.getNamespace() != null) {
+        codeGenerator.genCodeLine("package " + Options.getNamespace() +";");
+      }
+
       // This is the first line generated -- the the comment line at the top of the generated parser
       codeGenerator.genCodeLine("/* " + getIdString(tn, cu_name + ".java") + " */");
 
       boolean implementsExists = false;
       final boolean extendsExists = false;
-
+      
       if (cu_to_insertion_point_1.size() != 0) {
         Object firstToken = cu_to_insertion_point_1.get(0);
         codeGenerator.printTokenSetup((Token) firstToken);

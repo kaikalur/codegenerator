@@ -109,6 +109,9 @@ public class OtherFilesGen extends JavaCCGlobals implements JavaCCParserConstant
 
     List<String> tn = new ArrayList<String>(toolNames);
     tn.add(toolName);
+    if (Options.getNamespace() != null) {
+      ostr.println("package " + Options.getNamespace() +";");
+    }
     ostr.println("/* " + getIdString(tn, cu_name + CONSTANTS_FILENAME_SUFFIX) + " */");
 
     if (cu_to_insertion_point_1.size() != 0 &&

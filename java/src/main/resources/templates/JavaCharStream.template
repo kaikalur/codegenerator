@@ -1,3 +1,6 @@
+#if NAMESPACE
+package ${NAMESPACE};
+#fi
 /**
  * An implementation of interface CharStream, where the stream is assumed to
  * contain only ASCII characters (with java-like unicode escape processing).
@@ -95,8 +98,8 @@ class JavaCharStream
   {
     char[] newbuffer = new char[bufsize + 2048];
 #if KEEP_LINE_COLUMN
-    int newbufline[] = new int[bufsize + 2048];
-    int newbufcolumn[] = new int[bufsize + 2048];
+    int[] newbufline = new int[bufsize + 2048];
+    int[] newbufcolumn = new int[bufsize + 2048];
 #fi
 
     try
