@@ -1,3 +1,6 @@
+#if NAMESPACE
+package ${NAMESPACE};
+#fi
 /**
  * Describes the input token stream.
  */

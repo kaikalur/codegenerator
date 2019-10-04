@@ -1,19 +1,17 @@
-
 package org.javacc.java;
 
 import org.javacc.java.JavaFiles.JavaResourceTemplateLocations;
 import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.Options;
 
-public class CodeGenerator implements org.javacc.parser.CodeGenerator {
-
-  public static final boolean IS_DEBUG = true;
-
+public class CodeGenerator implements org.javacc.parser.CodeGenerator
+{
   /**
    * The name of the Java code generator.
    */
   @Override
-  public String getName() {
+  public String getName() 
+  {
     return "Java";
   }
 
@@ -21,14 +19,18 @@ public class CodeGenerator implements org.javacc.parser.CodeGenerator {
    * Generate any other support files you need.
    */
   @Override
-  public boolean generateHelpers(CodeGeneratorSettings settings) {
-    try {
+  public boolean generateHelpers(CodeGeneratorSettings settings)
+  {
+    try
+    {
       JavaResourceTemplateLocations templateLoc = JavaFiles.RESOURCES_JAVA_CLASSIC;
       JavaFiles.gen_TokenMgrError(templateLoc);
       JavaFiles.gen_ParseException(templateLoc);
       
       OtherFilesGen.start(Options.getJavaTemplateType().equals(Options.JAVA_TEMPLATE_TYPE_MODERN));
-    } catch (Exception e) {
+    }
+    catch(Exception e)
+    {
       return false;
     }
 
@@ -39,7 +41,8 @@ public class CodeGenerator implements org.javacc.parser.CodeGenerator {
    * The Token class generator.
    */
   @Override
-  public TokenCodeGenerator getTokenCodeGenerator() {
+  public TokenCodeGenerator getTokenCodeGenerator()
+  {
     return new TokenCodeGenerator();
   }
 
@@ -55,16 +58,18 @@ public class CodeGenerator implements org.javacc.parser.CodeGenerator {
    * The Parser class generator.
    */
   @Override
-  public ParserCodeGenerator getParserCodeGenerator() {
+  public ParserCodeGenerator getParserCodeGenerator()
+  {
     return new ParserCodeGenerator();
   }
-
+  
   /**
-   * TODO(sreeni): Fix this when we do tree annotations in the parser code generator. The JJTree
-   * preprocesor.
+   * TODO(sreeni): Fix this when we do tree annotations in the parser code generator.
+   * The JJTree preprocesor.
    */
   @Override
-  public org.javacc.jjtree.DefaultJJTreeVisitor getJJTreeCodeGenerator() {
+  public org.javacc.jjtree.DefaultJJTreeVisitor getJJTreeCodeGenerator()
+  {
     return new JJTreeCodeGenerator();
   }
 
