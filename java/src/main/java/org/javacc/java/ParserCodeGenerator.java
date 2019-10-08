@@ -49,6 +49,7 @@ import static org.javacc.parser.JavaCCGlobals.tokenCount;
 import static org.javacc.parser.JavaCCGlobals.toolName;
 import static org.javacc.parser.JavaCCGlobals.toolNames;
 
+import org.javacc.jjtree.JJTreeOptions;
 import org.javacc.parser.Action;
 import org.javacc.parser.BNFProduction;
 import org.javacc.parser.Choice;
@@ -138,8 +139,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       final List<String> tn = new ArrayList<String>(toolNames);
       tn.add(toolName);
 
-      if (Options.getNamespace() != null) {
-        codeGenerator.genCodeLine("package " + Options.getNamespace() +";");
+      if (JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
+        codeGenerator.genCodeLine("package " + JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE) +";");
       }
 
       // This is the first line generated -- the the comment line at the top of the generated parser

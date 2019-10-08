@@ -75,7 +75,7 @@ public class CodeGenerator implements org.javacc.parser.CodeGenerator
    * The TokenManager class generator.
    */
   @Override
-  public TokenManagerCodeGenerator getTokenManagerCodeGenerator()
+  public org.javacc.parser.TokenManagerCodeGenerator getTokenManagerCodeGenerator()
   {
     return new TokenManagerCodeGenerator();
   }

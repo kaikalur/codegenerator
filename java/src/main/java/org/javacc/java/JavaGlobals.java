@@ -20,6 +20,7 @@
 package org.javacc.java;
 
 import org.javacc.Version;
+import org.javacc.jjtree.JJTreeOptions;
 import org.javacc.parser.JavaCCErrors;
 import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.JavaCCParserConstants;
@@ -195,8 +196,8 @@ public abstract class JavaGlobals extends JavaCCGlobals implements JavaCCParserC
 
     List<String> tn = new ArrayList<String>(toolNames);
     tn.add(toolName);
-    if (Options.getNamespace() != null) {
-      ostr.println("package " + Options.getNamespace() + ";");
+    if (JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
+      ostr.println("package " + JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE) + ";");
     }
     ostr.println("/* " + getIdString(tn, cu_name + "Constants.java") + " */");
 
