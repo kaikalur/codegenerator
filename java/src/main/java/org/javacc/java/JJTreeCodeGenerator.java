@@ -3,42 +3,22 @@
 
 package org.javacc.java;
 
-import org.javacc.jjtree.ASTBNFAction;
-import org.javacc.jjtree.ASTBNFDeclaration;
-import org.javacc.jjtree.ASTBNFNodeScope;
-import org.javacc.jjtree.ASTBNFNonTerminal;
-import org.javacc.jjtree.ASTBNFOneOrMore;
-import org.javacc.jjtree.ASTBNFSequence;
-import org.javacc.jjtree.ASTBNFTryBlock;
-import org.javacc.jjtree.ASTBNFZeroOrMore;
-import org.javacc.jjtree.ASTBNFZeroOrOne;
-import org.javacc.jjtree.ASTCompilationUnit;
-import org.javacc.jjtree.ASTExpansionNodeScope;
-import org.javacc.jjtree.ASTGrammar;
-import org.javacc.jjtree.ASTJavacodeBody;
-import org.javacc.jjtree.ASTNodeDescriptor;
-import org.javacc.jjtree.ASTProduction;
-import org.javacc.jjtree.DefaultJJTreeVisitor;
-import org.javacc.jjtree.IO;
-import org.javacc.jjtree.JJTreeGlobals;
-import org.javacc.jjtree.JJTreeNode;
-import org.javacc.jjtree.JJTreeOptions;
-import org.javacc.jjtree.Node;
-import org.javacc.jjtree.NodeScope;
-import org.javacc.jjtree.SimpleNode;
-import org.javacc.jjtree.Token;
-import org.javacc.jjtree.TokenUtils;
-import org.javacc.parser.JavaCCGlobals;
-import org.javacc.parser.Options;
-import org.javacc.parser.OutputFile;
-
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Map;
 
+import org.javacc.Version;
+import org.javacc.parser.JavaCCGlobals;
+import org.javacc.parser.Options;
+import org.javacc.parser.OutputFile;
+import org.javacc.utils.OutputFileGenerator;
+import org.javacc.jjtree.*;
+
 public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
+
+  static final String JJTStateVersion = Version.majorDotMinor;
 
   @Override
   public Object defaultVisit(SimpleNode node, Object data) {
@@ -52,7 +32,6 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
     io.println("/*@bgen(jjtree) "
         + JavaCCGlobals.getIdString("JJTree", new File(io.getOutputFileName()).getName()) + " */");
     io.print("/*@egen*/");
-
     return node.childrenAccept(this, io);
   }
 
@@ -93,10 +72,10 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
         n = (JJTreeNode)p;
       }
       if (needClose) {
-        JJTreeCodeGenerator.openJJTreeComment(io, null);
+        openJJTreeComment(io, null);
         io.println();
         insertCloseNodeAction(ns, io, getIndentation(node));
-        JJTreeCodeGenerator.closeJJTreeComment(io);
+        closeJJTreeComment(io);
       }
     }
 
@@ -116,10 +95,10 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
         indent = "  ";
       }
 
-      JJTreeCodeGenerator.openJJTreeComment(io, node.node_scope.getNodeDescriptorText());
+      openJJTreeComment(io, node.node_scope.getNodeDescriptorText());
       io.println();
       insertOpenNodeCode(node.node_scope, io, indent);
-      JJTreeCodeGenerator.closeJJTreeComment(io);
+      closeJJTreeComment(io);
     }
 
     return visit((JJTreeNode)node, io);
@@ -134,7 +113,7 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
 
     String indent = getIndentation(node.expansion_unit);
 
-    JJTreeCodeGenerator.openJJTreeComment(io, node.node_scope.getNodeDescriptor().getDescriptor());
+    openJJTreeComment(io, node.node_scope.getNodeDescriptor().getDescriptor());
     io.println();
     tryExpansionUnit(node.node_scope, io, indent, node.expansion_unit);
     return null;
@@ -174,8 +153,11 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
       }
 
       if (t == JJTreeGlobals.parserClassBodyStart) {
+        String treeClazzName = "JJT" + JJTreeGlobals.parserName + "State";
         JJTreeCodeGenerator.openJJTreeComment(io, null);
-        JJTreeState.insertParserMembers(io);
+        io.println();
+        io.println("  protected " + JavaGlobals.getStatic() + treeClazzName + " jjtree = new " + treeClazzName + "();");
+        io.println();
         JJTreeCodeGenerator.closeJJTreeComment(io);
       }
 
@@ -190,7 +172,7 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
   public Object visit(ASTExpansionNodeScope node, Object data) {
     IO io = (IO)data;
     String indent = getIndentation(node.expansion_unit);
-    JJTreeCodeGenerator.openJJTreeComment(io, node.node_scope.getNodeDescriptor().getDescriptor());
+    openJJTreeComment(io, node.node_scope.getNodeDescriptor().getDescriptor());
     io.println();
     insertOpenNodeAction(node.node_scope, io, indent);
     tryExpansionUnit(node.node_scope, io, indent, node.expansion_unit);
@@ -215,7 +197,7 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
       indent += " ";
     }
 
-    JJTreeCodeGenerator.openJJTreeComment(io, node.node_scope.getNodeDescriptorText());
+    openJJTreeComment(io, node.node_scope.getNodeDescriptorText());
     io.println();
     insertOpenNodeCode(node.node_scope, io, indent);
     tryTokenSequence(node.node_scope, io, indent, first, node.getLastToken());
@@ -303,8 +285,8 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
     NodeFiles.generateNodeType(type);
 
     io.print(indent + nodeClass + " " + ns.nodeVar + " = ");
-    String p = Options.getStatic() ? "null" : "this";
-    String parserArg = JJTreeOptions.getNodeUsesParser() ? p + ", " : "";
+    String p = JJTreeOptions.getStatic() ? "null" : "this";
+    String parserArg = JJTreeOptions.getNodeUsesParser() ? (p + ", ") : "";
 
     if (JJTreeOptions.getNodeFactory().equals("*")) {
       // Old-style multiple-implementations.
@@ -338,7 +320,7 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
       io.println(indent + ns.closedVar + " = false;");
     }
     if (JJTreeOptions.getNodeScopeHook()) {
-      // int i = closeNode.lastIndexOf(",");
+      int i = closeNode.lastIndexOf(",");
       io.println(indent + "if (jjtree.nodeCreated()) {");
       io.println(indent + " jjtreeCloseNodeScope(" + ns.nodeVar + ");");
       io.println(indent + "}");
@@ -398,7 +380,7 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
   void tryTokenSequence(NodeScope ns, IO io, String indent, Token first, Token last)
   {
     io.println(indent + "try {");
-    JJTreeCodeGenerator.closeJJTreeComment(io);
+    closeJJTreeComment(io);
 
     /* Print out all the tokens, converting all references to
        `jjtThis' into the current node variable. */
@@ -406,7 +388,7 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
       TokenUtils.print(t, io, "jjtThis", ns.nodeVar);
     }
 
-    JJTreeCodeGenerator.openJJTreeComment(io, null);
+    openJJTreeComment(io, null);
     io.println();
 
     Enumeration<String> thrown_names = ns.production.throws_list.elements();
@@ -419,7 +401,7 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
       io.println(indent + "  }");
     }
     io.println(indent + "}");
-    JJTreeCodeGenerator.closeJJTreeComment(io);
+    closeJJTreeComment(io);
   }
 
 
@@ -448,11 +430,11 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
   void tryExpansionUnit(NodeScope ns, IO io, String indent, JJTreeNode expansion_unit)
   {
     io.println(indent + "try {");
-    JJTreeCodeGenerator.closeJJTreeComment(io);
+    closeJJTreeComment(io);
 
     expansion_unit.jjtAccept(this, io);
 
-    JJTreeCodeGenerator.openJJTreeComment(io, null);
+    openJJTreeComment(io, null);
     io.println();
 
     Hashtable<String, String> thrown_set = new Hashtable<>();
@@ -467,7 +449,7 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
       io.println(indent + "  }");
     }
     io.println(indent + "}");
-    JJTreeCodeGenerator.closeJJTreeComment(io);
+    closeJJTreeComment(io);
   }
 
   @Override
@@ -476,11 +458,13 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
     options.put(Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
     String filePrefix = new File(JJTreeOptions.getJJTreeOutputDirectory(), "JJT" + JJTreeGlobals.parserName + "State").getAbsolutePath();
 
-    OutputFile outputFile = new OutputFile(new File(filePrefix + ".java"),  JJTreeState.nameState() + ".java", new String[0]);
-    try(PrintWriter ostr = outputFile.getPrintWriter()) {
-      NodeFiles.generatePrologue(ostr);
-      JJTreeState.insertState(ostr);
-    }
+    OutputFile outputFile = new OutputFile(new File(filePrefix + ".java"), JJTStateVersion, new String[
+0]);
+    PrintWriter ostr = outputFile.getPrintWriter();
+    OutputFileGenerator generator;
+    generator = new OutputFileGenerator("/templates/JJTTreeState.template", options);
+    generator.generate(ostr);
+    ostr.close();
 
     NodeFiles.generateOutputFiles();
   }

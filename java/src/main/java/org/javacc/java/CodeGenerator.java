@@ -1,7 +1,8 @@
 package org.javacc.java;
 
-import org.javacc.java.JavaFiles.JavaResourceTemplateLocations;
+import org.javacc.java.JavaGlobals.JavaTemplates;
 import org.javacc.parser.CodeGeneratorSettings;
+import org.javacc.utils.OutputFileGenerator;
 import org.javacc.parser.Options;
 
 public class CodeGenerator implements org.javacc.parser.CodeGenerator
@@ -21,13 +22,37 @@ public class CodeGenerator implements org.javacc.parser.CodeGenerator
   @Override
   public boolean generateHelpers(CodeGeneratorSettings settings)
   {
+    JavaTemplates templates = JavaGlobals.getTemplates();
+
     try
     {
-      JavaResourceTemplateLocations templateLoc = JavaFiles.RESOURCES_JAVA_CLASSIC;
-      JavaFiles.gen_TokenMgrError(templateLoc);
-      JavaFiles.gen_ParseException(templateLoc);
+      OutputFileGenerator.generateSimple("/templates/TokenMgrError.template", JavaGlobals.getTokenMgrErrorClass() + ".java", "/* JavaCC generated file. */", settings);
+      OutputFileGenerator.generateSimple(templates.getParseExceptionTemplateResourceUrl(), "ParseException.java", "/* JavaCC generated file. */", settings);
       
-      OtherFilesGen.start(Options.getJavaTemplateType().equals(Options.JAVA_TEMPLATE_TYPE_MODERN));
+      JavaGlobals.gen_Constants();
+      
+      if (Options.isGenerateBoilerplateCode()) {
+        JavaGlobals.gen_Token();
+        if (Options.getUserTokenManager()) {
+          // CBA -- I think that Token managers are unique so will always be generated
+          JavaGlobals.gen_TokenManager();
+        }
+        
+        if (Options.getUserCharStream()) {
+          OutputFileGenerator.generateSimple("/templates/CharStream.template", "CharStream.java", "/* JavaCC generated file. */", settings);
+        } else if (Options.getJavaUnicodeEscape()) {
+          OutputFileGenerator.generateSimple(templates.getJavaCharStreamTemplateResourceUrl(), "JavaCharStream.java", "/* JavaCC generated file. */", settings);
+        } else {
+          OutputFileGenerator.generateSimple(templates.getSimpleCharStreamTemplateResourceUrl(), "SimpleCharStream.java", "/* JavaCC generated file. */", settings);
+        }
+        
+        if (JavaGlobals.isJavaModern()) {
+          JavaGlobals.genMiscFile("Provider.java", "/templates/gwt/Provider.template");
+          JavaGlobals.genMiscFile("StringProvider.java", "/templates/gwt/StringProvider.template");
+          // This provides a bridge to standard Java readers.
+          JavaGlobals.genMiscFile("StreamProvider.java", "/templates/gwt/StreamProvider.template");
+        }
+      }
     }
     catch(Exception e)
     {
@@ -50,7 +75,8 @@ public class CodeGenerator implements org.javacc.parser.CodeGenerator
    * The TokenManager class generator.
    */
   @Override
-  public TokenManagerCodeGenerator getTokenManagerCodeGenerator() {
+  public org.javacc.parser.TokenManagerCodeGenerator getTokenManagerCodeGenerator()
+  {
     return new TokenManagerCodeGenerator();
   }
 

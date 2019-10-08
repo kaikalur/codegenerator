@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.javacc.parser.CodeGeneratorSettings;
+import org.javacc.jjtree.JJTreeOptions;
 import org.javacc.parser.CodeGenHelper;
 import org.javacc.parser.Options;
 import org.javacc.parser.TokenizerData;
@@ -40,15 +41,11 @@ public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManager
     settings.put("superClass", (superClass == null || superClass.equals(""))
                       ? "" : "extends " + superClass);
     settings.put("noDfa", Options.getNoDfa());
-    if (Options.getNamespace() != null) {
-      settings.put("NAMESPACE", Options.getNamespace());
+    if (JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
+      settings.put("NAMESPACE",JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE));
     }
     settings.put("generatedStates", tokenizerData.nfa.size());
     try {
-      if (Options.getNamespace() != null) {
-        codeGenerator.genCodeLine("package " + Options.getNamespace() + ";\n");
-      }
-
       codeGenerator.writeTemplate(tokenManagerTemplate, settings);
       generateConstantsClass(tokenizerData);
       dumpDfaTables(codeGenerator, tokenizerData);
