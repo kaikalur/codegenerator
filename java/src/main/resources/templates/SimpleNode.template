@@ -1,3 +1,7 @@
+#if NAMESPACE
+package ${NAMESPACE};
+#fi
+
 #if SUPPORT_CLASS_VISIBILITY_PUBLIC
 public
 #fi
@@ -49,7 +53,7 @@ class SimpleNode implements Node {
     if (children == null) {
       children = new Node[i + 1];
     } else if (i >= children.length) {
-      Node c[] = new Node[i + 1];
+      Node[] c = new Node[i + 1];
       System.arraycopy(children, 0, c, 0, children.length);
       children = c;
     }
@@ -103,11 +107,6 @@ class SimpleNode implements Node {
   }
 
 #fi
-  /* You can override these two methods in subclasses of SimpleNode to
-     customize the way the node appears when the tree is dumped.  If
-     your output uses more than one line you should override
-     toString(String), otherwise overriding toString() is probably all
-     you need to do. */
 
   public String toString() {
     return ${PARSER_NAME}TreeConstants.jjtNodeName[id];

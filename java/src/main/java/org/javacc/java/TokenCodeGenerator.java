@@ -1,7 +1,8 @@
 package org.javacc.java;
 
-import org.javacc.java.JavaFiles.JavaResourceTemplateLocations;
+import java.io.IOException;
 import org.javacc.parser.CodeGeneratorSettings;
+import org.javacc.utils.OutputFileGenerator;
 
 public class TokenCodeGenerator implements org.javacc.parser.TokenCodeGenerator
 {
@@ -13,10 +14,9 @@ public class TokenCodeGenerator implements org.javacc.parser.TokenCodeGenerator
   {
     try
     {
-      JavaResourceTemplateLocations templateLoc = JavaFiles.RESOURCES_JAVA_CLASSIC;
-      JavaFiles.gen_Token(templateLoc);
+      OutputFileGenerator.generateSimple("/templates/Token.template", "Token.java", "/* JavaCC generated file. */", settings);
     }
-    catch(Exception e)
+    catch(IOException e)
     {
       return false;
     }
