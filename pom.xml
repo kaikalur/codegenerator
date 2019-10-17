@@ -28,8 +28,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.javacc</groupId>
-			<artifactId>core</artifactId>
-			<version>${core}</version>
+			<artifactId>parser</artifactId>
 		</dependency>
 	</dependencies>
 </project>
