@@ -242,11 +242,17 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
 
   static void openJJTreeComment(IO io, String arg)
   {
+    if (arg != null) {
+      io.print("/*@bgen(jjtree) " + arg + " */");
+    } else {
+      io.print("/*@bgen(jjtree)*/");
+    }
   }
 
 
   static void closeJJTreeComment(IO io)
   {
+    io.print("/*@egen*/");
   }
 
 
@@ -456,11 +462,15 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
   public void generateHelperFiles() throws java.io.IOException {
     Map<String, Object> options = JJTreeOptions.getOptions();
     options.put(Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
+    
     String filePrefix = new File(JJTreeOptions.getJJTreeOutputDirectory(), "JJT" + JJTreeGlobals.parserName + "State").getAbsolutePath();
 
     OutputFile outputFile = new OutputFile(new File(filePrefix + ".java"), JJTStateVersion, new String[
 0]);
     PrintWriter ostr = outputFile.getPrintWriter();
+    if(JJTreeGlobals.packageName.length() > 0) {
+      ostr.write("package " + JJTreeGlobals.packageName + ";\n");
+    }
     OutputFileGenerator generator;
     generator = new OutputFileGenerator("/templates/JJTTreeState.template", options);
     generator.generate(ostr);

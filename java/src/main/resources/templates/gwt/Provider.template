@@ -1,7 +1,3 @@
-#if NAMESPACE
-package ${NAMESPACE};
-#fi
-
 import java.io.IOException;
 
 public interface Provider {

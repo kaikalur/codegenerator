@@ -1,7 +1,3 @@
-#if NAMESPACE
-package ${NAMESPACE};
-#fi
-
 #if SUPPORT_CLASS_VISIBILITY_PUBLIC
 public
 #fi

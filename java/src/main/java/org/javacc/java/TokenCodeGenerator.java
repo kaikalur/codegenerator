@@ -1,8 +1,8 @@
 package org.javacc.java;
 
-import java.io.IOException;
 import org.javacc.parser.CodeGeneratorSettings;
-import org.javacc.utils.OutputFileGenerator;
+
+import java.io.IOException;
 
 public class TokenCodeGenerator implements org.javacc.parser.TokenCodeGenerator
 {
@@ -14,7 +14,7 @@ public class TokenCodeGenerator implements org.javacc.parser.TokenCodeGenerator
   {
     try
     {
-      OutputFileGenerator.generateSimple("/templates/Token.template", "Token.java", "/* JavaCC generated file. */", settings);
+      JavaGlobals.generateSimple("/templates/Token.template", "Token.java", "/* JavaCC generated file. */", settings);
     }
     catch(IOException e)
     {

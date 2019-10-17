@@ -2,7 +2,6 @@ package org.javacc.java;
 
 import org.javacc.java.JavaGlobals.JavaTemplates;
 import org.javacc.parser.CodeGeneratorSettings;
-import org.javacc.utils.OutputFileGenerator;
 import org.javacc.parser.Options;
 
 public class CodeGenerator implements org.javacc.parser.CodeGenerator
@@ -23,11 +22,10 @@ public class CodeGenerator implements org.javacc.parser.CodeGenerator
   public boolean generateHelpers(CodeGeneratorSettings settings)
   {
     JavaTemplates templates = JavaGlobals.getTemplates();
-
     try
     {
-      OutputFileGenerator.generateSimple("/templates/TokenMgrError.template", JavaGlobals.getTokenMgrErrorClass() + ".java", "/* JavaCC generated file. */", settings);
-      OutputFileGenerator.generateSimple(templates.getParseExceptionTemplateResourceUrl(), "ParseException.java", "/* JavaCC generated file. */", settings);
+      JavaGlobals.generateSimple("/templates/TokenMgrError.template", JavaGlobals.getTokenMgrErrorClass() + ".java", "/* JavaCC generated file. */", settings);
+      JavaGlobals.generateSimple(templates.getParseExceptionTemplateResourceUrl(), "ParseException.java", "/* JavaCC generated file. */", settings);
       
       JavaGlobals.gen_Constants();
       
@@ -39,11 +37,11 @@ public class CodeGenerator implements org.javacc.parser.CodeGenerator
         }
         
         if (Options.getUserCharStream()) {
-          OutputFileGenerator.generateSimple("/templates/CharStream.template", "CharStream.java", "/* JavaCC generated file. */", settings);
+          JavaGlobals.generateSimple("/templates/CharStream.template", "CharStream.java", "/* JavaCC generated file. */", settings);
         } else if (Options.getJavaUnicodeEscape()) {
-          OutputFileGenerator.generateSimple(templates.getJavaCharStreamTemplateResourceUrl(), "JavaCharStream.java", "/* JavaCC generated file. */", settings);
+          JavaGlobals.generateSimple(templates.getJavaCharStreamTemplateResourceUrl(), "JavaCharStream.java", "/* JavaCC generated file. */", settings);
         } else {
-          OutputFileGenerator.generateSimple(templates.getSimpleCharStreamTemplateResourceUrl(), "SimpleCharStream.java", "/* JavaCC generated file. */", settings);
+          JavaGlobals.generateSimple(templates.getSimpleCharStreamTemplateResourceUrl(), "SimpleCharStream.java", "/* JavaCC generated file. */", settings);
         }
         
         if (JavaGlobals.isJavaModern()) {

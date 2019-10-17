@@ -42,8 +42,8 @@ final class NodeFiles {
       outputFile.setToolName("JJTree");
       PrintWriter pw = outputFile.getPrintWriter();
 
-      if (JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
-        pw.println("package " + JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE) + ";");
+      if(JJTreeGlobals.packageName.length() > 0) {
+        pw.println("package " + JJTreeGlobals.packageName + ";");
       }
 
       for (String node: nodesToBuild) {
@@ -58,6 +58,9 @@ final class NodeFiles {
 
   static void generatePrologue(PrintWriter pw)
   {
+    if(JJTreeGlobals.packageName.length() > 0) {
+      pw.write("package " + JJTreeGlobals.packageName + ";\n");
+    }
   }
 
 
@@ -79,9 +82,6 @@ final class NodeFiles {
       List<String> nodeNames = ASTNodeDescriptor.getNodeNames();
 
       generatePrologue(pw);
-      if (JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
-        pw.println("package " + JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE) + ";");
-      }
       
       pw.println("public interface " + name);
       pw.println("{");
