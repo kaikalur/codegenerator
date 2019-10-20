@@ -1,6 +1,3 @@
-#if NAMESPACE
-package ${NAMESPACE};
-#fi
 /** Token Manager Error. */
 ${SUPPORT_CLASS_VISIBILITY_PUBLIC?public :}class ${LEGACY_EXCEPTION_HANDLING?TokenMgrError:TokenMgrException} extends ${LEGACY_EXCEPTION_HANDLING?Error:RuntimeException}
 {

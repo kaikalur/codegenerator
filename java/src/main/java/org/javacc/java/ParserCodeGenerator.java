@@ -49,14 +49,12 @@ import static org.javacc.parser.JavaCCGlobals.tokenCount;
 import static org.javacc.parser.JavaCCGlobals.toolName;
 import static org.javacc.parser.JavaCCGlobals.toolNames;
 
-import org.javacc.jjtree.JJTreeOptions;
 import org.javacc.parser.Action;
 import org.javacc.parser.BNFProduction;
 import org.javacc.parser.Choice;
 import org.javacc.parser.CodeGenHelper;
 import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.CodeProduction;
-import org.javacc.parser.CppCodeProduction;
 import org.javacc.parser.Expansion;
 import org.javacc.parser.JavaCCErrors;
 import org.javacc.parser.JavaCCGlobals;
@@ -139,10 +137,6 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       final List<String> tn = new ArrayList<String>(toolNames);
       tn.add(toolName);
 
-      if (JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
-        codeGenerator.genCodeLine("package " + JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE) +";");
-      }
-
       // This is the first line generated -- the the comment line at the top of the generated parser
       codeGenerator.genCodeLine("/* " + getIdString(tn, cu_name + ".java") + " */");
 
@@ -164,35 +158,19 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
         }
       }
 
-      codeGenerator.genCode("public class " + parserData.parserName);
-      if (settings.containsKey("superClass")) {
-        codeGenerator.genCode(" extends ");
-        codeGenerator.genCode(settings.get("superClass"));
-      }
-      
       if (implementsExists) {
         codeGenerator.genCode(", ");
       } else {
         codeGenerator.genCode(" implements ");
       }
-      codeGenerator.genCode(cu_name + "TreeConstants ");
-      codeGenerator.genCode(", ");
+
       codeGenerator.genCodeLine(cu_name + "Constants ");
-      codeGenerator.genCodeLine("{");
-      
-      if (jjtreeGenerated) {
-        codeGenerator.genCodeLine("  protected JJT" + cu_name + "State jjtree = new JJT" + cu_name + "State();");
-        codeGenerator.genCodeLine("\n");
-      }
-      
-      
       if (cu_to_insertion_point_2.size() != 0) {
         codeGenerator.printTokenSetup(cu_to_insertion_point_2.get(0));
         for (final Iterator<Token> it = cu_to_insertion_point_2.iterator(); it.hasNext();) {
           codeGenerator.printToken(it.next());
         }
       }
-      
 
       // copy other stuff
       Token t1 = JavaCCGlobals.otherLanguageDeclTokenBeg;
@@ -1071,7 +1049,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       }
       codeGenerator.genCodeLine("");
     }
-    codeGenerator.genCodeLine("}");
+//    codeGenerator.genCodeLine("}");
   }
 
   @Override
@@ -1756,6 +1734,21 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       retval += "\u0002\n" + "}";
       for (int i = 0; i < e_nrw.catchblks.size(); i++) {
         retval += " catch (";
+        list = e_nrw.types.get(i);
+        if (list.size() != 0) {
+          codeGenerator.printTokenSetup((Token)(list.get(0)));
+          for (Iterator<Token> it = list.iterator(); it.hasNext();) {
+            t = it.next();
+            retval += CodeGenHelper.getStringToPrint(t);
+          }
+          retval += codeGenerator.getTrailingComments(t);
+        }
+        retval += " ";
+        t = (Token)(e_nrw.ids.get(i));
+        codeGenerator.printTokenSetup(t);
+        retval += CodeGenHelper.getStringToPrint(t);
+        retval += codeGenerator.getTrailingComments(t);
+        retval += ") {\u0003\n";
         list = e_nrw.catchblks.get(i);
         if (list.size() != 0) {
           codeGenerator.printTokenSetup(list.get(0)); ccol = 1;

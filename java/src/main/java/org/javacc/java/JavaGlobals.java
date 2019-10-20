@@ -20,7 +20,7 @@
 package org.javacc.java;
 
 import org.javacc.Version;
-import org.javacc.jjtree.JJTreeOptions;
+import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.JavaCCErrors;
 import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.JavaCCParserConstants;
@@ -36,8 +36,10 @@ import org.javacc.parser.TokenProduction;
 import org.javacc.utils.OutputFileGenerator;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -196,9 +198,7 @@ public abstract class JavaGlobals extends JavaCCGlobals implements JavaCCParserC
 
     List<String> tn = new ArrayList<String>(toolNames);
     tn.add(toolName);
-    if (JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
-      ostr.println("package " + JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE) + ";");
-    }
+    
     ostr.println("/* " + getIdString(tn, cu_name + "Constants.java") + " */");
 
     if (cu_to_insertion_point_1.size() != 0 && cu_to_insertion_point_1.get(0).kind == PACKAGE) {
@@ -275,6 +275,40 @@ public abstract class JavaGlobals extends JavaCCGlobals implements JavaCCParserC
     ostr.close();
   }
 
+  public static void generateSimple(String template, String outputFileName, String fileHeader, CodeGeneratorSettings settings) throws IOException
+  {
+    File outputDir = new File((String)settings.get("OUTPUT_DIRECTORY"));
+    File outputFile = new File(outputDir, outputFileName);
+    final PrintWriter ostr = new PrintWriter(new FileWriter(outputFile));
+    OutputFileGenerator generator = new OutputFileGenerator(template, settings);
+
+    ostr.write(JavaGlobals.writePackage());
+    
+    generator.generate(ostr);
+    ostr.close();
+  }
+
+  public static String writePackage() {
+    StringWriter writer = new StringWriter();
+    PrintWriter ostr = new PrintWriter(writer);
+    Token t = null;
+    if (cu_to_insertion_point_1.size() != 0 && cu_to_insertion_point_1.get(0).kind == PACKAGE) {
+      for (int i = 1; i < cu_to_insertion_point_1.size(); i++) {
+        if (cu_to_insertion_point_1.get(i).kind == SEMICOLON) {
+          printTokenSetup(cu_to_insertion_point_1.get(0));
+          for (int j = 0; j <= i; j++) {
+            t = cu_to_insertion_point_1.get(j);
+            printToken(t, ostr, true);
+          }
+          printTrailingComments(t, ostr, true);
+          ostr.println("");
+          ostr.println("");
+          break;
+        }
+      }
+    }
+    return writer.toString();
+  }
 
   public static String getStatic() {
     return (Options.getStatic() ? JavaGlobals.getStatic() + " " : "");

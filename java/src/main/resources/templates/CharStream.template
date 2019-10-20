@@ -1,7 +1,3 @@
-#if NAMESPACE
-package ${NAMESPACE};
-#fi
-
 /**
  * This interface describes a character stream that maintains line and
  * column number positions of the characters.  It also has the capability

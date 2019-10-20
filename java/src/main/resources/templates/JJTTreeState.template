@@ -1,7 +1,3 @@
-#if NAMESPACE
-package ${NAMESPACE};
-#fi
-
 public class JJT${PARSER_NAME}State {
   private java.util.List<Node> nodes;
   private java.util.List<Integer> marks;
