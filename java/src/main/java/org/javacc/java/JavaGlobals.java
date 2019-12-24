@@ -311,7 +311,7 @@ public abstract class JavaGlobals extends JavaCCGlobals implements JavaCCParserC
   }
 
   public static String getStatic() {
-    return (Options.getStatic() ? JavaGlobals.getStatic() + " " : "");
+    return (Options.getStatic() ? "static " : "");
   }
 
   public static String getLongType() {

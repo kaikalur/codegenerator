@@ -158,26 +158,38 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
         }
       }
 
+      // copy other stuff
+      Token t1 = JavaCCGlobals.otherLanguageDeclTokenBeg;
+      Token t2 = JavaCCGlobals.otherLanguageDeclTokenEnd;
+
+      while(t1.kind != JavaCCParserConstants.LBRACE) {
+        codeGenerator.printToken(t1);
+
+        if (t1.kind == JavaCCParserConstants.IMPLEMENTS) {
+          implementsExists = true;
+        } else if (t1.kind == JavaCCParserConstants.CLASS) {
+          implementsExists = false;
+        }
+        t1 = t1.next;
+      }
+      
       if (implementsExists) {
         codeGenerator.genCode(", ");
       } else {
         codeGenerator.genCode(" implements ");
       }
+      codeGenerator.genCode(cu_name + "Constants ");
 
-      codeGenerator.genCodeLine(cu_name + "Constants ");
+      while(t1 != t2) {
+        codeGenerator.printToken(t1);
+        t1 = t1.next;
+      }
+      
       if (cu_to_insertion_point_2.size() != 0) {
         codeGenerator.printTokenSetup(cu_to_insertion_point_2.get(0));
         for (final Iterator<Token> it = cu_to_insertion_point_2.iterator(); it.hasNext();) {
           codeGenerator.printToken(it.next());
         }
-      }
-
-      // copy other stuff
-      Token t1 = JavaCCGlobals.otherLanguageDeclTokenBeg;
-      Token t2 = JavaCCGlobals.otherLanguageDeclTokenEnd;
-      while(t1 != t2) {
-        codeGenerator.printToken(t1);
-        t1 = t1.next;
       }
 
       codeGenerator.genCodeLine();
@@ -1734,7 +1746,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       retval += "\u0002\n" + "}";
       for (int i = 0; i < e_nrw.catchblks.size(); i++) {
         retval += " catch (";
-        list = e_nrw.types.get(i);
+        list = e_nrw.catchblks.get(i);
         if (list.size() != 0) {
           codeGenerator.printTokenSetup((Token)(list.get(0)));
           for (Iterator<Token> it = list.iterator(); it.hasNext();) {
