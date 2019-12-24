@@ -162,15 +162,17 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       Token t1 = JavaCCGlobals.otherLanguageDeclTokenBeg;
       Token t2 = JavaCCGlobals.otherLanguageDeclTokenEnd;
 
-      while(t1.kind != JavaCCParserConstants.LBRACE) {
-        codeGenerator.printToken(t1);
-
-        if (t1.kind == JavaCCParserConstants.IMPLEMENTS) {
-          implementsExists = true;
-        } else if (t1.kind == JavaCCParserConstants.CLASS) {
-          implementsExists = false;
+      if(t1 != null) {
+        while(t1.kind != JavaCCParserConstants.LBRACE) {
+          codeGenerator.printToken(t1);
+  
+          if (t1.kind == JavaCCParserConstants.IMPLEMENTS) {
+            implementsExists = true;
+          } else if (t1.kind == JavaCCParserConstants.CLASS) {
+            implementsExists = false;
+          }
+          t1 = t1.next;
         }
-        t1 = t1.next;
       }
       
       if (implementsExists) {
@@ -180,9 +182,11 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       }
       codeGenerator.genCode(cu_name + "Constants ");
 
-      while(t1 != t2) {
-        codeGenerator.printToken(t1);
-        t1 = t1.next;
+      if(t1 != null) {
+        while(t1.next != t2) {
+          codeGenerator.printToken(t1);
+          t1 = t1.next;
+        }
       }
       
       if (cu_to_insertion_point_2.size() != 0) {
@@ -1061,7 +1065,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       }
       codeGenerator.genCodeLine("");
     }
-//    codeGenerator.genCodeLine("}");
+    codeGenerator.genCodeLine("}");
   }
 
   @Override
