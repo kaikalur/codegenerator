@@ -101,7 +101,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
    * possible for the same phase 3 routine to be requested multiple times
    * with different lookaheads.  The hash table provides a easily searchable
    * capability to determine the previous requests.
-   * The phase 3 routines now are performed in a two step process - the first
+   * The phase 3 routines nExpressionTreeConstantsow are performed in a two step process - the first
    * step gathers the requests (replacing requests with lower lookaheads with
    * those requiring larger lookaheads).  The second step then generates these
    * methods.
@@ -1065,7 +1065,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       }
       codeGenerator.genCodeLine("");
     }
-    codeGenerator.genCodeLine("}");
+//    codeGenerator.genCodeLine("}");
   }
 
   @Override
@@ -1750,7 +1750,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       retval += "\u0002\n" + "}";
       for (int i = 0; i < e_nrw.catchblks.size(); i++) {
         retval += " catch (";
-        list = e_nrw.catchblks.get(i);
+        list = e_nrw.types.get(i);
         if (list.size() != 0) {
           codeGenerator.printTokenSetup((Token)(list.get(0)));
           for (Iterator<Token> it = list.iterator(); it.hasNext();) {
@@ -1760,11 +1760,11 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
           retval += codeGenerator.getTrailingComments(t);
         }
         retval += " ";
-        t = (Token)(e_nrw.ids.get(i));
-        codeGenerator.printTokenSetup(t);
-        retval += CodeGenHelper.getStringToPrint(t);
-        retval += codeGenerator.getTrailingComments(t);
-        retval += ") {\u0003\n";
+//        t = (Token)(e_nrw.ids.get(i));
+//        codeGenerator.printTokenSetup(t);
+//        retval += CodeGenHelper.getStringToPrint(t);
+//        retval += codeGenerator.getTrailingComments(t);
+//        retval += ") {\u0003\n";
         list = e_nrw.catchblks.get(i);
         if (list.size() != 0) {
           codeGenerator.printTokenSetup(list.get(0)); ccol = 1;
