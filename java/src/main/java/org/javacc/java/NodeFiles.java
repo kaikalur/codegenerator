@@ -10,8 +10,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.javacc.Version;
+import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.Options;
 import org.javacc.parser.OutputFile;
+import org.javacc.parser.Token;
 import org.javacc.utils.OutputFileGenerator;
 import org.javacc.jjtree.*;
 
