@@ -1570,12 +1570,27 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       retval += "\u0002\n" + "}";
       for (int i = 0; i < e_nrw.catchblks.size(); i++) {
         retval += " catch (";
-        list = e_nrw.catchblks.get(i);
+        list = e_nrw.types.get(i);
         if (list.size() != 0) {
-          codeGenerator.printTokenSetup(list.get(0)); ccol = 1;
+          codeGenerator.printTokenSetup(list.get(0));
           for (Iterator<Token> it = list.iterator(); it.hasNext();) {
             t = it.next();
             retval += CodeGenHelper.getStringToPrint(t);
+          }
+          retval += codeGenerator.getTrailingComments(t);
+        }
+//        retval += " ";
+//        t = (Token)(e_nrw.ids.get(i));
+//        codeGenerator.printTokenSetup(t);
+//        retval += codeGenerator.getStringToPrint(t);
+//        retval += codeGenerator.getTrailingComments(t);
+//        retval += ") {\u0003\n";
+        list = e_nrw.catchblks.get(i);
+        if (list.size() != 0) {
+          codeGenerator.printTokenSetup((Token)(list.get(0))); ccol = 1;
+          for (Iterator<Token> it = list.iterator(); it.hasNext();) {
+            t = it.next();
+            retval += codeGenerator.getStringToPrint(t);
           }
           retval += codeGenerator.getTrailingComments(t);
         }
