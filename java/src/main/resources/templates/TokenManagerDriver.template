@@ -104,6 +104,7 @@ private ${STATIC?static :} int jjRunStringLiteralMatch() {
     int index = arr[0];
     for (int i = 0; i < arr[1]; i++) {
       int len = stringLiterals[index++];
+      int ignoreCase = stringLiterals[index++];
 #if DEBUG_TOKEN_MANAGER
       System.err.println(
           "Looking for string literal match of kind: " +
@@ -114,7 +115,8 @@ private ${STATIC?static :} int jjRunStringLiteralMatch() {
 #if DEBUG_TOKEN_MANAGER
       System.err.println("Cur char: '" + (char)curChar + "'");
 #fi
-        if (curChar != stringLiterals[index + curPos]) break;
+        if (curChar != stringLiterals[index + curPos] &&
+            (ignoreCase == 0 || curChar != stringLiterals[index + len + curPos])) break;
         if (++curPos == len) break;
         if (!moveToNextChar()) {
           --curPos;
@@ -122,9 +124,9 @@ private ${STATIC?static :} int jjRunStringLiteralMatch() {
         }
       } while(curPos < len);
       if (curPos == len) {
-        jjmatchedKind = stringLiterals[index + len];
+        jjmatchedKind = stringLiterals[index + len + (ignoreCase * len)];
         jjmatchedPos = curPos;
-        startState = stringLiterals[index + len + 1];
+        startState = stringLiterals[index + len + (ignoreCase * len) + 1];
 #if DEBUG_TOKEN_MANAGER
         System.err.println(
             "Currently matched the first: " + jjmatchedPos +
@@ -137,7 +139,7 @@ private ${STATIC?static :} int jjRunStringLiteralMatch() {
         curPos++;
         break;
       } else {
-        index += len + 2;
+        index += len + (ignoreCase * len) + 2;
         input_stream.backup(curPos + 1);
         curPos = 0;
         if (!moveToNextChar()) {
@@ -330,7 +332,7 @@ protected ${STATIC?static :} Token jjFillToken() {
     beginColumn = endColumn = input_stream.getEndColumn();
 #fi
   } else {
-    String im = tokenImage[jjmatchedKind];
+    String im = jjstrLiteralImages[jjmatchedKind];
     curTokenImage = (im == null) ? input_stream.GetImage() : im;
 #if KEEP_LINE_COLUMN
     beginLine = input_stream.getBeginLine();
