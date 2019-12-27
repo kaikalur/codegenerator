@@ -249,7 +249,7 @@ public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManager
         for (int j = 0; j < image.length(); j++) {
           if (image.charAt(j) <= 0xff) {
             codeGenerator.genCode(
-                "0" + Integer.toOctalString(image.charAt(j)));
+                "\\" + Integer.toOctalString(image.charAt(j)));
           } else {
             String hexVal = Integer.toHexString(image.charAt(j));
             if (hexVal.length() == 3)

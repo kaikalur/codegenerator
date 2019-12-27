@@ -330,7 +330,7 @@ protected ${STATIC?static :} Token jjFillToken() {
     beginColumn = endColumn = input_stream.getEndColumn();
 #fi
   } else {
-    String im = tokenImage[jjmatchedKind];
+    String im = jjstrLiteralImages[jjmatchedKind];
     curTokenImage = (im == null) ? input_stream.GetImage() : im;
 #if KEEP_LINE_COLUMN
     beginLine = input_stream.getBeginLine();
