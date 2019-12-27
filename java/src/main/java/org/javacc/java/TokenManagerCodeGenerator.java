@@ -83,17 +83,27 @@ public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManager
       if (i > 0) codeGenerator.genCodeLine(", ");
       for (String s : l) {
         if (j > 0) codeGenerator.genCodeLine(", ");
+        int kind = kinds.get(j);
+        boolean ignoreCase = tokenizerData.ignoreCaseKinds.contains(kind);
         codeGenerator.genCode(s.length());
+        codeGenerator.genCode(", ");
+        codeGenerator.genCode(ignoreCase ? 1 : 0);
         for (int k = 0; k < s.length(); k++) {
           codeGenerator.genCode(", ");
           codeGenerator.genCode((int)s.charAt(k));
           i++;
         }
-        int kind = kinds.get(j);
+        if(ignoreCase) {
+          for (int k = 0; k < s.length(); k++) {
+            codeGenerator.genCode(", ");
+            codeGenerator.genCode((int)s.toUpperCase().charAt(k));
+            i++;
+          }
+        }
         codeGenerator.genCode(", " + kind);
         codeGenerator.genCode(
             ", " + tokenizerData.kindToNfaStartState.get(kind));
-        i += 3;
+        i += 4;
         j++;
       }
       startAndSize.put(key, arr);
