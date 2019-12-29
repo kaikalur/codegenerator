@@ -428,6 +428,6 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
     generator.generate(pw);
     pw.close();
 
-    NodeFiles.generateOutputFiles();
+    NodeFiles.generateOutputFiles(io);
   }
 }
