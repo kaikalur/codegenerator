@@ -412,7 +412,7 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
   }
 
   @Override
-  public void generateHelperFiles() throws java.io.IOException {
+  public void generateHelperFiles(IO io) throws java.io.IOException {
     Map<String, Object> options = Options.getOptions();
     options.put(Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
     String filePrefix = new File(JJTreeOptions.getJJTreeOutputDirectory(), "JJT" + JJTreeGlobals.parserName + "State")
