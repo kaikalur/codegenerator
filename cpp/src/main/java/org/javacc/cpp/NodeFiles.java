@@ -54,8 +54,12 @@ final class NodeFiles {
   }
 
   public static String jjtreeIncludeFile(String s) {
-    return new File(JJTreeOptions.getJJTreeOutputDirectory(), s + ".h").getAbsolutePath();
-  }
+	    return new File(JJTreeOptions.getJJTreeOutputDirectory(), s + ".h").getAbsolutePath();
+	  }
+
+  public static String jjtreeIncludeFile(String s, IO io) {
+	    return new File(JJTreeOptions.getASTNodesDirectory(io), s + ".h").getAbsolutePath();
+	  }
 
   public static String jjtreeImplFile() {
     return new File(JJTreeOptions.getJJTreeOutputDirectory(), JJTreeGlobals.parserName + "Tree.cc").getAbsolutePath();
@@ -70,15 +74,15 @@ final class NodeFiles {
     return new File(JJTreeOptions.getJJTreeOutputDirectory(), name + ".h").getAbsolutePath();
   }
 
-  static void generateOutputFiles() throws IOException {
+  static void generateOutputFiles(IO io) throws IOException {
     generateNodeHeader();
     generateSimpleNodeHeader();
     generateSimpleNodeCode();
     generateNodeHeader();
      generateOneTreeInterface();
     // generateOneTreeImpl();
-    generateMultiTreeInterface();
-    generateMultiTreeImpl();
+    generateMultiTreeInterface(io);
+    generateMultiTreeImpl(io);
     generateTreeConstants();
     generateVisitors();
   }
@@ -292,13 +296,19 @@ final class NodeFiles {
     }
   }
 
-  private static void generateMultiTreeInterface() {
+  private static void generateMultiTreeInterface(IO io) {
     OutputFile outputFile = null;
 
     try {
       for (Iterator<String> i = nodesToBuild.iterator(); i.hasNext();) {
         String node = (String) i.next();
-        File file = new File(jjtreeIncludeFile(node));
+        File file;
+        file = new File (jjtreeIncludeFile(node, io));
+        if (file.exists()) {
+        	return;
+        }
+        
+        file = new File(jjtreeIncludeFile(node));
         String[] options = new String[] { "MULTI", "NODE_USES_PARSER", "VISITOR", "TRACK_TOKENS", "NODE_PREFIX",
             "NODE_EXTENDS", "NODE_FACTORY", Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC };
         outputFile = new OutputFile(file, nodeVersion, options);
@@ -330,13 +340,18 @@ final class NodeFiles {
     }
   }
 
-  private static void generateMultiTreeImpl() {
+  private static void generateMultiTreeImpl(IO io) {
     OutputFile outputFile = null;
 
     try {
       for (Iterator<String> i = nodesToBuild.iterator(); i.hasNext();) {
         String node = (String) i.next();
-        File file = new File(jjtreeImplFile(node));
+        File file;
+        file = new File (jjtreeIncludeFile(node, io));
+        if (file.exists()) {
+        	return;
+        }
+        file = new File(jjtreeImplFile(node));
         String[] options = new String[] { "MULTI", "NODE_USES_PARSER", "VISITOR", "TRACK_TOKENS", "NODE_PREFIX",
             "NODE_EXTENDS", "NODE_FACTORY", Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC };
         outputFile = new OutputFile(file, nodeVersion, options);
