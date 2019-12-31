@@ -54,13 +54,17 @@ final class NodeFiles {
   }
 
   public static String jjtreeIncludeFile(String s) {
-	    return new File(JJTreeOptions.getJJTreeOutputDirectory(), s + ".h").getAbsolutePath();
-	  }
+    return new File(JJTreeOptions.getJJTreeOutputDirectory(), s + ".h").getAbsolutePath();
+  }
 
-  public static String jjtreeIncludeFile(String s, IO io) {
-	    return new File(JJTreeOptions.getASTNodesDirectory(io), s + ".h").getAbsolutePath();
-	  }
+  public static String jjtreeASTNodeInterfaceFile(String s) {
+    return new File(JJTreeOptions.getASTNodeDirectory(), s + ".h").getAbsolutePath();
+  }
 
+  public static String jjtreeASTNodeImplFile(String s) {
+    return new File(JJTreeOptions.getASTNodeDirectory(), s + ".cc").getAbsolutePath();
+  }
+    
   public static String jjtreeImplFile() {
     return new File(JJTreeOptions.getJJTreeOutputDirectory(), JJTreeGlobals.parserName + "Tree.cc").getAbsolutePath();
   }
@@ -74,15 +78,15 @@ final class NodeFiles {
     return new File(JJTreeOptions.getJJTreeOutputDirectory(), name + ".h").getAbsolutePath();
   }
 
-  static void generateOutputFiles(IO io) throws IOException {
+  static void generateOutputFiles() throws IOException {
     generateNodeHeader();
     generateSimpleNodeHeader();
     generateSimpleNodeCode();
     generateNodeHeader();
      generateOneTreeInterface();
     // generateOneTreeImpl();
-    generateMultiTreeInterface(io);
-    generateMultiTreeImpl(io);
+    generateMultiTreeInterface();
+    generateMultiTreeImpl();
     generateTreeConstants();
     generateVisitors();
   }
@@ -296,14 +300,14 @@ final class NodeFiles {
     }
   }
 
-  private static void generateMultiTreeInterface(IO io) {
+  private static void generateMultiTreeInterface() {
     OutputFile outputFile = null;
 
     try {
       for (Iterator<String> i = nodesToBuild.iterator(); i.hasNext();) {
         String node = (String) i.next();
         File file;
-        file = new File (jjtreeIncludeFile(node, io));
+        file = new File (jjtreeASTNodeInterfaceFile(node));
         if (file.exists()) {
         	return;
         }
@@ -340,14 +344,14 @@ final class NodeFiles {
     }
   }
 
-  private static void generateMultiTreeImpl(IO io) {
+  private static void generateMultiTreeImpl() {
     OutputFile outputFile = null;
 
     try {
       for (Iterator<String> i = nodesToBuild.iterator(); i.hasNext();) {
         String node = (String) i.next();
         File file;
-        file = new File (jjtreeIncludeFile(node, io));
+        file = new File (jjtreeASTNodeImplFile(node));
         if (file.exists()) {
         	return;
         }
