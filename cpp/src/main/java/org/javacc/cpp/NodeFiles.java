@@ -309,7 +309,7 @@ final class NodeFiles {
         File file;
         file = new File (jjtreeASTNodeInterfaceFile(node));
         if (file.exists()) {
-        	return;
+        	continue;
         }
         
         file = new File(jjtreeIncludeFile(node));
@@ -353,7 +353,7 @@ final class NodeFiles {
         File file;
         file = new File (jjtreeASTNodeImplFile(node));
         if (file.exists()) {
-        	return;
+        	continue;
         }
         file = new File(jjtreeImplFile(node));
         String[] options = new String[] { "MULTI", "NODE_USES_PARSER", "VISITOR", "TRACK_TOKENS", "NODE_PREFIX",
