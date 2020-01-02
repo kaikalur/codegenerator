@@ -49,6 +49,9 @@ final class NodeFiles {
       }
 
       for (String node: nodesToBuild) {
+		file = new File(JJTreeOptions.getASTNodeDirectory(), node + ".java");
+		if (file.exists())
+			continue;
         generateMULTINode(pw, node);
       }
 
