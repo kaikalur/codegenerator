@@ -83,7 +83,7 @@ final class NodeFiles {
     generateSimpleNodeHeader();
     generateSimpleNodeCode();
     generateNodeHeader();
-     generateOneTreeInterface();
+    generateOneTreeInterface();
     // generateOneTreeImpl();
     generateMultiTreeInterface();
     generateMultiTreeImpl();
