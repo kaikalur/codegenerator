@@ -1,0 +1,90 @@
+\#include "stdio.h"
+\#include "JavaCC.h"
+\#include "CharStream.h"
+\#include "Token.h"
+\#include "TokenMgrError.h"
+\#include "${parserName}Tree.h"
+\#include "TokenManager.h"
+\#include "${parserName}Constants.h"
+
+#if NAMESPACE
+namespace ${NAMESPACE_OPEN}
+#fi
+class ${parserName};
+
+/** Token Manager. */
+class ${parserName}TokenManager : public TokenManager {
+public:
+\#ifndef JAVACC_CHARSTREAM
+\#define JAVACC_CHARSTREAM CharStream
+\#endif
+
+private:
+  ${STATIC?static :}int defaultLexState = ${defaultLexState};
+  ${STATIC?static :}int curLexState = ${defaultLexState};
+  ${STATIC?static :}int jjmatchedPos;
+  ${STATIC?static :}int jjmatchedKind;
+
+  ${STATIC?static :}int stateSet[${generatedStates}];
+  ${STATIC?static :}int newStateSet[${generatedStates}];
+  ${STATIC?static :}long moved[${generatedStates}];
+  ${STATIC?static :}long moveIndex = 1;
+  ${STATIC?static :}long jjChars[${nfaSize}][${charsVectorSize}];
+    
+  ${STATIC?static :}JJString                  jjimage;
+  ${STATIC?static :}JJString                  image = jjimage;
+  ${STATIC?static :}int                       jjimageLen;
+  ${STATIC?static :}int                       lengthOfMatch;
+  ${STATIC?static :}JJChar                    curChar;
+  ${STATIC?static :}JAVACC_CHARSTREAM       * input_stream;
+
+  int                       jjrounds[${stateSetSize}];
+  int                       jjstateSet[2 * ${stateSetSize}];
+  TokenMgrError           * errorHandler = nullptr;
+  bool 											delete_eh = false;
+
+public: 
+#if TOKEN_MANAGER_USES_PARSER && !STATIC
+  ${parserName}TokenManager(${parserName} parserArg, JAVACC_CHARSTREAM * stream, int lexState = 0);
+#else
+  ${parserName}TokenManager(JAVACC_CHARSTREAM * stream, int lexState = 0);
+#fi
+  virtual ~${parserName}TokenManager() {}
+
+  Token * getNextToken();
+
+protected:
+  bool moveToNextChar();
+  
+#if TOKEN_MANAGER_USES_PARSER && !STATIC
+  void ReInit( ${parserName} parserArg, JAVACC_CHARSTREAM * stream, int lexState = 0);
+#else
+  ${STATIC?static :}void ReInit(JAVACC_CHARSTREAM * stream, int lexState = 0);
+#fi
+
+  ${STATIC?static :}void SwitchTo(int lexState);
+
+
+private:
+  ${STATIC?static :}void TokenLexicalActions(Token * matchedToken);
+  ${STATIC?static :}void SkipLexicalActions(Token * matchedToken);
+  ${STATIC?static :}void MoreLexicalActions();
+
+  ${STATIC?static :}int getStartAndSize(int index, int isCount);
+  ${STATIC?static :}int jjRunStringLiteralMatch();
+
+  ${STATIC?static :}int jjMoveNfa(int startState, int curPos);
+  ${STATIC?static :}Token * jjFillToken();
+  ${STATIC?static :}void reportError(int lastReadPosition);
+
+#if NAMESPACE
+${NAMESPACE_CLOSE}
+#fi
+
+public:
+  void setErrorHandler(TokenMgrError *eh) {
+      if (delete_eh) delete errorHandler, errorHandler = nullptr;
+      delete_eh = false;  // We don't delete stuff passed in.
+      errorHandler = eh;
+  }
+};

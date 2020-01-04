@@ -6,7 +6,7 @@ import org.javacc.parser.TokenManagerCodeGenerator;
 import org.javacc.utils.OutputFileGenerator;
 
 public class CodeGenerator implements org.javacc.parser.CodeGenerator {
-  
+
   public static final boolean IS_DEBUG = true;
 
   /**
@@ -23,25 +23,36 @@ public class CodeGenerator implements org.javacc.parser.CodeGenerator {
   @Override
   public boolean generateHelpers(CodeGeneratorSettings settings) {
     try {
-      OutputFileGenerator.generateSimple("/templates/cpp/CharStream.h.template", "CharStream.h", "/* JavaCC generated file. */", settings);
-      OutputFileGenerator.generateSimple("/templates/cpp/CharStream.cc.template", "CharStream.cc", "/* JavaCC generated file. */", settings);
+      OutputFileGenerator.generateSimple("/templates/cpp/CharStream.h.template", "CharStream.h",
+          "/* JavaCC generated file. */", settings);
+      OutputFileGenerator.generateSimple("/templates/cpp/CharStream.cc.template", "CharStream.cc",
+          "/* JavaCC generated file. */", settings);
 
-      OutputFileGenerator.generateSimple("/templates/cpp/TokenMgrError.h.template", "TokenMgrError.h", "/* JavaCC generated file. */", settings);
-      OutputFileGenerator.generateSimple("/templates/cpp/TokenMgrError.cc.template", "TokenMgrError.cc", "/* JavaCC generated file. */", settings);
+      OutputFileGenerator.generateSimple("/templates/cpp/TokenMgrError.h.template", "TokenMgrError.h",
+          "/* JavaCC generated file. */", settings);
+      OutputFileGenerator.generateSimple("/templates/cpp/TokenMgrError.cc.template", "TokenMgrError.cc",
+          "/* JavaCC generated file. */", settings);
 
-      OutputFileGenerator.generateSimple("/templates/cpp/ParseException.h.template", "ParseException.h", "/* JavaCC generated file. */", settings);
-      OutputFileGenerator.generateSimple("/templates/cpp/ParseException.cc.template", "ParseException.cc", "/* JavaCC generated file. */", settings);
+      OutputFileGenerator.generateSimple("/templates/cpp/ParseException.h.template", "ParseException.h",
+          "/* JavaCC generated file. */", settings);
+      OutputFileGenerator.generateSimple("/templates/cpp/ParseException.cc.template", "ParseException.cc",
+          "/* JavaCC generated file. */", settings);
 
-      OutputFileGenerator.generateSimple("/templates/cpp/TokenManager.h.template", "TokenManager.h", "/* JavaCC generated file. */", settings);
+      OutputFileGenerator.generateSimple("/templates/cpp/TokenManager.h.template", "TokenManager.h",
+          "/* JavaCC generated file. */", settings);
 
-      OutputFileGenerator.generateSimple("/templates/cpp/JavaCC.h.template", "JavaCC.h", "/* JavaCC generated file. */", settings);
-      OutputFileGenerator.generateSimple("/templates/cpp/ErrorHandler.h.template", "ErrorHandler.h", "/* JavaCC generated file. */", settings);
+      OutputFileGenerator.generateSimple("/templates/cpp/JavaCC.h.template", "JavaCC.h", "/* JavaCC generated file. */",
+          settings);
+      OutputFileGenerator.generateSimple("/templates/cpp/ErrorHandler.h.template", "ErrorHandler.h",
+          "/* JavaCC generated file. */", settings);
 
-//      if ((Boolean) settings.get("JAVA_UNICODE_ESCAPE")) {
-//        OutputFileGenerator.generateSimple("/templates/cpp/JavaCharStream.template", "JavaCharStream.cs", "/* JavaCC generated file. */", settings);
-//      } else {
-//        OutputFileGenerator.generateSimple("/templates/cpp/CharStream.template", "CharStream.cs", "/* JavaCC generated file. */", settings);
-//      }
+      // if ((Boolean) settings.get("JAVA_UNICODE_ESCAPE")) {
+      // OutputFileGenerator.generateSimple("/templates/cpp/JavaCharStream.template",
+      // "JavaCharStream.cs", "/* JavaCC generated file. */", settings);
+      // } else {
+      // OutputFileGenerator.generateSimple("/templates/cpp/CharStream.template",
+      // "CharStream.cs", "/* JavaCC generated file. */", settings);
+      // }
 
       OtherFilesGenCPP.start();
     } catch (Exception e) {
@@ -64,7 +75,7 @@ public class CodeGenerator implements org.javacc.parser.CodeGenerator {
    */
   @Override
   public TokenManagerCodeGenerator getTokenManagerCodeGenerator() {
-    return new org.javacc.cpp.classic.TokenManagerCodeGenerator();
+    return new org.javacc.cpp.TokenManagerCodeGenerator();
   }
 
   /**
@@ -76,8 +87,8 @@ public class CodeGenerator implements org.javacc.parser.CodeGenerator {
   }
 
   /**
-   * TODO(sreeni): Fix this when we do tree annotations in the parser code generator. The JJTree
-   * preprocesor.
+   * TODO(sreeni): Fix this when we do tree annotations in the parser code
+   * generator. The JJTree preprocesor.
    */
   @Override
   public org.javacc.jjtree.DefaultJJTreeVisitor getJJTreeCodeGenerator() {

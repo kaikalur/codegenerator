@@ -64,8 +64,6 @@ ${decls}
   {
 #if TOKEN_MANAGER_USES_PARSER && !STATIC
 	this.parser = parserArg;
-#else
-
 #fi
 
     jjmatchedPos = 0;
