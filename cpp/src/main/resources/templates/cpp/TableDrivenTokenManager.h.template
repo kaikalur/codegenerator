@@ -20,7 +20,7 @@ public:
 \#endif
 
 private:
-  ${STATIC?static :}int defaultLexState = ${defaultLexState};
+  ${STATIC?static :}int defaultLexState;
   ${STATIC?static :}int curLexState = ${defaultLexState};
   ${STATIC?static :}int jjmatchedPos;
   ${STATIC?static :}int jjmatchedKind;
@@ -28,7 +28,7 @@ private:
   ${STATIC?static :}int stateSet[${generatedStates}];
   ${STATIC?static :}int newStateSet[${generatedStates}];
   ${STATIC?static :}long moved[${generatedStates}];
-  ${STATIC?static :}long moveIndex = 1;
+  ${STATIC?static :}long moveIndex;
   ${STATIC?static :}long jjChars[${nfaSize}][${charsVectorSize}];
     
   ${STATIC?static :}JJString                  jjimage;
@@ -40,8 +40,8 @@ private:
 
   int                       jjrounds[${stateSetSize}];
   int                       jjstateSet[2 * ${stateSetSize}];
-  TokenMgrError           * errorHandler = nullptr;
-  bool 											delete_eh = false;
+  TokenMgrError           * errorHandler;
+  bool 						delete_eh;
 
 public: 
 #if TOKEN_MANAGER_USES_PARSER && !STATIC
