@@ -38,6 +38,12 @@ void ${parserName}TokenManager::ReInit( ${parserName} parserArg, JAVACC_CHARSTRE
 ${STATIC?static :} void ${parserName}TokenManager::ReInit(JAVACC_CHARSTREAM * stream, int lexState)
 {
 #fi
+    defaultLexState = ${defaultLexState};
+    curLexState = ${defaultLexState};
+    moveIndex = 1;
+    errorHandler = nullptr;
+    delete_eh = false;
+
     for (int i = 0; i < ${nfaSize}; i++) {
       int ind = 0;
       // We originally generate something like RLE for the static arrays and
