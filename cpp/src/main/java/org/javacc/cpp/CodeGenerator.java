@@ -2,8 +2,9 @@
 package org.javacc.cpp;
 
 import org.javacc.parser.CodeGeneratorSettings;
+import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.TokenManagerCodeGenerator;
-import org.javacc.utils.OutputFileGenerator;
+import org.javacc.utils.TemplateGenerator;
 
 public class CodeGenerator implements org.javacc.parser.CodeGenerator {
 
@@ -23,37 +24,28 @@ public class CodeGenerator implements org.javacc.parser.CodeGenerator {
   @Override
   public boolean generateHelpers(CodeGeneratorSettings settings) {
     try {
-      OutputFileGenerator.generateSimple("/templates/cpp/CharStream.h.template", "CharStream.h",
-          "/* JavaCC generated file. */", settings);
-      OutputFileGenerator.generateSimple("/templates/cpp/CharStream.cc.template", "CharStream.cc",
-          "/* JavaCC generated file. */", settings);
+      TemplateGenerator.generateTemplate("/templates/cpp/CharStream.h.template", "CharStream.h",
+          JavaCCGlobals.toolName, settings);
+      TemplateGenerator.generateTemplate("/templates/cpp/CharStream.cc.template", "CharStream.cc",
+          JavaCCGlobals.toolName, settings);
 
-      OutputFileGenerator.generateSimple("/templates/cpp/TokenMgrError.h.template", "TokenMgrError.h",
-          "/* JavaCC generated file. */", settings);
-      OutputFileGenerator.generateSimple("/templates/cpp/TokenMgrError.cc.template", "TokenMgrError.cc",
-          "/* JavaCC generated file. */", settings);
+      TemplateGenerator.generateTemplate("/templates/cpp/TokenMgrError.h.template", "TokenMgrError.h",
+          JavaCCGlobals.toolName, settings);
+      TemplateGenerator.generateTemplate("/templates/cpp/TokenMgrError.cc.template", "TokenMgrError.cc",
+          JavaCCGlobals.toolName, settings);
 
-      OutputFileGenerator.generateSimple("/templates/cpp/ParseException.h.template", "ParseException.h",
-          "/* JavaCC generated file. */", settings);
-      OutputFileGenerator.generateSimple("/templates/cpp/ParseException.cc.template", "ParseException.cc",
-          "/* JavaCC generated file. */", settings);
+      TemplateGenerator.generateTemplate("/templates/cpp/ParseException.h.template", "ParseException.h",
+          JavaCCGlobals.toolName, settings);
+      TemplateGenerator.generateTemplate("/templates/cpp/ParseException.cc.template", "ParseException.cc",
+          JavaCCGlobals.toolName, settings);
 
-      OutputFileGenerator.generateSimple("/templates/cpp/TokenManager.h.template", "TokenManager.h",
-          "/* JavaCC generated file. */", settings);
+      TemplateGenerator.generateTemplate("/templates/cpp/TokenManager.h.template", "TokenManager.h",
+          JavaCCGlobals.toolName, settings);
 
-      OutputFileGenerator.generateSimple("/templates/cpp/JavaCC.h.template", "JavaCC.h", "/* JavaCC generated file. */",
+      TemplateGenerator.generateTemplate("/templates/cpp/JavaCC.h.template", "JavaCC.h", JavaCCGlobals.toolName,
           settings);
-      OutputFileGenerator.generateSimple("/templates/cpp/ErrorHandler.h.template", "ErrorHandler.h",
-          "/* JavaCC generated file. */", settings);
-
-      // if ((Boolean) settings.get("JAVA_UNICODE_ESCAPE")) {
-      // OutputFileGenerator.generateSimple("/templates/cpp/JavaCharStream.template",
-      // "JavaCharStream.cs", "/* JavaCC generated file. */", settings);
-      // } else {
-      // OutputFileGenerator.generateSimple("/templates/cpp/CharStream.template",
-      // "CharStream.cs", "/* JavaCC generated file. */", settings);
-      // }
-
+      TemplateGenerator.generateTemplate("/templates/cpp/ErrorHandler.h.template", "ErrorHandler.h",
+          JavaCCGlobals.toolName, settings);
       OtherFilesGenCPP.start();
     } catch (Exception e) {
       return false;

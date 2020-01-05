@@ -12,8 +12,8 @@ import java.util.Map;
 import org.javacc.Version;
 import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.Options;
-import org.javacc.parser.OutputFile;
-import org.javacc.utils.OutputFileGenerator;
+import org.javacc.utils.OutputFile;
+import org.javacc.utils.TemplateGenerator;
 import org.javacc.jjtree.*;
 
 public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
@@ -465,16 +465,14 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
     
     String filePrefix = new File(JJTreeOptions.getJJTreeOutputDirectory(), "JJT" + JJTreeGlobals.parserName + "State").getAbsolutePath();
 
-    OutputFile outputFile = new OutputFile(new File(filePrefix + ".java"), JJTStateVersion, new String[
-0]);
-    PrintWriter ostr = outputFile.getPrintWriter();
-    if(JJTreeGlobals.packageName.length() > 0) {
-      ostr.write("package " + JJTreeGlobals.packageName + ";\n");
+    try(OutputFile output = new OutputFile(new File(filePrefix + ".java"), JavaCCGlobals.toolName, JJTStateVersion, new String[0])) {
+      PrintWriter ostr = output.getPrintWriter();
+      if(JJTreeGlobals.packageName.length() > 0) {
+        ostr.write("package " + JJTreeGlobals.packageName + ";\n");
+      }
+      TemplateGenerator.generateTemplate(ostr, "/templates/JJTTreeState.template", options);
+      ostr.close();
     }
-    OutputFileGenerator generator;
-    generator = new OutputFileGenerator("/templates/JJTTreeState.template", options);
-    generator.generate(ostr);
-    ostr.close();
 
     NodeFiles.generateOutputFiles();
   }

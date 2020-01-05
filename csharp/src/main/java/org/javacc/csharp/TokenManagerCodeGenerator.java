@@ -1,16 +1,16 @@
 package org.javacc.csharp;
 
+import org.javacc.parser.CodeGeneratorSettings;
+import org.javacc.parser.Options;
+import org.javacc.parser.TokenizerData;
+import org.javacc.utils.CodeGenBuilder;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.javacc.parser.CodeGeneratorSettings;
-import org.javacc.parser.CodeGenHelper;
-import org.javacc.parser.Options;
-import org.javacc.parser.TokenizerData;
 
 /**
  * Class that implements a table driven code generator for the token manager in
@@ -19,7 +19,7 @@ import org.javacc.parser.TokenizerData;
 public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGenerator {
   private static final String tokenManagerTemplate =
       "/templates/csharp/TokenManagerDriver.template";
-  private final CodeGenHelper codeGenerator = new CodeGenHelper();
+  private CodeGenBuilder codeGenerator;
 
   @Override
   public void generateCode(CodeGeneratorSettings settings, TokenizerData tokenizerData) {
@@ -43,14 +43,18 @@ public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManager
       settings.put("NAMESPACE", Options.getNamespace());
     }
     settings.put("generatedStates", tokenizerData.nfa.size());
+    
+    String fileName = Options.getOutputDirectory() + File.separator +
+        tokenizerData.parserName + "TokenManager.cs";
     try {
+      codeGenerator = new CodeGenBuilder(fileName, settings);
       if (Options.getNamespace() != null) {
         codeGenerator.genCodeLine("namespace " + Options.getNamespace() + " {\n");
       }
 
       generateConstantsClass(tokenizerData);
 
-      codeGenerator.writeTemplate(tokenManagerTemplate, settings);
+      codeGenerator.genTemplate(tokenManagerTemplate);
       dumpDfaTables(codeGenerator, tokenizerData);
       dumpNfaTables(codeGenerator, tokenizerData);
       dumpMatchInfo(codeGenerator, tokenizerData);
@@ -69,13 +73,12 @@ public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManager
       codeGenerator.genCodeLine("\n}");
     }
     if (!Options.getBuildTokenManager()) return;
-    String fileName = Options.getOutputDirectory() + File.separator +
-                      tokenizerData.parserName + "TokenManager.cs";
-    codeGenerator.saveOutput(fileName);
+   
+    codeGenerator.build();
   }
 
   private void dumpDfaTables(
-      CodeGenHelper codeGenerator, TokenizerData tokenizerData) {
+      CodeGenBuilder codeGenerator, TokenizerData tokenizerData) {
     Map<Integer, int[]> startAndSize = new HashMap<Integer, int[]>();
     int i = 0;
 
@@ -119,7 +122,7 @@ public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManager
   }
 
   private void dumpNfaTables(
-      CodeGenHelper codeGenerator, TokenizerData tokenizerData) {
+      CodeGenBuilder codeGenerator, TokenizerData tokenizerData) {
     // WE do the following for java so that the generated code is reasonable
     // size and can be compiled. May not be needed for other languages.
     codeGenerator.genCodeLine("private static readonly long[][] jjCharData = {");
@@ -221,7 +224,7 @@ public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManager
   }
 
   private void dumpMatchInfo(
-      CodeGenHelper codeGenerator, TokenizerData tokenizerData) {
+      CodeGenBuilder codeGenerator, TokenizerData tokenizerData) {
     Map<Integer, TokenizerData.MatchInfo> allMatches =
         tokenizerData.allMatches;
 
@@ -320,7 +323,7 @@ public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManager
   private void dumpLexicalActions(
       Map<Integer, TokenizerData.MatchInfo> allMatches,
       TokenizerData.MatchType matchType, String kindString,
-      CodeGenHelper codeGenerator) {
+      CodeGenBuilder codeGenerator) {
     codeGenerator.genCodeLine("  switch(" + kindString + ") {");
     for (int i : allMatches.keySet()) {
       TokenizerData.MatchInfo matchInfo = allMatches.get(i);
@@ -338,7 +341,7 @@ public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManager
   }
 
   private static void generateBitVector(
-      String name, BitSet bits, CodeGenHelper codeGenerator) {
+      String name, BitSet bits, CodeGenBuilder codeGenerator) {
     codeGenerator.genCodeLine("private static readonly long[] " + name + " = {");
     long[] longs = bits.toLongArray();
     for (int i = 0; i < longs.length; i++) {

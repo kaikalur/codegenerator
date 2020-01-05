@@ -14,8 +14,8 @@ import java.util.Set;
 
 import org.javacc.Version;
 import org.javacc.parser.Options;
-import org.javacc.parser.OutputFile;
-import org.javacc.utils.OutputFileGenerator;
+import org.javacc.utils.OutputFile;
+import org.javacc.utils.TemplateGenerator;
 import org.javacc.jjtree.*;
 
 final class NodeFiles {
@@ -98,10 +98,9 @@ final class NodeFiles {
     try {
       String[] options = new String[] { "MULTI", "NODE_USES_PARSER", "VISITOR", "TRACK_TOKENS", "NODE_PREFIX",
           "NODE_EXTENDS", "NODE_FACTORY", "SUPPORT_CLASS_VISIBILITY_PUBLIC" };
-      outputFile = new OutputFile(file, nodeVersion, options);
-      outputFile.setToolName("JJTree");
+      outputFile = new OutputFile(file, JJTreeGlobals.toolName, nodeVersion, options);
 
-      if (file.exists() && !outputFile.needToWrite) {
+      if (file.exists() && !outputFile.isNeedToWrite()) {
         return;
       }
 
@@ -133,10 +132,9 @@ final class NodeFiles {
     try {
       String[] options = new String[] { "MULTI", "NODE_USES_PARSER", "VISITOR", "TRACK_TOKENS", "NODE_PREFIX",
           "NODE_EXTENDS", "NODE_FACTORY", Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC };
-      outputFile = new OutputFile(file, nodeVersion, options);
-      outputFile.setToolName("JJTree");
+      outputFile = new OutputFile(file, JJTreeGlobals.toolName, nodeVersion, options);
 
-      if (file.exists() && !outputFile.needToWrite) {
+      if (file.exists() && !outputFile.isNeedToWrite()) {
         return;
       }
 
@@ -167,10 +165,9 @@ final class NodeFiles {
     try {
       String[] options = new String[] { "MULTI", "NODE_USES_PARSER", "VISITOR", "TRACK_TOKENS", "NODE_PREFIX",
           "NODE_EXTENDS", "NODE_FACTORY", Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC };
-      outputFile = new OutputFile(file, nodeVersion, options);
-      outputFile.setToolName("JJTree");
+      outputFile = new OutputFile(file, JJTreeGlobals.toolName, nodeVersion, options);
 
-      if (file.exists() && !outputFile.needToWrite) {
+      if (file.exists() && !outputFile.isNeedToWrite()) {
         return;
       }
 
@@ -201,10 +198,9 @@ final class NodeFiles {
     try {
       String[] options = new String[] { "MULTI", "NODE_USES_PARSER", "VISITOR", "TRACK_TOKENS", "NODE_PREFIX",
           "NODE_EXTENDS", "NODE_FACTORY", "SUPPORT_CLASS_VISIBILITY_PUBLIC" };
-      outputFile = new OutputFile(file, nodeVersion, options);
-      outputFile.setToolName("JJTree");
+      outputFile = new OutputFile(file, JJTreeGlobals.toolName, nodeVersion, options);
 
-      if (file.exists() && !outputFile.needToWrite) {
+      if (file.exists() && !outputFile.isNeedToWrite()) {
         return;
       }
 
@@ -259,10 +255,9 @@ final class NodeFiles {
     try {
       String[] options = new String[] { "MULTI", "NODE_USES_PARSER", "VISITOR", "TRACK_TOKENS", "NODE_PREFIX",
           "NODE_EXTENDS", "NODE_FACTORY", "SUPPORT_CLASS_VISIBILITY_PUBLIC" };
-      outputFile = new OutputFile(file, nodeVersion, options);
-      outputFile.setToolName("JJTree");
+      outputFile = new OutputFile(file, JJTreeGlobals.toolName, nodeVersion, options);
 
-      if (file.exists() && !outputFile.needToWrite) {
+      if (file.exists() && !outputFile.isNeedToWrite()) {
         return;
       }
 
@@ -315,10 +310,9 @@ final class NodeFiles {
         file = new File(jjtreeIncludeFile(node));
         String[] options = new String[] { "MULTI", "NODE_USES_PARSER", "VISITOR", "TRACK_TOKENS", "NODE_PREFIX",
             "NODE_EXTENDS", "NODE_FACTORY", Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC };
-        outputFile = new OutputFile(file, nodeVersion, options);
-        outputFile.setToolName("JJTree");
+        outputFile = new OutputFile(file, JJTreeGlobals.toolName, nodeVersion, options);
 
-        if (file.exists() && !outputFile.needToWrite) {
+        if (file.exists() && !outputFile.isNeedToWrite()) {
           return;
         }
 
@@ -358,10 +352,9 @@ final class NodeFiles {
         file = new File(jjtreeImplFile(node));
         String[] options = new String[] { "MULTI", "NODE_USES_PARSER", "VISITOR", "TRACK_TOKENS", "NODE_PREFIX",
             "NODE_EXTENDS", "NODE_FACTORY", Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC };
-        outputFile = new OutputFile(file, nodeVersion, options);
-        outputFile.setToolName("JJTree");
+        outputFile = new OutputFile(file, JJTreeGlobals.toolName, nodeVersion, options);
 
-        if (file.exists() && !outputFile.needToWrite) {
+        if (file.exists() && !outputFile.isNeedToWrite()) {
           return;
         }
 
@@ -589,8 +582,6 @@ final class NodeFiles {
 
   public static void generateFile(PrintWriter ostr, String template, Map<String, Object> options) throws IOException {
     generatePrologue(ostr);
-    OutputFileGenerator generator;
-    generator = new OutputFileGenerator(template, options);
-    generator.generate(ostr);
+    TemplateGenerator.generateTemplate(ostr, template, options);
   }
 }

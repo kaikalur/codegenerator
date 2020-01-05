@@ -10,11 +10,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.javacc.Version;
-import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.Options;
-import org.javacc.parser.OutputFile;
-import org.javacc.parser.Token;
-import org.javacc.utils.OutputFileGenerator;
+import org.javacc.utils.OutputFile;
+import org.javacc.utils.TemplateGenerator;
 import org.javacc.jjtree.*;
 
 final class NodeFiles {
@@ -40,8 +38,7 @@ final class NodeFiles {
     try {
       String[] options = new String[] {"MULTI", "NODE_USES_PARSER", "VISITOR", "TRACK_TOKENS", "NODE_PREFIX", "NODE_EXTENDS", "NODE_FACTORY", Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC};
 
-      OutputFile outputFile = new OutputFile(file, nodeVersion, options);
-      outputFile.setToolName("JJTree");
+      OutputFile outputFile = new OutputFile(file, JJTreeGlobals.toolName, nodeVersion, options);
       PrintWriter pw = outputFile.getPrintWriter();
 
       if(JJTreeGlobals.packageName.length() > 0) {
@@ -262,10 +259,7 @@ final class NodeFiles {
     options.put(Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
     options.put("VISITOR_RETURN_TYPE_VOID", Boolean.valueOf(JJTreeOptions.getVisitorReturnType().equals("void")));
 
-    OutputFileGenerator generator = new OutputFileGenerator(
-        "/templates/Node.template", options);
-
-    generator.generate(pw);
+    TemplateGenerator.generateTemplate(pw, "/templates/Node.template", options);
 
     pw.close();
 
@@ -274,10 +268,7 @@ final class NodeFiles {
     
     generatePrologue(pw);
 
-    generator = new OutputFileGenerator(
-        "/templates/SimpleNode.template", options);
-
-    generator.generate(pw);
+    TemplateGenerator.generateTemplate(pw, "/templates/SimpleNode.template", options);
 
     pw.close();
   }
@@ -291,10 +282,7 @@ final class NodeFiles {
     options.put("NODE_TYPE", nodeType);
     options.put("VISITOR_RETURN_TYPE_VOID", Boolean.valueOf(JJTreeOptions.getVisitorReturnType().equals("void")));
 
-    OutputFileGenerator generator = new OutputFileGenerator(
-        "/templates/MultiNode.template", options);
-
-    generator.generate(pw);
+    TemplateGenerator.generateTemplate(pw, "/templates/MultiNode.template", options);
   }
 
   static void generateOutputFiles() throws IOException {
