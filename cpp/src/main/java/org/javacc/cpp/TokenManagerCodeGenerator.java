@@ -7,10 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.javacc.parser.CodeGenHelper;
 import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.Options;
 import org.javacc.parser.TokenizerData;
+import org.javacc.utils.CodeGenBuilder;
 
 /**
  * Class that implements a table driven code generator for the token manager in
@@ -20,7 +20,7 @@ public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManager
   private static final String TokenManagerTemplate = "/templates/cpp/TableDrivenTokenManager.template";
   private static final String TokenManagerTemplateH = "/templates/cpp/TableDrivenTokenManager.h.template";
 
-  private final CodeGenHelper codeGenerator = new CppCodeGenHelper();
+  private CppCodeGenBuilder codeGenerator;
 
   @Override
   public void generateCode(CodeGeneratorSettings settings, TokenizerData tokenizerData) {
@@ -35,7 +35,7 @@ public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManager
     settings.put("parserName", tokenizerData.parserName);
     settings.put("maxLongs", tokenizerData.allMatches.size()/64 + 1);
     settings.put("parserName", tokenizerData.parserName);
-    settings.put("charStreamName", CodeGenHelper.getCharStreamName());
+    settings.put("charStreamName", Options.getCharStreamName());
     settings.put("defaultLexState", tokenizerData.defaultLexState);
     settings.put("decls", tokenizerData.decls);
     settings.put("superClass", (superClass == null || superClass.equals(""))
@@ -43,11 +43,14 @@ public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManager
     settings.put("noDfa", Options.getNoDfa());
     settings.put("generatedStates", tokenizerData.nfa.size());
 
+    String fileName = Options.getOutputDirectory() + File.separator +
+        tokenizerData.parserName + "TokenManager.cc";
     try {
-      codeGenerator.writeTemplate(TokenManagerCodeGenerator.TokenManagerTemplate, settings);
+      codeGenerator = new CppCodeGenBuilder(fileName, settings);
+      codeGenerator.genTemplate(TokenManagerCodeGenerator.TokenManagerTemplate);
 
       codeGenerator.switchToIncludeFile(); // remaining variables
-      codeGenerator.writeTemplate(TokenManagerCodeGenerator.TokenManagerTemplateH, settings, "charStreamName", "CharStream", "lexStateNameLength",
+      codeGenerator.genTemplate(TokenManagerCodeGenerator.TokenManagerTemplateH, "charStreamName", "CharStream", "lexStateNameLength",
       	        tokenizerData.lexStateNames.length);
       codeGenerator.switchToStaticsFile();
 
@@ -62,13 +65,11 @@ public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManager
   @Override
   public void finish(CodeGeneratorSettings settings, TokenizerData tokenizerData) {
     if (!Options.getBuildTokenManager()) return;
-    String fileName = Options.getOutputDirectory() + File.separator +
-                      tokenizerData.parserName + "TokenManager.cc";
-    codeGenerator.saveOutput(fileName);
+    codeGenerator.build();
   }
 
   private void dumpDfaTables(
-      CodeGenHelper codeGenerator, TokenizerData tokenizerData) {
+      CodeGenBuilder codeGenerator, TokenizerData tokenizerData) {
     Map<Integer, int[]> startAndSize = new HashMap<>();
     int i = 0;
 
@@ -128,7 +129,7 @@ public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManager
   }
 
   private void dumpNfaTables(
-      CodeGenHelper codeGenerator, TokenizerData tokenizerData) {
+      CodeGenBuilder codeGenerator, TokenizerData tokenizerData) {
     // WE do the following for java so that the generated code is reasonable
     // size and can be compiled. May not be needed for other languages.
     Map<Integer, TokenizerData.NfaState> nfa = tokenizerData.nfa;
@@ -271,7 +272,7 @@ public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManager
   }
 
   private void dumpMatchInfo(
-      CodeGenHelper codeGenerator, TokenizerData tokenizerData) {
+      CodeGenBuilder codeGenerator, TokenizerData tokenizerData) {
     Map<Integer, TokenizerData.MatchInfo> allMatches =
         tokenizerData.allMatches;
 
@@ -372,7 +373,7 @@ public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManager
   private void dumpLexicalActions(
       Map<Integer, TokenizerData.MatchInfo> allMatches,
       TokenizerData.MatchType matchType, String kindString,
-      CodeGenHelper codeGenerator) {
+      CodeGenBuilder codeGenerator) {
     codeGenerator.genCodeLine("  switch(" + kindString + ") {");
     for (int i : allMatches.keySet()) {
       TokenizerData.MatchInfo matchInfo = allMatches.get(i);
@@ -389,7 +390,7 @@ public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManager
     codeGenerator.genCodeLine("  }");
   }
 
-  private static void generateBitVector(String name, BitSet bits, CodeGenHelper codeGenerator) {
+  private static void generateBitVector(String name, BitSet bits, CodeGenBuilder codeGenerator) {
 	codeGenerator.genCodeLine("static const long " + name + "[] = {");
     codeGenerator.genCode("   ");
     long[] longs = bits.toLongArray();

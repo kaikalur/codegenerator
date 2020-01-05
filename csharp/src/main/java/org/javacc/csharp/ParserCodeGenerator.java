@@ -31,6 +31,7 @@
 package org.javacc.csharp;
 
 import org.javacc.parser.*;
+import org.javacc.utils.CodeGenBuilder;
 
 import java.io.File;
 import java.util.*;
@@ -73,7 +74,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
   private int gensymindex = 0;
   private int indentamt;
   private boolean jj2LA;
-  private CodeGenHelper codeGenerator = new CodeGenHelper();
+  private CodeGenBuilder codeGenerator;
   private int cline = 1;
   private int ccol = 1;
 
@@ -87,6 +88,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
   public void generateCode(
       CodeGeneratorSettings settings, ParserData parserData) {
     this.parserData = parserData;
+    this.codeGenerator = new CodeGenBuilder(Options.getOutputDirectory() + File.separator + parserData.parserName + ".cs", settings);
 
     String superClass = (String)settings.get(
                              Options.USEROPTION__TOKEN_MANAGER_SUPER_CLASS);
@@ -116,12 +118,12 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
 
       processProductions(settings, codeGenerator);
       settings.put("numproductions", internalIndexes.size());
-      codeGenerator.writeTemplate(parserTemplate, settings);
+      codeGenerator.genTemplate(parserTemplate);
       codeGenerator.genCodeLine("\n}");
       if (Options.getNamespace() != null) {
         codeGenerator.genCodeLine("\n}");
       }
-      codeGenerator.saveOutput(Options.getOutputDirectory() + File.separator + parserData.parserName + ".cs");
+      codeGenerator.build();
     } catch(Exception e) {
 e.printStackTrace();
       assert(false);
@@ -138,7 +140,7 @@ e.printStackTrace();
   private void GenerateCodeProduction(
       CodeProduction production,
       CodeGeneratorSettings settings,
-      CodeGenHelper codeGenerator) {
+      CodeGenBuilder codeGenerator) {
     Token t = (production.getReturnTypeTokens().get(0));
     codeGenerator.printTokenSetup(t); ccol = 1;
     codeGenerator.printLeadingComments(t);
@@ -172,7 +174,7 @@ e.printStackTrace();
     codeGenerator.genCode(" {");
     if (Options.getDebugParser()) {
       codeGenerator.genCodeLine("");
-      codeGenerator.genCodeLine("    trace_call(\"" + codeGenerator.addUnicodeEscapes(production.getLhs()) + "\");");
+      codeGenerator.genCodeLine("    trace_call(\"" + codeGenerator.escapeToUnicode(production.getLhs()) + "\");");
       codeGenerator.genCode("    try {");
     }
     if (production.getCodeTokens().size() != 0) {
@@ -182,7 +184,7 @@ e.printStackTrace();
     codeGenerator.genCodeLine("");
     if (Options.getDebugParser()) {
       codeGenerator.genCodeLine("    } finally {");
-      codeGenerator.genCodeLine("      trace_return(\"" + codeGenerator.addUnicodeEscapes(production.getLhs()) + "\");");
+      codeGenerator.genCodeLine("      trace_return(\"" + codeGenerator.escapeToUnicode(production.getLhs()) + "\");");
       codeGenerator.genCodeLine("    }");
     }
     codeGenerator.genCodeLine("  }");
@@ -191,7 +193,7 @@ e.printStackTrace();
 
   private void processProductions(
       CodeGeneratorSettings settings,
-      CodeGenHelper codeGenerator) {
+      CodeGenBuilder codeGenerator) {
     NormalProduction p;
     JavaCodeProduction jp;
     CppCodeProduction cp;
@@ -223,8 +225,6 @@ e.printStackTrace();
     for (java.util.Enumeration enumeration = phase3table.elements(); enumeration.hasMoreElements();) {
       buildPhase3Routine((Phase3Data)(enumeration.nextElement()), false);
     }
-
-    codeGenerator.switchToMainFile();
   }
 
   private String internalName(Expansion e) {
@@ -398,7 +398,7 @@ e.printStackTrace();
           codeGenerator.printTokenSetup((la.getActionTokens().get(0)));
           for (Iterator it = la.getActionTokens().iterator(); it.hasNext();) {
             t = (Token)it.next();
-            retval += codeGenerator.getStringToPrint(t);
+            retval += CodeGenBuilder.toString(t);
           }
           retval += codeGenerator.getTrailingComments(t);
           retval += ") {\u0001" + actions[index];
@@ -514,7 +514,7 @@ e.printStackTrace();
           codeGenerator.printTokenSetup((la.getActionTokens().get(0)));
           for (Iterator it = la.getActionTokens().iterator(); it.hasNext();) {
             t = (Token)it.next();
-            retval += codeGenerator.getStringToPrint(t);
+            retval += CodeGenBuilder.toString(t);
           }
           retval += codeGenerator.getTrailingComments(t);
           retval += ")";
@@ -623,7 +623,7 @@ e.printStackTrace();
     indentamt = 4;
     if (Options.getDebugParser()) {
       codeGenerator.genCodeLine("");
-      codeGenerator.genCodeLine("    trace_call(\"" + codeGenerator.addUnicodeEscapes(p.getLhs()) + "\");");
+      codeGenerator.genCodeLine("    trace_call(\"" + codeGenerator.escapeToUnicode(p.getLhs()) + "\");");
       codeGenerator.genCodeLine("    try {");
       indentamt = 6;
     }
@@ -648,7 +648,7 @@ e.printStackTrace();
     }
     if (Options.getDebugParser()) {
       codeGenerator.genCodeLine("    } finally {");
-      codeGenerator.genCodeLine("      trace_return(\"" + codeGenerator.addUnicodeEscapes(p.getLhs()) + "\");");
+      codeGenerator.genCodeLine("      trace_return(\"" + codeGenerator.escapeToUnicode(p.getLhs()) + "\");");
       codeGenerator.genCodeLine("    }");
     }
 
@@ -675,7 +675,7 @@ e.printStackTrace();
         codeGenerator.printTokenSetup((e_nrw.lhsTokens.get(0)));
         for (Iterator it = e_nrw.lhsTokens.iterator(); it.hasNext();) {
           t = (Token)it.next();
-          retval += codeGenerator.getStringToPrint(t);
+          retval += CodeGenBuilder.toString(t);
         }
         retval += codeGenerator.getTrailingComments(t);
         retval += " = ";
@@ -698,7 +698,7 @@ e.printStackTrace();
         codeGenerator.printTokenSetup((e_nrw.getLhsTokens().get(0)));
         for (Iterator it = e_nrw.getLhsTokens().iterator(); it.hasNext();) {
           t = (Token)it.next();
-          retval += codeGenerator.getStringToPrint(t);
+          retval += CodeGenBuilder.toString(t);
         }
         retval += codeGenerator.getTrailingComments(t);
         retval += " = ";
@@ -708,7 +708,7 @@ e.printStackTrace();
         codeGenerator.printTokenSetup((e_nrw.getArgumentTokens().get(0)));
         for (Iterator it = e_nrw.getArgumentTokens().iterator(); it.hasNext();) {
           t = (Token)it.next();
-          retval += codeGenerator.getStringToPrint(t);
+          retval += CodeGenBuilder.toString(t);
         }
         retval += codeGenerator.getTrailingComments(t);
       }
@@ -721,7 +721,7 @@ e.printStackTrace();
         codeGenerator.printTokenSetup((e_nrw.getActionTokens().get(0))); ccol = 1;
         for (Iterator it = e_nrw.getActionTokens().iterator(); it.hasNext();) {
           t = (Token)it.next();
-          retval += codeGenerator.getStringToPrint(t);
+          retval += CodeGenBuilder.toString(t);
         }
         retval += codeGenerator.getTrailingComments(t);
       }
@@ -827,7 +827,7 @@ e.printStackTrace();
           codeGenerator.printTokenSetup((Token)(list.get(0))); ccol = 1;
           for (Iterator it = list.iterator(); it.hasNext();) {
             t = (Token)it.next();
-            retval += codeGenerator.getStringToPrint(t);
+            retval += CodeGenBuilder.toString(t);
           }
           retval += codeGenerator.getTrailingComments(t);
         }
@@ -840,7 +840,7 @@ e.printStackTrace();
           codeGenerator.printTokenSetup((e_nrw.finallyblk.get(0))); ccol = 1;
           for (Iterator it = e_nrw.finallyblk.iterator(); it.hasNext();) {
             t = (Token)it.next();
-            retval += codeGenerator.getStringToPrint(t);
+            retval += CodeGenBuilder.toString(t);
           }
           retval += codeGenerator.getTrailingComments(t);
         }
@@ -877,7 +877,7 @@ e.printStackTrace();
   String genReturn(boolean value) {
     String retval = (value ? "true" : "false");
     if (Options.getDebugLookahead() && jj3_expansion != null) {
-      String tracecode = "trace_return(\"" + codeGenerator.addUnicodeEscapes(((NormalProduction)jj3_expansion.parent).getLhs()) +
+      String tracecode = "trace_return(\"" + codeGenerator.escapeToUnicode(((NormalProduction)jj3_expansion.parent).getLhs()) +
       "(LOOKAHEAD " + (value ? "FAILED" : "SUCCEEDED") + ")\");";
       if (Options.getErrorReporting()) {
         tracecode = "if (!jj_rescan) " + tracecode;
@@ -1013,7 +1013,7 @@ e.printStackTrace();
         if (Options.getErrorReporting()) {
           codeGenerator.genCode("if (!jj_rescan) ");
         }
-        codeGenerator.genCodeLine("trace_call(\"" + codeGenerator.addUnicodeEscapes(((NormalProduction)e.parent).getLhs()) + "(LOOKING AHEAD...)\");");
+        codeGenerator.genCodeLine("trace_call(\"" + codeGenerator.escapeToUnicode(((NormalProduction)e.parent).getLhs()) + "(LOOKING AHEAD...)\");");
         jj3_expansion = e;
       } else {
         jj3_expansion = null;

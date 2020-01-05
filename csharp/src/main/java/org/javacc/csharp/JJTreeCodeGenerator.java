@@ -8,9 +8,10 @@ import java.io.PrintWriter;
 import java.util.Map;
 
 import org.javacc.Version;
+import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.Options;
-import org.javacc.parser.OutputFile;
-import org.javacc.utils.OutputFileGenerator;
+import org.javacc.utils.OutputFile;
+import org.javacc.utils.TemplateGenerator;
 import org.javacc.jjtree.*;
 
 public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
@@ -229,11 +230,6 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
     return s;
   }
 
-  void insertOpenNodeDeclaration(NodeScope ns, IO io, String indent)
-  {
-    insertOpenNodeCode(ns, io, indent);
-  }
-
   void insertOpenNodeCode(NodeScope ns, IO io, String indent)
   {
     String type = ns.node_descriptor.getNodeType();
@@ -384,12 +380,10 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
     options.put(Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
     String filePrefix = new File(JJTreeOptions.getJJTreeOutputDirectory(), "JJT" + JJTreeGlobals.parserName + "State").getAbsolutePath();
 
-    OutputFile outputFile = new OutputFile(new File(filePrefix + ".cs"), JJTStateVersion, new String[
+    OutputFile outputFile = new OutputFile(new File(filePrefix + ".cs"), JavaCCGlobals.toolName, JJTStateVersion, new String[
 0]);
     PrintWriter ostr = outputFile.getPrintWriter();
-    OutputFileGenerator generator;
-    generator = new OutputFileGenerator("/templates/csharp/JJTTreeState.cs.template", options);
-    generator.generate(ostr);
+    TemplateGenerator.generateTemplate(ostr, "/templates/csharp/JJTTreeState.cs.template", options);
     ostr.close();
 
     NodeFiles.generateOutputFiles();

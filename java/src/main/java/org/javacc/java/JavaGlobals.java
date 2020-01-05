@@ -27,13 +27,13 @@ import org.javacc.parser.JavaCCParserConstants;
 import org.javacc.parser.LexGen;
 import org.javacc.parser.MetaParseException;
 import org.javacc.parser.Options;
-import org.javacc.parser.OutputFile;
 import org.javacc.parser.RStringLiteral;
 import org.javacc.parser.RegExprSpec;
 import org.javacc.parser.RegularExpression;
 import org.javacc.parser.Token;
 import org.javacc.parser.TokenProduction;
-import org.javacc.utils.OutputFileGenerator;
+import org.javacc.utils.OutputFile;
+import org.javacc.utils.TemplateGenerator;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -54,15 +54,15 @@ public abstract class JavaGlobals extends JavaCCGlobals implements JavaCCParserC
   private JavaGlobals() {}
   
   public static void genMiscFile(String fileName, String templatePath) throws Error {
+    File file = new File(Options.getOutputDirectory(), fileName);
     try {
-      final File file = new File(Options.getOutputDirectory(), fileName);
-      final OutputFile outputFile = new OutputFile(file, Version.majorDotMinor,
+      final OutputFile outputFile = new OutputFile(file, JavaCCGlobals.toolName, Version.majorDotMinor,
           new String[] { /*
                           * cba -- 2013/07/22 -- previously wired to a typo
                           * version of this option -- KEEP_LINE_COL
                           */ Options.USEROPTION__KEEP_LINE_COLUMN });
 
-      if (!outputFile.needToWrite) {
+      if (!outputFile.isNeedToWrite()) {
         return;
       }
 
@@ -83,9 +83,7 @@ public abstract class JavaGlobals extends JavaCCGlobals implements JavaCCParserC
         }
       }
 
-      OutputFileGenerator generator = new OutputFileGenerator(templatePath, Options.getOptions());
-
-      generator.generate(ostr);
+      TemplateGenerator.generateTemplate(ostr, templatePath, Options.getOptions());
 
       ostr.close();
     } catch (IOException e) {
@@ -99,13 +97,13 @@ public abstract class JavaGlobals extends JavaCCGlobals implements JavaCCParserC
     try {
       final File file = new File(Options.getOutputDirectory(), "Token.java");
       final OutputFile outputFile =
-          new OutputFile(file, Version.majorDotMinor, new String[] { Options.USEROPTION__TOKEN_EXTENDS,
+          new OutputFile(file, JavaCCGlobals.toolName, Version.majorDotMinor, new String[] { Options.USEROPTION__TOKEN_EXTENDS,
               /*
                * cba -- 2013/07/22 -- previously wired to a typo version of this
                * option -- KEEP_LINE_COL
                */ Options.USEROPTION__KEEP_LINE_COLUMN, Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC });
 
-      if (!outputFile.needToWrite) {
+      if (!outputFile.isNeedToWrite()) {
         return;
       }
 
@@ -126,9 +124,7 @@ public abstract class JavaGlobals extends JavaCCGlobals implements JavaCCParserC
         }
       }
 
-      OutputFileGenerator generator = new OutputFileGenerator("/templates/Token.template", Options.getOptions());
-
-      generator.generate(ostr);
+      TemplateGenerator.generateTemplate(ostr, "/templates/Token.template", Options.getOptions());
 
       ostr.close();
     } catch (IOException e) {
@@ -142,10 +138,10 @@ public abstract class JavaGlobals extends JavaCCGlobals implements JavaCCParserC
   public static void gen_TokenManager() {
     try {
       final File file = new File(Options.getOutputDirectory(), "TokenManager.java");
-      final OutputFile outputFile = new OutputFile(file, Version.majorDotMinor,
+      final OutputFile outputFile = new OutputFile(file, JavaCCGlobals.toolName, Version.majorDotMinor,
           new String[] { Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC });
 
-      if (!outputFile.needToWrite) {
+      if (!outputFile.isNeedToWrite()) {
         return;
       }
 
@@ -166,9 +162,7 @@ public abstract class JavaGlobals extends JavaCCGlobals implements JavaCCParserC
         }
       }
 
-      OutputFileGenerator generator = new OutputFileGenerator("/templates/TokenManager.template", Options.getOptions());
-
-      generator.generate(ostr);
+      TemplateGenerator.generateTemplate(ostr, "/templates/TokenManager.template", Options.getOptions());
 
       ostr.close();
     } catch (IOException e) {
@@ -280,11 +274,8 @@ public abstract class JavaGlobals extends JavaCCGlobals implements JavaCCParserC
     File outputDir = new File((String)settings.get("OUTPUT_DIRECTORY"));
     File outputFile = new File(outputDir, outputFileName);
     final PrintWriter ostr = new PrintWriter(new FileWriter(outputFile));
-    OutputFileGenerator generator = new OutputFileGenerator(template, settings);
-
     ostr.write(JavaGlobals.writePackage());
-    
-    generator.generate(ostr);
+    TemplateGenerator.generateTemplate(ostr, template, settings);
     ostr.close();
   }
 
@@ -312,10 +303,6 @@ public abstract class JavaGlobals extends JavaCCGlobals implements JavaCCParserC
 
   public static String getStatic() {
     return (Options.getStatic() ? "static " : "");
-  }
-
-  public static String getLongType() {
-    return "long";
   }
 
   public static String getBooleanType() {

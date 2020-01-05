@@ -2,7 +2,8 @@ package org.javacc.csharp;
 
 import java.io.IOException;
 import org.javacc.parser.CodeGeneratorSettings;
-import org.javacc.utils.OutputFileGenerator;
+import org.javacc.parser.JavaCCGlobals;
+import org.javacc.utils.TemplateGenerator;
 
 public class TokenCodeGenerator implements org.javacc.parser.TokenCodeGenerator
 {
@@ -14,7 +15,7 @@ public class TokenCodeGenerator implements org.javacc.parser.TokenCodeGenerator
   {
     try
     {
-      OutputFileGenerator.generateSimple("/templates/csharp/Token.template", "Token.cs", "/* JavaCC generated file. */", settings);
+      TemplateGenerator.generateTemplate("/templates/csharp/Token.template", "Token.cs", JavaCCGlobals.toolName, settings);
     }
     catch(IOException e)
     {
