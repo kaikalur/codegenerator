@@ -305,10 +305,6 @@ public abstract class JavaGlobals extends JavaCCGlobals implements JavaCCParserC
     return (Options.getStatic() ? "static " : "");
   }
 
-  public static String getLongType() {
-    return "long";
-  }
-
   public static String getBooleanType() {
     return "boolean";
   }

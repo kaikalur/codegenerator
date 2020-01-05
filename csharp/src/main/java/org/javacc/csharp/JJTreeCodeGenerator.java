@@ -230,11 +230,6 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
     return s;
   }
 
-  void insertOpenNodeDeclaration(NodeScope ns, IO io, String indent)
-  {
-    insertOpenNodeCode(ns, io, indent);
-  }
-
   void insertOpenNodeCode(NodeScope ns, IO io, String indent)
   {
     String type = ns.node_descriptor.getNodeType();

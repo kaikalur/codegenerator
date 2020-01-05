@@ -174,7 +174,7 @@ e.printStackTrace();
     codeGenerator.genCode(" {");
     if (Options.getDebugParser()) {
       codeGenerator.genCodeLine("");
-      codeGenerator.genCodeLine("    trace_call(\"" + CodeGenBuilder.escapeUnicode(production.getLhs()) + "\");");
+      codeGenerator.genCodeLine("    trace_call(\"" + codeGenerator.escapeToUnicode(production.getLhs()) + "\");");
       codeGenerator.genCode("    try {");
     }
     if (production.getCodeTokens().size() != 0) {
@@ -184,7 +184,7 @@ e.printStackTrace();
     codeGenerator.genCodeLine("");
     if (Options.getDebugParser()) {
       codeGenerator.genCodeLine("    } finally {");
-      codeGenerator.genCodeLine("      trace_return(\"" + CodeGenBuilder.escapeUnicode(production.getLhs()) + "\");");
+      codeGenerator.genCodeLine("      trace_return(\"" + codeGenerator.escapeToUnicode(production.getLhs()) + "\");");
       codeGenerator.genCodeLine("    }");
     }
     codeGenerator.genCodeLine("  }");
@@ -623,7 +623,7 @@ e.printStackTrace();
     indentamt = 4;
     if (Options.getDebugParser()) {
       codeGenerator.genCodeLine("");
-      codeGenerator.genCodeLine("    trace_call(\"" + CodeGenBuilder.escapeUnicode(p.getLhs()) + "\");");
+      codeGenerator.genCodeLine("    trace_call(\"" + codeGenerator.escapeToUnicode(p.getLhs()) + "\");");
       codeGenerator.genCodeLine("    try {");
       indentamt = 6;
     }
@@ -648,7 +648,7 @@ e.printStackTrace();
     }
     if (Options.getDebugParser()) {
       codeGenerator.genCodeLine("    } finally {");
-      codeGenerator.genCodeLine("      trace_return(\"" + CodeGenBuilder.escapeUnicode(p.getLhs()) + "\");");
+      codeGenerator.genCodeLine("      trace_return(\"" + codeGenerator.escapeToUnicode(p.getLhs()) + "\");");
       codeGenerator.genCodeLine("    }");
     }
 
@@ -877,7 +877,7 @@ e.printStackTrace();
   String genReturn(boolean value) {
     String retval = (value ? "true" : "false");
     if (Options.getDebugLookahead() && jj3_expansion != null) {
-      String tracecode = "trace_return(\"" + CodeGenBuilder.escapeUnicode(((NormalProduction)jj3_expansion.parent).getLhs()) +
+      String tracecode = "trace_return(\"" + codeGenerator.escapeToUnicode(((NormalProduction)jj3_expansion.parent).getLhs()) +
       "(LOOKAHEAD " + (value ? "FAILED" : "SUCCEEDED") + ")\");";
       if (Options.getErrorReporting()) {
         tracecode = "if (!jj_rescan) " + tracecode;
@@ -1013,7 +1013,7 @@ e.printStackTrace();
         if (Options.getErrorReporting()) {
           codeGenerator.genCode("if (!jj_rescan) ");
         }
-        codeGenerator.genCodeLine("trace_call(\"" + CodeGenBuilder.escapeUnicode(((NormalProduction)e.parent).getLhs()) + "(LOOKING AHEAD...)\");");
+        codeGenerator.genCodeLine("trace_call(\"" + codeGenerator.escapeToUnicode(((NormalProduction)e.parent).getLhs()) + "(LOOKING AHEAD...)\");");
         jj3_expansion = e;
       } else {
         jj3_expansion = null;

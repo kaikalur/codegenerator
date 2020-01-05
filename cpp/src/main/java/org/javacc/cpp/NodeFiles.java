@@ -216,7 +216,7 @@ final class NodeFiles {
 
         ostr.println("#include \"SimpleNode.h\"");
         for (Iterator<String> i = nodesToBuild.iterator(); i.hasNext(); ) {
-            String s = (String)i.next();
+            String s = i.next();
             ostr.println("#include \"" + s + ".h\"");
         }
 //        generateFile(ostr, "/templates/cpp/TreeIncludeHeader.template", optionMap);
@@ -300,7 +300,7 @@ final class NodeFiles {
 
     try {
       for (Iterator<String> i = nodesToBuild.iterator(); i.hasNext();) {
-        String node = (String) i.next();
+        String node = i.next();
         File file;
         file = new File (jjtreeASTNodeInterfaceFile(node));
         if (file.exists()) {
@@ -343,7 +343,7 @@ final class NodeFiles {
 
     try {
       for (Iterator<String> i = nodesToBuild.iterator(); i.hasNext();) {
-        String node = (String) i.next();
+        String node = i.next();
         File file;
         file = new File (jjtreeASTNodeImplFile(node));
         if (file.exists()) {

@@ -63,6 +63,7 @@ public class CppCodeGenBuilder extends CodeGenBuilder {
   /**
    * Get the {@link StringBuffer}
    */
+  @Override
   protected final StringBuffer getBuffer() {
     switch (kind) {
       case Include:
@@ -158,31 +159,6 @@ public class CppCodeGenBuilder extends CodeGenBuilder {
     switchToMainFile();
   }
 
-  public void genStringLiteralArrayCPP(String varName, String[] arr) {
-    // First generate char array vars
-    for (int i = 0; i < arr.length; i++) {
-      genCodeLine("static const JJChar " + varName + "_arr_" + i + "[] = ");
-      genStringLiteral(arr[i]);
-      genCodeLine(";");
-    }
-
-    genCodeLine("static const JJString " + varName + "[] = {");
-    for (int i = 0; i < arr.length; i++) {
-      genCodeLine(varName + "_arr_" + i + ", ");
-    }
-    genCodeLine("};");
-  }
-
-  private void genStringLiteral(String s) {
-    // String literals in CPP become char arrays
-    getBuffer().append("{");
-    for (int i = 0; i < s.length(); i++) {
-      getBuffer().append("0x" + Integer.toHexString(s.charAt(i)) + ", ");
-    }
-    getBuffer().append("0}");
-  }
-
-
   // HACK
   private void fixupLongLiterals(StringBuffer sb) {
     for (int i = 0; i < sb.length() - 1; i++) {
@@ -211,7 +187,8 @@ public class CppCodeGenBuilder extends CodeGenBuilder {
     }
   }
 
-  protected final String escapeToUnicode(String text) {
+  @Override
+  public final String escapeToUnicode(String text) {
     return text;
   }
 

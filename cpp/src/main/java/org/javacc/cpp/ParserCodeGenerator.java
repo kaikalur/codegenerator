@@ -1342,8 +1342,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     indentamt = 4;
     if (Options.getDebugParser()) {
         codeGenerator.genCodeLine("");
-        codeGenerator.genCodeLine("    JJEnter<std::function<void()>> jjenter([this]() {trace_call  (\"" + Types.addUnicodeEscapes(p.getLhs()) +"\"); });");
-        codeGenerator.genCodeLine("    JJExit <std::function<void()>> jjexit ([this]() {trace_return(\"" + Types.addUnicodeEscapes(p.getLhs()) +"\"); });");
+        codeGenerator.genCodeLine("    JJEnter<std::function<void()>> jjenter([this]() {trace_call  (\"" + codeGenerator.escapeToUnicode(p.getLhs()) +"\"); });");
+        codeGenerator.genCodeLine("    JJExit <std::function<void()>> jjexit ([this]() {trace_return(\"" + codeGenerator.escapeToUnicode(p.getLhs()) +"\"); });");
         codeGenerator.genCodeLine("    try {");
         indentamt = 6;
       }
@@ -1587,7 +1587,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
 //        retval += ") {\u0003\n";
         list = e_nrw.catchblks.get(i);
         if (list.size() != 0) {
-          codeGenerator.printTokenSetup((Token)(list.get(0))); ccol = 1;
+          codeGenerator.printTokenSetup((list.get(0))); ccol = 1;
           for (Iterator<Token> it = list.iterator(); it.hasNext();) {
             t = it.next();
             retval += CodeGenBuilder.toString(t);
@@ -1643,7 +1643,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
   String genReturn(boolean value) {
     String retval = value ? "true" : "false";
     if (Options.getDebugLookahead() && jj3_expansion != null) {
-      String tracecode = "trace_return(\"" + Types.addUnicodeEscapes(((NormalProduction)jj3_expansion.parent).getLhs()) +
+      String tracecode = "trace_return(\"" + codeGenerator.escapeToUnicode(((NormalProduction)jj3_expansion.parent).getLhs()) +
       "(LOOKAHEAD " + (value ? "FAILED" : "SUCCEEDED") + ")\");";
       if (Options.getErrorReporting()) {
         tracecode = "if (!jj_rescan) " + tracecode;
@@ -1810,7 +1810,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
         if (Options.getErrorReporting()) {
           codeGenerator.genCode("if (!jj_rescan) ");
         }
-        codeGenerator.genCodeLine("trace_call(\"" + Types.addUnicodeEscapes(((NormalProduction)e.parent).getLhs()) + "(LOOKING AHEAD...)\");");
+        codeGenerator.genCodeLine("trace_call(\"" + codeGenerator.escapeToUnicode(((NormalProduction)e.parent).getLhs()) + "(LOOKING AHEAD...)\");");
         jj3_expansion = e;
       } else {
         jj3_expansion = null;
@@ -2082,8 +2082,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
           codeGenerator.genCodeLine(" {");
           if (Options.getDebugParser()) {
             codeGenerator.genCodeLine("");
-            codeGenerator.genCodeLine("    JJEnter<std::function<void()>> jjenter([this]() {trace_call  (\"" + Types.addUnicodeEscapes(cp.getLhs()) +"\"); });");
-            codeGenerator.genCodeLine("    JJExit <std::function<void()>> jjexit ([this]() {trace_return(\"" + Types.addUnicodeEscapes(cp.getLhs()) +"\"); });");
+            codeGenerator.genCodeLine("    JJEnter<std::function<void()>> jjenter([this]() {trace_call  (\"" + codeGenerator.escapeToUnicode(cp.getLhs()) +"\"); });");
+            codeGenerator.genCodeLine("    JJExit <std::function<void()>> jjexit ([this]() {trace_return(\"" + codeGenerator.escapeToUnicode(cp.getLhs()) +"\"); });");
             codeGenerator.genCodeLine("    try {");
           }
           if (cp.getCodeTokens().size() != 0) {

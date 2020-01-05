@@ -1748,7 +1748,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
         retval += " catch (";
         list = e_nrw.types.get(i);
         if (list.size() != 0) {
-          codeGenerator.printTokenSetup((Token)(list.get(0)));
+          codeGenerator.printTokenSetup((list.get(0)));
           for (Iterator<Token> it = list.iterator(); it.hasNext();) {
             t = it.next();
             retval += CodeGenBuilder.toString(t);
@@ -1935,7 +1935,6 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       return "jj_3" + internalNames.get(e) + "()";
   }
 
-  Hashtable<String, Phase3Data> generated = new Hashtable<>();
   void buildPhase3Routine(Phase3Data inf, boolean recursive_call) {
     Expansion e = inf.exp;
     Token t = null;
@@ -2254,97 +2253,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       // buildPhase3Table(inf);
       // System.err.println("**** END TABLE *********");
     // }
-  }
-
-  public void reInit()
-  {
-    gensymindex = 0;
-    indentamt = 0;
-    jj2LA = false;
-    phase2list = new ArrayList<>();
-    phase3list = new ArrayList<>();
-    phase3table = new Hashtable<>();
-    firstSet = null;
-    xsp_declared = false;
-    jj3_expansion = null;
-  }
-
-  // Table driven.
-  void buildPhase3Table(Phase3Data inf) {
-    Expansion e = inf.exp;
-//    Token t = null;
-    if (e instanceof RegularExpression) {
-      RegularExpression e_nrw = (RegularExpression)e;
-      System.err.println("TOKEN, " + e_nrw.ordinal);
-    } else if (e instanceof NonTerminal) {
-      NonTerminal e_nrw = (NonTerminal)e;
-      NormalProduction ntprod =
-          production_table.get(e_nrw.getName());
-      if (ntprod instanceof CodeProduction) {
-        // javacode, true - always (warn?)
-        System.err.println("JAVACODE_PROD, true");
-      } else {
-        Expansion ntexp = ntprod.getExpansion();
-        // nt exp's table.
-        System.err.println("PRODUCTION, " + internalIndexes.get(ntexp));
-        //buildPhase3Table(new Phase3Data(ntexp, inf.count));
-      }
-    } else if (e instanceof Choice) {
-      Sequence nested_seq;
-      Choice e_nrw = (Choice)e;
-      System.err.print("CHOICE, ");
-      for (int i = 0; i < e_nrw.getChoices().size(); i++) {
-        if (i > 0) System.err.print("\n|");
-        nested_seq = (Sequence)e_nrw.getChoices().get(i);
-        Lookahead la = (Lookahead)nested_seq.units.get(0);
-        if (la.getActionTokens().size() != 0) {
-          System.err.print("SEMANTIC,");
-        } else {
-          buildPhase3Table(new Phase3Data(nested_seq, inf.count));
-        }
-      }
-      System.err.println();
-    } else if (e instanceof Sequence) {
-      Sequence e_nrw = (Sequence)e;
-      int cnt = inf.count;
-      if (e_nrw.units.size() > 2) {
-        System.err.println("SEQ, " + cnt);
-        for (int i = 1; i < e_nrw.units.size(); i++) {
-          System.err.print("   ");
-          Expansion eseq = e_nrw.units.get(i);
-          buildPhase3Table(new Phase3Data(eseq, cnt));
-          cnt -= minimumSize(eseq);
-          if (cnt <= 0) break;
-        }
-      } else {
-        Expansion tmp = e_nrw.units.get(1);
-        while (tmp instanceof NonTerminal) {
-          NormalProduction ntprod =
-              production_table.get(((NonTerminal)tmp).getName());
-          if (ntprod instanceof CodeProduction) break;
-          tmp = ntprod.getExpansion();
-        }
-        buildPhase3Table(new Phase3Data(tmp, cnt));
-      }
-      System.err.println();
-    } else if (e instanceof TryBlock) {
-      TryBlock e_nrw = (TryBlock)e;
-      buildPhase3Table(new Phase3Data(e_nrw.exp, inf.count));
-    } else if (e instanceof OneOrMore) {
-      OneOrMore e_nrw = (OneOrMore)e;
-      System.err.println("SEQ PROD " + internalIndexes.get(e_nrw.expansion));
-      System.err.println("ZEROORMORE " + internalIndexes.get(e_nrw.expansion));
-    } else if (e instanceof ZeroOrMore) {
-      ZeroOrMore e_nrw = (ZeroOrMore)e;
-      System.err.print("ZEROORMORE, " + internalIndexes.get(e_nrw.expansion));
-    } else if (e instanceof ZeroOrOne) {
-      ZeroOrOne e_nrw = (ZeroOrOne)e;
-      System.err.println("ZERORONE, " + internalIndexes.get(e_nrw.expansion));
-    } else {
-      assert false;
-      // table for nested_e - optional
-    }
-  }
+  }  
 }
 
 /**
