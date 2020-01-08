@@ -104,7 +104,16 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     codeGenerator.genCodeLine("#include \"Token.h\"");
     codeGenerator.genCodeLine("#include \"TokenManager.h\"");
 
+    // standard includes
+    codeGenerator = CppCodeGenBuilder.of(settings).setFile(file);
     
+    codeGenerator.switchToIncludeFile();
+    codeGenerator.println("#include \"JavaCC.h\"");
+    codeGenerator.println("#include \"CharStream.h\"");
+    codeGenerator.println("#include \"Token.h\"");
+    codeGenerator.println("#include \"TokenManager.h\"");
+
+
     Object object = Options.objectValue(Options.USEROPTION__CPP_PARSER_INCLUDES);
     
     if (object instanceof String) {
@@ -158,9 +167,9 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
 
    
     String superClass = Options.stringValue(Options.USEROPTION__PARSER_SUPER_CLASS);
-    codeGenerator.genClassStart("", cu_name, new String[]{},
-                  superClass == null  ? new String[0] : new String[] {
-                   "public " + superClass});
+    codeGenerator.genClassStart("", cu_name, new String[] {},
+        superClass == null ? new String[0] : new String[] { "public " + superClass });
+    
     codeGenerator.switchToMainFile();
     if (cu_to_insertion_point_2.size() != 0) {
       codeGenerator.printTokenSetup(cu_to_insertion_point_2.get(0));
@@ -175,7 +184,6 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     codeGenerator.genCodeLine("");
 
     build(codeGenerator);
-//    new ParseEngine().build(codeGenerator);
 
     codeGenerator.switchToIncludeFile();
     codeGenerator.genCodeLine("");
