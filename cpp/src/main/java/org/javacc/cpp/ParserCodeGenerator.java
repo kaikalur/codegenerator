@@ -99,20 +99,12 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
 
     //standard includes
     codeGenerator = new CppCodeGenBuilder(fileName, settings);
+
+    codeGenerator.switchToIncludeFile();
     codeGenerator.genCodeLine("#include \"JavaCC.h\"");
     codeGenerator.genCodeLine("#include \"CharStream.h\"");
     codeGenerator.genCodeLine("#include \"Token.h\"");
     codeGenerator.genCodeLine("#include \"TokenManager.h\"");
-
-    // standard includes
-    codeGenerator = CppCodeGenBuilder.of(settings).setFile(file);
-    
-    codeGenerator.switchToIncludeFile();
-    codeGenerator.println("#include \"JavaCC.h\"");
-    codeGenerator.println("#include \"CharStream.h\"");
-    codeGenerator.println("#include \"Token.h\"");
-    codeGenerator.println("#include \"TokenManager.h\"");
-
 
     Object object = Options.objectValue(Options.USEROPTION__CPP_PARSER_INCLUDES);
     
