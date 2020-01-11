@@ -1,4 +1,3 @@
-\#include "JJT${PARSER_NAME}State.h"
 \#include "Node.h"
 
 #if NAMESPACE

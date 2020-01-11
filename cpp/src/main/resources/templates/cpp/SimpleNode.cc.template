@@ -1,5 +1,4 @@
 \#include <stdio.h>
-\#include "SimpleNode.h"
 
 #if VISITOR
 \#include "${PARSER_NAME}Visitor.h"

@@ -20,6 +20,7 @@
 package org.javacc.java;
 
 import org.javacc.Version;
+import org.javacc.jjtree.JJTreeGlobals;
 import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.JavaCCErrors;
 import org.javacc.parser.JavaCCGlobals;
@@ -32,8 +33,7 @@ import org.javacc.parser.RegExprSpec;
 import org.javacc.parser.RegularExpression;
 import org.javacc.parser.Token;
 import org.javacc.parser.TokenProduction;
-import org.javacc.utils.OutputFile;
-import org.javacc.utils.TemplateGenerator;
+import org.javacc.utils.CodeGenBuilder;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -52,40 +53,22 @@ public abstract class JavaGlobals extends JavaCCGlobals implements JavaCCParserC
    * Constructs an instance of {@link JavaGlobals}.
    */
   private JavaGlobals() {}
-  
+
   public static void genMiscFile(String fileName, String templatePath) throws Error {
-    File file = new File(Options.getOutputDirectory(), fileName);
+    JavaCodeGenBuilder builder = JavaCodeGenBuilder.of(Collections.emptyMap());
+    builder.setFile(new File(Options.getOutputDirectory(), fileName));
+
+    /*
+     * cba -- 2013/07/22 -- previously wired to a typo version of this option --
+     * KEEP_LINE_COL
+     */
+    builder.setVersion(Version.version).addTools(JavaCCGlobals.toolName)
+        .addOption(Options.USEROPTION__KEEP_LINE_COLUMN);
+
+    builder.setPackageName(JJTreeGlobals.packageName);
     try {
-      final OutputFile outputFile = new OutputFile(file, JavaCCGlobals.toolName, Version.majorDotMinor,
-          new String[] { /*
-                          * cba -- 2013/07/22 -- previously wired to a typo
-                          * version of this option -- KEEP_LINE_COL
-                          */ Options.USEROPTION__KEEP_LINE_COLUMN });
-
-      if (!outputFile.isNeedToWrite()) {
-        return;
-      }
-
-      final PrintWriter ostr = outputFile.getPrintWriter();
-
-      if (cu_to_insertion_point_1.size() != 0 && cu_to_insertion_point_1.get(0).kind == PACKAGE) {
-        for (int i = 1; i < cu_to_insertion_point_1.size(); i++) {
-          if (cu_to_insertion_point_1.get(i).kind == SEMICOLON) {
-            cline = cu_to_insertion_point_1.get(0).beginLine;
-            ccol = cu_to_insertion_point_1.get(0).beginColumn;
-            for (int j = 0; j <= i; j++) {
-              printToken(cu_to_insertion_point_1.get(j), ostr, true);
-            }
-            ostr.println("");
-            ostr.println("");
-            break;
-          }
-        }
-      }
-
-      TemplateGenerator.generateTemplate(ostr, templatePath, Options.getOptions());
-
-      ostr.close();
+      builder.printTemplate(templatePath, Options.getOptions());
+      builder.build();
     } catch (IOException e) {
       System.err.println("Failed to create " + fileName + " " + e);
       JavaCCErrors.semantic_error("Could not open file " + fileName + " for writing.");
@@ -94,39 +77,20 @@ public abstract class JavaGlobals extends JavaCCGlobals implements JavaCCParserC
   }
 
   public static void gen_Token() {
+    JavaCodeGenBuilder builder = JavaCodeGenBuilder.of(Options.getOptions());
+    builder.setFile(new File(Options.getOutputDirectory(), "Token.java"));
+    builder.setVersion(Version.version).addTools(JavaCCGlobals.toolName);
+    builder.setPackageName(JJTreeGlobals.packageName);
     try {
-      final File file = new File(Options.getOutputDirectory(), "Token.java");
-      final OutputFile outputFile =
-          new OutputFile(file, JavaCCGlobals.toolName, Version.majorDotMinor, new String[] { Options.USEROPTION__TOKEN_EXTENDS,
-              /*
-               * cba -- 2013/07/22 -- previously wired to a typo version of this
-               * option -- KEEP_LINE_COL
-               */ Options.USEROPTION__KEEP_LINE_COLUMN, Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC });
+      /*
+       * cba -- 2013/07/22 -- previously wired to a typo version of this option
+       * -- KEEP_LINE_COL
+       */
+      builder.addOption(Options.USEROPTION__TOKEN_EXTENDS, Options.USEROPTION__KEEP_LINE_COLUMN,
+          Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
 
-      if (!outputFile.isNeedToWrite()) {
-        return;
-      }
-
-      final PrintWriter ostr = outputFile.getPrintWriter();
-
-      if (cu_to_insertion_point_1.size() != 0 && cu_to_insertion_point_1.get(0).kind == PACKAGE) {
-        for (int i = 1; i < cu_to_insertion_point_1.size(); i++) {
-          if (cu_to_insertion_point_1.get(i).kind == SEMICOLON) {
-            cline = cu_to_insertion_point_1.get(0).beginLine;
-            ccol = cu_to_insertion_point_1.get(0).beginColumn;
-            for (int j = 0; j <= i; j++) {
-              printToken(cu_to_insertion_point_1.get(j), ostr, true);
-            }
-            ostr.println("");
-            ostr.println("");
-            break;
-          }
-        }
-      }
-
-      TemplateGenerator.generateTemplate(ostr, "/templates/Token.template", Options.getOptions());
-
-      ostr.close();
+      builder.printTemplate("/templates/Token.template");
+      builder.build();
     } catch (IOException e) {
       System.err.println("Failed to create Token " + e);
       JavaCCErrors.semantic_error("Could not open file Token.java for writing.");
@@ -136,35 +100,14 @@ public abstract class JavaGlobals extends JavaCCGlobals implements JavaCCParserC
 
 
   public static void gen_TokenManager() {
+    JavaCodeGenBuilder builder = JavaCodeGenBuilder.of(Options.getOptions());
+    builder.setFile(new File(Options.getOutputDirectory(), "TokenManager.java"));
+    builder.setVersion(Version.version).addTools(JavaCCGlobals.toolName)
+        .addOption(Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
+    builder.setPackageName(JJTreeGlobals.packageName);
     try {
-      final File file = new File(Options.getOutputDirectory(), "TokenManager.java");
-      final OutputFile outputFile = new OutputFile(file, JavaCCGlobals.toolName, Version.majorDotMinor,
-          new String[] { Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC });
-
-      if (!outputFile.isNeedToWrite()) {
-        return;
-      }
-
-      final PrintWriter ostr = outputFile.getPrintWriter();
-
-      if (cu_to_insertion_point_1.size() != 0 && cu_to_insertion_point_1.get(0).kind == PACKAGE) {
-        for (int i = 1; i < cu_to_insertion_point_1.size(); i++) {
-          if (cu_to_insertion_point_1.get(i).kind == SEMICOLON) {
-            cline = cu_to_insertion_point_1.get(0).beginLine;
-            ccol = cu_to_insertion_point_1.get(0).beginColumn;
-            for (int j = 0; j <= i; j++) {
-              printToken(cu_to_insertion_point_1.get(j), ostr, true);
-            }
-            ostr.println("");
-            ostr.println("");
-            break;
-          }
-        }
-      }
-
-      TemplateGenerator.generateTemplate(ostr, "/templates/TokenManager.template", Options.getOptions());
-
-      ostr.close();
+      builder.printTemplate("/templates/TokenManager.template");
+      builder.build();
     } catch (IOException e) {
       System.err.println("Failed to create TokenManager " + e);
       JavaCCErrors.semantic_error("Could not open file TokenManager.java for writing.");
@@ -192,7 +135,7 @@ public abstract class JavaGlobals extends JavaCCGlobals implements JavaCCParserC
 
     List<String> tn = new ArrayList<String>(toolNames);
     tn.add(toolName);
-    
+
     ostr.println("/* " + getIdString(tn, cu_name + "Constants.java") + " */");
 
     if (cu_to_insertion_point_1.size() != 0 && cu_to_insertion_point_1.get(0).kind == PACKAGE) {
@@ -269,13 +212,13 @@ public abstract class JavaGlobals extends JavaCCGlobals implements JavaCCParserC
     ostr.close();
   }
 
-  public static void generateSimple(String template, String outputFileName, String fileHeader, CodeGeneratorSettings settings) throws IOException
-  {
-    File outputDir = new File((String)settings.get("OUTPUT_DIRECTORY"));
+  public static void generateSimple(String template, String outputFileName, String fileHeader,
+      CodeGeneratorSettings settings) throws IOException {
+    File outputDir = new File((String) settings.get("OUTPUT_DIRECTORY"));
     File outputFile = new File(outputDir, outputFileName);
     final PrintWriter ostr = new PrintWriter(new FileWriter(outputFile));
     ostr.write(JavaGlobals.writePackage());
-    TemplateGenerator.generateTemplate(ostr, template, settings);
+    CodeGenBuilder.generateTemplate(ostr, template, settings);
     ostr.close();
   }
 

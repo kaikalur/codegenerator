@@ -20,23 +20,23 @@ public:
 \#endif
 
 private:
-  ${STATIC?static :}int defaultLexState;
-  ${STATIC?static :}int curLexState = ${defaultLexState};
-  ${STATIC?static :}int jjmatchedPos;
-  ${STATIC?static :}int jjmatchedKind;
+  int defaultLexState;
+  int curLexState = ${defaultLexState};
+  int jjmatchedPos;
+  int jjmatchedKind;
 
-  ${STATIC?static :}int stateSet[${generatedStates}];
-  ${STATIC?static :}int newStateSet[${generatedStates}];
-  ${STATIC?static :}long moved[${generatedStates}];
-  ${STATIC?static :}long moveIndex;
-  ${STATIC?static :}long jjChars[${nfaSize}][${charsVectorSize}];
+  int stateSet[${generatedStates}];
+  int newStateSet[${generatedStates}];
+  long moved[${generatedStates}];
+  long moveIndex;
+  long jjChars[${nfaSize}][${charsVectorSize}];
     
-  ${STATIC?static :}JJString                  jjimage;
-  ${STATIC?static :}JJString                  image = jjimage;
-  ${STATIC?static :}int                       jjimageLen;
-  ${STATIC?static :}int                       lengthOfMatch;
-  ${STATIC?static :}JJChar                    curChar;
-  ${STATIC?static :}JAVACC_CHARSTREAM       * input_stream;
+  JJString                  jjimage;
+  JJString                  image = jjimage;
+  int                       jjimageLen;
+  int                       lengthOfMatch;
+  JJChar                    curChar;
+  JAVACC_CHARSTREAM       * input_stream;
 
   int                       jjrounds[${stateSetSize}];
   int                       jjstateSet[2 * ${stateSetSize}];
@@ -56,26 +56,26 @@ public:
 protected:
   bool moveToNextChar();
   
-#if TOKEN_MANAGER_USES_PARSER && !STATIC
+#if TOKEN_MANAGER_USES_PARSER
   void ReInit( ${parserName} parserArg, JAVACC_CHARSTREAM * stream, int lexState = 0);
 #else
-  ${STATIC?static :}void ReInit(JAVACC_CHARSTREAM * stream, int lexState = 0);
+  void ReInit(JAVACC_CHARSTREAM * stream, int lexState = 0);
 #fi
 
-  ${STATIC?static :}void SwitchTo(int lexState);
+  void SwitchTo(int lexState);
 
 
 private:
-  ${STATIC?static :}void TokenLexicalActions(Token * matchedToken);
-  ${STATIC?static :}void SkipLexicalActions(Token * matchedToken);
-  ${STATIC?static :}void MoreLexicalActions();
+  void TokenLexicalActions(Token * matchedToken);
+  void SkipLexicalActions(Token * matchedToken);
+  void MoreLexicalActions();
 
-  ${STATIC?static :}int getStartAndSize(int index, int isCount);
-  ${STATIC?static :}int jjRunStringLiteralMatch();
+  int getStartAndSize(int index, int isCount);
+  int jjRunStringLiteralMatch();
 
-  ${STATIC?static :}int jjMoveNfa(int startState, int curPos);
-  ${STATIC?static :}Token * jjFillToken();
-  ${STATIC?static :}void reportError(int lastReadPosition);
+  int jjMoveNfa(int startState, int curPos);
+  Token * jjFillToken();
+  void reportError(int lastReadPosition);
 
 #if NAMESPACE
 ${NAMESPACE_CLOSE}
