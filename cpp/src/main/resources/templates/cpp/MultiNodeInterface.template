@@ -1,6 +1,3 @@
-\#ifndef ${NODE_TYPE}_H_
-\#define ${NODE_TYPE}_H_
-
 \#include "${NODE_CLASS:-SimpleNode}.h"
 
 #if NAMESPACE
@@ -23,5 +20,3 @@ public:
 #if NAMESPACE
 ${NAMESPACE_CLOSE}
 #fi
-
-\#endif

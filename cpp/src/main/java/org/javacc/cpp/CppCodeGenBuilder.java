@@ -22,17 +22,17 @@ package org.javacc.cpp;
 import static org.javacc.parser.JavaCCGlobals.cu_name;
 import static org.javacc.parser.JavaCCGlobals.jjtreeGenerated;
 
-import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.Options;
 import org.javacc.utils.CodeGenBuilder;
 
 import java.io.File;
+import java.util.Map;
 
 
 /**
  * The {@link CppCodeGenBuilder} class.
  */
-public class CppCodeGenBuilder extends CodeGenBuilder {
+public class CppCodeGenBuilder extends CodeGenBuilder<CppCodeGenBuilder> {
 
   private enum Buffer {
     Main,
@@ -40,8 +40,8 @@ public class CppCodeGenBuilder extends CodeGenBuilder {
     Statistic;
   }
 
-
-  private final StringBuffer mainBuffer;
+  private boolean            headeOnly;
+  private final StringBuffer mainBuffer    = new StringBuffer();
   private final StringBuffer includeBuffer = new StringBuffer();
   private final StringBuffer staticsBuffer = new StringBuffer();
 
@@ -51,13 +51,12 @@ public class CppCodeGenBuilder extends CodeGenBuilder {
   /**
    * Constructs an instance of {@link CodeGenBuilder}.
    *
-   * @param fileName
-   * @param settings
+   * @param options
    */
-  public CppCodeGenBuilder(String fileName, CodeGeneratorSettings settings) {
-    super(new StringBuffer(), fileName, settings);
-    this.mainBuffer = super.getBuffer();
-    this.kind = Buffer.Main;
+  private CppCodeGenBuilder(Map<String, Object> options, boolean headeOnly) {
+    super(options);
+    this.headeOnly = headeOnly;
+    this.kind = headeOnly ? Buffer.Include : Buffer.Main;
   }
 
   /**
@@ -80,33 +79,40 @@ public class CppCodeGenBuilder extends CodeGenBuilder {
    * array of super interfaes
    */
   public void genClassStart(String mod, String name, String[] superClasses, String[] superInterfaces) {
-    genCode("class " + name);
+    print("class " + name);
     if (superClasses.length > 0 || superInterfaces.length > 0) {
-      genCode(" : ");
+      print(" : ");
     }
 
     genCommaSeperatedString(superClasses);
     genCommaSeperatedString(superInterfaces);
-    genCodeLine(" {");
-    genCodeLine("public:");
+    println(" {");
+    println("public:");
   }
 
   @Override
   public final void build() {
-    String incfilePath = getFileName().replace(".cc", ".h");
-    String incfileName = new File(incfilePath).getName();
-    includeBuffer.insert(0, "#pragma once\n");
+    String includeFileName = getFile().getName().replace(".cc", ".h");
+    File includeFile = new File(getFile().getParentFile(), includeFileName);
+    
+    // Finally enclose the whole thing in the namespace, if specified.
+    if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
+      includeBuffer.insert(0, "namespace " + Options.stringValue("NAMESPACE_OPEN") + "\n");
+      includeBuffer.append(Options.stringValue("NAMESPACE_CLOSE") + "\n");
+    }
+    includeBuffer.insert(0, "#pragma once\n\n");
 
+    fixupLongLiterals(includeBuffer);
+    store(includeFile, includeBuffer);
 
-    // dump the statics into the main file with the code.
-
+    if (headeOnly)
+      return;
     mainBuffer.insert(0, staticsBuffer);
 
     // Finally enclose the whole thing in the namespace, if specified.
     if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
       mainBuffer.insert(0, "namespace " + Options.stringValue("NAMESPACE_OPEN") + "\n");
       mainBuffer.append(Options.stringValue("NAMESPACE_CLOSE") + "\n");
-      includeBuffer.append(Options.stringValue("NAMESPACE_CLOSE") + "\n");
     }
 
     if (jjtreeGenerated) {
@@ -114,14 +120,10 @@ public class CppCodeGenBuilder extends CodeGenBuilder {
     }
     if (Options.getTokenManagerUsesParser())
       mainBuffer.insert(0, "#include \"" + cu_name + ".h\"\n");
-    mainBuffer.insert(0, "#include \"TokenMgrError.h\"\n");
-    mainBuffer.insert(0, "#include \"" + incfileName + "\"\n");
-    mainBuffer.insert(0, "/* " + new File(getFileName()).getName() + " */\n");
+    mainBuffer.insert(0, "#include \"" + includeFileName + "\"\n");
 
-    fixupLongLiterals(includeBuffer);
     fixupLongLiterals(mainBuffer);
-    write(incfilePath, includeBuffer);
-    write(getFileName(), mainBuffer);
+    store(getFile(), mainBuffer);
   }
 
   public void generateMethodDefHeader(String modsAndRetType, String className, String nameAndParams) {
@@ -167,7 +169,7 @@ public class CppCodeGenBuilder extends CodeGenBuilder {
       char c2 = sb.charAt(i + 1);
       if (Character.isDigit(c1) || (c1 == '0' && c2 == 'x')) {
         i += c1 == '0' ? 2 : 1;
-        while (CodeGenBuilder.isHexDigit(sb.charAt(i)))
+        while (GenericCodeBuilder.isHexDigit(sb.charAt(i)))
           i++;
         if (sb.charAt(i) == 'L') {
           sb.insert(i, "UL");
@@ -180,12 +182,24 @@ public class CppCodeGenBuilder extends CodeGenBuilder {
   protected final void genCommaSeperatedString(String[] strings) {
     for (int i = 0; i < strings.length; i++) {
       if (i > 0) {
-        genCode(", ");
+        print(", ");
       }
 
-      genCode(strings[i]);
+      print(strings[i]);
     }
   }
+
+
+  // Used by the CPP code generatror
+  public final CppCodeGenBuilder printCharArray(String s) {
+    print("{");
+    for (char c : s.toCharArray()) {
+      print("0x" + Integer.toHexString(c) + ", ");
+    }
+    print("0}");
+    return this;
+  }
+
 
   @Override
   public final String escapeToUnicode(String text) {
@@ -202,5 +216,23 @@ public class CppCodeGenBuilder extends CodeGenBuilder {
 
   public void switchToStaticsFile() {
     this.kind = Buffer.Statistic;
+  }
+
+  /**
+   * Constructs an instance of {@link CppCodeGenBuilder}.
+   *
+   * @param options
+   */
+  public static CppCodeGenBuilder of(Map<String, Object> options) {
+    return new CppCodeGenBuilder(options, false);
+  }
+
+  /**
+   * Constructs an instance of {@link CppCodeGenBuilder}.
+   *
+   * @param options
+   */
+  public static CppCodeGenBuilder ofHeader(Map<String, Object> options) {
+    return new CppCodeGenBuilder(options, true);
   }
 }

@@ -3,8 +3,9 @@ package org.javacc.cpp;
 
 import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.JavaCCGlobals;
+import org.javacc.parser.Options;
 import org.javacc.parser.TokenManagerCodeGenerator;
-import org.javacc.utils.TemplateGenerator;
+import org.javacc.utils.CodeGenBuilder;
 
 public class CodeGenerator implements org.javacc.parser.CodeGenerator {
 
@@ -24,28 +25,36 @@ public class CodeGenerator implements org.javacc.parser.CodeGenerator {
   @Override
   public boolean generateHelpers(CodeGeneratorSettings settings) {
     try {
-      TemplateGenerator.generateTemplate("/templates/cpp/CharStream.h.template", "CharStream.h",
-          JavaCCGlobals.toolName, settings);
-      TemplateGenerator.generateTemplate("/templates/cpp/CharStream.cc.template", "CharStream.cc",
-          JavaCCGlobals.toolName, settings);
+      String[] parameters = new String[] {Options.USEROPTION__STATIC, Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC};
+      CodeGenBuilder.generateTemplate("/templates/cpp/CharStream.h.template", "CharStream.h",
+          JavaCCGlobals.toolName, settings, parameters);
+      CodeGenBuilder.generateTemplate("/templates/cpp/CharStream.cc.template", "CharStream.cc",
+          JavaCCGlobals.toolName, settings, parameters);
 
-      TemplateGenerator.generateTemplate("/templates/cpp/TokenMgrError.h.template", "TokenMgrError.h",
-          JavaCCGlobals.toolName, settings);
-      TemplateGenerator.generateTemplate("/templates/cpp/TokenMgrError.cc.template", "TokenMgrError.cc",
-          JavaCCGlobals.toolName, settings);
+      parameters = new String[] {Options.USEROPTION__STATIC, Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC};
+      CodeGenBuilder.generateTemplate("/templates/cpp/TokenMgrError.h.template", "TokenMgrError.h",
+          JavaCCGlobals.toolName, settings, parameters);
+      CodeGenBuilder.generateTemplate("/templates/cpp/TokenMgrError.cc.template", "TokenMgrError.cc",
+          JavaCCGlobals.toolName, settings, parameters);
 
-      TemplateGenerator.generateTemplate("/templates/cpp/ParseException.h.template", "ParseException.h",
-          JavaCCGlobals.toolName, settings);
-      TemplateGenerator.generateTemplate("/templates/cpp/ParseException.cc.template", "ParseException.cc",
-          JavaCCGlobals.toolName, settings);
+      parameters = new String[] {Options.USEROPTION__STATIC, Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC};
+      CodeGenBuilder.generateTemplate("/templates/cpp/ParseException.h.template", "ParseException.h",
+          JavaCCGlobals.toolName, settings, parameters);
+      CodeGenBuilder.generateTemplate("/templates/cpp/ParseException.cc.template", "ParseException.cc",
+          JavaCCGlobals.toolName, settings, parameters);
 
-      TemplateGenerator.generateTemplate("/templates/cpp/TokenManager.h.template", "TokenManager.h",
-          JavaCCGlobals.toolName, settings);
+      parameters = new String[] {Options.USEROPTION__STATIC, Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC};
+      CodeGenBuilder.generateTemplate("/templates/cpp/TokenManager.h.template", "TokenManager.h",
+          JavaCCGlobals.toolName, settings, parameters);
 
-      TemplateGenerator.generateTemplate("/templates/cpp/JavaCC.h.template", "JavaCC.h", JavaCCGlobals.toolName,
-          settings);
-      TemplateGenerator.generateTemplate("/templates/cpp/ErrorHandler.h.template", "ErrorHandler.h",
-          JavaCCGlobals.toolName, settings);
+      parameters = new String[] {Options.USEROPTION__STATIC, Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC};
+      CodeGenBuilder.generateTemplate("/templates/cpp/JavaCC.h.template", "JavaCC.h", JavaCCGlobals.toolName,
+          settings, parameters);
+
+      parameters = new String[] {Options.USEROPTION__STATIC, Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC, Options.USEROPTION__BUILD_PARSER, Options.USEROPTION__BUILD_TOKEN_MANAGER};
+      CodeGenBuilder.generateTemplate("/templates/cpp/ErrorHandler.h.template", "ErrorHandler.h",
+          JavaCCGlobals.toolName, settings, parameters);
+
       OtherFilesGenCPP.start();
     } catch (Exception e) {
       return false;

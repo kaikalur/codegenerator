@@ -1,4 +1,3 @@
-\#include "${NODE_TYPE}.h"
 #if VISITOR
 \#include "${PARSER_NAME}Visitor.h"
 #fi

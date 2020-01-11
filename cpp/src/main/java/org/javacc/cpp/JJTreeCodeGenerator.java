@@ -30,15 +30,13 @@ import org.javacc.jjtree.Token;
 import org.javacc.jjtree.TokenUtils;
 import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.Options;
-import org.javacc.utils.OutputFile;
-import org.javacc.utils.TemplateGenerator;
 
 import java.io.File;
 import java.util.Map;
 
 public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
 
-  static final String JJTStateVersion = Version.majorDotMinor;
+  static final String JJTStateVersion = Version.version;
 
   @Override
   public Object defaultVisit(SimpleNode node, Object data) {
@@ -409,17 +407,16 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
   public void generateHelperFiles() throws java.io.IOException {
     Map<String, Object> options = Options.getOptions();
     options.put(Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
-
-    File directory = JJTreeOptions.getJJTreeOutputDirectory();
-    String filePrefix = new File(directory, "JJT" + JJTreeGlobals.parserName + "State").getAbsolutePath();
-
-    try(OutputFile output = new OutputFile(new File(filePrefix + ".h"), JavaCCGlobals.toolName, JJTStateVersion, new String[0])) {
-      TemplateGenerator.generateTemplate(output.getPrintWriter(), "/templates/cpp/JJTTreeState.h.template", options);
-    }
-
-    try(OutputFile output = new OutputFile(new File(filePrefix + ".cc"), JavaCCGlobals.toolName, JJTStateVersion, new String[0])) {
-      TemplateGenerator.generateTemplate(output.getPrintWriter(), "/templates/cpp/JJTTreeState.cc.template", options);
-    }
+    
+    CppCodeGenBuilder builder = CppCodeGenBuilder.of(options);
+    builder.setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), "JJT" + JJTreeGlobals.parserName + "State.cc"));
+    builder.setVersion(JJTStateVersion).addOption(JavaCCGlobals.toolName);
+    
+    builder.printTemplate("/templates/cpp/JJTTreeState.cc.template");
+    builder.switchToIncludeFile();
+    builder.printTemplate("/templates/cpp/JJTTreeState.h.template");
+    
+    builder.build();
 
     NodeFiles.generateOutputFiles();
   }

@@ -2,7 +2,7 @@ package org.javacc.csharp;
 
 import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.JavaCCGlobals;
-import org.javacc.utils.TemplateGenerator;
+import org.javacc.utils.CodeGenBuilder;
 
 public class CodeGenerator implements org.javacc.parser.CodeGenerator
 {
@@ -23,13 +23,13 @@ public class CodeGenerator implements org.javacc.parser.CodeGenerator
   {
     try
     {
-      TemplateGenerator.generateTemplate("/templates/csharp/CharStream.template", "CharStream.cs", JavaCCGlobals.toolName, settings);
-      TemplateGenerator.generateTemplate("/templates/csharp/TokenMgrError.template", "TokenMgrError.cs", JavaCCGlobals.toolName, settings);
-      TemplateGenerator.generateTemplate("/templates/csharp/ParseException.template", "ParseException.cs", JavaCCGlobals.toolName, settings);
+      CodeGenBuilder.generateTemplate("/templates/csharp/CharStream.template", "CharStream.cs", JavaCCGlobals.toolName, settings);
+      CodeGenBuilder.generateTemplate("/templates/csharp/TokenMgrError.template", "TokenMgrError.cs", JavaCCGlobals.toolName, settings);
+      CodeGenBuilder.generateTemplate("/templates/csharp/ParseException.template", "ParseException.cs", JavaCCGlobals.toolName, settings);
       if ((Boolean)settings.get("JAVA_UNICODE_ESCAPE")) {
-        TemplateGenerator.generateTemplate("/templates/csharp/JavaCharStream.template", "JavaCharStream.cs", JavaCCGlobals.toolName, settings);
+        CodeGenBuilder.generateTemplate("/templates/csharp/JavaCharStream.template", "JavaCharStream.cs", JavaCCGlobals.toolName, settings);
       } else {
-        TemplateGenerator.generateTemplate("/templates/csharp/CharStream.template", "CharStream.cs", JavaCCGlobals.toolName, settings);
+        CodeGenBuilder.generateTemplate("/templates/csharp/CharStream.template", "CharStream.cs", JavaCCGlobals.toolName, settings);
       }
     }
     catch(Exception e)

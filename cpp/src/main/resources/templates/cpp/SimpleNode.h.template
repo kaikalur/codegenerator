@@ -1,6 +1,3 @@
-\#ifndef JAVACC_${PARSER_NAME}_SIMPLENODE_H_
-\#define JAVACC_${PARSER_NAME}_SIMPLENODE_H_
-
 \#include <vector>
 \#include "JavaCC.h"
 \#include "Token.h"
@@ -84,5 +81,3 @@ public:
 #if NAMESPACE
 ${NAMESPACE_CLOSE}
 #fi
-
-\#endif

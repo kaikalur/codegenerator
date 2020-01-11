@@ -51,7 +51,6 @@ import java.util.List;
 public class OtherFilesGenCPP extends JavaCCGlobals implements JavaCCParserConstants {
 
   static public void start() throws MetaParseException {
-
     Token t = null;
     if (JavaCCErrors.get_error_count() != 0) throw new MetaParseException();
 
