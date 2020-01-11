@@ -1,6 +1,6 @@
 
 
-${STATIC?static :}bool ${parserName}TokenManager::moveToNextChar() {
+bool ${parserName}TokenManager::moveToNextChar() {
   if(input_stream->endOfInput())
     return false;
 
@@ -35,7 +35,7 @@ ${parserName}TokenManager::${parserName}TokenManager (JAVACC_CHARSTREAM * stream
 void ${parserName}TokenManager::ReInit( ${parserName} parserArg, JAVACC_CHARSTREAM * stream, int lexState)
 {
 #else
-${STATIC?static :} void ${parserName}TokenManager::ReInit(JAVACC_CHARSTREAM * stream, int lexState)
+ void ${parserName}TokenManager::ReInit(JAVACC_CHARSTREAM * stream, int lexState)
 {
 #fi
     defaultLexState = ${defaultLexState};
@@ -63,13 +63,13 @@ ${STATIC?static :} void ${parserName}TokenManager::ReInit(JAVACC_CHARSTREAM * st
 }
 
   /** Switch to specified lex state. */
-${STATIC?static :}void ${parserName}TokenManager::SwitchTo(int lexState)
+void ${parserName}TokenManager::SwitchTo(int lexState)
 {
     curLexState = lexState;
 }
 
 #if !NO_DFA
-${STATIC?static :} int ${parserName}TokenManager::jjRunStringLiteralMatch() {
+ int ${parserName}TokenManager::jjRunStringLiteralMatch() {
   int curPos = 0;
   int key = (int)curLexState << 16 | curChar;
   int startState = jjInitStates[curLexState];
@@ -130,7 +130,7 @@ ${STATIC?static :} int ${parserName}TokenManager::jjRunStringLiteralMatch() {
 }
 #fi
 
-${STATIC?static :} int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
+ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
 
   if (startState < 0) {
 #if DEBUG_TOKEN_MANAGER
@@ -271,7 +271,7 @@ static bool isMore(int kind) {
   return (jjtoMore[kind >> 6] & (1L << (kind & 077))) != 0L;
 }
 
-${STATIC?static :} Token * ${parserName}TokenManager::jjFillToken() {
+ Token * ${parserName}TokenManager::jjFillToken() {
   Token * t;
   JJString curTokenImage;
 #if KEEP_LINE_COLUMN
@@ -456,7 +456,7 @@ Token * ${parserName}TokenManager::getNextToken() {
   }
 }
 
-${STATIC?static :} void ${parserName}TokenManager::reportError(int lastReadPosition) {
+ void ${parserName}TokenManager::reportError(int lastReadPosition) {
   int error_line = input_stream->getEndLine();
   int error_column = input_stream->getEndColumn();
   JJString error_after = "";

@@ -116,7 +116,7 @@ public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManager
     final String staticString = Options.getStatic() ? "static " : "";
     // Token actions.
     codeGenerator.println(
-        staticString + "int " + tokenizerData.parserName + "TokenManager::getStartAndSize(int index, int isCount)\n{");
+        "int " + tokenizerData.parserName + "TokenManager::getStartAndSize(int index, int isCount)\n{");
     codeGenerator.println("  switch(index) {");
     for (int key : tokenizerData.literalSequence.keySet()) {
       int[] arr = startAndSize.get(key);
@@ -343,18 +343,18 @@ public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManager
     final String staticString = Options.getStatic() ? "static " : "";
     // Token actions.
     codeGenerator.println(
-        staticString + "void " + tokenizerData.parserName + "TokenManager::TokenLexicalActions(Token * matchedToken) {");
+        "void " + tokenizerData.parserName + "TokenManager::TokenLexicalActions(Token * matchedToken) {");
     dumpLexicalActions(allMatches, TokenizerData.MatchType.TOKEN,
                        "matchedToken->kind", codeGenerator);
     codeGenerator.println("}");
 
-    codeGenerator.println(staticString + "void " + tokenizerData.parserName + "TokenManager::SkipLexicalActions(Token * matchedToken) {");
+    codeGenerator.println("void " + tokenizerData.parserName + "TokenManager::SkipLexicalActions(Token * matchedToken) {");
     dumpLexicalActions(allMatches, TokenizerData.MatchType.SKIP, "jjmatchedKind", codeGenerator);
     dumpLexicalActions(allMatches, TokenizerData.MatchType.SPECIAL_TOKEN, "jjmatchedKind", codeGenerator);
     codeGenerator.println("}");
 
     // More actions.
-    codeGenerator.println(staticString + "void " + tokenizerData.parserName + "TokenManager::MoreLexicalActions() {");
+    codeGenerator.println("void " + tokenizerData.parserName + "TokenManager::MoreLexicalActions() {");
     codeGenerator.println("jjimageLen += (lengthOfMatch = jjmatchedPos + 1);");
     dumpLexicalActions(allMatches, TokenizerData.MatchType.MORE,
                        "jjmatchedKind", codeGenerator);
