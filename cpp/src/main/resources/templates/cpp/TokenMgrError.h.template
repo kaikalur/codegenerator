@@ -3,7 +3,6 @@
 
 \#include "JavaCC.h"
 
-
 #if NAMESPACE
 namespace ${NAMESPACE_OPEN}
 #fi

@@ -70,13 +70,13 @@ import org.javacc.parser.Token;
 import org.javacc.parser.TryBlock;
 import org.javacc.parser.ZeroOrMore;
 import org.javacc.parser.ZeroOrOne;
-import org.javacc.utils.CodeGenBuilder;
+import org.javacc.utils.CodeBuilder;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -105,8 +105,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
    * "phase3done" any more. But this has not been removed yet.
    */
 
-  private CppCodeGenBuilder             codeGenerator;
-  private ParserData                    parserData;
+  private CppCodeBuilder                codeGenerator;
 
   private int                           cline, ccol;
 
@@ -115,20 +114,22 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
 
   @Override
   public void generateCode(CodeGeneratorSettings settings, ParserData parserData) {
-    this.parserData = parserData;
-
     List<String> tn = new ArrayList<>(toolNames);
     tn.add(toolName);
 
     File file = new File(Options.getOutputDirectory(), parserData.parserName + ".cc");
-    codeGenerator = CppCodeGenBuilder.of(settings).setFile(file);
-    
+    codeGenerator = CppCodeBuilder.of(settings).setFile(file);
+
+    if (jjtreeGenerated) {
+      codeGenerator.switchToStaticsFile();
+      codeGenerator.println("#include \"" + cu_name + "Tree.h\"\n");
+    }
+
     codeGenerator.switchToIncludeFile();
     codeGenerator.println("#include \"JavaCC.h\"");
     codeGenerator.println("#include \"CharStream.h\"");
     codeGenerator.println("#include \"Token.h\"");
     codeGenerator.println("#include \"TokenManager.h\"");
-
 
     Object object = Options.objectValue(Options.USEROPTION__CPP_PARSER_INCLUDES);
 
@@ -184,7 +185,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     String superClass = Options.stringValue(Options.USEROPTION__PARSER_SUPER_CLASS);
     codeGenerator.genClassStart("", cu_name, new String[] {},
         superClass == null ? new String[0] : new String[] { "public " + superClass });
-    
+
     codeGenerator.switchToMainFile();
     if (cu_to_insertion_point_2.size() != 0) {
       codeGenerator.printTokenSetup(cu_to_insertion_point_2.get(0));
@@ -194,6 +195,10 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     }
 
     codeGenerator.switchToMainFile();
+    
+    if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
+      codeGenerator.println("namespace " + Options.stringValue("NAMESPACE_OPEN"));
+    }
 
     codeGenerator.println("");
     codeGenerator.println("");
@@ -393,8 +398,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     if (!Options.getStackLimit().equals("")) {
       codeGenerator.println("    if(kind != -1 && (jj_stack_error || jj_stack_check(false))) {");
       codeGenerator.println("      if (!jj_stack_error) {");
-      codeGenerator
-          .println("        errorHandler->handleOtherError(\"Stack overflow while trying to parse\", this);");
+      codeGenerator.println("        errorHandler->handleOtherError(\"Stack overflow while trying to parse\", this);");
       codeGenerator.println("        jj_stack_error=true;");
       codeGenerator.println("      }");
       codeGenerator.println("      return jj_consume_token(-1);");
@@ -731,9 +735,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       codeGenerator.println("  {");
       codeGenerator.println("    if (trace_enabled()) {");
       codeGenerator.println("      for (int i = 0; i < indent; i++) { std::clog << \" \"; }");
-      codeGenerator
-          .println("      std::clog << \"Consumed token: <kind: \" << t->kind << \"(\" << addUnicodeEscapes("
-              + getTokenImage() + "[t->kind]) << \"), \" << addUnicodeEscapes(t->image);");
+      codeGenerator.println("      std::clog << \"Consumed token: <kind: \" << t->kind << \"(\" << addUnicodeEscapes("
+          + getTokenImage() + "[t->kind]) << \"), \" << addUnicodeEscapes(t->image);");
       // codeGenerator.genCodeLine(" if (t->kind != 0 &&
       // !tokenImage[t->kind].equals(\"\\\"\" + t->image + \"\\\"\")) {");
       // codeGenerator.genCodeLine(" System.out.print(\": \\\"\" + t->image +
@@ -751,9 +754,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       codeGenerator.println("  {");
       codeGenerator.println("    if (trace_enabled()) {");
       codeGenerator.println("      for (int i = 0; i < indent; i++) { std::clog << \" \"; }");
-      codeGenerator
-          .println("      std::clog << \"Visited token: <Kind: \" << t1->kind << \"(\" << addUnicodeEscapes("
-              + getTokenImage() + "[t1->kind]) << \"), \" << addUnicodeEscapes(t1->image);");
+      codeGenerator.println("      std::clog << \"Visited token: <Kind: \" << t1->kind << \"(\" << addUnicodeEscapes("
+          + getTokenImage() + "[t1->kind]) << \"), \" << addUnicodeEscapes(t1->image);");
 
       // codeGenerator.genCodeLine(" if (t1->kind != 0 &&
       // !tokenImage[t1->kind].equals(\"\\\"\" + t1->image + \"\\\"\")) {");
@@ -848,7 +850,17 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
 
   @Override
   public void finish(CodeGeneratorSettings settings, ParserData parserData) {
-    codeGenerator.build();
+    if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
+      codeGenerator.println(Options.stringValue("NAMESPACE_CLOSE"));
+      codeGenerator.switchToMainFile();
+      codeGenerator.println(Options.stringValue("NAMESPACE_CLOSE"));
+    }
+
+    try {
+      codeGenerator.close();
+    } catch (IOException e) {
+      throw new Error(e);
+    }
   }
 
   private int     gensymindex = 0;
@@ -1013,14 +1025,6 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
   final int OPENIF     = 1;
   final int OPENSWITCH = 2;
 
-  private void dumpLookaheads(Lookahead[] conds, String[] actions) {
-    for (int i = 0; i < conds.length; i++) {
-      System.err.println("Lookahead: " + i);
-      System.err.println(conds[i].dump(0, new HashSet()));
-      System.err.println();
-    }
-  }
-
   /**
    * This method takes two parameters - an array of Lookahead's "conds", and an
    * array of String's "actions". "actions" contains exactly one element more
@@ -1097,7 +1101,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
           codeGenerator.printTokenSetup(la.getActionTokens().get(0));
           for (Iterator<Token> it = la.getActionTokens().iterator(); it.hasNext();) {
             t = it.next();
-            retval += CodeGenBuilder.toString(t);
+            retval += CodeBuilder.toString(t);
           }
           retval += codeGenerator.getTrailingComments(t);
           retval += ") {\u0001" + actions[index];
@@ -1218,7 +1222,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
           codeGenerator.printTokenSetup(la.getActionTokens().get(0));
           for (Iterator<Token> it = la.getActionTokens().iterator(); it.hasNext();) {
             t = it.next();
-            retval += CodeGenBuilder.toString(t);
+            retval += CodeBuilder.toString(t);
           }
           retval += codeGenerator.getTrailingComments(t);
           retval += ")";
@@ -1299,7 +1303,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
 
     codeGenerator.printTokenSetup(t);
     ccol = 1;
-    String comment1 = codeGenerator.getLeadingComments(t);
+    codeGenerator.getLeadingComments(t);
     cline = t.beginLine;
     ccol = t.beginColumn;
     sig.append(t.image);
@@ -1310,14 +1314,14 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
 
     for (int i = 1; i < p.getReturnTypeTokens().size(); i++) {
       t = p.getReturnTypeTokens().get(i);
-      sig.append(CodeGenBuilder.toString(t));
+      sig.append(CodeBuilder.toString(t));
       if (t.kind == JavaCCParserConstants.VOID)
         void_ret = true;
       if (t.kind == JavaCCParserConstants.STAR)
         ptr_ret = true;
     }
 
-    String comment2 = codeGenerator.getTrailingComments(t);
+    codeGenerator.getTrailingComments(t);
     ret = sig.toString();
 
     sig.setLength(0);
@@ -1326,7 +1330,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       codeGenerator.printTokenSetup(p.getParameterListTokens().get(0));
       for (Iterator<Token> it = p.getParameterListTokens().iterator(); it.hasNext();) {
         t = it.next();
-        sig.append(CodeGenBuilder.toString(t));
+        sig.append(CodeBuilder.toString(t));
       }
       sig.append(codeGenerator.getTrailingComments(t));
     }
@@ -1369,7 +1373,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
           .println("  errorHandler->handleParseError(token, getToken(1), __FUNCTION__, this), hasError = true;");
       if (!voidReturn) {
         codeGenerator.println("  return __ERROR_RET__;"); // Non-recoverable
-                                                              // error
+                                                          // error
       } else {
         codeGenerator.println("  return;"); // Non-recoverable error
       }
@@ -1455,7 +1459,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
         codeGenerator.printTokenSetup(e_nrw.lhsTokens.get(0));
         for (Iterator<Token> it = e_nrw.lhsTokens.iterator(); it.hasNext();) {
           t = it.next();
-          retval += CodeGenBuilder.toString(t);
+          retval += CodeBuilder.toString(t);
         }
         retval += codeGenerator.getTrailingComments(t);
         retval += " = ";
@@ -1483,7 +1487,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
         codeGenerator.printTokenSetup(e_nrw.getLhsTokens().get(0));
         for (Iterator<Token> it = e_nrw.getLhsTokens().iterator(); it.hasNext();) {
           t = it.next();
-          retval += CodeGenBuilder.toString(t);
+          retval += CodeBuilder.toString(t);
         }
         retval += codeGenerator.getTrailingComments(t);
         retval += " = ";
@@ -1493,7 +1497,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
         codeGenerator.printTokenSetup(e_nrw.getArgumentTokens().get(0));
         for (Iterator<Token> it = e_nrw.getArgumentTokens().iterator(); it.hasNext();) {
           t = it.next();
-          retval += CodeGenBuilder.toString(t);
+          retval += CodeBuilder.toString(t);
         }
         retval += codeGenerator.getTrailingComments(t);
       }
@@ -1509,7 +1513,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
         ccol = 1;
         for (Iterator<Token> it = e_nrw.getActionTokens().iterator(); it.hasNext();) {
           t = it.next();
-          retval += CodeGenBuilder.toString(t);
+          retval += CodeBuilder.toString(t);
         }
         retval += codeGenerator.getTrailingComments(t);
       }
@@ -1632,7 +1636,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
           codeGenerator.printTokenSetup(list.get(0));
           for (Iterator<Token> it = list.iterator(); it.hasNext();) {
             t = it.next();
-            retval += CodeGenBuilder.toString(t);
+            retval += CodeBuilder.toString(t);
           }
           retval += codeGenerator.getTrailingComments(t);
         }
@@ -1648,7 +1652,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
           ccol = 1;
           for (Iterator<Token> it = list.iterator(); it.hasNext();) {
             t = it.next();
-            retval += CodeGenBuilder.toString(t);
+            retval += CodeBuilder.toString(t);
           }
           retval += codeGenerator.getTrailingComments(t);
         }
@@ -1662,7 +1666,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
           ccol = 1;
           for (Iterator<Token> it = e_nrw.finallyblk.iterator(); it.hasNext();) {
             t = it.next();
-            retval += CodeGenBuilder.toString(t);
+            retval += CodeBuilder.toString(t);
           }
           retval += codeGenerator.getTrailingComments(t);
         }
@@ -1686,8 +1690,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     codeGenerator.println("    jj_done = false;");
     codeGenerator.println("    return (!jj_3" + internalNames.get(e) + "() || jj_done)" + ret_suffix + ";");
     if (Options.getErrorReporting()) {
-      codeGenerator
-          .println(" { jj_save(" + (Integer.parseInt(internalNames.get(e).substring(1)) - 1) + ", xla); }");
+      codeGenerator.println(" { jj_save(" + (Integer.parseInt(internalNames.get(e).substring(1)) - 1) + ", xla); }");
     }
     codeGenerator.println("  }");
     codeGenerator.println("");
@@ -1863,8 +1866,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
         if (Options.getErrorReporting()) {
           codeGenerator.print("if (!jj_rescan) ");
         }
-        codeGenerator.println("trace_call(\""
-            + codeGenerator.escapeToUnicode(((NormalProduction) e.parent).getLhs()) + "(LOOKING AHEAD...)\");");
+        codeGenerator.println("trace_call(\"" + codeGenerator.escapeToUnicode(((NormalProduction) e.parent).getLhs())
+            + "(LOOKING AHEAD...)\");");
         jj3_expansion = e;
       } else {
         jj3_expansion = null;
@@ -2107,9 +2110,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     return retval;
   }
 
-  public void build(CppCodeGenBuilder codeGenerator) {
+  public void build(CppCodeBuilder codeGenerator) {
     NormalProduction p;
-    JavaCodeProduction jp;
     CppCodeProduction cp;
 
     this.codeGenerator = codeGenerator;
@@ -2122,24 +2124,17 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
         String ret, params;
         Token t = null;
 
-        String method_name = p.getLhs();
-        boolean void_ret = false;
-        boolean ptr_ret = false;
+        p.getLhs();
 
         for (int i = 0; i < p.getReturnTypeTokens().size(); i++) {
           t = p.getReturnTypeTokens().get(i);
-          String s = CodeGenBuilder.toString(t);
+          CodeBuilder.toString(t);
           sig.append(t.toString());
           sig.append(" ");
-          if (t.kind == JavaCCParserConstants.VOID)
-            void_ret = true;
-          if (t.kind == JavaCCParserConstants.STAR)
-            ptr_ret = true;
         }
 
-        String comment2 = "";
         if (t != null)
-          comment2 = codeGenerator.getTrailingComments(t);
+          codeGenerator.getTrailingComments(t);
         ret = sig.toString();
 
         sig.setLength(0);
@@ -2148,7 +2143,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
           codeGenerator.printTokenSetup(p.getParameterListTokens().get(0));
           for (Iterator<Token> it = p.getParameterListTokens().iterator(); it.hasNext();) {
             t = it.next();
-            sig.append(CodeGenBuilder.toString(t));
+            sig.append(CodeBuilder.toString(t));
           }
           sig.append(codeGenerator.getTrailingComments(t));
         }
@@ -2202,96 +2197,6 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       buildPhase3Routine(enumeration.nextElement(), false);
     }
     codeGenerator.switchToMainFile();
-  }
-
-  public void reInit() {
-    gensymindex = 0;
-    indentamt = 0;
-    jj2LA = false;
-    phase2list = new ArrayList<>();
-    phase3list = new ArrayList<>();
-    phase3table = new Hashtable<>();
-    firstSet = null;
-    xsp_declared = false;
-    jj3_expansion = null;
-  }
-
-  // Table driven.
-  void buildPhase3Table(Phase3Data inf) {
-    Expansion e = inf.exp;
-    // Token t = null;
-    if (e instanceof RegularExpression) {
-      RegularExpression e_nrw = (RegularExpression) e;
-      System.err.println("TOKEN, " + e_nrw.ordinal);
-    } else if (e instanceof NonTerminal) {
-      NonTerminal e_nrw = (NonTerminal) e;
-      NormalProduction ntprod = production_table.get(e_nrw.getName());
-      if (ntprod instanceof CodeProduction) {
-        // javacode, true - always (warn?)
-        System.err.println("JAVACODE_PROD, true");
-      } else {
-        Expansion ntexp = ntprod.getExpansion();
-        // nt exp's table.
-        System.err.println("PRODUCTION, " + internalIndexes.get(ntexp));
-        // buildPhase3Table(new Phase3Data(ntexp, inf.count));
-      }
-    } else if (e instanceof Choice) {
-      Sequence nested_seq;
-      Choice e_nrw = (Choice) e;
-      System.err.print("CHOICE, ");
-      for (int i = 0; i < e_nrw.getChoices().size(); i++) {
-        if (i > 0)
-          System.err.print("\n|");
-        nested_seq = (Sequence) e_nrw.getChoices().get(i);
-        Lookahead la = (Lookahead) nested_seq.units.get(0);
-        if (la.getActionTokens().size() != 0) {
-          System.err.print("SEMANTIC,");
-        } else {
-          buildPhase3Table(new Phase3Data(nested_seq, inf.count));
-        }
-      }
-      System.err.println();
-    } else if (e instanceof Sequence) {
-      Sequence e_nrw = (Sequence) e;
-      int cnt = inf.count;
-      if (e_nrw.units.size() > 2) {
-        System.err.println("SEQ, " + cnt);
-        for (int i = 1; i < e_nrw.units.size(); i++) {
-          System.err.print("   ");
-          Expansion eseq = e_nrw.units.get(i);
-          buildPhase3Table(new Phase3Data(eseq, cnt));
-          cnt -= minimumSize(eseq);
-          if (cnt <= 0)
-            break;
-        }
-      } else {
-        Expansion tmp = e_nrw.units.get(1);
-        while (tmp instanceof NonTerminal) {
-          NormalProduction ntprod = production_table.get(((NonTerminal) tmp).getName());
-          if (ntprod instanceof CodeProduction)
-            break;
-          tmp = ntprod.getExpansion();
-        }
-        buildPhase3Table(new Phase3Data(tmp, cnt));
-      }
-      System.err.println();
-    } else if (e instanceof TryBlock) {
-      TryBlock e_nrw = (TryBlock) e;
-      buildPhase3Table(new Phase3Data(e_nrw.exp, inf.count));
-    } else if (e instanceof OneOrMore) {
-      OneOrMore e_nrw = (OneOrMore) e;
-      System.err.println("SEQ PROD " + internalIndexes.get(e_nrw));
-      System.err.println("ZEROORMORE " + internalIndexes.get(e_nrw));
-    } else if (e instanceof ZeroOrMore) {
-      ZeroOrMore e_nrw = (ZeroOrMore) e;
-      System.err.print("ZEROORMORE, " + internalIndexes.get(e_nrw));
-    } else if (e instanceof ZeroOrOne) {
-      ZeroOrOne e_nrw = (ZeroOrOne) e;
-      System.err.println("ZERORONE, " + internalIndexes.get(e_nrw));
-    } else {
-      assert false;
-      // table for nested_e - optional
-    }
   }
 }
 

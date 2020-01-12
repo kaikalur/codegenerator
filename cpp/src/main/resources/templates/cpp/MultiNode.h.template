@@ -1,20 +1,22 @@
-\#include "JavaCC.h"
-\#include "SimpleNode.h"
+\#include "${NODE_CLASS:-SimpleNode}.h"
 
-#if NODE_FACTORY
-\#define jjtCreate(id) new _${NODE_TYPE}(id)
-\#define jjtCreate(parser, id) new _${NODE_TYPE}(parser, id);
+#if NAMESPACE
+namespace ${NAMESPACE_OPEN}
 #fi
+class ${PARSER_NAME};
 
-typedef class _${NODE_TYPE} *${NODE_TYPE};
-class _${NODE_TYPE} : public ${NODE_CLASS:-_SimpleNode} {
+class ${NODE_TYPE} : public ${NODE_CLASS:-SimpleNode} {
 public: 
-    _${NODE_TYPE}(int id);
-    _${NODE_TYPE}(${PARSER_NAME} *parser, int id);
-    virtual ~_${NODE_TYPE}();
+           ${NODE_TYPE}(int id);
+           ${NODE_TYPE}(${PARSER_NAME} *parser, int id);
+  virtual ~${NODE_TYPE}();
 
 #if VISITOR
   /** Accept the visitor. **/
-    virtual ${VISITOR_RETURN_TYPE} jjtAccept(${PARSER_NAME}Visitor visitor, ${VISITOR_DATA_TYPE:-Object} data);
+  virtual ${VISITOR_RETURN_TYPE} jjtAccept(${PARSER_NAME}Visitor *visitor, ${VISITOR_DATA_TYPE:-void *} data) const ;
 #fi
 };
+
+#if NAMESPACE
+${NAMESPACE_CLOSE}
+#fi

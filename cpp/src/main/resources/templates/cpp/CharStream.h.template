@@ -1,6 +1,3 @@
-\#ifndef JAVACC_${PARSER_NAME}_CHARSTREAM_H_
-\#define JAVACC_${PARSER_NAME}_CHARSTREAM_H_
-
 \#include "JavaCC.h"
 
 \#ifndef INITIAL_BUFFER_SIZE
@@ -277,5 +274,3 @@ protected:
 #if NAMESPACE
 ${NAMESPACE_CLOSE}
 #fi
-
-\#endif

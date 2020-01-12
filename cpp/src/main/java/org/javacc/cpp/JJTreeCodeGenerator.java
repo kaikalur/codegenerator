@@ -28,11 +28,11 @@ import org.javacc.jjtree.NodeScope;
 import org.javacc.jjtree.SimpleNode;
 import org.javacc.jjtree.Token;
 import org.javacc.jjtree.TokenUtils;
+import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.Options;
 
 import java.io.File;
-import java.util.Map;
 
 public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
 
@@ -47,7 +47,7 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
   @Override
   public Object visit(ASTGrammar node, Object data) {
     IO io = (IO) data;
-    if (CodeGenerator.IS_DEBUG) {
+    if (CppCodeGenerator.IS_DEBUG) {
       io.println("/*@bgen(jjtree) " + JavaCCGlobals.getIdString("JJTree", new File(io.getOutputFileName()).getName())
           + (Options.booleanValue("IGNORE_ACTIONS") ? "" : " */"));
       io.print((Options.booleanValue("IGNORE_ACTIONS") ? "" : "/*") + "@egen*/");
@@ -236,7 +236,7 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
 
 
   static void openJJTreeComment(IO io, String arg) {
-    if (CodeGenerator.IS_DEBUG) {
+    if (CppCodeGenerator.IS_DEBUG) {
       if (arg != null) {
         io.print("/*@bgen(jjtree) " + arg + (Options.booleanValue("IGNORE_ACTIONS") ? "" : " */"));
       } else {
@@ -247,7 +247,7 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
 
 
   static void closeJJTreeComment(IO io) {
-    if (CodeGenerator.IS_DEBUG) {
+    if (CppCodeGenerator.IS_DEBUG) {
       io.print((Options.booleanValue("IGNORE_ACTIONS") ? "" : "/*") + "@egen*/");
     }
   }
@@ -405,18 +405,18 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
 
   @Override
   public void generateHelperFiles() throws java.io.IOException {
-    Map<String, Object> options = Options.getOptions();
-    options.put(Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
-    
-    CppCodeGenBuilder builder = CppCodeGenBuilder.of(options);
-    builder.setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), "JJT" + JJTreeGlobals.parserName + "State.cc"));
-    builder.setVersion(JJTStateVersion).addOption(JavaCCGlobals.toolName);
-    
-    builder.printTemplate("/templates/cpp/JJTTreeState.cc.template");
-    builder.switchToIncludeFile();
-    builder.printTemplate("/templates/cpp/JJTTreeState.h.template");
-    
-    builder.build();
+    CodeGeneratorSettings options = CodeGeneratorSettings.of(Options.getOptions());
+    options.set(Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
+
+    try (CppCodeBuilder builder = CppCodeBuilder.of(options)) {
+      builder
+          .setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), "JJT" + JJTreeGlobals.parserName + "State.cc"));
+      builder.setVersion(JJTStateVersion).addOption(JavaCCGlobals.toolName);
+
+      builder.printTemplate("/templates/cpp/JJTTreeState.cc.template");
+      builder.switchToIncludeFile();
+      builder.printTemplate("/templates/cpp/JJTTreeState.h.template");
+    }
 
     NodeFiles.generateOutputFiles();
   }

@@ -1,28 +1,26 @@
+
 package org.javacc.csharp;
 
 import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.JavaCCGlobals;
-import org.javacc.utils.CodeGenBuilder;
+import org.javacc.utils.CodeBuilder.GenericCodeBuilder;
 
+import java.io.File;
 import java.io.IOException;
 
-public class TokenCodeGenerator implements org.javacc.parser.TokenCodeGenerator
-{
+public class TokenCodeGenerator implements org.javacc.parser.TokenCodeGenerator {
+
   /**
    * The Token class generator.
    */
   @Override
-  public boolean generateCodeForToken(CodeGeneratorSettings settings)
-  {
-    try
-    {
-      CodeGenBuilder.generateTemplate("/templates/csharp/Token.template", "Token.cs", JavaCCGlobals.toolName, settings);
-    }
-    catch(IOException e)
-    {
+  public boolean generateCodeForToken(CodeGeneratorSettings settings) {
+    try (GenericCodeBuilder builder = GenericCodeBuilder.of(settings)) {
+      builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "Token.cs"));
+      builder.addTools(JavaCCGlobals.toolName).printTemplate("/templates/csharp/Token.template");
+    } catch (IOException e) {
       return false;
     }
-
     return true;
   }
 }

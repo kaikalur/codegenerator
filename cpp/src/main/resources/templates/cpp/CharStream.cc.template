@@ -1,5 +1,3 @@
-\#include "CharStream.h"
-
 namespace {
 template <class T>
 void ArrayCopy(T* src, int src_offset, T* dest, int dest_offset, int len) {

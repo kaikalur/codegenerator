@@ -1,5 +1,3 @@
-\#include "Token.h"
-
 #if NAMESPACE
 namespace ${NAMESPACE_OPEN}
 #fi
