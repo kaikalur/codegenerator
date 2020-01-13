@@ -1,12 +1,18 @@
 
 package org.javacc.java;
 
+import static org.javacc.parser.JavaCCGlobals.cu_to_insertion_point_1;
+
 import org.javacc.parser.CodeGeneratorSettings;
+import org.javacc.parser.JavaCCParserConstants;
 import org.javacc.parser.Options;
+import org.javacc.parser.Token;
 import org.javacc.parser.TokenizerData;
+import org.javacc.utils.CodeBuilder;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +52,24 @@ public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManager
     try {
       codeGenerator = JavaCodeBuilder.of(settings).setFile(file);
       codeGenerator.setPackageName(JavaUtil.parsePackage());
+
+      if (cu_to_insertion_point_1.size() != 0) {
+        List<String> tokens = null;
+        Object firstToken = cu_to_insertion_point_1.get(0);
+        codeGenerator.printTokenSetup((Token) firstToken);
+        for (Token t : cu_to_insertion_point_1) {
+          if (t.kind == JavaCCParserConstants.IMPORT) {
+            tokens = new ArrayList<String>();
+          } else if (tokens != null && t.kind == JavaCCParserConstants.SEMICOLON) {
+            codeGenerator.println("import", String.join("", tokens), ";");
+            tokens = null;
+          } else if (tokens != null) {
+            tokens.add(CodeBuilder.toString(t));
+          }
+        }
+        codeGenerator.println();
+      }
+
       codeGenerator.printTemplate(tokenManagerTemplate);
       generateConstantsClass(tokenizerData);
 

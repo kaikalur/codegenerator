@@ -145,7 +145,6 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
           } else if (t.kind == JavaCCParserConstants.CLASS) {
             implementsExists = false;
           }
-
           codeGenerator.printToken(t);
         }
       }
