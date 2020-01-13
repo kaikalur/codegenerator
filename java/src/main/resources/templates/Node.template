@@ -36,9 +36,9 @@ interface Node {
 
   /** Accept the visitor. **/
 #if VISITOR_EXCEPTION
-  ${VISITOR_RETURN_TYPE} jjtAccept(${PARSER_NAME}Visitor visitor, ${VISITOR_DATA_TYPE:-object} data) throws ${VISITOR_EXCEPTION};
+  ${VISITOR_RETURN_TYPE} jjtAccept(${PARSER_NAME}Visitor visitor, ${VISITOR_DATA_TYPE:-Object} data) throws ${VISITOR_EXCEPTION};
 #else
-  ${VISITOR_RETURN_TYPE} jjtAccept(${PARSER_NAME}Visitor visitor, ${VISITOR_DATA_TYPE:-object} data);
+  ${VISITOR_RETURN_TYPE} jjtAccept(${PARSER_NAME}Visitor visitor, ${VISITOR_DATA_TYPE:-Object} data);
 #fi
 #fi
 }
