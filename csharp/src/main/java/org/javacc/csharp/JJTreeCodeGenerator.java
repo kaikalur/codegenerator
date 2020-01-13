@@ -28,15 +28,12 @@ import org.javacc.jjtree.NodeScope;
 import org.javacc.jjtree.SimpleNode;
 import org.javacc.jjtree.Token;
 import org.javacc.jjtree.TokenUtils;
+import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.Options;
-import org.javacc.utils.CodeGenBuilder;
-import org.javacc.utils.CodeGenBuilder.GenericCodeBuilder;
-import org.javacc.utils.OutputFile;
+import org.javacc.utils.CodeBuilder.GenericCodeBuilder;
 
 import java.io.File;
-import java.io.PrintWriter;
-import java.util.Map;
 
 public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
 
@@ -395,16 +392,17 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
 
   @Override
   public void generateHelperFiles() throws java.io.IOException {
-    Map<String, Object> options = JJTreeOptions.getOptions();
-    options.put(Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
+    CodeGeneratorSettings options = CodeGeneratorSettings.of(JJTreeOptions.getOptions());
+    options.set(Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
+
     String filePrefix = new File(JJTreeOptions.getJJTreeOutputDirectory(), "JJT" + JJTreeGlobals.parserName + "State")
         .getAbsolutePath();
 
-    GenericCodeBuilder builder = GenericCodeBuilder.of(options);
-    builder.setFile(new File(filePrefix + ".cs"));
-    builder.setVersion(JJTStateVersion).addTools(JavaCCGlobals.toolName);
-    builder.printTemplate("/templates/csharp/JJTTreeState.cs.template");
-    builder.build();
+    try (GenericCodeBuilder builder = GenericCodeBuilder.of(options)) {
+      builder.setFile(new File(filePrefix + ".cs"));
+      builder.setVersion(JJTStateVersion).addTools(JavaCCGlobals.toolName);
+      builder.printTemplate("/templates/csharp/JJTTreeState.cs.template");
+    }
 
     NodeFiles.generateOutputFiles();
   }

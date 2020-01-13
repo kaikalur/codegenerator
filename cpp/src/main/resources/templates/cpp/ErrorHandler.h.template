@@ -1,5 +1,3 @@
-\#ifndef JAVACC__${PARSER_NAME}_ERRORHANDLER_H_
-\#define JAVACC__${PARSER_NAME}_ERRORHANDLER_H_
 \#include <string>
 \#include "JavaCC.h"
 \#include "Token.h"
@@ -77,5 +75,3 @@ JAVACC_SIMPLE_STRING addUnicodeEscapes(const JAVACC_STRING_TYPE& str);
 #if NAMESPACE
 ${NAMESPACE_CLOSE}
 #fi
-
-\#endif

@@ -1,26 +1,32 @@
-\#include "${NODE_TYPE}.h"
-\#include "JJTree.h"
 #if VISITOR
 \#include "${PARSER_NAME}Visitor.h"
 #fi
 
-  _${NODE_TYPE}::_${NODE_TYPE}(int id) : ${NODE_CLASS:-_SimpleNode}(id){
+#if NAMESPACE
+namespace ${NAMESPACE_OPEN}
+#fi
+  
+  ${NODE_TYPE}::${NODE_TYPE}(int id) : ${NODE_CLASS:-SimpleNode}(id) {
   }
-
-  _${NODE_TYPE}::_${NODE_TYPE}(${PARSER_NAME} *p, int id) : ${NODE_CLASS:-_SimpleNode}(p, id){
+  ${NODE_TYPE}::${NODE_TYPE}(${PARSER_NAME} *parser, int id) : ${NODE_CLASS:-SimpleNode}(parser, id) {
+  }
+  ${NODE_TYPE}::~${NODE_TYPE}() {
   }
 
 #if VISITOR
-
   /** Accept the visitor. **/
-  ${VISITOR_RETURN_TYPE} _${NODE_TYPE}::jjtAccept(${PARSER_NAME}Visitor visitor, ${VISITOR_DATA_TYPE:-Object} data) {
-#if VISITOR_RETURN_TYPE_VOID
-    visitor->visit(this, data);
+  ${VISITOR_RETURN_TYPE} ${NODE_TYPE}::jjtAccept(${PARSER_NAME}Visitor *visitor, ${VISITOR_DATA_TYPE:-void *} data) const {
+#if !VISITOR_RETURN_TYPE_VOID
+    return 
+#fi
+#if VISITOR_METHOD_NAME_INCLUDES_TYPE_NAME
+    visitor->visit${NODE_TYPE}(this, data);
 #else
-    return visitor->visit(this, data);
+    visitor->visit(this, data);
 #fi
   }
+#fi
 
-  _${NODE_TYPE}::~_${NODE_TYPE}() {
-  }
+#if NAMESPACE
+${NAMESPACE_CLOSE}
 #fi

@@ -6,6 +6,9 @@
 \#include "${parserName}Tree.h"
 \#include "TokenManager.h"
 \#include "${parserName}Constants.h"
+#if TOKEN_MANAGER_USES_PARSER
+\#include "${parserName}.h"
+#fi
 
 #if NAMESPACE
 namespace ${NAMESPACE_OPEN}
@@ -77,10 +80,6 @@ private:
   Token * jjFillToken();
   void reportError(int lastReadPosition);
 
-#if NAMESPACE
-${NAMESPACE_CLOSE}
-#fi
-
 public:
   void setErrorHandler(TokenMgrError *eh) {
       if (delete_eh) delete errorHandler, errorHandler = nullptr;
@@ -88,3 +87,7 @@ public:
       errorHandler = eh;
   }
 };
+
+#if NAMESPACE
+${NAMESPACE_CLOSE}
+#fi

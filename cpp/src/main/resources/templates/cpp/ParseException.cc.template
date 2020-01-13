@@ -1,6 +1,3 @@
-\#include "ParseException.h"
-
-
 #if NAMESPACE
 namespace ${NAMESPACE_OPEN}
 #fi

@@ -29,17 +29,15 @@ import org.javacc.jjtree.NodeScope;
 import org.javacc.jjtree.SimpleNode;
 import org.javacc.jjtree.Token;
 import org.javacc.jjtree.TokenUtils;
+import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.Options;
 
 import java.io.File;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Map;
 
 public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
-
-  static final String JJTStateVersion = Version.version;
 
   @Override
   public Object defaultVisit(SimpleNode node, Object data) {
@@ -160,12 +158,12 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
         if (t.image.equals("implements")) {
           node.print(t, io);
           JJTreeCodeGenerator.openJJTreeComment(io, null);
-          io.getOut().print(" " + NodeFiles.nodeConstants() + ", ");
+          io.getOut().print(" " + JavaTemplates.nodeConstants() + ", ");
           JJTreeCodeGenerator.closeJJTreeComment(io);
         } else {
           // t is pointing at the opening brace of the class body.
           JJTreeCodeGenerator.openJJTreeComment(io, null);
-          io.getOut().print("implements " + NodeFiles.nodeConstants());
+          io.getOut().print("implements " + JavaTemplates.nodeConstants());
           JJTreeCodeGenerator.closeJJTreeComment(io);
           node.print(t, io);
         }
@@ -177,7 +175,7 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
         String treeClazzName = "JJT" + JJTreeGlobals.parserName + "State";
         JJTreeCodeGenerator.openJJTreeComment(io, null);
         io.println();
-        io.println("  protected " + JavaGlobals.getStatic() + treeClazzName + " jjtree = new " + treeClazzName + "();");
+        io.println("  protected " + JavaUtil.getStatic() + treeClazzName + " jjtree = new " + treeClazzName + "();");
         io.println();
         JJTreeCodeGenerator.closeJJTreeComment(io);
       }
@@ -341,7 +339,6 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
       io.println(indent + ns.closedVar + " = false;");
     }
     if (JJTreeOptions.getNodeScopeHook()) {
-      int i = closeNode.lastIndexOf(",");
       io.println(indent + "if (jjtree.nodeCreated()) {");
       io.println(indent + " jjtreeCloseNodeScope(" + ns.nodeVar + ");");
       io.println(indent + "}");
@@ -474,15 +471,16 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
 
   @Override
   public void generateHelperFiles() throws java.io.IOException {
-    Map<String, Object> options = JJTreeOptions.getOptions();
-    options.put(Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
+    CodeGeneratorSettings options = CodeGeneratorSettings.of(JJTreeOptions.getOptions());
+    options.set(Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
 
-    JavaCodeGenBuilder builder = JavaCodeGenBuilder.of(options);
-    builder.setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), "JJT" + JJTreeGlobals.parserName + "State.java"));
-    builder.setVersion(JJTStateVersion).addTools(JavaCCGlobals.toolName);
-    builder.setPackageName(JJTreeGlobals.packageName);
-    builder.printTemplate("/templates/JJTTreeState.template");
-    builder.build();
+    try (JavaCodeBuilder builder = JavaCodeBuilder.of(options)) {
+      builder
+          .setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), "JJT" + JJTreeGlobals.parserName + "State.java"));
+      builder.setVersion(Version.version).addTools(JavaCCGlobals.toolName);
+      builder.setPackageName(JJTreeGlobals.packageName);
+      builder.printTemplate("/templates/JJTTreeState.template");
+    }
 
     NodeFiles.generateOutputFiles();
   }

@@ -1,17 +1,19 @@
+
 package org.javacc.csharp;
 
 import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.JavaCCGlobals;
-import org.javacc.utils.CodeGenBuilder;
+import org.javacc.utils.CodeBuilder.GenericCodeBuilder;
 
-public class CodeGenerator implements org.javacc.parser.CodeGenerator
-{
+import java.io.File;
+
+public class CodeGenerator implements org.javacc.parser.CodeGenerator {
+
   /**
    * The name of the C# code generator.
    */
   @Override
-  public String getName() 
-  {
+  public String getName() {
     return "C#";
   }
 
@@ -19,21 +21,36 @@ public class CodeGenerator implements org.javacc.parser.CodeGenerator
    * Generate any other support files you need.
    */
   @Override
-  public boolean generateHelpers(CodeGeneratorSettings settings)
-  {
-    try
-    {
-      CodeGenBuilder.generateTemplate("/templates/csharp/CharStream.template", "CharStream.cs", JavaCCGlobals.toolName, settings);
-      CodeGenBuilder.generateTemplate("/templates/csharp/TokenMgrError.template", "TokenMgrError.cs", JavaCCGlobals.toolName, settings);
-      CodeGenBuilder.generateTemplate("/templates/csharp/ParseException.template", "ParseException.cs", JavaCCGlobals.toolName, settings);
-      if ((Boolean)settings.get("JAVA_UNICODE_ESCAPE")) {
-        CodeGenBuilder.generateTemplate("/templates/csharp/JavaCharStream.template", "JavaCharStream.cs", JavaCCGlobals.toolName, settings);
-      } else {
-        CodeGenBuilder.generateTemplate("/templates/csharp/CharStream.template", "CharStream.cs", JavaCCGlobals.toolName, settings);
+  public boolean generateHelpers(CodeGeneratorSettings settings) {
+    File directory = new File((String) settings.get("OUTPUT_DIRECTORY"));
+    try {
+      try (GenericCodeBuilder builder = GenericCodeBuilder.of(settings)) {
+        builder.setFile(new File(directory, "CharStream.cs"));
+        builder.addTools(JavaCCGlobals.toolName).printTemplate("/templates/csharp/CharStream.template");
       }
-    }
-    catch(Exception e)
-    {
+
+      try (GenericCodeBuilder builder = GenericCodeBuilder.of(settings)) {
+        builder.setFile(new File(directory, "TokenMgrError.cs"));
+        builder.addTools(JavaCCGlobals.toolName).printTemplate("/templates/csharp/TokenMgrError.template");
+      }
+
+      try (GenericCodeBuilder builder = GenericCodeBuilder.of(settings)) {
+        builder.setFile(new File(directory, "ParseException.cs"));
+        builder.addTools(JavaCCGlobals.toolName).printTemplate("/templates/csharp/ParseException.template");
+      }
+
+      try (GenericCodeBuilder builder = GenericCodeBuilder.of(settings)) {
+        builder.addTools(JavaCCGlobals.toolName);
+
+        if ((Boolean) settings.get("JAVA_UNICODE_ESCAPE")) {
+          builder.setFile(new File(directory, "JavaCharStream.cs"));
+          builder.printTemplate("/templates/csharp/JavaCharStream.template");
+        } else {
+          builder.setFile(new File(directory, "CharStream.cs"));
+          builder.printTemplate("/templates/csharp/CharStream.template");
+        }
+      }
+    } catch (Exception e) {
       return false;
     }
 
@@ -44,8 +61,7 @@ public class CodeGenerator implements org.javacc.parser.CodeGenerator
    * The Token class generator.
    */
   @Override
-  public TokenCodeGenerator getTokenCodeGenerator()
-  {
+  public TokenCodeGenerator getTokenCodeGenerator() {
     return new TokenCodeGenerator();
   }
 
@@ -53,8 +69,7 @@ public class CodeGenerator implements org.javacc.parser.CodeGenerator
    * The TokenManager class generator.
    */
   @Override
-  public TokenManagerCodeGenerator getTokenManagerCodeGenerator()
-  {
+  public TokenManagerCodeGenerator getTokenManagerCodeGenerator() {
     return new TokenManagerCodeGenerator();
   }
 
@@ -62,18 +77,16 @@ public class CodeGenerator implements org.javacc.parser.CodeGenerator
    * The Parser class generator.
    */
   @Override
-  public ParserCodeGenerator getParserCodeGenerator()
-  {
+  public ParserCodeGenerator getParserCodeGenerator() {
     return new ParserCodeGenerator();
   }
-  
+
   /**
-   * TODO(sreeni): Fix this when we do tree annotations in the parser code generator.
-   * The JJTree preprocesor.
+   * TODO(sreeni): Fix this when we do tree annotations in the parser code
+   * generator. The JJTree preprocesor.
    */
   @Override
-  public org.javacc.jjtree.DefaultJJTreeVisitor getJJTreeCodeGenerator()
-  {
+  public org.javacc.jjtree.DefaultJJTreeVisitor getJJTreeCodeGenerator() {
     return new JJTreeCodeGenerator();
   }
 

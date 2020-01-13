@@ -5,16 +5,14 @@ import org.javacc.Version;
 import org.javacc.jjtree.ASTNodeDescriptor;
 import org.javacc.jjtree.JJTreeGlobals;
 import org.javacc.jjtree.JJTreeOptions;
+import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.Options;
-import org.javacc.utils.CodeGenBuilder.GenericCodeBuilder;
+import org.javacc.utils.CodeBuilder.GenericCodeBuilder;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 final class NodeFiles {
@@ -36,29 +34,28 @@ final class NodeFiles {
   }
 
   private static void generateTreeNodes() {
-    Map<String, Object> options = new HashMap<>(Options.getOptions());
-    options.put(Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
-    options.put("VISITOR_RETURN_TYPE_VOID", Boolean.valueOf(JJTreeOptions.getVisitorReturnType().equals("void")));
+    CodeGeneratorSettings options = CodeGeneratorSettings.of(Options.getOptions());
+    options.set(Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
+    options.set("VISITOR_RETURN_TYPE_VOID", Boolean.valueOf(JJTreeOptions.getVisitorReturnType().equals("void")));
 
-    GenericCodeBuilder builder = GenericCodeBuilder.of(options);
-    builder.setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), JJTreeGlobals.parserName + "Tree.cs"));
-    builder.setVersion(nodeVersion).addTools(JJTreeGlobals.toolName);
-    builder.addOption("MULTI", "NODE_USES_PARSER", "VISITOR", "TRACK_TOKENS", "NODE_PREFIX", "NODE_EXTENDS",
-        "NODE_FACTORY", Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
+    try (GenericCodeBuilder builder = GenericCodeBuilder.of(options)) {
+      builder.setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), JJTreeGlobals.parserName + "Tree.cs"));
+      builder.setVersion(nodeVersion).addTools(JJTreeGlobals.toolName);
+      builder.addOption("MULTI", "NODE_USES_PARSER", "VISITOR", "TRACK_TOKENS", "NODE_PREFIX", "NODE_EXTENDS",
+          "NODE_FACTORY", Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
 
-    try {
       if (JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
         builder.println("namespace " + JJTreeOptions.stringValue("NAMESPACE_OPEN"));
       }
 
       for (String node : nodesToBuild) {
-        builder.printTemplate("/templates/csharp/MultiNode.template", Collections.singletonMap("NODE_TYPE", node));
+        builder.printTemplate("/templates/csharp/MultiNode.template",
+            CodeGeneratorSettings.create().set("NODE_TYPE", node));
       }
 
       if (JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
         builder.println(JJTreeOptions.stringValue("NAMESPACE_CLOSE"));
       }
-      builder.build();
     } catch (IOException e) {
       throw new Error(e.toString());
     }
@@ -70,40 +67,40 @@ final class NodeFiles {
   }
 
   static void generateTreeConstants() {
+    try (GenericCodeBuilder builder = GenericCodeBuilder.of(CodeGeneratorSettings.create())) {
+      builder.setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), nodeConstants() + ".cs"));
 
+      List<String> nodeIds = ASTNodeDescriptor.getNodeIds();
+      List<String> nodeNames = ASTNodeDescriptor.getNodeNames();
 
-    GenericCodeBuilder builder = GenericCodeBuilder.of(Collections.emptyMap());
-    builder.setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), nodeConstants() + ".cs"));
+      if (JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
+        builder.println("namespace " + JJTreeOptions.stringValue("NAMESPACE_OPEN"));
+      }
+      builder.println("public class " + nodeConstants());
+      builder.println("{");
 
-    List<String> nodeIds = ASTNodeDescriptor.getNodeIds();
-    List<String> nodeNames = ASTNodeDescriptor.getNodeNames();
+      for (int i = 0; i < nodeIds.size(); ++i) {
+        String n = nodeIds.get(i);
+        builder.println("  public const int " + n + " = " + i + ";");
+      }
 
-    if (JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
-      builder.println("namespace " + JJTreeOptions.stringValue("NAMESPACE_OPEN"));
+      builder.println();
+      builder.println();
+
+      builder.println("  public static string[] jjtNodeName = {");
+      for (int i = 0; i < nodeNames.size(); ++i) {
+        String n = nodeNames.get(i);
+        builder.println("    \"" + n + "\",");
+      }
+      builder.println("  };");
+
+      builder.println("}");
+      if (JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
+        builder.println(JJTreeOptions.stringValue("NAMESPACE_CLOSE"));
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
     }
-    builder.println("public class " + nodeConstants());
-    builder.println("{");
-
-    for (int i = 0; i < nodeIds.size(); ++i) {
-      String n = nodeIds.get(i);
-      builder.println("  public const int " + n + " = " + i + ";");
-    }
-
-    builder.println();
-    builder.println();
-
-    builder.println("  public static string[] jjtNodeName = {");
-    for (int i = 0; i < nodeNames.size(); ++i) {
-      String n = nodeNames.get(i);
-      builder.println("    \"" + n + "\",");
-    }
-    builder.println("  };");
-
-    builder.println("}");
-    if (JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
-      builder.println(JJTreeOptions.stringValue("NAMESPACE_CLOSE"));
-    }
-    builder.build();
   }
 
 
@@ -116,42 +113,44 @@ final class NodeFiles {
       return;
     }
 
-    GenericCodeBuilder builder = GenericCodeBuilder.of(Collections.emptyMap());
-    builder.setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), visitorClass() + ".cs"));
+    try (GenericCodeBuilder builder = GenericCodeBuilder.of(CodeGeneratorSettings.create())) {
+      builder.setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), visitorClass() + ".cs"));
 
-    List<String> nodeNames = ASTNodeDescriptor.getNodeNames();
+      List<String> nodeNames = ASTNodeDescriptor.getNodeNames();
 
-    if (JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
-      builder.println("namespace " + JJTreeOptions.stringValue("NAMESPACE_OPEN"));
-    }
-    builder.println("public interface " + visitorClass());
-    builder.println("{");
-
-    String ve = mergeVisitorException();
-
-    String argumentType = "object";
-    if (!JJTreeOptions.getVisitorDataType().equals("")) {
-      argumentType = JJTreeOptions.getVisitorDataType();
-    }
-
-    builder.println(
-        "  " + JJTreeOptions.getVisitorReturnType() + " Visit(SimpleNode node, " + argumentType + " data)" + ve + ";");
-    if (JJTreeOptions.getMulti()) {
-      for (int i = 0; i < nodeNames.size(); ++i) {
-        String n = nodeNames.get(i);
-        if (n.equals("void")) {
-          continue;
-        }
-        String nodeType = JJTreeOptions.getNodePrefix() + n;
-        builder.println("  " + JJTreeOptions.getVisitorReturnType() + " " + getVisitMethodName(nodeType) + "("
-            + nodeType + " node, " + argumentType + " data)" + ve + ";");
+      if (JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
+        builder.println("namespace " + JJTreeOptions.stringValue("NAMESPACE_OPEN"));
       }
+      builder.println("public interface " + visitorClass());
+      builder.println("{");
+
+      String ve = mergeVisitorException();
+
+      String argumentType = "object";
+      if (!JJTreeOptions.getVisitorDataType().equals("")) {
+        argumentType = JJTreeOptions.getVisitorDataType();
+      }
+
+      builder.println("  " + JJTreeOptions.getVisitorReturnType() + " Visit(SimpleNode node, " + argumentType + " data)"
+          + ve + ";");
+      if (JJTreeOptions.getMulti()) {
+        for (int i = 0; i < nodeNames.size(); ++i) {
+          String n = nodeNames.get(i);
+          if (n.equals("void")) {
+            continue;
+          }
+          String nodeType = JJTreeOptions.getNodePrefix() + n;
+          builder.println("  " + JJTreeOptions.getVisitorReturnType() + " " + getVisitMethodName(nodeType) + "("
+              + nodeType + " node, " + argumentType + " data)" + ve + ";");
+        }
+      }
+      builder.println("}");
+      if (JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
+        builder.println(JJTreeOptions.stringValue("NAMESPACE_CLOSE"));
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
     }
-    builder.println("}");
-    if (JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
-      builder.println(JJTreeOptions.stringValue("NAMESPACE_CLOSE"));
-    }
-    builder.build();
   }
 
   static String defaultVisitorClass() {
@@ -175,51 +174,55 @@ final class NodeFiles {
       return;
     }
 
-    GenericCodeBuilder builder = GenericCodeBuilder.of(Collections.emptyMap());
-    builder.setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), defaultVisitorClass() + ".cs"));
+    try (GenericCodeBuilder builder = GenericCodeBuilder.of(CodeGeneratorSettings.create())) {
+      builder.setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), defaultVisitorClass() + ".cs"));
 
-    List<String> nodeNames = ASTNodeDescriptor.getNodeNames();
+      List<String> nodeNames = ASTNodeDescriptor.getNodeNames();
 
-    if (JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
-      builder.println("namespace " + JJTreeOptions.stringValue("NAMESPACE_OPEN"));
-    }
-    builder.println("public class " + defaultVisitorClass() + " : " + visitorClass() + "{");
-
-    String ve = mergeVisitorException();
-
-    String argumentType = "object";
-    if (!JJTreeOptions.getVisitorDataType().equals("")) {
-      argumentType = JJTreeOptions.getVisitorDataType();
-    }
-
-    String ret = JJTreeOptions.getVisitorReturnType();
-    builder.println("  public virtual " + ret + " defaultVisit(SimpleNode node, " + argumentType + " data)" + ve + "{");
-    builder.println("    node.childrenAccept(this, data);");
-    builder.println("    return" + (ret.trim().equals("void") ? "" : " data") + ";");
-    builder.println("  }");
-
-    builder.println("  public virtual " + ret + " Visit(SimpleNode node, " + argumentType + " data)" + ve + "{");
-    builder.println("    " + (ret.trim().equals("void") ? "" : "return ") + "defaultVisit(node, data);");
-    builder.println("  }");
-
-    if (JJTreeOptions.getMulti()) {
-      for (int i = 0; i < nodeNames.size(); ++i) {
-        String n = nodeNames.get(i);
-        if (n.equals("void")) {
-          continue;
-        }
-        String nodeType = JJTreeOptions.getNodePrefix() + n;
-        builder.println("  public virtual " + ret + " " + getVisitMethodName(nodeType) + "(" + nodeType + " node, "
-            + argumentType + " data)" + ve + "{");
-        builder.println("    " + (ret.trim().equals("void") ? "" : "return ") + "defaultVisit(node, data);");
-        builder.println("  }");
+      if (JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
+        builder.println("namespace " + JJTreeOptions.stringValue("NAMESPACE_OPEN"));
       }
+      builder.println("public class " + defaultVisitorClass() + " : " + visitorClass() + "{");
+
+      String ve = mergeVisitorException();
+
+      String argumentType = "object";
+      if (!JJTreeOptions.getVisitorDataType().equals("")) {
+        argumentType = JJTreeOptions.getVisitorDataType();
+      }
+
+      String ret = JJTreeOptions.getVisitorReturnType();
+      builder
+          .println("  public virtual " + ret + " defaultVisit(SimpleNode node, " + argumentType + " data)" + ve + "{");
+      builder.println("    node.childrenAccept(this, data);");
+      builder.println("    return" + (ret.trim().equals("void") ? "" : " data") + ";");
+      builder.println("  }");
+
+      builder.println("  public virtual " + ret + " Visit(SimpleNode node, " + argumentType + " data)" + ve + "{");
+      builder.println("    " + (ret.trim().equals("void") ? "" : "return ") + "defaultVisit(node, data);");
+      builder.println("  }");
+
+      if (JJTreeOptions.getMulti()) {
+        for (int i = 0; i < nodeNames.size(); ++i) {
+          String n = nodeNames.get(i);
+          if (n.equals("void")) {
+            continue;
+          }
+          String nodeType = JJTreeOptions.getNodePrefix() + n;
+          builder.println("  public virtual " + ret + " " + getVisitMethodName(nodeType) + "(" + nodeType + " node, "
+              + argumentType + " data)" + ve + "{");
+          builder.println("    " + (ret.trim().equals("void") ? "" : "return ") + "defaultVisit(node, data);");
+          builder.println("  }");
+        }
+      }
+      builder.println("}");
+      if (JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
+        builder.println(JJTreeOptions.stringValue("NAMESPACE_CLOSE"));
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
     }
-    builder.println("}");
-    if (JJTreeOptions.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
-      builder.println(JJTreeOptions.stringValue("NAMESPACE_CLOSE"));
-    }
-    builder.build();
+
   }
 
   private static String mergeVisitorException() {
@@ -231,14 +234,14 @@ final class NodeFiles {
   }
 
   private static void generateDefaultNode() throws IOException {
-    Map<String, Object> options = new HashMap<>(Options.getOptions());
-    options.put(Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
-    options.put("VISITOR_RETURN_TYPE_VOID", Boolean.valueOf(JJTreeOptions.getVisitorReturnType().equals("void")));
+    CodeGeneratorSettings options = CodeGeneratorSettings.of(Options.getOptions());
+    options.set(Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
+    options.set("VISITOR_RETURN_TYPE_VOID", Boolean.valueOf(JJTreeOptions.getVisitorReturnType().equals("void")));
 
-    GenericCodeBuilder builder = GenericCodeBuilder.of(options);
-    builder.setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), "Node.cs"));
-    builder.printTemplate("/templates/csharp/Node.template");
-    builder.build();
+    try (GenericCodeBuilder builder = GenericCodeBuilder.of(options)) {
+      builder.setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), "Node.cs"));
+      builder.printTemplate("/templates/csharp/Node.template");
+    }
   }
 
   static void generateOutputFiles() throws IOException {
