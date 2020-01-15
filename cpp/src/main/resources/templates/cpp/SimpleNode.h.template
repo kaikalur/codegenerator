@@ -3,6 +3,9 @@
 \#include "Token.h"
 \#include "Node.h"
 \#include "${PARSER_NAME}TreeConstants.h"
+#if NODE_EXTENDS
+\#include "${NODE_EXTENDS}.h"
+#fi
 
 #if NAMESPACE
 namespace ${NAMESPACE_OPEN}
