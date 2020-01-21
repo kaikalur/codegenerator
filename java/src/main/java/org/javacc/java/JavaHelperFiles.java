@@ -41,7 +41,7 @@ public abstract class JavaHelperFiles {
       builder.setVersion(Version.version).addTools(JavaCCGlobals.toolName)
           .addOption(Options.USEROPTION__KEEP_LINE_COLUMN);
 
-      builder.setPackageName(JJTreeGlobals.packageName);
+      builder.setPackageName(JavaUtil.parsePackage());
       builder.printTemplate(templatePath);
     } catch (IOException e) {
       System.err.println("Failed to create " + fileName + " " + e);
@@ -54,7 +54,7 @@ public abstract class JavaHelperFiles {
     try (JavaCodeBuilder builder = JavaCodeBuilder.of(CodeGeneratorSettings.of(Options.getOptions()))) {
       builder.setFile(new File(Options.getOutputDirectory(), "Token.java"));
       builder.setVersion(Version.version).addTools(JavaCCGlobals.toolName);
-      builder.setPackageName(JJTreeGlobals.packageName);
+      builder.setPackageName(JavaUtil.parsePackage());
 
       /*
        * cba -- 2013/07/22 -- previously wired to a typo version of this option
@@ -77,7 +77,7 @@ public abstract class JavaHelperFiles {
       builder.setFile(new File(Options.getOutputDirectory(), "TokenManager.java"));
       builder.setVersion(Version.version).addTools(JavaCCGlobals.toolName)
           .addOption(Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
-      builder.setPackageName(JJTreeGlobals.packageName);
+      builder.setPackageName(JavaUtil.parsePackage());
       builder.printTemplate("/templates/TokenManager.template");
     } catch (IOException e) {
       System.err.println("Failed to create TokenManager " + e);

@@ -33,7 +33,6 @@ package org.javacc.cpp;
 import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.JavaCCErrors;
 import org.javacc.parser.JavaCCGlobals;
-import org.javacc.parser.JavaCCParserConstants;
 import org.javacc.parser.LexGen;
 import org.javacc.parser.MetaParseException;
 import org.javacc.parser.Options;
@@ -49,7 +48,7 @@ import java.util.List;
 /**
  * Generates the Constants file.
  */
-public class OtherFilesGenCPP extends JavaCCGlobals implements JavaCCParserConstants {
+public class OtherFilesGenCPP extends JavaCCGlobals  {
 
   static public void start() throws MetaParseException {
     if (JavaCCErrors.get_error_count() != 0)
