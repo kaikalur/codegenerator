@@ -48,18 +48,18 @@ import java.util.List;
 /**
  * Generates the Constants file.
  */
-public class OtherFilesGenCPP extends JavaCCGlobals  {
+class OtherFilesGenCPP  {
 
-  static public void start() throws MetaParseException {
+  static void start() throws MetaParseException {
     if (JavaCCErrors.get_error_count() != 0)
       throw new MetaParseException();
 
-    List<String> toolnames = new ArrayList<>(toolNames);
-    toolnames.add(toolName);
+    List<String> toolnames = new ArrayList<>(JavaCCGlobals.toolNames);
+    toolnames.add(JavaCCGlobals.toolName);
 
 
     try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(CodeGeneratorSettings.create())) {
-      builder.setFile(new File(Options.getOutputDirectory(), cu_name + "Constants.h"));
+      builder.setFile(new File(Options.getOutputDirectory(), JavaCCGlobals.cu_name + "Constants.h"));
       builder.addTools(toolnames.toArray(new String[toolnames.size()]));
 
       builder.println();
@@ -77,7 +77,7 @@ public class OtherFilesGenCPP extends JavaCCGlobals  {
       String constPrefix = "const";
       builder.println("  /** End of File. */");
       builder.println(constPrefix + "  int _EOF = 0;");
-      for (RegularExpression re : ordered_named_tokens) {
+      for (RegularExpression re : JavaCCGlobals.ordered_named_tokens) {
         builder.println("  /** RegularExpression Id. */");
         builder.println(constPrefix + "  int " + re.label + " = " + re.ordinal + ";");
       }
@@ -97,7 +97,7 @@ public class OtherFilesGenCPP extends JavaCCGlobals  {
       printCharArray(builder, "<EOF>");
       builder.println(";");
 
-      for (TokenProduction tp : rexprlist) {
+      for (TokenProduction tp : JavaCCGlobals.rexprlist) {
         for (RegExprSpec res : tp.respecs) {
           RegularExpression re = res.rexp;
           builder.println("  static const JJChar tokenImage_arr_" + ++cnt + "[] = ");
@@ -125,13 +125,13 @@ public class OtherFilesGenCPP extends JavaCCGlobals  {
         builder.println(Options.stringValue("NAMESPACE_CLOSE"));
       }
     } catch (java.io.IOException e) {
-      JavaCCErrors.semantic_error("Could not open file " + cu_name + "Constants.h for writing.");
+      JavaCCErrors.semantic_error("Could not open file " + JavaCCGlobals.cu_name + "Constants.h for writing.");
       throw new Error();
     }
   }
 
   // Used by the CPP code generatror
-  public static void printCharArray(CppCodeBuilder builder, String s) {
+  private static void printCharArray(CppCodeBuilder builder, String s) {
     builder.print("{");
     for (int i = 0; i < s.length(); i++) {
       builder.print("0x" + Integer.toHexString(s.charAt(i)) + ", ");

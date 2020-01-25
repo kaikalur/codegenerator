@@ -22,7 +22,7 @@ final class NodeFiles {
    * ID of the latest version (of JJTree) in which one of the Node classes was
    * modified.
    */
-  static final String        nodeVersion  = Version.version;
+  private static final String        nodeVersion  = Version.version;
 
   private static Set<String> nodesToBuild = new HashSet<>();
 
@@ -60,7 +60,7 @@ final class NodeFiles {
     builder.printTemplate("/templates/MultiNode.template", options);
   }
 
-  static void generateTreeConstants() {
+  private static void generateTreeConstants() {
     List<String> nodeIds = ASTNodeDescriptor.getNodeIds();
     List<String> nodeNames = ASTNodeDescriptor.getNodeNames();
 
@@ -89,7 +89,7 @@ final class NodeFiles {
     }
   }
 
-  static void generateVisitor() {
+  private static void generateVisitor() {
     if (!JJTreeOptions.getVisitor()) {
       return;
     }
@@ -139,7 +139,7 @@ final class NodeFiles {
     return sb.toString();
   }
 
-  static void generateDefaultVisitor() {
+  private static void generateDefaultVisitor() {
     if (!JJTreeOptions.getVisitor()) {
       return;
     }

@@ -4,13 +4,11 @@ package org.javacc.java;
 import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.utils.CodeBuilder;
 
-import java.util.Map;
-
 
 /**
  * The {@link JavaCodeBuilder} class.
  */
-public class JavaCodeBuilder extends CodeBuilder<JavaCodeBuilder> {
+class JavaCodeBuilder extends CodeBuilder<JavaCodeBuilder> {
 
   private final StringBuffer buffer = new StringBuffer();
 
@@ -38,7 +36,7 @@ public class JavaCodeBuilder extends CodeBuilder<JavaCodeBuilder> {
    *
    * @param packageName
    */
-  public JavaCodeBuilder setPackageName(String packageName) {
+  JavaCodeBuilder setPackageName(String packageName) {
     this.packageName = packageName;
     return this;
   }
@@ -61,7 +59,7 @@ public class JavaCodeBuilder extends CodeBuilder<JavaCodeBuilder> {
    *
    * @param options
    */
-  public static JavaCodeBuilder of(CodeGeneratorSettings options) {
+  static JavaCodeBuilder of(CodeGeneratorSettings options) {
     return new JavaCodeBuilder(options);
   }
 }

@@ -24,7 +24,7 @@ final class NodeFiles {
    * ID of the latest version (of JJTree) in which one of the Node classes was
    * modified.
    */
-  static final String         nodeVersion       = Version.version;
+  private static final String         nodeVersion       = Version.version;
 
   private static Set<String>  nodesToBuild      = new HashSet<>();
 
@@ -34,23 +34,23 @@ final class NodeFiles {
     }
   }
 
-  public static String nodeIncludeFile() {
+  private static String nodeIncludeFile() {
     return new File(JJTreeOptions.getJJTreeOutputDirectory(), "Node.h").getAbsolutePath();
   }
 
-  public static String simpleNodeCodeFile() {
+  private static String simpleNodeCodeFile() {
     return new File(JJTreeOptions.getJJTreeOutputDirectory(), "SimpleNode.cc").getAbsolutePath();
   }
 
-  public static String jjtreeIncludeFile() {
+  private static String jjtreeIncludeFile() {
     return new File(JJTreeOptions.getJJTreeOutputDirectory(), JJTreeGlobals.parserName + "Tree.h").getAbsolutePath();
   }
 
-  public static String jjtreeASTNodeImplFile(String s) {
+  private static String jjtreeASTNodeImplFile(String s) {
     return new File(JJTreeOptions.getASTNodeDirectory(), s + ".cc").getAbsolutePath();
   }
 
-  public static String jjtreeImplFile(String s) {
+  private static String jjtreeImplFile(String s) {
     return new File(JJTreeOptions.getJJTreeOutputDirectory(), s + ".cc").getAbsolutePath();
   }
 
@@ -167,11 +167,11 @@ final class NodeFiles {
     }
   }
 
-  static String nodeConstants() {
+  private static String nodeConstants() {
     return JJTreeGlobals.parserName + "TreeConstants";
   }
 
-  static void generateTreeConstants() {
+  private static void generateTreeConstants() {
     List<String> nodeIds = ASTNodeDescriptor.getNodeIds();
     List<String> nodeNames = ASTNodeDescriptor.getNodeNames();
 
@@ -207,7 +207,7 @@ final class NodeFiles {
     }
   }
 
-  static String visitorClass() {
+  private static String visitorClass() {
     return JJTreeGlobals.parserName + "Visitor";
   }
 
@@ -233,7 +233,7 @@ final class NodeFiles {
     return ret == null || ret.equals("") || ret.equals("Object") ? "void" : ret;
   }
 
-  static void generateVisitors() {
+  private static void generateVisitors() {
     if (!JJTreeOptions.getVisitor()) {
       return;
     }
@@ -291,7 +291,7 @@ final class NodeFiles {
     builder.println("};");
   }
 
-  static String defaultVisitorClass() {
+  private static String defaultVisitorClass() {
     return JJTreeGlobals.parserName + "DefaultVisitor";
   }
 

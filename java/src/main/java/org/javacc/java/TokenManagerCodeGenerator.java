@@ -22,7 +22,7 @@ import java.util.Map;
  * Class that implements a table driven code generator for the token manager in
  * java.
  */
-public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGenerator {
+class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGenerator {
 
   private static final String tokenManagerTemplate = "/templates/TokenManagerDriver.template";
 

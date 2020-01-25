@@ -11,7 +11,7 @@ import java.io.File;
 
 public class CppCodeGenerator implements CodeGenerator {
 
-  public static final boolean IS_DEBUG = true;
+  static final boolean IS_DEBUG = true;
 
   /**
    * The name of the C# code generator.

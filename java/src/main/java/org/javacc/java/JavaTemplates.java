@@ -7,7 +7,7 @@ import org.javacc.parser.Options;
 /**
  * The {@link JavaTemplates} class.
  */
-public abstract class JavaTemplates {
+abstract class JavaTemplates {
 
   private static final JavaTemplates RESOURCES_JAVA_CLASSIC = new JavaClassicTemplates();
   private static final JavaTemplates RESOURCES_JAVA_MODERN  = new JavaModernTemplates();
@@ -20,19 +20,19 @@ public abstract class JavaTemplates {
   public abstract String getParseExceptionTemplateResourceUrl();
 
 
-  public static String getTokenMgrErrorClass() {
+  static String getTokenMgrErrorClass() {
     return Options.isLegacyExceptionHandling() ? "TokenMgrError" : "TokenMgrException";
   }
 
-  public static String nodeConstants() {
+  static String nodeConstants() {
     return JJTreeGlobals.parserName + "TreeConstants";
   }
 
-  public static String visitorClass() {
+  static String visitorClass() {
     return JJTreeGlobals.parserName + "Visitor";
   }
 
-  public static String defaultVisitorClass() {
+  static String defaultVisitorClass() {
     return JJTreeGlobals.parserName + "DefaultVisitor";
   }
 
@@ -78,11 +78,11 @@ public abstract class JavaTemplates {
     }
   };
 
-  public static boolean isJavaModern() {
+  static boolean isJavaModern() {
     return Options.getJavaTemplateType().equals(Options.JAVA_TEMPLATE_TYPE_MODERN);
   }
 
-  public static JavaTemplates getTemplates() {
+  static JavaTemplates getTemplates() {
     return isJavaModern() ? RESOURCES_JAVA_MODERN : RESOURCES_JAVA_CLASSIC;
   }
 }

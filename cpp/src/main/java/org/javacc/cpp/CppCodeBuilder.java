@@ -10,7 +10,7 @@ import java.io.File;
 /**
  * The {@link CppCodeBuilder} class.
  */
-public class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
+class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
 
   private enum Buffer {
     Main,
@@ -56,7 +56,7 @@ public class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
    * Generate a class with a given name, an array of superclass and another
    * array of super interfaes
    */
-  public void genClassStart(String mod, String name, String[] superClasses, String[] superInterfaces) {
+  void genClassStart(String mod, String name, String[] superClasses, String[] superInterfaces) {
     print("class " + name);
     if (superClasses.length > 0 || superInterfaces.length > 0) {
       print(" : ");
@@ -103,11 +103,11 @@ public class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
     store(getFile(), mainBuffer);
   }
 
-  public void generateMethodDefHeader(String modsAndRetType, String className, String nameAndParams) {
+  void generateMethodDefHeader(String modsAndRetType, String className, String nameAndParams) {
     generateMethodDefHeader(modsAndRetType, className, nameAndParams, null);
   }
 
-  public void generateMethodDefHeader(String qualifiedModsAndRetType, String className, String nameAndParams,
+  void generateMethodDefHeader(String qualifiedModsAndRetType, String className, String nameAndParams,
       String exceptions) {
     // for C++, we generate the signature in the header file and body in main
     // file
@@ -165,7 +165,7 @@ public class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
     return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
   }
 
-  protected final void genCommaSeperatedString(String[] strings) {
+  private final void genCommaSeperatedString(String[] strings) {
     for (int i = 0; i < strings.length; i++) {
       if (i > 0) {
         print(", ");
@@ -177,7 +177,7 @@ public class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
 
 
   // Used by the CPP code generatror
-  public final CppCodeBuilder printCharArray(String s) {
+  final CppCodeBuilder printCharArray(String s) {
     print("{");
     for (char c : s.toCharArray()) {
       print("0x" + Integer.toHexString(c) + ", ");
@@ -192,15 +192,15 @@ public class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
     return text;
   }
 
-  public void switchToMainFile() {
+  void switchToMainFile() {
     this.kind = Buffer.Main;
   }
 
-  public void switchToIncludeFile() {
+  void switchToIncludeFile() {
     this.kind = Buffer.Include;
   }
 
-  public void switchToStaticsFile() {
+  void switchToStaticsFile() {
     this.kind = Buffer.Statistic;
   }
 
@@ -209,7 +209,7 @@ public class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
    *
    * @param options
    */
-  public static CppCodeBuilder of(CodeGeneratorSettings options) {
+  static CppCodeBuilder of(CodeGeneratorSettings options) {
     return new CppCodeBuilder(options, false);
   }
 
@@ -218,7 +218,7 @@ public class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
    *
    * @param options
    */
-  public static CppCodeBuilder ofHeader(CodeGeneratorSettings options) {
+  static CppCodeBuilder ofHeader(CodeGeneratorSettings options) {
     return new CppCodeBuilder(options, true);
   }
 }

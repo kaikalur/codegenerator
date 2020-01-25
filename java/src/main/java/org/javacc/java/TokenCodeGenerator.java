@@ -5,7 +5,7 @@ import org.javacc.parser.CodeGeneratorSettings;
 
 import java.io.IOException;
 
-public class TokenCodeGenerator implements org.javacc.parser.TokenCodeGenerator {
+class TokenCodeGenerator implements org.javacc.parser.TokenCodeGenerator {
 
   /**
    * The Token class generator.
