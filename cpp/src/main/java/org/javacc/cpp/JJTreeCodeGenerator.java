@@ -34,9 +34,9 @@ import org.javacc.parser.Options;
 
 import java.io.File;
 
-public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
+class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
 
-  static final String JJTStateVersion = Version.version;
+  private static final String JJTStateVersion = Version.version;
 
   @Override
   public Object defaultVisit(SimpleNode node, Object data) {
@@ -200,8 +200,7 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
    * calling the print methods of its children. Overriding this print method in
    * appropriate nodes gives the output the added stuff not in the input.
    */
-
-  public Object visit(JJTreeNode node, Object data) {
+  private Object visit(JJTreeNode node, Object data) {
     IO io = (IO) data;
     /*
      * Some productions do not consume any tokens. In that case their first and
@@ -235,7 +234,7 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
   }
 
 
-  static void openJJTreeComment(IO io, String arg) {
+  private static void openJJTreeComment(IO io, String arg) {
     if (CppCodeGenerator.IS_DEBUG) {
       if (arg != null) {
         io.print("/*@bgen(jjtree) " + arg + (Options.booleanValue("IGNORE_ACTIONS") ? "" : " */"));
@@ -246,19 +245,19 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
   }
 
 
-  static void closeJJTreeComment(IO io) {
+  private static void closeJJTreeComment(IO io) {
     if (CppCodeGenerator.IS_DEBUG) {
       io.print((Options.booleanValue("IGNORE_ACTIONS") ? "" : "/*") + "@egen*/");
     }
   }
 
 
-  String getIndentation(JJTreeNode n) {
+  private String getIndentation(JJTreeNode n) {
     return getIndentation(n, 0);
   }
 
 
-  String getIndentation(JJTreeNode n, int offset) {
+  private String getIndentation(JJTreeNode n, int offset) {
     String s = "";
     for (int i = offset + 1; i < n.getFirstToken().beginColumn; ++i) {
       s += " ";
@@ -266,7 +265,7 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
     return s;
   }
 
-  void insertOpenNodeCode(NodeScope ns, IO io, String indent) {
+  private void insertOpenNodeCode(NodeScope ns, IO io, String indent) {
     String type = ns.node_descriptor.getNodeType();
     final String nodeClass;
     if (JJTreeOptions.getNodeClass().length() > 0 && !JJTreeOptions.getMulti()) {
@@ -308,7 +307,7 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
   }
 
 
-  void insertCloseNodeCode(NodeScope ns, IO io, String indent, boolean isFinal) {
+  private void insertCloseNodeCode(NodeScope ns, IO io, String indent, boolean isFinal) {
     String closeNode = ns.node_descriptor.closeNode(ns.nodeVar);
     io.println(indent + closeNode);
     if (ns.usesCloseNodeVar() && !isFinal) {
@@ -326,14 +325,14 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
   }
 
 
-  void insertOpenNodeAction(NodeScope ns, IO io, String indent) {
+  private void insertOpenNodeAction(NodeScope ns, IO io, String indent) {
     io.println(indent + "{");
     insertOpenNodeCode(ns, io, indent + "  ");
     io.println(indent + "}");
   }
 
 
-  void insertCloseNodeAction(NodeScope ns, IO io, String indent) {
+  private void insertCloseNodeAction(NodeScope ns, IO io, String indent) {
     io.println(indent + "{");
     insertCloseNodeCode(ns, io, indent + "  ", false);
     io.println(indent + "}");
@@ -354,7 +353,7 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
 
   }
 
-  void tryTokenSequence(NodeScope ns, IO io, String indent, Token first, Token last) {
+  private void tryTokenSequence(NodeScope ns, IO io, String indent, Token first, Token last) {
     io.println(indent + "try {");
     closeJJTreeComment(io);
 
@@ -382,7 +381,7 @@ public class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
   }
 
 
-  void tryExpansionUnit(NodeScope ns, IO io, String indent, JJTreeNode expansion_unit) {
+  private void tryExpansionUnit(NodeScope ns, IO io, String indent, JJTreeNode expansion_unit) {
     io.println(indent + "try {");
     closeJJTreeComment(io);
 

@@ -451,32 +451,25 @@ Token * ${parserName}TokenManager::getNextToken() {
 #fi
         } while(curChar >= 0);
       }
-      reportError(lastReadPosition);
     }
-  }
-}
+    int error_line = input_stream->getEndLine();
+    int error_column = input_stream->getEndColumn();
+    JJString error_after = "";
+    bool EOFSeen = false;
 
- void ${parserName}TokenManager::reportError(int lastReadPosition) {
-  int error_line = input_stream->getEndLine();
-  int error_column = input_stream->getEndColumn();
-  JJString error_after = "";
-  bool EOFSeen = false;
-
-  if(input_stream->readChar() < 0) {
-    EOFSeen = true;
-    error_after = lastReadPosition <= 1 ? "" : input_stream->GetImage();
-    if (curChar == '\n' || curChar == '\r') {
-       error_line++;
-       error_column = 0;
+    if(input_stream->endOfInput() < 0) {
+      EOFSeen = true;
+      error_after = lastReadPosition <= 1 ? "" : input_stream->GetImage();
+      if (curChar == '\n' || curChar == '\r') {
+         error_line++;
+         error_column = 0;
+      }
+      else
+         error_column++;
     }
-    else
-       error_column++;
-  } else {
-    input_stream->backup(1);
+    if (!EOFSeen) {
+      error_after = lastReadPosition <= 1 ? "" : input_stream->GetImage();
+    }
+    errorHandler->LexicalError(EOFSeen, curLexState, error_line, error_column, error_after, curChar);
   }
-  if (!EOFSeen) {
-    input_stream->backup(1);
-    error_after = lastReadPosition <= 1 ? "" : input_stream->GetImage();
-  }
-  throw errorHandler->LexicalError(EOFSeen, curLexState, error_line, error_column, error_after, curChar);
 }

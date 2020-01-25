@@ -83,7 +83,7 @@ abstract class JavaUtil {
     ostr.append(JavaCCGlobals.printTokenOnly(t, escape));
   }
 
-  public static void printTrailingComments(Token t, java.io.PrintWriter ostr, boolean escape) {
+  private static void printTrailingComments(Token t, java.io.PrintWriter ostr, boolean escape) {
     if (t.next == null)
       return;
 

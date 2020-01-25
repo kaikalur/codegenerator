@@ -78,7 +78,6 @@ private:
 
   int jjMoveNfa(int startState, int curPos);
   Token * jjFillToken();
-  void reportError(int lastReadPosition);
 
 public:
   void setErrorHandler(TokenMgrError *eh) {

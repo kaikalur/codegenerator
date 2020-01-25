@@ -17,7 +17,7 @@ import java.util.Map;
  * Class that implements a table driven code generator for the token manager in
  * java.
  */
-public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGenerator {
+class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGenerator {
   private static final String tokenManagerTemplate =
       "/templates/csharp/TokenManagerDriver.template";
   private GenericCodeBuilder codeGenerator;
@@ -83,7 +83,7 @@ public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManager
   }
 
   private void dumpDfaTables(
-      CodeBuilder codeGenerator, TokenizerData tokenizerData) {
+      CodeBuilder<?> codeGenerator, TokenizerData tokenizerData) {
     Map<Integer, int[]> startAndSize = new HashMap<Integer, int[]>();
     int i = 0;
 
@@ -127,7 +127,7 @@ public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManager
   }
 
   private void dumpNfaTables(
-      CodeBuilder codeGenerator, TokenizerData tokenizerData) {
+      CodeBuilder<?> codeGenerator, TokenizerData tokenizerData) {
     // WE do the following for java so that the generated code is reasonable
     // size and can be compiled. May not be needed for other languages.
     codeGenerator.println("private static readonly long[][] jjCharData = {");
@@ -229,7 +229,7 @@ public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManager
   }
 
   private void dumpMatchInfo(
-      CodeBuilder codeGenerator, TokenizerData tokenizerData) {
+      CodeBuilder<?> codeGenerator, TokenizerData tokenizerData) {
     Map<Integer, TokenizerData.MatchInfo> allMatches =
         tokenizerData.allMatches;
 
@@ -328,7 +328,7 @@ public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManager
   private void dumpLexicalActions(
       Map<Integer, TokenizerData.MatchInfo> allMatches,
       TokenizerData.MatchType matchType, String kindString,
-      CodeBuilder codeGenerator) {
+      CodeBuilder<?> codeGenerator) {
     codeGenerator.println("  switch(" + kindString + ") {");
     for (int i : allMatches.keySet()) {
       TokenizerData.MatchInfo matchInfo = allMatches.get(i);
@@ -346,7 +346,7 @@ public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManager
   }
 
   private static void generateBitVector(
-      String name, BitSet bits, CodeBuilder codeGenerator) {
+      String name, BitSet bits, CodeBuilder<?> codeGenerator) {
     codeGenerator.println("private static readonly long[] " + name + " = {");
     long[] longs = bits.toLongArray();
     for (int i = 0; i < longs.length; i++) {
