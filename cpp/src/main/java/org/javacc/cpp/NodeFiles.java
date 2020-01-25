@@ -193,11 +193,11 @@ final class NodeFiles {
       builder.println();
 
       for (int i = 0; i < nodeNames.size(); ++i) {
-        builder.println("  static JAVACC_CHAR_TYPE jjtNodeName_arr_", i, "[] = ");
+        builder.println("  static JJChar jjtNodeName_arr_", i, "[] = ");
         builder.printCharArray(nodeNames.get(i));
         builder.println(";");
       }
-      builder.println("  static JAVACC_STRING_TYPE jjtNodeName[] = {");
+      builder.println("  static JJString jjtNodeName[] = {");
       for (int i = 0; i < nodeNames.size(); i++) {
         builder.println("jjtNodeName_arr_", i, ", ");
       }
