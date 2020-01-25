@@ -16,7 +16,7 @@ import java.util.Map;
  * Class that implements a table driven code generator for the token manager in
  * C++.
  */
-public class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGenerator {
+class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGenerator {
 
   private static final String TokenManagerTemplate  = "/templates/cpp/TableDrivenTokenManager.template";
   private static final String TokenManagerTemplateH = "/templates/cpp/TableDrivenTokenManager.h.template";

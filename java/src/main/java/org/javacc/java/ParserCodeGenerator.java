@@ -87,7 +87,7 @@ import java.util.Map;
 /**
  * Generate the parser.
  */
-public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
+class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
 
   /**
    * These lists are used to maintain expansions for which code generation in
@@ -1211,9 +1211,9 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
   /**
    * Constants used in the following method "buildLookaheadChecker".
    */
-  final int NOOPENSTM  = 0;
-  final int OPENIF     = 1;
-  final int OPENSWITCH = 2;
+  private final int NOOPENSTM  = 0;
+  private final int OPENIF     = 1;
+  private final int OPENSWITCH = 2;
 
   /**
    * This method takes two parameters - an array of Lookahead's "conds", and an
@@ -1229,7 +1229,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
    * A particular action entry ("actions[i]") can be null, in which case, a noop
    * is generated for that action.
    */
-  String buildLookaheadChecker(Lookahead[] conds, String[] actions) {
+  private String buildLookaheadChecker(Lookahead[] conds, String[] actions) {
 
     // The state variables.
     int state = NOOPENSTM;
@@ -1448,7 +1448,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     return retval;
   }
 
-  void dumpFormattedString(String str) {
+  private void dumpFormattedString(String str) {
     char ch = ' ';
     char prevChar;
     boolean indentOn = true;
@@ -1478,7 +1478,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     }
   }
 
-  void buildPhase1Routine(BNFProduction p) {
+  private void buildPhase1Routine(BNFProduction p) {
     Token t = p.getReturnTypeTokens().get(0);
     boolean voidReturn = false;
     if (t.kind == JavaCCParserConstants.VOID) {
@@ -1496,7 +1496,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       codeGenerator.printToken(t);
     }
     codeGenerator.printTrailingComments(t);
-    codeGenerator.print(" " + p.getLhs() + "(");
+    codeGenerator.print(p.getLhs() + "(");
     if (p.getParameterListTokens().size() != 0) {
       codeGenerator.printTokenSetup(p.getParameterListTokens().get(0));
       for (Iterator<Token> it = p.getParameterListTokens().iterator(); it.hasNext();) {
@@ -1557,14 +1557,14 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     codeGenerator.println("");
   }
 
-  void phase1NewLine() {
+  private void phase1NewLine() {
     codeGenerator.println("");
     for (int i = 0; i < indentamt; i++) {
       codeGenerator.print(" ");
     }
   }
 
-  String phase1ExpansionGen(Expansion e) {
+  private String phase1ExpansionGen(Expansion e) {
     String retval = "";
     Token t = null;
     Lookahead[] conds;
@@ -1776,7 +1776,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     return retval;
   }
 
-  void buildPhase2Routine(Lookahead la) {
+  private void buildPhase2Routine(Lookahead la) {
     Expansion e = la.getLaExpansion();
     codeGenerator.println(
         "  " + staticOpt() + "private " + JavaUtil.getBooleanType() + " jj_2" + internalNames.get(e) + "(int xla)");
@@ -1803,9 +1803,9 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
 
   private boolean xsp_declared;
 
-  Expansion       jj3_expansion;
+  private Expansion       jj3_expansion;
 
-  String genReturn(boolean value) {
+  private String genReturn(boolean value) {
     String retval = value ? "true" : "false";
     if (Options.getDebugLookahead() && jj3_expansion != null) {
       String tracecode =
@@ -1855,7 +1855,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     }
   }
 
-  void setupPhase3Builds(Phase3Data inf) {
+  private void setupPhase3Builds(Phase3Data inf) {
     Expansion e = inf.exp;
     if (e instanceof RegularExpression) {
       ; // nothing to here
@@ -1914,7 +1914,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       return "jj_3" + internalNames.get(e) + "()";
   }
 
-  void buildPhase3Routine(Phase3Data inf, boolean recursive_call) {
+  private void buildPhase3Routine(Phase3Data inf, boolean recursive_call) {
     Expansion e = inf.exp;
     Token t = null;
     if (internalNames.containsKey(e) && internalNames.get(e).startsWith("jj_scan_token"))
@@ -1997,15 +1997,16 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
           codeGenerator.print("!jj_semLA || ");
         }
         if (i != e_nrw.getChoices().size() - 1) {
-          codeGenerator.println(genjj_3Call(nested_seq) + ") {");
+          codeGenerator.println("!" + genjj_3Call(nested_seq) + ") " + genReturn(false));
+//          codeGenerator.println(genjj_3Call(nested_seq) + ") {");
           codeGenerator.println("    jj_scanpos = xsp;");
         } else {
           codeGenerator.println(genjj_3Call(nested_seq) + ") " + genReturn(true));
         }
       }
-      for (int i = 1; i < e_nrw.getChoices().size(); i++) {
-        codeGenerator.println("    }");
-      }
+//      for (int i = 1; i < e_nrw.getChoices().size(); i++) {
+//        codeGenerator.println("    }");
+//      }
     } else if (e instanceof Sequence) {
       Sequence e_nrw = (Sequence) e;
       // We skip the first element in the following iteration since it is the
@@ -2062,14 +2063,14 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     }
   }
 
-  int minimumSize(Expansion e) {
+  private int minimumSize(Expansion e) {
     return minimumSize(e, Integer.MAX_VALUE);
   }
 
   /*
    * Returns the minimum number of tokens that can parse to this expansion.
    */
-  int minimumSize(Expansion e, int oldMin) {
+  private int minimumSize(Expansion e, int oldMin) {
     int retval = 0; // should never be used. Will be bad if it is.
     if (e.inMinimumSize) {
       // recursive search for minimum size unnecessary.
@@ -2138,7 +2139,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     return retval;
   }
 
-  void genStackCheck(boolean voidReturn) {
+  private void genStackCheck(boolean voidReturn) {
     if (Options.getDepthLimit() > 0) {
       codeGenerator.println("if(++jj_depth > " + Options.getDepthLimit() + ") {");
       codeGenerator.println("  jj_consume_token(-1);");
@@ -2148,7 +2149,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     }
   }
 
-  void genStackCheckEnd() {
+  private void genStackCheckEnd() {
     if (Options.getDepthLimit() > 0) {
       codeGenerator.println(" } finally {");
       codeGenerator.println("   --jj_depth;");
@@ -2156,7 +2157,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     }
   }
 
-  public void build(GenericCodeBuilder codeBuilder) {
+  private void build(GenericCodeBuilder codeBuilder) {
     NormalProduction p;
     JavaCodeProduction jp;
     Token t = null;

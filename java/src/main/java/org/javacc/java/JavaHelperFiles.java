@@ -2,7 +2,6 @@
 package org.javacc.java;
 
 import org.javacc.Version;
-import org.javacc.jjtree.JJTreeGlobals;
 import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.JavaCCErrors;
 import org.javacc.parser.JavaCCGlobals;
@@ -22,7 +21,7 @@ import java.util.List;
 /**
  * The {@link JavaHelperFiles} class.
  */
-public abstract class JavaHelperFiles {
+abstract class JavaHelperFiles {
 
   /**
    * Constructs an instance of {@link JavaHelperFiles}.
@@ -30,7 +29,7 @@ public abstract class JavaHelperFiles {
   private JavaHelperFiles() {}
 
 
-  public static void genMiscFile(String fileName, String templatePath) throws Error {
+  static void genMiscFile(String fileName, String templatePath) throws Error {
     try (JavaCodeBuilder builder = JavaCodeBuilder.of(CodeGeneratorSettings.of(Options.getOptions()))) {
       builder.setFile(new File(Options.getOutputDirectory(), fileName));
 
@@ -50,7 +49,7 @@ public abstract class JavaHelperFiles {
     }
   }
 
-  public static void gen_Token() {
+  static void gen_Token() {
     try (JavaCodeBuilder builder = JavaCodeBuilder.of(CodeGeneratorSettings.of(Options.getOptions()))) {
       builder.setFile(new File(Options.getOutputDirectory(), "Token.java"));
       builder.setVersion(Version.version).addTools(JavaCCGlobals.toolName);
@@ -72,7 +71,7 @@ public abstract class JavaHelperFiles {
   }
 
 
-  public static void gen_TokenManager() {
+  static void gen_TokenManager() {
     try (JavaCodeBuilder builder = JavaCodeBuilder.of(CodeGeneratorSettings.of(Options.getOptions()))) {
       builder.setFile(new File(Options.getOutputDirectory(), "TokenManager.java"));
       builder.setVersion(Version.version).addTools(JavaCCGlobals.toolName)
@@ -86,7 +85,7 @@ public abstract class JavaHelperFiles {
     }
   }
 
-  public static void gen_Constants() throws MetaParseException {
+  static void gen_Constants() throws MetaParseException {
     if (JavaCCErrors.get_error_count() != 0)
       throw new MetaParseException();
 
@@ -153,7 +152,7 @@ public abstract class JavaHelperFiles {
     }
   }
 
-  public static void generateSimple(String template, String outputFileName, CodeGeneratorSettings settings)
+  static void generateSimple(String template, String outputFileName, CodeGeneratorSettings settings)
       throws IOException {
     File file = new File((String) settings.get("OUTPUT_DIRECTORY"), outputFileName);
 

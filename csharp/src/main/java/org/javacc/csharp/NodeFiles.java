@@ -23,7 +23,7 @@ final class NodeFiles {
    * ID of the latest version (of JJTree) in which one of the Node classes was
    * modified.
    */
-  static final String        nodeVersion  = Version.version;
+  private static final String        nodeVersion  = Version.version;
 
   private static Set<String> nodesToBuild = new HashSet<String>();
 
@@ -62,11 +62,11 @@ final class NodeFiles {
   }
 
 
-  static String nodeConstants() {
+  private static String nodeConstants() {
     return JJTreeGlobals.parserName + "TreeConstants";
   }
 
-  static void generateTreeConstants() {
+  private static void generateTreeConstants() {
     try (GenericCodeBuilder builder = GenericCodeBuilder.of(CodeGeneratorSettings.create())) {
       builder.setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), nodeConstants() + ".cs"));
 
@@ -104,11 +104,11 @@ final class NodeFiles {
   }
 
 
-  static String visitorClass() {
+  private static String visitorClass() {
     return JJTreeGlobals.parserName + "Visitor";
   }
 
-  static void generateVisitor() {
+  private static void generateVisitor() {
     if (!JJTreeOptions.getVisitor()) {
       return;
     }
@@ -153,7 +153,7 @@ final class NodeFiles {
     }
   }
 
-  static String defaultVisitorClass() {
+  private static String defaultVisitorClass() {
     return JJTreeGlobals.parserName + "DefaultVisitor";
   }
 
@@ -169,7 +169,7 @@ final class NodeFiles {
     return sb.toString();
   }
 
-  static void generateDefaultVisitor() {
+  private static void generateDefaultVisitor() {
     if (!JJTreeOptions.getVisitor()) {
       return;
     }
