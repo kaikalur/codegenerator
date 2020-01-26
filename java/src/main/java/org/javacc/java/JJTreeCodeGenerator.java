@@ -48,8 +48,7 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
   @Override
   public Object visit(ASTGrammar node, Object data) {
     IO io = (IO) data;
-    io.println(
-        "/*@bgen(jjtree) " + JavaCCGlobals.getIdString("JJTree", new File(io.getOutputFileName()).getName()) + " */");
+    io.println("/*@bgen(jjtree) " + JavaCCGlobals.getIdString("JJTree", new File(io.getOutputFileName()).getName()) + " */");
     io.print("/*@egen*/");
     return node.childrenAccept(this, io);
   }
