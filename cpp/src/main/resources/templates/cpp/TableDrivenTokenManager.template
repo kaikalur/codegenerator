@@ -412,7 +412,7 @@ Token * ${parserName}TokenManager::getNextToken() {
           CommonTokenAction(matchedToken);
 #fi
           return matchedToken;
-        } else if (isSkip(jjmatchedKind)) {
+        } else if (isSkip(jjmatchedKind) || isSpecial(jjmatchedKind)) {
 #if DEBUG_TOKEN_MANAGER
           System.err.println("Found a SKIP match.");
 #fi
@@ -451,25 +451,25 @@ Token * ${parserName}TokenManager::getNextToken() {
 #fi
         } while(curChar >= 0);
       }
-    }
-    int error_line = input_stream->getEndLine();
-    int error_column = input_stream->getEndColumn();
-    JJString error_after = "";
-    bool EOFSeen = false;
+      int error_line = input_stream->getEndLine();
+      int error_column = input_stream->getEndColumn();
+      JJString error_after = "";
+      bool EOFSeen = false;
 
-    if(input_stream->endOfInput() < 0) {
-      EOFSeen = true;
-      error_after = lastReadPosition <= 1 ? "" : input_stream->GetImage();
-      if (curChar == '\n' || curChar == '\r') {
-         error_line++;
-         error_column = 0;
+      if(input_stream->endOfInput() < 0) {
+        EOFSeen = true;
+        error_after = lastReadPosition <= 1 ? "" : input_stream->GetImage();
+        if (curChar == '\n' || curChar == '\r') {
+           error_line++;
+           error_column = 0;
+        }
+        else
+           error_column++;
       }
-      else
-         error_column++;
+      if (!EOFSeen) {
+        error_after = lastReadPosition <= 1 ? "" : input_stream->GetImage();
+      }
+      errorHandler->LexicalError(EOFSeen, curLexState, error_line, error_column, error_after, curChar);
     }
-    if (!EOFSeen) {
-      error_after = lastReadPosition <= 1 ? "" : input_stream->GetImage();
-    }
-    errorHandler->LexicalError(EOFSeen, curLexState, error_line, error_column, error_after, curChar);
   }
 }

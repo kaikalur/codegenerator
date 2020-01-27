@@ -450,7 +450,7 @@ public ${STATIC?static :} Token getNextToken() {
           CommonTokenAction(matchedToken);
 #fi
           return matchedToken;
-        } else if (isSkip(jjmatchedKind)) {
+        } else if (isSkip(jjmatchedKind) || isSpecial(jjmatchedKind)) {
 #if DEBUG_TOKEN_MANAGER
           System.err.println("Found a SKIP match.");
 #fi
