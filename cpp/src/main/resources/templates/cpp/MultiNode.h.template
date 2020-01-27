@@ -7,8 +7,8 @@ class ${PARSER_NAME};
 
 class ${NODE_TYPE} : public ${NODE_CLASS:-SimpleNode} {
 public: 
-           ${NODE_TYPE}(int id);
-           ${NODE_TYPE}(${PARSER_NAME} *parser, int id);
+  ${NODE_TYPE}(int id);
+  ${NODE_TYPE}(${PARSER_NAME} *parser, int id);
   virtual ~${NODE_TYPE}();
 
 #if VISITOR
