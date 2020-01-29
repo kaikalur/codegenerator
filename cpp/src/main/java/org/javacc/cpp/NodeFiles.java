@@ -183,6 +183,11 @@ final class NodeFiles {
 
       builder.println("\n#include \"JavaCC.h\"");
 
+      boolean hasNamespace = Options.stringValue("NAMESPACE").length() > 0;
+      if (hasNamespace) {
+        builder.println("namespace " + Options.stringValue("NAMESPACE_OPEN"));
+      }
+
       builder.println("enum {");
       for (int i = 0; i < nodeIds.size(); ++i) {
         String n = nodeIds.get(i);
@@ -202,6 +207,10 @@ final class NodeFiles {
         builder.println("jjtNodeName_arr_", i, ", ");
       }
       builder.println("  };");
+
+      if (hasNamespace) {
+        builder.println(Options.stringValue("NAMESPACE_CLOSE"));
+      }
     } catch (IOException e) {
       throw new Error(e);
     }

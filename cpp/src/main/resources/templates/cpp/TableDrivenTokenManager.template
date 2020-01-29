@@ -367,7 +367,7 @@ Token * ${parserName}TokenManager::getNextToken() {
     // image->setLength(0);
     jjimageLen = 0;
 
-    MoreLoop: for (;;) {
+    for (;;) {
       jjmatchedKind = 0x7fffffff;
       jjmatchedPos = 0;
 #if DEBUG_TOKEN_MANAGER
@@ -456,7 +456,7 @@ Token * ${parserName}TokenManager::getNextToken() {
       JJString error_after = "";
       bool EOFSeen = false;
 
-      if(input_stream->endOfInput() < 0) {
+      if(input_stream->endOfInput()) {
         EOFSeen = true;
         error_after = lastReadPosition <= 1 ? "" : input_stream->GetImage();
         if (curChar == '\n' || curChar == '\r') {

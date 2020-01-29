@@ -23,7 +23,7 @@ JJSimpleString addUnicodeEscapes(const JJString& str);
       // actual - the actual token that the parser got instead.
       virtual void handleUnexpectedToken(int expectedKind, const JJString & expectedToken, Token *actual, ${PARSER_NAME} *parser) {
         error_count++;
-		std::cerr << "Expecting " << addUnicodeEscapes(expectedToken) << " at: " << actual->beginLine << ":" << actual->beginColumn << "but got " << addUnicodeEscapes(actual->image) << std::endl;
+        std::cerr << "Expecting " << addUnicodeEscapes(expectedToken) << " at: " << actual->beginLine << ":" << actual->beginColumn << "but got " << addUnicodeEscapes(actual->image) << std::endl;
       }
       // Called when the parser cannot continue parsing.
       // last - the last token successfully parsed.
@@ -31,13 +31,13 @@ JJSimpleString addUnicodeEscapes(const JJString& str);
       // production - the production in which this error occurrs.
       virtual void handleParseError(Token *last, Token *unexpected, const JJSimpleString & production, ${PARSER_NAME} *parser) {
         error_count++;
-		std::cerr << "Encountered: " << addUnicodeEscapes(unexpected->image) << " at: " << unexpected->beginLine << ":" << unexpected->beginColumn << "while parsing: " << production << std::endl;
-	  }
+        std::cerr << "Encountered: " << addUnicodeEscapes(unexpected->image) << " at: " << unexpected->beginLine << ":" << unexpected->beginColumn << "while parsing: " << production << std::endl;
+      }
       virtual int getErrorCount() {
         return error_count;
       }
       virtual void handleOtherError(const JJString & message, ${PARSER_NAME} *parser) {
-	    std::cerr << "Error: " << message << std::endl;
+        std::cerr << "Error: " << message << std::endl;
       }
       virtual ~ErrorHandler() {}
       ErrorHandler() { error_count = 0; }
@@ -63,10 +63,10 @@ JJSimpleString addUnicodeEscapes(const JJString& str);
       //
       virtual void lexicalError(bool EOFSeen, int lexState, int errorLine, int errorColumn, JJString errorAfter, JJChar curChar, ${PARSER_NAME}TokenManager* token_manager) {
         // by default, we just print an error message and return.
-		std::cerr << "Lexical error at: " << errorLine << ":" << errorColumn << ". Encountered: " << curChar << " after: " << errorAfter << "." << std::endl;
+        std::cerr << "Lexical error at: " << errorLine << ":" << errorColumn << ". Encountered: " << curChar << " after: " << errorAfter << "." << std::endl;
       }
       virtual void lexicalError(const JJString & errorMessage, ${PARSER_NAME}TokenManager* token_manager) {
-		std::cerr << errorMessage << std::endl;
+        std::cerr << errorMessage << std::endl;
       }
       virtual ~TokenManagerErrorHandler() {}
   };
