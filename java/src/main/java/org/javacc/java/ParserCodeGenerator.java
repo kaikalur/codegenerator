@@ -1844,7 +1844,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       }
 
       gensymindex++;
-      internalNames.put(e, "R_" + gensymindex);
+      internalNames.put(e, "R_" + e.getProductionName() + "_" + e.getLine()  + "_" + e.getColumn() + "_" + gensymindex);
       internalIndexes.put(e, gensymindex);
     }
     Phase3Data p3d = phase3table.get(e);
