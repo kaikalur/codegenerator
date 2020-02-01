@@ -84,7 +84,7 @@ namespace ${NAMESPACE_OPEN}
   }
 
 
-  void JJT${PARSER_NAME}State::clearNodeScope(Node *n) {
+  void JJT${PARSER_NAME}State::clearNodeScope(Node * /*n*/) {
     while (sp > mk) {
       delete popNode();
     }
