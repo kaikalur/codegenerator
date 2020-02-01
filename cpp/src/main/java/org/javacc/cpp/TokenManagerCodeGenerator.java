@@ -108,23 +108,23 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
         }
         int kind = kinds.get(j);
         boolean ignoreCase = tokenizerData.ignoreCaseKinds.contains(kind);
-        codeGenerator.print(s.length());
+        codeGenerator.print(s.length() + "LL");
         codeGenerator.print(", ");
         codeGenerator.print(ignoreCase ? 1 : 0);
         for (int k = 0; k < s.length(); k++) {
           codeGenerator.print(", ");
-          codeGenerator.print((int) s.charAt(k));
+          codeGenerator.print((int) s.charAt(k) + "LL");
           i++;
         }
         if (ignoreCase) {
           for (int k = 0; k < s.length(); k++) {
             codeGenerator.print(", ");
-            codeGenerator.print((int) s.toUpperCase().charAt(k));
+            codeGenerator.print((int) s.toUpperCase().charAt(k) + "LL");
             i++;
           }
         }
-        codeGenerator.print(", " + kind);
-        codeGenerator.print(", " + tokenizerData.kindToNfaStartState.get(kind));
+        codeGenerator.print(", " + kind + "LL");
+        codeGenerator.print(", " + tokenizerData.kindToNfaStartState.get(kind) + "LL");
         i += 4;
         j++;
       }
@@ -194,14 +194,14 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
         bits.set(c);
       }
       long[] longs = bits.toLongArray();
-      codeGenerator.print(lengths[i]);
+      codeGenerator.print(lengths[i] + "LL");
       for (int k = 0; k < longs.length; k++) {
         int rep = 1;
         while (k + rep < longs.length && longs[k + rep] == longs[k]) {
           rep++;
         }
-        codeGenerator.print(", ", rep + ", ");
-        codeGenerator.print("" + Long.toString(longs[k]));
+        codeGenerator.print(", ", rep + "LL, ");
+        codeGenerator.print("" + Long.toString(longs[k]) + "LL");
         k += rep - 1;
       }
       codeGenerator.print("}");
@@ -442,7 +442,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
       if (i > 0) {
         codeGenerator.print(", ");
       }
-      codeGenerator.print("" + Long.toString(longs[i]));
+      codeGenerator.print("" + Long.toString(longs[i]) + "ULL");
     }
     codeGenerator.println("};");
   }

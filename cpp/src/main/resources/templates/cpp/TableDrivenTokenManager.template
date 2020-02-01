@@ -37,8 +37,8 @@ void ${parserName}TokenManager::ReInit(JAVACC_CHARSTREAM * stream, int lexState)
       int ind = 0;
       // We originally generate something like RLE for the static arrays and
       // we actually expannd them here.
-      for (int j = 0; j < jjCharData[i][0]; j += 2) {
-        for (int k = 0; k < (int)jjCharData[i][j + 1]; k++) {
+      for (int j = 0; j < (int) jjCharData[i][0]; j += 2) {
+        for (int k = 0; k < (int) jjCharData[i][j + 1]; k++) {
           jjChars[i][ind++] = jjCharData[i][j + 2];
         }
       }
@@ -76,11 +76,11 @@ int ${parserName}TokenManager::jjRunStringLiteralMatch() {
   int index = getStartAndSize(key, 0);
   if (index != -1) {
     for (int i = 0; i < getStartAndSize(key, 1); i++) {
-      int len = stringLiterals[index++];
-      int ignoreCase = stringLiterals[index++];
+      int len = (int) stringLiterals[index++];
+      int ignoreCase = (int) stringLiterals[index++];
 #if DEBUG_TOKEN_MANAGER
       throw 
-          "Looking for string literal match of kind: " +
+          "Looking for string literal match of kind: " +in
           stringLiterals[index + len] +
           "; token image: " + tokenImage[stringLiterals[index + len]];
 #fi
@@ -97,9 +97,9 @@ int ${parserName}TokenManager::jjRunStringLiteralMatch() {
         }
       } while(curPos < len);
       if (curPos == len) {
-        jjmatchedKind = stringLiterals[index + len + (ignoreCase * len)];
+        jjmatchedKind = (int) stringLiterals[index + len + (ignoreCase * len)];
         jjmatchedPos = curPos;
-        startState = stringLiterals[index + len + (ignoreCase * len) + 1];
+        startState = (int) stringLiterals[index + len + (ignoreCase * len) + 1];
 #if DEBUG_TOKEN_MANAGER
         throw
             "Currently matched the first: " + jjmatchedPos +

@@ -153,7 +153,9 @@ class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
         while (CppCodeBuilder.isHexDigit(sb.charAt(i))) {
           i++;
         }
-        if (sb.charAt(i) == 'L') {
+        // Avoid replacing long long (LL) with unsigned long long (ULL)
+        if (sb.charAt(i) == 'L' && sb.charAt(i + 1) != 'L' && sb.charAt(i - 1) != 'L') {
+//          if (sb.charAt(i) == 'L' && (i >= sb.length() || sb.charAt(i + 1) != 'L')) {
           sb.insert(i, "UL");
         }
         i++;
