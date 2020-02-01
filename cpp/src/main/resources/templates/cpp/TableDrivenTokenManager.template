@@ -14,30 +14,19 @@ bool ${parserName}TokenManager::moveToNextChar() {
 ${decls}
 
 #if TOKEN_MANAGER_USES_PARSER && !STATIC
-  /** Constructor with parser. */
+/** Constructor with parser. */
 ${parserName}TokenManager::${parserName}TokenManager (${parserName} parserArg, JAVACC_CHARSTREAM * stream, int lexState)
-{
-    ReInit(parserArg, stream);
-    if(lexState)
-      SwitchTo(lexState);
 #else
-  /** Constructor. */
+/** Constructor. */
 ${parserName}TokenManager::${parserName}TokenManager (JAVACC_CHARSTREAM * stream, int lexState)
-{
-    ReInit(stream);
-    if(lexState)
-      SwitchTo(lexState);
 #fi
+{
+    ReInit(stream, lexState);
 }
 
-  /** Reinitialise parser. */
-#if TOKEN_MANAGER_USES_PARSER && !STATIC
-void ${parserName}TokenManager::ReInit( ${parserName} parserArg, JAVACC_CHARSTREAM * stream, int lexState)
+/** Reinitialise parser. */
+void ${parserName}TokenManager::ReInit(JAVACC_CHARSTREAM * stream, int lexState)
 {
-#else
- void ${parserName}TokenManager::ReInit(JAVACC_CHARSTREAM * stream, int lexState)
-{
-#fi
     defaultLexState = ${defaultLexState};
     curLexState = ${defaultLexState};
     moveIndex = 1;
@@ -58,18 +47,29 @@ void ${parserName}TokenManager::ReInit( ${parserName} parserArg, JAVACC_CHARSTRE
     jjmatchedPos = 0;
     curLexState = defaultLexState;
     input_stream = stream;
-    if(lexState)
-      SwitchTo(lexState);
+    SwitchTo(lexState);
+    errorHandler = new TokenManagerErrorHandler();
 }
 
-  /** Switch to specified lex state. */
+/** Switch to specified lex state. */
 void ${parserName}TokenManager::SwitchTo(int lexState)
 {
-    curLexState = lexState;
+    if (lexState >= 1 || lexState < 0) {
+      JJString message;
+\#ifdef WIDE_CHAR
+      message += L"Error: Ignoring invalid lexical state : ";
+      message += lexState; message += L". State unchanged.";
+\#else
+      message += "Error: Ignoring invalid lexical state : ";
+      message += lexState; message += ". State unchanged.";
+\#endif
+      throw new TokenMgrError(message, INVALID_LEXICAL_STATE);
+    } else
+      curLexState = lexState;
 }
 
 #if !NO_DFA
- int ${parserName}TokenManager::jjRunStringLiteralMatch() {
+int ${parserName}TokenManager::jjRunStringLiteralMatch() {
   int curPos = 0;
   int key = (int)curLexState << 16 | curChar;
   int startState = jjInitStates[curLexState];
@@ -130,7 +130,7 @@ void ${parserName}TokenManager::SwitchTo(int lexState)
 }
 #fi
 
- int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
+int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
 
   if (startState < 0) {
 #if DEBUG_TOKEN_MANAGER
@@ -271,7 +271,7 @@ static bool isMore(int kind) {
   return (jjtoMore[kind >> 6] & (1L << (kind & 077))) != 0L;
 }
 
- Token * ${parserName}TokenManager::jjFillToken() {
+Token * ${parserName}TokenManager::jjFillToken() {
   Token * t;
   JJString curTokenImage;
 #if KEEP_LINE_COLUMN
@@ -469,7 +469,8 @@ Token * ${parserName}TokenManager::getNextToken() {
       if (!EOFSeen) {
         error_after = lastReadPosition <= 1 ? "" : input_stream->GetImage();
       }
-      errorHandler->LexicalError(EOFSeen, curLexState, error_line, error_column, error_after, curChar);
+      errorHandler->lexicalError(EOFSeen, curLexState, error_line, error_column, error_after, curChar, this);
+      goto EOFLoop;
     }
   }
 }
