@@ -18,7 +18,7 @@ class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
     Statistic;
   }
 
-  private boolean            headeOnly;
+  private final boolean      headeOnly;
   private final StringBuffer mainBuffer    = new StringBuffer();
   private final StringBuffer includeBuffer = new StringBuffer();
   private final StringBuffer staticsBuffer = new StringBuffer();
@@ -34,7 +34,7 @@ class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
   private CppCodeBuilder(CodeGeneratorSettings options, boolean headeOnly) {
     super(options);
     this.headeOnly = headeOnly;
-    this.kind = headeOnly ? Buffer.Include : Buffer.Main;
+    kind = headeOnly ? Buffer.Include : Buffer.Main;
   }
 
   /**
@@ -85,8 +85,9 @@ class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
     fixupLongLiterals(includeBuffer);
     store(includeFile, includeBuffer);
 
-    if (headeOnly)
+    if (headeOnly) {
       return;
+    }
 
     mainBuffer.insert(0, staticsBuffer);
 
@@ -118,18 +119,21 @@ class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
 
     String modsAndRetType = null;
     int i = qualifiedModsAndRetType.lastIndexOf(':');
-    if (i >= 0)
+    if (i >= 0) {
       modsAndRetType = qualifiedModsAndRetType.substring(i + 1);
+    }
 
     if (modsAndRetType != null) {
       i = modsAndRetType.lastIndexOf("virtual");
-      if (i >= 0)
+      if (i >= 0) {
         modsAndRetType = modsAndRetType.substring(i + "virtual".length());
+      }
     }
     if (qualifiedModsAndRetType != null) {
       i = qualifiedModsAndRetType.lastIndexOf("virtual");
-      if (i >= 0)
+      if (i >= 0) {
         qualifiedModsAndRetType = qualifiedModsAndRetType.substring(i + "virtual".length());
+      }
     }
     String qualifierClass = (className == null) ? "" : className + "::";
     mainBuffer.append("\n" + qualifiedModsAndRetType + " " + qualifierClass + nameAndParams);
@@ -146,8 +150,9 @@ class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
       char c2 = sb.charAt(i + 1);
       if (Character.isDigit(c1) || (c1 == '0' && c2 == 'x')) {
         i += c1 == '0' ? 2 : 1;
-        while (CppCodeBuilder.isHexDigit(sb.charAt(i)))
+        while (CppCodeBuilder.isHexDigit(sb.charAt(i))) {
           i++;
+        }
         if (sb.charAt(i) == 'L') {
           sb.insert(i, "UL");
         }
@@ -193,15 +198,15 @@ class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
   }
 
   void switchToMainFile() {
-    this.kind = Buffer.Main;
+    kind = Buffer.Main;
   }
 
   void switchToIncludeFile() {
-    this.kind = Buffer.Include;
+    kind = Buffer.Include;
   }
 
   void switchToStaticsFile() {
-    this.kind = Buffer.Statistic;
+    kind = Buffer.Statistic;
   }
 
   /**

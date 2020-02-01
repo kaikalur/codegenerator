@@ -70,8 +70,9 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
 
   @Override
   public void finish(CodeGeneratorSettings settings, TokenizerData tokenizerData) {
-    if (!Options.getBuildTokenManager())
+    if (!Options.getBuildTokenManager()) {
       return;
+    }
 
     if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
       codeGenerator.switchToMainFile();
@@ -98,11 +99,13 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
       arr[0] = i;
       arr[1] = l.size();
       int j = 0;
-      if (i > 0)
+      if (i > 0) {
         codeGenerator.println(", ");
+      }
       for (String s : l) {
-        if (j > 0)
+        if (j > 0) {
           codeGenerator.println(", ");
+        }
         int kind = kinds.get(j);
         boolean ignoreCase = tokenizerData.ignoreCaseKinds.contains(kind);
         codeGenerator.print(s.length());
@@ -165,8 +168,9 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
         long[] longs = bits.toLongArray();
         for (int k = 0; k < longs.length; k++) {
           int rep = 1;
-          while (k + rep < longs.length && longs[k + rep] == longs[k])
+          while (k + rep < longs.length && longs[k + rep] == longs[k]) {
             rep++;
+          }
           k += rep - 1;
           lengths[i] = lengths[i] + 2;
         }
@@ -177,8 +181,9 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     codeGenerator.println("static const long long jjCharData[][" + (length + 1) + "] = {");
     for (int i = 0; i < nfa.size(); i++) {
       TokenizerData.NfaState tmp = nfa.get(i);
-      if (i > 0)
+      if (i > 0) {
         codeGenerator.println(",");
+      }
       if (tmp == null) {
         codeGenerator.print("{}");
         continue;
@@ -192,8 +197,9 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
       codeGenerator.print(lengths[i]);
       for (int k = 0; k < longs.length; k++) {
         int rep = 1;
-        while (k + rep < longs.length && longs[k + rep] == longs[k])
+        while (k + rep < longs.length && longs[k + rep] == longs[k]) {
           rep++;
+        }
         codeGenerator.print(", ", rep + ", ");
         codeGenerator.print("" + Long.toString(longs[k]));
         k += rep - 1;
@@ -214,8 +220,9 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     codeGenerator.println("static const int jjcompositeState[][" + length + "] = {");
     for (int i = 0; i < nfa.size(); i++) {
       TokenizerData.NfaState tmp = nfa.get(i);
-      if (i > 0)
+      if (i > 0) {
         codeGenerator.println(", ");
+      }
       if (tmp == null) {
         codeGenerator.print("{}");
         continue;
@@ -223,8 +230,9 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
       codeGenerator.print("{");
       int k = 0;
       for (int st : tmp.compositeStates) {
-        if (k++ > 0)
+        if (k++ > 0) {
           codeGenerator.print(", ");
+        }
         codeGenerator.print(st);
       }
       codeGenerator.print("}");
@@ -235,8 +243,9 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     codeGenerator.println("static const int jjmatchKinds[] = {");
     for (int i = 0; i < nfa.size(); i++) {
       TokenizerData.NfaState tmp = nfa.get(i);
-      if (i > 0)
+      if (i > 0) {
         codeGenerator.println(", ");
+      }
       // TODO(sreeni) : Fix this mess.
       if (tmp == null) {
         codeGenerator.print(Integer.MAX_VALUE);
@@ -258,8 +267,9 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     codeGenerator.println("static const int jjnextStateSet[][" + (length + 1) + "] = {");
     for (int i = 0; i < nfa.size(); i++) {
       TokenizerData.NfaState tmp = nfa.get(i);
-      if (i > 0)
+      if (i > 0) {
         codeGenerator.println(", ");
+      }
       if (tmp == null) {
         codeGenerator.print("{0}");
         continue;
@@ -278,8 +288,9 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     codeGenerator.println("static const int jjInitStates[]  = {");
     int k = 0;
     for (int i : tokenizerData.initialStates.keySet()) {
-      if (k++ > 0)
+      if (k++ > 0) {
         codeGenerator.print(", ");
+      }
       codeGenerator.print(tokenizerData.initialStates.get(i));
     }
     codeGenerator.println("};");
@@ -288,8 +299,9 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     codeGenerator.println("static const int canMatchAnyChar[] = {");
     k = 0;
     for (int i = 0; i < tokenizerData.wildcardKind.size(); i++) {
-      if (k++ > 0)
+      if (k++ > 0) {
         codeGenerator.print(", ");
+      }
       codeGenerator.print(tokenizerData.wildcardKind.get(i));
     }
     codeGenerator.println("};");
@@ -332,8 +344,9 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
       }
       newStates[i] = matchInfo.newLexState;
       String image = matchInfo.image;
-      if (k++ > 0)
+      if (k++ > 0) {
         codeGenerator.println(", ");
+      }
       if (image != null) {
         codeGenerator.print("\"");
         for (int j = 0; j < image.length(); j++) {
@@ -341,8 +354,9 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
             codeGenerator.print("\\" + Integer.toOctalString(image.charAt(j)));
           } else {
             String hexVal = Integer.toHexString(image.charAt(j));
-            if (hexVal.length() == 3)
+            if (hexVal.length() == 3) {
               hexVal = "0" + hexVal;
+            }
             codeGenerator.print("\\u" + hexVal);
           }
         }
@@ -355,15 +369,16 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     codeGenerator.println();
 
     // Now generate the bit masks.
-    generateBitVector("jjtoSkip", toSkip, codeGenerator);
-    generateBitVector("jjtoSpecial", toSpecial, codeGenerator);
-    generateBitVector("jjtoMore", toMore, codeGenerator);
-    generateBitVector("jjtoToken", toToken, codeGenerator);
+    TokenManagerCodeGenerator.generateBitVector("jjtoSkip", toSkip, codeGenerator);
+    TokenManagerCodeGenerator.generateBitVector("jjtoSpecial", toSpecial, codeGenerator);
+    TokenManagerCodeGenerator.generateBitVector("jjtoMore", toMore, codeGenerator);
+    TokenManagerCodeGenerator.generateBitVector("jjtoToken", toToken, codeGenerator);
 
     codeGenerator.println("static const int jjnewLexState[] = {");
     for (int i = 0; i < newStates.length; i++) {
-      if (i > 0)
+      if (i > 0) {
         codeGenerator.print(", ");
+      }
       // codeGenerator.genCode("0x" + Integer.toHexString(newStates[i]));
       codeGenerator.print("" + Integer.toString(newStates[i]));
     }
@@ -380,7 +395,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     codeGenerator.println("}");
 
     codeGenerator
-    .println("void " + tokenizerData.parserName + "TokenManager::SkipLexicalActions(Token * /*matchedToken*/) {");
+        .println("void " + tokenizerData.parserName + "TokenManager::SkipLexicalActions(Token * /*matchedToken*/) {");
     dumpLexicalActions(allMatches, TokenizerData.MatchType.SKIP, "jjmatchedKind", codeGenerator);
     dumpLexicalActions(allMatches, TokenizerData.MatchType.SPECIAL_TOKEN, "jjmatchedKind", codeGenerator);
     codeGenerator.println("}");
@@ -424,8 +439,9 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     codeGenerator.print("   ");
     long[] longs = bits.toLongArray();
     for (int i = 0; i < longs.length; i++) {
-      if (i > 0)
+      if (i > 0) {
         codeGenerator.print(", ");
+      }
       codeGenerator.print("" + Long.toString(longs[i]));
     }
     codeGenerator.println("};");

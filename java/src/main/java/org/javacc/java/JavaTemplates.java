@@ -55,7 +55,7 @@ abstract class JavaTemplates {
     public String getParseExceptionTemplateResourceUrl() {
       return "/templates/ParseException.template";
     }
-  };
+  }
 
   /**
    * The {@link JavaModernTemplates} class.
@@ -76,13 +76,13 @@ abstract class JavaTemplates {
     public String getParseExceptionTemplateResourceUrl() {
       return "/templates/gwt/ParseException.template";
     }
-  };
+  }
 
   static boolean isJavaModern() {
     return Options.getJavaTemplateType().equals(Options.JAVA_TEMPLATE_TYPE_MODERN);
   }
 
   static JavaTemplates getTemplates() {
-    return isJavaModern() ? RESOURCES_JAVA_MODERN : RESOURCES_JAVA_CLASSIC;
+    return JavaTemplates.isJavaModern() ? JavaTemplates.RESOURCES_JAVA_MODERN : JavaTemplates.RESOURCES_JAVA_CLASSIC;
   }
 }

@@ -48,11 +48,12 @@ import java.util.List;
 /**
  * Generates the Constants file.
  */
-class OtherFilesGenCPP  {
+class OtherFilesGenCPP {
 
   static void start() throws MetaParseException {
-    if (JavaCCErrors.get_error_count() != 0)
+    if (JavaCCErrors.get_error_count() != 0) {
       throw new MetaParseException();
+    }
 
     List<String> toolnames = new ArrayList<>(JavaCCGlobals.toolNames);
     toolnames.add(JavaCCGlobals.toolName);
@@ -94,7 +95,7 @@ class OtherFilesGenCPP  {
 
       int cnt = 0;
       builder.println("  static const JJChar tokenImage_arr_" + cnt + "[] = ");
-      printCharArray(builder, "<EOF>");
+      OtherFilesGenCPP.printCharArray(builder, "<EOF>");
       builder.println(";");
 
       for (TokenProduction tp : JavaCCGlobals.rexprlist) {
@@ -102,14 +103,14 @@ class OtherFilesGenCPP  {
           RegularExpression re = res.rexp;
           builder.println("  static const JJChar tokenImage_arr_" + ++cnt + "[] = ");
           if (re instanceof RStringLiteral) {
-            printCharArray(builder, "\"" + ((RStringLiteral) re).image + "\"");
+            OtherFilesGenCPP.printCharArray(builder, "\"" + ((RStringLiteral) re).image + "\"");
           } else if (!re.label.equals("")) {
-            printCharArray(builder, "\"<" + re.label + ">\"");
+            OtherFilesGenCPP.printCharArray(builder, "\"<" + re.label + ">\"");
           } else {
             if (re.tpContext.kind == TokenProduction.TOKEN) {
               JavaCCErrors.warning(re, "Consider giving this non-string token a label for better error reporting.");
             }
-            printCharArray(builder, "\"<token of kind " + re.ordinal + ">\"");
+            OtherFilesGenCPP.printCharArray(builder, "\"<token of kind " + re.ordinal + ">\"");
           }
           builder.println(";");
         }

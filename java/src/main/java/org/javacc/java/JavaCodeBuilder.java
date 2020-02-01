@@ -27,6 +27,7 @@ class JavaCodeBuilder extends CodeBuilder<JavaCodeBuilder> {
   /**
    * Get the {@link StringBuffer}
    */
+  @Override
   protected final StringBuffer getBuffer() {
     return buffer;
   }

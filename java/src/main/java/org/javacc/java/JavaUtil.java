@@ -46,10 +46,11 @@ abstract class JavaUtil {
     }
 
     String text = writer.toString();
-    if (text == null)
+    if (text == null) {
       return "";
+    }
 
-    Matcher matcher = PACKAGE_PATTERN.matcher(text);
+    Matcher matcher = JavaUtil.PACKAGE_PATTERN.matcher(text);
     return matcher.find() ? matcher.group(1) : "";
   }
 
@@ -64,8 +65,9 @@ abstract class JavaUtil {
 
   private static void printTokenSetup(Token t) {
     Token tt = t;
-    while (tt.specialToken != null)
+    while (tt.specialToken != null) {
       tt = tt.specialToken;
+    }
     JavaCCGlobals.cline = tt.beginLine;
     JavaCCGlobals.ccol = tt.beginColumn;
   }
@@ -73,8 +75,9 @@ abstract class JavaUtil {
   private static void printToken(Token t, java.io.PrintWriter ostr, boolean escape) {
     Token tt = t.specialToken;
     if (tt != null) {
-      while (tt.specialToken != null)
+      while (tt.specialToken != null) {
         tt = tt.specialToken;
+      }
       while (tt != null) {
         ostr.append(JavaCCGlobals.printTokenOnly(tt, escape));
         tt = tt.next;
@@ -84,20 +87,23 @@ abstract class JavaUtil {
   }
 
   private static void printTrailingComments(Token t, java.io.PrintWriter ostr, boolean escape) {
-    if (t.next == null)
+    if (t.next == null) {
       return;
+    }
 
-    printLeadingComments(t.next, escape);
+    JavaUtil.printLeadingComments(t.next, escape);
   }
 
 
   private static String printLeadingComments(Token t, boolean escape) {
     String retval = "";
-    if (t.specialToken == null)
+    if (t.specialToken == null) {
       return retval;
+    }
     Token tt = t.specialToken;
-    while (tt.specialToken != null)
+    while (tt.specialToken != null) {
       tt = tt.specialToken;
+    }
     while (tt != null) {
       retval += JavaCCGlobals.printTokenOnly(tt, escape);
       tt = tt.next;

@@ -111,8 +111,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
   @Override
   public void generateCode(CodeGeneratorSettings settings, ParserData parserData) {
     this.parserData = parserData;
-    this.codeGenerator = GenericCodeBuilder.of(settings);
-    this.codeGenerator.setFile(new File(Options.getOutputDirectory(), parserData.parserName + ".cs"));
+    codeGenerator = GenericCodeBuilder.of(settings);
+    codeGenerator.setFile(new File(Options.getOutputDirectory(), parserData.parserName + ".cs"));
 
     String superClass = (String) settings.get(Options.USEROPTION__TOKEN_MANAGER_SUPER_CLASS);
     settings.put("parserName", parserData.parserName);
@@ -140,7 +140,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
 
       processProductions(settings, codeGenerator);
       settings.put("numproductions", internalIndexes.size());
-      codeGenerator.printTemplate(parserTemplate);
+      codeGenerator.printTemplate(ParserCodeGenerator.parserTemplate);
       codeGenerator.println("\n}");
       if (Options.getNamespace() != null) {
         codeGenerator.println("\n}");
@@ -174,16 +174,16 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     codeGenerator.print(" " + production.getLhs() + "(");
     if (production.getParameterListTokens().size() != 0) {
       codeGenerator.printTokenSetup((production.getParameterListTokens().get(0)));
-      for (java.util.Iterator it = production.getParameterListTokens().iterator(); it.hasNext();) {
-        t = (Token) it.next();
+      for (Object element : production.getParameterListTokens()) {
+        t = (Token) element;
         codeGenerator.printToken(t);
       }
       codeGenerator.printTrailingComments(t);
     }
     codeGenerator.print(")");
-    for (java.util.Iterator it = production.getThrowsList().iterator(); it.hasNext();) {
+    for (Object element : production.getThrowsList()) {
       codeGenerator.print(", ");
-      java.util.List name = (java.util.List) it.next();
+      java.util.List name = (java.util.List) element;
       for (java.util.Iterator it2 = name.iterator(); it2.hasNext();) {
         t = (Token) it2.next();
         codeGenerator.print(t.image);
@@ -217,8 +217,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     Token t = null;
 
     this.codeGenerator = codeGenerator;
-    for (Iterator prodIterator = parserData.bnfproductions.iterator(); prodIterator.hasNext();) {
-      p = (NormalProduction) prodIterator.next();
+    for (Object element : parserData.bnfproductions) {
+      p = (NormalProduction) element;
       if (p instanceof CodeProduction) {
         GenerateCodeProduction((CodeProduction) p, settings, codeGenerator);
       } else {
@@ -226,8 +226,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       }
     }
 
-    for (int phase2index = 0; phase2index < phase2list.size(); phase2index++) {
-      buildPhase2Routine((Lookahead) (phase2list.get(phase2index)));
+    for (Object element : phase2list) {
+      buildPhase2Routine((Lookahead) (element));
     }
 
     int phase3index = 0;
@@ -280,8 +280,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       }
     } else if (exp instanceof Choice) {
       Choice ch = (Choice) exp;
-      for (int i = 0; i < ch.getChoices().size(); i++) {
-        genFirstSet((ch.getChoices().get(i)));
+      for (Expansion element : ch.getChoices()) {
+        genFirstSet((element));
       }
     } else if (exp instanceof Sequence) {
       Sequence seq = (Sequence) exp;
@@ -413,8 +413,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
               indentAmt++;
           }
           codeGenerator.printTokenSetup((la.getActionTokens().get(0)));
-          for (Iterator it = la.getActionTokens().iterator(); it.hasNext();) {
-            t = (Token) it.next();
+          for (Object element : la.getActionTokens()) {
+            t = (Token) element;
             retval += CodeBuilder.toString(t);
           }
           retval += codeGenerator.getTrailingComments(t);
@@ -524,7 +524,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
         }
         jj2Index++;
 
-        internalNames.put(la.getLaExpansion(), "_" + jj2Index);;
+        internalNames.put(la.getLaExpansion(), "_" + jj2Index);
         internalIndexes.put(la.getLaExpansion(), jj2Index);
         phase2list.add(la);
         retval += "jj_2" + internalName(la.getLaExpansion()) + "(" + la.getAmount() + ")";
@@ -533,8 +533,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
           // the semantic check with the syntactic one.
           retval += " && (";
           codeGenerator.printTokenSetup((la.getActionTokens().get(0)));
-          for (Iterator it = la.getActionTokens().iterator(); it.hasNext();) {
-            t = (Token) it.next();
+          for (Object element : la.getActionTokens()) {
+            t = (Token) element;
             retval += CodeBuilder.toString(t);
           }
           retval += codeGenerator.getTrailingComments(t);
@@ -624,17 +624,17 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     codeGenerator.print(" " + p.getLhs() + "(");
     if (p.getParameterListTokens().size() != 0) {
       codeGenerator.printTokenSetup((p.getParameterListTokens().get(0)));
-      for (Iterator it = p.getParameterListTokens().iterator(); it.hasNext();) {
-        t = (Token) it.next();
+      for (Object element : p.getParameterListTokens()) {
+        t = (Token) element;
         codeGenerator.printToken(t);
       }
       codeGenerator.printTrailingComments(t);
     }
     codeGenerator.print(")");
 
-    for (Iterator it = p.getThrowsList().iterator(); it.hasNext();) {
+    for (Object element : p.getThrowsList()) {
       codeGenerator.print(", ");
-      java.util.List name = (java.util.List) it.next();
+      java.util.List name = (java.util.List) element;
       for (Iterator it2 = name.iterator(); it2.hasNext();) {
         t = (Token) it2.next();
         codeGenerator.print(t.image);
@@ -653,9 +653,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
 
     if (!Options.booleanValue(Options.USEROPTION__IGNORE_ACTIONS) && p.getDeclarationTokens().size() != 0) {
       codeGenerator.printTokenSetup((p.getDeclarationTokens().get(0)));
-      cline--;
-      for (Iterator it = p.getDeclarationTokens().iterator(); it.hasNext();) {
-        t = (Token) it.next();
+      for (Object element : p.getDeclarationTokens()) {
+        t = (Token) element;
         codeGenerator.printToken(t);
       }
       codeGenerator.printTrailingComments(t);
@@ -695,8 +694,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       retval += "\n";
       if (e_nrw.lhsTokens.size() != 0) {
         codeGenerator.printTokenSetup((e_nrw.lhsTokens.get(0)));
-        for (Iterator it = e_nrw.lhsTokens.iterator(); it.hasNext();) {
-          t = (Token) it.next();
+        for (Object element : e_nrw.lhsTokens) {
+          t = (Token) element;
           retval += CodeBuilder.toString(t);
         }
         retval += codeGenerator.getTrailingComments(t);
@@ -718,8 +717,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       retval += "\n";
       if (e_nrw.getLhsTokens().size() != 0) {
         codeGenerator.printTokenSetup((e_nrw.getLhsTokens().get(0)));
-        for (Iterator it = e_nrw.getLhsTokens().iterator(); it.hasNext();) {
-          t = (Token) it.next();
+        for (Object element : e_nrw.getLhsTokens()) {
+          t = (Token) element;
           retval += CodeBuilder.toString(t);
         }
         retval += codeGenerator.getTrailingComments(t);
@@ -728,8 +727,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       retval += e_nrw.getName() + "(";
       if (e_nrw.getArgumentTokens().size() != 0) {
         codeGenerator.printTokenSetup((e_nrw.getArgumentTokens().get(0)));
-        for (Iterator it = e_nrw.getArgumentTokens().iterator(); it.hasNext();) {
-          t = (Token) it.next();
+        for (Object element : e_nrw.getArgumentTokens()) {
+          t = (Token) element;
           retval += CodeBuilder.toString(t);
         }
         retval += codeGenerator.getTrailingComments(t);
@@ -740,9 +739,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       retval += "\u0003\n";
       if (!Options.booleanValue(Options.USEROPTION__IGNORE_ACTIONS) && e_nrw.getActionTokens().size() != 0) {
         codeGenerator.printTokenSetup((e_nrw.getActionTokens().get(0)));
-        ccol = 1;
-        for (Iterator it = e_nrw.getActionTokens().iterator(); it.hasNext();) {
-          t = (Token) it.next();
+        for (Object element : e_nrw.getActionTokens()) {
+          t = (Token) element;
           retval += CodeBuilder.toString(t);
         }
         retval += codeGenerator.getTrailingComments(t);
@@ -842,9 +840,9 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       retval += "try {\u0001";
       retval += phase1ExpansionGen(nested_e);
       retval += "\u0002\n" + "}";
-      for (int i = 0; i < e_nrw.catchblks.size(); i++) {
+      for (List<Token> element : e_nrw.catchblks) {
         retval += " catch (";
-        list = (e_nrw.catchblks.get(i));
+        list = (element);
         if (list.size() != 0) {
           codeGenerator.printTokenSetup((Token) (list.get(0)));
           ccol = 1;
@@ -861,9 +859,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
 
         if (e_nrw.finallyblk.size() != 0) {
           codeGenerator.printTokenSetup((e_nrw.finallyblk.get(0)));
-          ccol = 1;
-          for (Iterator it = e_nrw.finallyblk.iterator(); it.hasNext();) {
-            t = (Token) it.next();
+          for (Object element : e_nrw.finallyblk) {
+            t = (Token) element;
             retval += CodeBuilder.toString(t);
           }
           retval += codeGenerator.getTrailingComments(t);
@@ -926,8 +923,9 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
           } else {
             seq = ntprod.getExpansion();
           }
-        } else
+        } else {
           break;
+        }
       }
 
       if (seq instanceof RegularExpression) {
@@ -950,7 +948,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
   void setupPhase3Builds(Phase3Data inf) {
     Expansion e = inf.exp;
     if (e instanceof RegularExpression) {
-      ; // nothing to here
+      // nothing to here
     } else if (e instanceof NonTerminal) {
       // All expansions of non-terminals have the "name" fields set. So
       // there's no need to check it below for "e_nrw" and "ntexp". In
@@ -959,14 +957,14 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       NonTerminal e_nrw = (NonTerminal) e;
       NormalProduction ntprod = (parserData.productionTable.get(e_nrw.getName()));
       if (ntprod instanceof CodeProduction) {
-        ; // nothing to do here
+        // nothing to do here
       } else {
         generate3R(ntprod.getExpansion(), inf);
       }
     } else if (e instanceof Choice) {
       Choice e_nrw = (Choice) e;
-      for (int i = 0; i < e_nrw.getChoices().size(); i++) {
-        generate3R((e_nrw.getChoices().get(i)), inf);
+      for (Expansion element : e_nrw.getChoices()) {
+        generate3R((element), inf);
       }
     } else if (e instanceof Sequence) {
       Sequence e_nrw = (Sequence) e;
@@ -977,8 +975,9 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
         Expansion eseq = (e_nrw.units.get(i));
         setupPhase3Builds(new Phase3Data(eseq, cnt));
         cnt -= minimumSize(eseq);
-        if (cnt <= 0)
+        if (cnt <= 0) {
           break;
+        }
       }
     } else if (e instanceof TryBlock) {
       TryBlock e_nrw = (TryBlock) e;
@@ -1001,10 +1000,11 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
 
   private String genjj_3Call(Expansion e) {
     String name = internalName(e);
-    if (name.startsWith("jj_scan_token"))
+    if (name.startsWith("jj_scan_token")) {
       return name;
-    else
+    } else {
       return "jj_3" + name + "()";
+    }
   }
 
   Hashtable generated = new Hashtable();
@@ -1013,8 +1013,9 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     Expansion e = inf.exp;
     Token t = null;
     String name = internalName(e);
-    if (name.startsWith("jj_scan_token"))
+    if (name.startsWith("jj_scan_token")) {
       return;
+    }
 
     if (!recursive_call) {
       codeGenerator.println("private bool jj_3" + name + "()");
@@ -1077,8 +1078,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
           codeGenerator.println("    jj_lookingAhead = true;");
           codeGenerator.print("    jj_semLA = ");
           codeGenerator.printTokenSetup((la.getActionTokens().get(0)));
-          for (Iterator it = la.getActionTokens().iterator(); it.hasNext();) {
-            t = (Token) it.next();
+          for (Object element : la.getActionTokens()) {
+            t = (Token) element;
             codeGenerator.printToken(t);
           }
           codeGenerator.printTrailingComments(t);
@@ -1108,8 +1109,9 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
         Expansion eseq = (e_nrw.units.get(i));
         buildPhase3Routine(new Phase3Data(eseq, cnt), true);
         cnt -= minimumSize(eseq);
-        if (cnt <= 0)
+        if (cnt <= 0) {
           break;
+        }
       }
     } else if (e instanceof TryBlock) {
       TryBlock e_nrw = (TryBlock) e;
@@ -1189,8 +1191,9 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       for (int i = 0; min > 1 && i < e_nrw.getChoices().size(); i++) {
         nested_e = (e_nrw.getChoices().get(i));
         int min1 = minimumSize(nested_e, min);
-        if (min > min1)
+        if (min > min1) {
           min = min1;
+        }
       }
       retval = min;
     } else if (e instanceof Sequence) {
@@ -1203,11 +1206,12 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
         int mineseq = minimumSize(eseq);
         if (min == Integer.MAX_VALUE || mineseq == Integer.MAX_VALUE) {
           min = Integer.MAX_VALUE; // Adding infinity to something results in
-                                   // infinity.
+          // infinity.
         } else {
           min += mineseq;
-          if (min > oldMin)
+          if (min > oldMin) {
             break;
+          }
         }
       }
       retval = min;

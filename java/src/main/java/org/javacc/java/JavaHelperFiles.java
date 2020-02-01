@@ -86,10 +86,11 @@ abstract class JavaHelperFiles {
   }
 
   static void gen_Constants() throws MetaParseException {
-    if (JavaCCErrors.get_error_count() != 0)
+    if (JavaCCErrors.get_error_count() != 0) {
       throw new MetaParseException();
+    }
 
-    List<String> toolnames = new ArrayList<String>(JavaCCGlobals.toolNames);
+    List<String> toolnames = new ArrayList<>(JavaCCGlobals.toolNames);
     toolnames.add(JavaCCGlobals.toolName);
 
     try (JavaCodeBuilder builder = JavaCodeBuilder.of(CodeGeneratorSettings.create())) {

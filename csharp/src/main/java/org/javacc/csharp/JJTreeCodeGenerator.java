@@ -87,10 +87,10 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
         n = (JJTreeNode) p;
       }
       if (needClose) {
-        openJJTreeComment(io, null);
+        JJTreeCodeGenerator.openJJTreeComment(io, null);
         io.println();
         insertCloseNodeAction(ns, io, getIndentation(node));
-        closeJJTreeComment(io);
+        JJTreeCodeGenerator.closeJJTreeComment(io);
       }
     }
 
@@ -110,10 +110,10 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
         indent = "  ";
       }
 
-      openJJTreeComment(io, node.node_scope.getNodeDescriptorText());
+      JJTreeCodeGenerator.openJJTreeComment(io, node.node_scope.getNodeDescriptorText());
       io.println();
       insertOpenNodeCode(node.node_scope, io, indent);
-      closeJJTreeComment(io);
+      JJTreeCodeGenerator.closeJJTreeComment(io);
     }
 
     return visit((JJTreeNode) node, io);
@@ -128,7 +128,7 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
 
     String indent = getIndentation(node.expansion_unit);
 
-    openJJTreeComment(io, node.node_scope.getNodeDescriptor().getDescriptor());
+    JJTreeCodeGenerator.openJJTreeComment(io, node.node_scope.getNodeDescriptor().getDescriptor());
     io.println();
     tryExpansionUnit(node.node_scope, io, indent, node.expansion_unit);
     return null;
@@ -140,8 +140,9 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
     Token t = node.getFirstToken();
     while (true) {
       node.print(t, io);
-      if (t == node.getLastToken())
+      if (t == node.getLastToken()) {
         break;
+      }
       if (t.kind == JJTreeParserConstants._PARSER_BEGIN) {
         // eat PARSER_BEGIN "(" <ID> ")"
         node.print(t.next, io);
@@ -158,7 +159,7 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
   public Object visit(ASTExpansionNodeScope node, Object data) {
     IO io = (IO) data;
     String indent = getIndentation(node.expansion_unit);
-    openJJTreeComment(io, node.node_scope.getNodeDescriptor().getDescriptor());
+    JJTreeCodeGenerator.openJJTreeComment(io, node.node_scope.getNodeDescriptor().getDescriptor());
     io.println();
     insertOpenNodeAction(node.node_scope, io, indent);
     tryExpansionUnit(node.node_scope, io, indent, node.expansion_unit);
@@ -183,7 +184,7 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
       indent += " ";
     }
 
-    openJJTreeComment(io, node.node_scope.getNodeDescriptorText());
+    JJTreeCodeGenerator.openJJTreeComment(io, node.node_scope.getNodeDescriptorText());
     io.println();
     insertOpenNodeCode(node.node_scope, io, indent);
     tryTokenSequence(node.node_scope, io, indent, first, node.getLastToken());
@@ -214,8 +215,9 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
       n = (JJTreeNode) node.jjtGetChild(ord);
       while (true) {
         t = t.next;
-        if (t == n.getFirstToken())
+        if (t == n.getFirstToken()) {
           break;
+        }
         node.print(t, io);
       }
       n.jjtAccept(this, io);
@@ -264,7 +266,7 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
     NodeFiles.generateNodeType(type);
 
     io.print(indent + nodeClass + " " + ns.nodeVar + " = ");
-    String p = JJTreeOptions.getStatic() ? "null" : "this";
+    String p = Options.getStatic() ? "null" : "this";
     String parserArg = JJTreeOptions.getNodeUsesParser() ? (p + ", ") : "";
 
     if (JJTreeOptions.getNodeFactory().equals("*")) {
@@ -300,7 +302,7 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
       io.println(indent + ns.closedVar + " = false;");
     }
     if (JJTreeOptions.getNodeScopeHook()) {
-      int i = closeNode.lastIndexOf(",");
+      closeNode.lastIndexOf(",");
       io.println(indent + "if (jjtree.nodeCreated()) {");
       io.println(indent + " jjtreeCloseNodeScope(" + ns.nodeVar + ");");
       io.println(indent + "}");
@@ -343,7 +345,7 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
 
   private void tryTokenSequence(NodeScope ns, IO io, String indent, Token first, Token last) {
     io.println(indent + "try {");
-    closeJJTreeComment(io);
+    JJTreeCodeGenerator.closeJJTreeComment(io);
 
     /*
      * Print out all the tokens, converting all references to `jjtThis' into the
@@ -353,7 +355,7 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
       TokenUtils.print(t, io, "jjtThis", ns.nodeVar);
     }
 
-    openJJTreeComment(io, null);
+    JJTreeCodeGenerator.openJJTreeComment(io, null);
     io.println();
 
     insertCatchBlocks(ns, io, indent);
@@ -365,17 +367,17 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
       io.println(indent + "  }");
     }
     io.println(indent + "}");
-    closeJJTreeComment(io);
+    JJTreeCodeGenerator.closeJJTreeComment(io);
   }
 
 
   private void tryExpansionUnit(NodeScope ns, IO io, String indent, JJTreeNode expansion_unit) {
     io.println(indent + "try {");
-    closeJJTreeComment(io);
+    JJTreeCodeGenerator.closeJJTreeComment(io);
 
     expansion_unit.jjtAccept(this, io);
 
-    openJJTreeComment(io, null);
+    JJTreeCodeGenerator.openJJTreeComment(io, null);
     io.println();
 
     insertCatchBlocks(ns, io, indent);
@@ -387,12 +389,12 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
       io.println(indent + "  }");
     }
     io.println(indent + "}");
-    closeJJTreeComment(io);
+    JJTreeCodeGenerator.closeJJTreeComment(io);
   }
 
   @Override
   public void generateHelperFiles() throws java.io.IOException {
-    CodeGeneratorSettings options = CodeGeneratorSettings.of(JJTreeOptions.getOptions());
+    CodeGeneratorSettings options = CodeGeneratorSettings.of(Options.getOptions());
     options.set(Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
 
     String filePrefix = new File(JJTreeOptions.getJJTreeOutputDirectory(), "JJT" + JJTreeGlobals.parserName + "State")
@@ -400,7 +402,7 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
 
     try (GenericCodeBuilder builder = GenericCodeBuilder.of(options)) {
       builder.setFile(new File(filePrefix + ".cs"));
-      builder.setVersion(JJTStateVersion).addTools(JavaCCGlobals.toolName);
+      builder.setVersion(JJTreeCodeGenerator.JJTStateVersion).addTools(JavaCCGlobals.toolName);
       builder.printTemplate("/templates/csharp/JJTTreeState.cs.template");
     }
 

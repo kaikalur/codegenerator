@@ -22,28 +22,29 @@ final class NodeFiles {
    * ID of the latest version (of JJTree) in which one of the Node classes was
    * modified.
    */
-  private static final String        nodeVersion  = Version.version;
+  private static final String nodeVersion  = Version.version;
 
-  private static Set<String> nodesToBuild = new HashSet<>();
+  private static Set<String>  nodesToBuild = new HashSet<>();
 
   static void generateNodeType(String nodeType) {
     if (!nodeType.equals("Node") && !nodeType.equals("SimpleNode")) {
-      nodesToBuild.add(nodeType);
+      NodeFiles.nodesToBuild.add(nodeType);
     }
   }
 
   private static void generateTreeNodes() {
     try (JavaCodeBuilder builder = JavaCodeBuilder.of(CodeGeneratorSettings.create())) {
       builder.setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), JJTreeGlobals.parserName + "Tree.java"));
-      builder.addTools(JJTreeGlobals.toolName).setVersion(nodeVersion);
+      builder.addTools(JJTreeGlobals.toolName).setVersion(NodeFiles.nodeVersion);
       builder.addOption("MULTI", "NODE_USES_PARSER", "VISITOR", "TRACK_TOKENS", "NODE_PREFIX", "NODE_EXTENDS",
           "NODE_FACTORY", Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
       builder.setPackageName(JJTreeGlobals.packageName);
 
-      for (String node : nodesToBuild) {
+      for (String node : NodeFiles.nodesToBuild) {
         File file = new File(JJTreeOptions.getASTNodeDirectory(), node + ".java");
-        if (file.exists())
+        if (file.exists()) {
           continue;
+        }
 
         NodeFiles.generateMULTINode(builder, node);
       }
@@ -79,8 +80,8 @@ final class NodeFiles {
       builder.println();
 
       builder.println("  public static String[] jjtNodeName = {");
-      for (int i = 0; i < nodeNames.size(); ++i) {
-        builder.println("    \"", nodeNames.get(i), "\",");
+      for (String nodeName : nodeNames) {
+        builder.println("    \"", nodeName, "\",");
       }
       builder.println("  };");
       builder.println("}");
@@ -95,7 +96,7 @@ final class NodeFiles {
     }
 
     List<String> nodeNames = ASTNodeDescriptor.getNodeNames();
-    String ve = mergeVisitorException();
+    String ve = NodeFiles.mergeVisitorException();
 
     String argumentType = "Object";
     if (!JJTreeOptions.getVisitorDataType().equals("")) {
@@ -112,12 +113,11 @@ final class NodeFiles {
           " data)", ve, ";");
 
       if (JJTreeOptions.getMulti()) {
-        for (int i = 0; i < nodeNames.size(); ++i) {
-          String n = nodeNames.get(i);
+        for (String n : nodeNames) {
           if (!n.equals("void")) {
             String nodeType = JJTreeOptions.getNodePrefix() + n;
-            builder.println("  public ", JJTreeOptions.getVisitorReturnType(), " ", getVisitMethodName(nodeType), "(",
-                nodeType, " node, ", argumentType + " data)", ve, ";");
+            builder.println("  public ", JJTreeOptions.getVisitorReturnType(), " ",
+                NodeFiles.getVisitMethodName(nodeType), "(", nodeType, " node, ", argumentType + " data)", ve, ";");
           }
         }
       }
@@ -129,7 +129,7 @@ final class NodeFiles {
 
   private static String getVisitMethodName(String className) {
     StringBuffer sb = new StringBuffer("visit");
-    if (JJTreeOptions.booleanValue("VISITOR_METHOD_NAME_INCLUDES_TYPE_NAME")) {
+    if (Options.booleanValue("VISITOR_METHOD_NAME_INCLUDES_TYPE_NAME")) {
       sb.append(Character.toUpperCase(className.charAt(0)));
       for (int i = 1; i < className.length(); i++) {
         sb.append(className.charAt(i));
@@ -144,7 +144,7 @@ final class NodeFiles {
       return;
     }
 
-    String ve = mergeVisitorException();
+    String ve = NodeFiles.mergeVisitorException();
     String ret = JJTreeOptions.getVisitorReturnType();
     String argumentType = "Object";
     if (!JJTreeOptions.getVisitorDataType().equals("")) {
@@ -168,14 +168,13 @@ final class NodeFiles {
       builder.println("  }");
 
       if (JJTreeOptions.getMulti()) {
-        for (int i = 0; i < nodeNames.size(); ++i) {
-          String n = nodeNames.get(i);
+        for (String n : nodeNames) {
           if (n.equals("void")) {
             continue;
           }
           String nodeType = JJTreeOptions.getNodePrefix() + n;
-          builder.println("  public ", ret, " ", getVisitMethodName(nodeType), "(", nodeType, " node, ", argumentType,
-              " data)", ve, "{");
+          builder.println("  public ", ret, " ", NodeFiles.getVisitMethodName(nodeType), "(", nodeType, " node, ",
+              argumentType, " data)", ve, "{");
           builder.println("    ", (ret.trim().equals("void") ? "" : "return "), "defaultVisit(node, data);");
           builder.println("  }");
         }
@@ -213,11 +212,12 @@ final class NodeFiles {
   }
 
   static void generateOutputFiles() throws IOException {
-    generateDefaultNode();
-    if (!nodesToBuild.isEmpty())
-      generateTreeNodes();
-    generateTreeConstants();
-    generateVisitor();
-    generateDefaultVisitor();
+    NodeFiles.generateDefaultNode();
+    if (!NodeFiles.nodesToBuild.isEmpty()) {
+      NodeFiles.generateTreeNodes();
+    }
+    NodeFiles.generateTreeConstants();
+    NodeFiles.generateVisitor();
+    NodeFiles.generateDefaultVisitor();
   }
 }
