@@ -42,7 +42,7 @@ namespace ${NAMESPACE_OPEN}
   }
 
   /** Constructor with message. */
-  ParseException::ParseException(const JJString& message) {
+  ParseException::ParseException(const JJString & /*message*/) {
   }
 
 
@@ -74,9 +74,9 @@ namespace ${NAMESPACE_OPEN}
    * from the parser) the correct error message
    * gets displayed.
    */
-  JJString ParseException::initialise(Token currentToken,
-                           int** expectedTokenSequences,
-                           JJString* tokenImage) {
+  JJString ParseException::initialise(Token /*currentToken*/,
+                           int** /*expectedTokenSequences*/,
+                           JJString* /*tokenImage*/) {
 \#if 0
     //JJString eol = System.getProperty("line.separator", "\n");
      expected = new JJString();
