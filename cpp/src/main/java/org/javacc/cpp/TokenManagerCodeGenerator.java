@@ -90,7 +90,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     int i = 0;
 
     codeGenerator.println();
-    codeGenerator.println("static const long stringLiterals[] = {");
+    codeGenerator.println("static const long long stringLiterals[] = {");
     for (int key : tokenizerData.literalSequence.keySet()) {
       int[] arr = new int[2];
       List<String> l = tokenizerData.literalSequence.get(key);
@@ -174,7 +174,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
       }
     }
 
-    codeGenerator.println("static const long jjCharData[][" + (length + 1) + "] = {");
+    codeGenerator.println("static const long long jjCharData[][" + (length + 1) + "] = {");
     for (int i = 0; i < nfa.size(); i++) {
       TokenizerData.NfaState tmp = nfa.get(i);
       if (i > 0)
@@ -420,7 +420,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
   }
 
   private static void generateBitVector(String name, BitSet bits, CppCodeBuilder codeGenerator) {
-    codeGenerator.println("static const long " + name + "[] = {");
+    codeGenerator.println("static const unsigned long long " + name + "[] = {");
     codeGenerator.print("   ");
     long[] longs = bits.toLongArray();
     for (int i = 0; i < longs.length; i++) {

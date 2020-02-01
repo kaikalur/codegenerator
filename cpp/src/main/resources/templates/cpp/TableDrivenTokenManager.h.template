@@ -29,9 +29,9 @@ private:
 
   int stateSet[${generatedStates}];
   int newStateSet[${generatedStates}];
-  long moved[${generatedStates}];
-  long moveIndex;
-  long jjChars[${nfaSize}][${charsVectorSize}];
+  unsigned long long moved[${generatedStates}];
+  unsigned long long moveIndex;
+  unsigned long long jjChars[${nfaSize}][${charsVectorSize}];
     
   JJString                  jjimage;
   JJString                  image = jjimage;
