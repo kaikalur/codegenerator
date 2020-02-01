@@ -2,8 +2,7 @@
 \#include "JavaCC.h"
 \#include "CharStream.h"
 \#include "Token.h"
-\#include "TokenMgrError.h"
-\#include "${parserName}Tree.h"
+\#include "ErrorHandler.h"
 \#include "TokenManager.h"
 \#include "${parserName}Constants.h"
 #if TOKEN_MANAGER_USES_PARSER
@@ -43,7 +42,7 @@ private:
 
   int                       jjrounds[${stateSetSize}];
   int                       jjstateSet[2 * ${stateSetSize}];
-  TokenMgrError           * errorHandler;
+  TokenManagerErrorHandler* errorHandler;
   bool 						delete_eh;
 
 public: 
@@ -80,7 +79,7 @@ private:
   Token * jjFillToken();
 
 public:
-  void setErrorHandler(TokenMgrError *eh) {
+  void setErrorHandler(TokenManagerErrorHandler *eh) {
       if (delete_eh) delete errorHandler, errorHandler = nullptr;
       delete_eh = false;  // We don't delete stuff passed in.
       errorHandler = eh;
