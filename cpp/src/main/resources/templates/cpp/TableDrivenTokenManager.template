@@ -79,14 +79,13 @@ int ${parserName}TokenManager::jjRunStringLiteralMatch() {
       int len = (int) stringLiterals[index++];
       int ignoreCase = (int) stringLiterals[index++];
 #if DEBUG_TOKEN_MANAGER
-      throw 
-          "Looking for string literal match of kind: " +in
-          stringLiterals[index + len] +
-          "; token image: " + tokenImage[stringLiterals[index + len]];
+      std::cerr << "Looking for string literal match of kind: " << stringLiterals[index + len]
+                << "; token image: " << tokenImage[stringLiterals[index + len]]
+                << std::endl;
 #fi
       do {
 #if DEBUG_TOKEN_MANAGER
-      throw "Cur char: '" + (char)curChar + "'";
+        std::cerr << "Cur char: '" << ((char)curChar) << "'" << std::endl;
 #fi
         if (curChar != stringLiterals[index + curPos] &&
             (ignoreCase == 0 || curChar != stringLiterals[index + len + curPos])) break;
@@ -101,10 +100,10 @@ int ${parserName}TokenManager::jjRunStringLiteralMatch() {
         jjmatchedPos = curPos;
         startState = (int) stringLiterals[index + len + (ignoreCase * len) + 1];
 #if DEBUG_TOKEN_MANAGER
-        throw
-            "Currently matched the first: " + jjmatchedPos +
-            " chars as kind: " + stringLiterals[index + len] +
-            "; with image: " + tokenImage[jjmatchedKind];
+        std::cerr << "Currently matched the first: " << jjmatchedPos
+            << " chars as kind: " << stringLiterals[index + len]
+            << "; with image: " << tokenImage[jjmatchedKind]
+            << std::endl;
 #fi
         if (!moveToNextChar()) {
           return curPos;
@@ -122,8 +121,7 @@ int ${parserName}TokenManager::jjRunStringLiteralMatch() {
     }
   } else {
 #if DEBUG_TOKEN_MANAGER
-      throw 
-          "No string literal start with char: '" + (char)curChar + "'";
+      std::cerr << "No string literal start with char: '" << ((char)curChar) << "'" << std::endl;
 #fi
   }
   return jjMoveNfa(startState, curPos);
@@ -134,7 +132,7 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
 
   if (startState < 0) {
 #if DEBUG_TOKEN_MANAGER
-  throw "No NFA state at pos: " + curPos;
+  std::cerr << "No NFA state at pos: " << curPos << std::endl;
 #fi
     return curPos;
   }
@@ -165,11 +163,11 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
   }
 
 #if DEBUG_TOKEN_MANAGER
-  throw "Starting NFA with start state: " + startState;
+  std::cerr << "Starting NFA with start state: " << startState << std::endl;
 #fi
   do {
 #if DEBUG_TOKEN_MANAGER
-    throw "Cur char: '" + (char)curChar + "'";
+    std::cerr << "Cur char: '" << (char)curChar << "'" << std::endl;
 #fi
     int newCnt = 0;
     int kind = 0x7fffffff;
@@ -183,10 +181,10 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
     do {
       int state = stateSet[--cnt];
 #if DEBUG_TOKEN_MANAGER
-      // TODO(sreeni) : Fix it to give better error message instead of UNKNOWN.
-      throw "Looking to move from state: " + state + "; for: " +
-         (jjmatchKinds[state] != 0x7fffffff
-              ? tokenImage[jjmatchKinds[state]] : " <UNKNOWN>");
+    std::cerr << "Looking to move from state: " << state << "; for: "
+              << (jjmatchKinds[state] != 0x7fffffff
+              ? tokenImage[jjmatchKinds[state]] : " <UNKNOWN>")
+              << std::endl;
 #fi
       if ((jjChars[state][vectorIndex] & bitpattern) != 0L) {
         // Current input character can move this NFA state. So add all the
@@ -205,10 +203,9 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
           // what's already matched.
           kind = newKind;
 #if DEBUG_TOKEN_MANAGER
-          throw 
-              "Found a match of kind: " + kind + "; kind: " +
-              tokenImage[kind] + " using the first: " + curPos +
-              " characters.";
+          std::cerr << "Found a match of kind: " << kind << "; kind: "
+                    << tokenImage[kind] << " using the first: " << curPos
+                    << " characters." << std::endl;
 #fi
         }
       }
@@ -236,7 +233,7 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
       // There were no transitions from any of the current states on the
       // current input. So we are done.
 #if DEBUG_TOKEN_MANAGER
-      throw "Done with NFA at pos: " + curPos;
+      std::cerr << "Done with NFA at pos: " << curPos << std::endl;
 #fi
       return curPos;
     }
@@ -244,7 +241,7 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
     if (!moveToNextChar()) {
       // EOF reached!
 #if DEBUG_TOKEN_MANAGER
-      throw "Reached EOF here at pos: " + curPos;
+      std::cerr << "Reached EOF here at pos: " << curPos << std::endl;
 #fi
       return curPos;
     }
@@ -331,12 +328,10 @@ Token * ${parserName}TokenManager::getNextToken() {
   for (;;) {
     if(input_stream->endOfInput()) {
 #if DEBUG_TOKEN_MANAGER
-      if (lexStateNames.length > 1) {
-        System.err.print("<" + lexStateNames[curLexState] + "> ");
-      }
-      throw "Reached EOF at " +
-                       input_stream->getBeginLine() + ":" +
-                       input_stream->getBeginColumn();
+      std::cerr << "<" << lexStateNames[curLexState] << "> " 
+                << "Reached EOF at " << input_stream->getBeginLine()
+                << ":" << input_stream->getBeginColumn()
+                << std::endl;
 #fi
       // No input. So return EOF token.
       jjmatchedKind = _EOF;
@@ -353,12 +348,11 @@ Token * ${parserName}TokenManager::getNextToken() {
 #fi
 
 #if DEBUG_TOKEN_MANAGER
-    if (lexStateNames.length > 1) {
-      System.err.print("<" + lexStateNames[curLexState] + "> ");
-    }
-    throw "Current input char: '" + (char)curChar + "' at " +
-                       input_stream->getBeginLine() + ":" +
-                       input_stream->getBeginColumn();
+      std::cerr << "<" << lexStateNames[curLexState] << "> " 
+                << "Current input char: '" << (char)curChar 
+                << "' at " << input_stream->getBeginLine()
+                << ":" << input_stream->getBeginColumn()
+                << std::endl;
 #fi
 
     // Set matched kind to a MAX VALUE to implement largest, first occuring rule
@@ -371,12 +365,11 @@ Token * ${parserName}TokenManager::getNextToken() {
       jjmatchedKind = 0x7fffffff;
       jjmatchedPos = 0;
 #if DEBUG_TOKEN_MANAGER
-    if (lexStateNames.length > 1) {
-      System.err.print("<" + lexStateNames[curLexState] + "> ");
-    }
-    throw "Current input char: '" + (char)curChar + "' at " +
-                       input_stream->getBeginLine() + ":" +
-                       input_stream->getBeginColumn();
+      std::cerr << "<" << lexStateNames[curLexState] << "> " 
+                << "Current input char: '" << (char)curChar 
+                << "' at " << input_stream->getBeginLine()
+                << ":" << input_stream->getBeginColumn()
+                << std::endl;
 #fi
 #if !NO_DFA
       lastReadPosition = jjRunStringLiteralMatch();
@@ -386,9 +379,9 @@ Token * ${parserName}TokenManager::getNextToken() {
       if (jjmatchedPos == 0 && jjmatchedKind > canMatchAnyChar[curLexState]) {
         jjmatchedKind = canMatchAnyChar[curLexState];
 #if DEBUG_TOKEN_MANAGER
-        System.err.println(
-            "Matched current char: '" + (char)curChar +
-            "' as a wildcard kind: " + jjmatchedKind);
+      std::cerr << "Matched current char: '" << (char)curChar
+                <<  "' as a wildcard kind: " << jjmatchedKind
+                << std::endl;
 #fi
       }
 
@@ -399,7 +392,7 @@ Token * ${parserName}TokenManager::getNextToken() {
         input_stream->backup(lastReadPosition - jjmatchedPos);
         if (isToken(jjmatchedKind)) {
 #if DEBUG_TOKEN_MANAGER
-          System.err.println("Returning token.");
+      std::cerr << "Returning token." << std::endl;
 #fi
           // Matched kind is a real TOKEN.
           matchedToken = jjFillToken();
@@ -414,7 +407,7 @@ Token * ${parserName}TokenManager::getNextToken() {
           return matchedToken;
         } else if (isSkip(jjmatchedKind) || isSpecial(jjmatchedKind)) {
 #if DEBUG_TOKEN_MANAGER
-          System.err.println("Found a SKIP match.");
+      std::cerr << "Found a SKIP match." << std::endl;
 #fi
           // Matched kind is a SKIP or SPECIAL_TOKEN.
           if (isSpecial(jjmatchedKind)) {
@@ -435,7 +428,7 @@ Token * ${parserName}TokenManager::getNextToken() {
           goto EOFLoop;
         }
 #if DEBUG_TOKEN_MANAGER
-        System.err.println("Found a MORE match.");
+      std::cerr << "Found a MORE match." << std::endl;
 #fi
         // Here it's a MORE.
         MoreLexicalActions();
