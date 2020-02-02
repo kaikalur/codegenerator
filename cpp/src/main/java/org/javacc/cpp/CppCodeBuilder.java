@@ -155,7 +155,8 @@ class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
         }
         // Avoid replacing long long (LL) with unsigned long long (ULL)
         if (sb.charAt(i) == 'L' && sb.charAt(i + 1) != 'L' && sb.charAt(i - 1) != 'L') {
-//          if (sb.charAt(i) == 'L' && (i >= sb.length() || sb.charAt(i + 1) != 'L')) {
+          // if (sb.charAt(i) == 'L' && (i >= sb.length() || sb.charAt(i + 1) !=
+          // 'L')) {
           sb.insert(i, "UL");
         }
         i++;
@@ -191,6 +192,25 @@ class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
     }
     print("0}");
     return this;
+  }
+
+  public void printLiteralArray(String varName, String[] arr) {
+    // First generate char array vars
+    for (int i = 0; i < arr.length; i++) {
+      println("static const JJChar " + varName + "_arr_" + i + "[] = ");
+      printCharArray(arr[i]);
+      println(";");
+    }
+
+    println("static const JJString " + varName + "[] = {");
+    for (int i = 0; i < arr.length; i++) {
+      print(varName + "_arr_" + i);
+      if (i + 1 < arr.length) {
+        print(", ");
+      }
+      println();
+    }
+    println("};");
   }
 
 

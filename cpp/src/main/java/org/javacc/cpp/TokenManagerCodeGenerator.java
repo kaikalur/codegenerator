@@ -407,14 +407,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     codeGenerator.println("}");
     codeGenerator.switchToStaticsFile();
 
-    codeGenerator.println("static const JJChar lexStateNames[] = {");
-    for (int i = 0; i < tokenizerData.lexStateNames.length; i++) {
-      if (i > 0) {
-        codeGenerator.print(", ");
-      }
-      codeGenerator.print("\"" + tokenizerData.lexStateNames[i] + "\"");
-    }
-    codeGenerator.println("};");
+    codeGenerator.printLiteralArray("lexStateNames", tokenizerData.lexStateNames);
   }
 
   private void dumpLexicalActions(Map<Integer, TokenizerData.MatchInfo> allMatches, TokenizerData.MatchType matchType,

@@ -85,7 +85,7 @@ int ${parserName}TokenManager::jjRunStringLiteralMatch() {
 #fi
       do {
 #if DEBUG_TOKEN_MANAGER
-        std::cerr << "Cur char: '" << ((char)curChar) << "'" << std::endl;
+        std::cerr << "  Current character: '" << ((char)curChar) << "'" << std::endl;
 #fi
         if (curChar != stringLiterals[index + curPos] &&
             (ignoreCase == 0 || curChar != stringLiterals[index + len + curPos])) break;
@@ -328,7 +328,7 @@ Token * ${parserName}TokenManager::getNextToken() {
   for (;;) {
     if(input_stream->endOfInput()) {
 #if DEBUG_TOKEN_MANAGER
-      std::cerr << "<" << lexStateNames[curLexState] << "> " 
+      std::cerr << "<" << addUnicodeEscapes(lexStateNames[curLexState]).c_str() << "> " 
                 << "Reached EOF at " << input_stream->getBeginLine()
                 << ":" << input_stream->getBeginColumn()
                 << std::endl;
@@ -348,8 +348,8 @@ Token * ${parserName}TokenManager::getNextToken() {
 #fi
 
 #if DEBUG_TOKEN_MANAGER
-      std::cerr << "<" << lexStateNames[curLexState] << "> " 
-                << "Current input char: '" << (char)curChar 
+      std::cerr << "<" << addUnicodeEscapes(lexStateNames[curLexState]).c_str() << "> " 
+                << " Current character: '" << (char)curChar
                 << "' at " << input_stream->getBeginLine()
                 << ":" << input_stream->getBeginColumn()
                 << std::endl;
@@ -364,13 +364,6 @@ Token * ${parserName}TokenManager::getNextToken() {
     for (;;) {
       jjmatchedKind = 0x7fffffff;
       jjmatchedPos = 0;
-#if DEBUG_TOKEN_MANAGER
-      std::cerr << "<" << lexStateNames[curLexState] << "> " 
-                << "Current input char: '" << (char)curChar 
-                << "' at " << input_stream->getBeginLine()
-                << ":" << input_stream->getBeginColumn()
-                << std::endl;
-#fi
 #if !NO_DFA
       lastReadPosition = jjRunStringLiteralMatch();
 #else
