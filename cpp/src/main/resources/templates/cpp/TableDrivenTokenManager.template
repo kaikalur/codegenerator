@@ -80,7 +80,7 @@ int ${parserName}TokenManager::jjRunStringLiteralMatch() {
       int ignoreCase = (int) stringLiterals[index++];
 #if DEBUG_TOKEN_MANAGER
       std::cerr << "Looking for string literal match of kind: " << stringLiterals[index + len]
-                << "; token image: " << tokenImage[stringLiterals[index + len]]
+                << "; token image: " << addUnicodeEscapes(tokenImage[stringLiterals[index + len]])
                 << std::endl;
 #fi
       do {
@@ -102,7 +102,7 @@ int ${parserName}TokenManager::jjRunStringLiteralMatch() {
 #if DEBUG_TOKEN_MANAGER
         std::cerr << "Currently matched the first: " << jjmatchedPos
             << " chars as kind: " << stringLiterals[index + len]
-            << "; with image: " << tokenImage[jjmatchedKind]
+            << "; with image: " << addUnicodeEscapes(tokenImage[jjmatchedKind])
             << std::endl;
 #fi
         if (!moveToNextChar()) {
@@ -132,7 +132,7 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
 
   if (startState < 0) {
 #if DEBUG_TOKEN_MANAGER
-  std::cerr << "No NFA state at pos: " << curPos << std::endl;
+    std::cerr << "No NFA state at pos: " << curPos << std::endl;
 #fi
     return curPos;
   }
@@ -141,8 +141,8 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
   // the input position so when the input reaches part 0x7fffffff (which
   // should be extremely rare), we need to reset them all back to zero.
   if (++moveIndex == 0x7fffffff) {
-    for (int i = 0; i < ${generatedStates}; i++) moved[i] = 0L;
-    moveIndex = 1L;
+    for (int i = 0; i < ${generatedStates}; i++) moved[i] = 0;
+    moveIndex = 1;
   }
 
   // We initialize the kind to MAX value so that when a match is found, we can
@@ -167,24 +167,25 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
 #fi
   do {
 #if DEBUG_TOKEN_MANAGER
-    std::cerr << "Cur char: '" << (char)curChar << "'" << std::endl;
+    std::cerr << "Current character: '" << (char)curChar << "'" << std::endl;
 #fi
     int newCnt = 0;
     int kind = 0x7fffffff;
     if (++moveIndex == 0x7fffffff) {
-      for (int i = 0; i < ${generatedStates}; i++) moved[i] = 0L;
-      moveIndex = 1L;
+      for (int i = 0; i < ${generatedStates}; i++) moved[i] = 0;
+      moveIndex = 1;
     }
 
     int vectorIndex = curChar >> 6;
-    unsigned long long bitpattern = (1L << (curChar & 0x37));
+    // unsigned long long bitpattern = (1L << (curChar & 0x37));
+    unsigned long long bitpattern = (1ULL << (curChar & 077)) & 0x7fffffe07fffffeULL;
     do {
       int state = stateSet[--cnt];
 #if DEBUG_TOKEN_MANAGER
-    std::cerr << "Looking to move from state: " << state << "; for: "
-              << (jjmatchKinds[state] != 0x7fffffff
-              ? tokenImage[jjmatchKinds[state]] : " <UNKNOWN>")
-              << std::endl;
+      std::cerr << "Looking to move from state: " << state << " for: "
+                << (jjmatchKinds[state] != 0x7fffffff
+                   ? addUnicodeEscapes(tokenImage[jjmatchKinds[state]]).c_str() : " <UNKNOWN>")
+                << std::endl;
 #fi
       if ((jjChars[state][vectorIndex] & bitpattern) != 0L) {
         // Current input character can move this NFA state. So add all the
@@ -204,7 +205,7 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
           kind = newKind;
 #if DEBUG_TOKEN_MANAGER
           std::cerr << "Found a match of kind: " << kind << "; kind: "
-                    << tokenImage[kind] << " using the first: " << curPos
+                    << addUnicodeEscapes(tokenImage[kind]) << " using the first: " << curPos
                     << " characters." << std::endl;
 #fi
         }
@@ -372,9 +373,9 @@ Token * ${parserName}TokenManager::getNextToken() {
       if (jjmatchedPos == 0 && jjmatchedKind > canMatchAnyChar[curLexState]) {
         jjmatchedKind = canMatchAnyChar[curLexState];
 #if DEBUG_TOKEN_MANAGER
-      std::cerr << "Matched current char: '" << (char)curChar
-                <<  "' as a wildcard kind: " << jjmatchedKind
-                << std::endl;
+        std::cerr << "Matched current char: '" << (char)curChar
+                  <<  "' as a wildcard kind: " << jjmatchedKind
+                  << std::endl;
 #fi
       }
 
@@ -384,9 +385,6 @@ Token * ${parserName}TokenManager::getNextToken() {
         // Put back any characters looked ahead.
         input_stream->backup(lastReadPosition - jjmatchedPos);
         if (isToken(jjmatchedKind)) {
-#if DEBUG_TOKEN_MANAGER
-      std::cerr << "Returning token." << std::endl;
-#fi
           // Matched kind is a real TOKEN.
           matchedToken = jjFillToken();
           matchedToken->specialToken = specialToken;
@@ -397,10 +395,13 @@ Token * ${parserName}TokenManager::getNextToken() {
 #if COMMON_TOKEN_ACTION
           CommonTokenAction(matchedToken);
 #fi
+#if DEBUG_TOKEN_MANAGER
+          std::cerr << "Returning token: '"  << addUnicodeEscapes(matchedToken->image).c_str() << "'" << std::endl;
+#fi
           return matchedToken;
         } else if (isSkip(jjmatchedKind) || isSpecial(jjmatchedKind)) {
 #if DEBUG_TOKEN_MANAGER
-      std::cerr << "Found a SKIP match." << std::endl;
+          std::cerr << "Found a SKIP match." << std::endl;
 #fi
           // Matched kind is a SKIP or SPECIAL_TOKEN.
           if (isSpecial(jjmatchedKind)) {
@@ -421,7 +422,7 @@ Token * ${parserName}TokenManager::getNextToken() {
           goto EOFLoop;
         }
 #if DEBUG_TOKEN_MANAGER
-      std::cerr << "Found a MORE match." << std::endl;
+        std::cerr << "Found a MORE match." << std::endl;
 #fi
         // Here it's a MORE.
         MoreLexicalActions();
