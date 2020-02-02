@@ -32,12 +32,12 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     settings.put("charsVectorSize", ((Character.MAX_VALUE >> 6) + 1));
     settings.put("stateSetSize", tokenizerData.nfa.size());
     settings.put("parserName", tokenizerData.parserName);
-    settings.put("maxLongs", tokenizerData.allMatches.size() / 64 + 1);
+    settings.put("maxLongs", (tokenizerData.allMatches.size() / 64) + 1);
     settings.put("parserName", tokenizerData.parserName);
     settings.put("charStreamName", "ICharStream");
     settings.put("defaultLexState", tokenizerData.defaultLexState);
     settings.put("decls", tokenizerData.decls);
-    settings.put("superClass", (superClass == null || superClass.equals("")) ? "" : " :  " + superClass);
+    settings.put("superClass", ((superClass == null) || superClass.equals("")) ? "" : " :  " + superClass);
     settings.put("noDfa", Options.getNoDfa());
     if (Options.getNamespace() != null) {
       settings.put("NAMESPACE", Options.getNamespace());
@@ -149,7 +149,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
       long[] longs = bits.toLongArray();
       for (int k = 0; k < longs.length; k++) {
         int rep = 1;
-        while (k + rep < longs.length && longs[k + rep] == longs[k]) {
+        while (((k + rep) < longs.length) && (longs[k + rep] == longs[k])) {
           rep++;
         }
         if (k > 0) {
@@ -348,7 +348,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     codeGenerator.println("  switch(" + kindString + ") {");
     for (int i : allMatches.keySet()) {
       TokenizerData.MatchInfo matchInfo = allMatches.get(i);
-      if (matchInfo.action == null || matchInfo.matchType != matchType) {
+      if ((matchInfo.action == null) || (matchInfo.matchType != matchType)) {
         continue;
       }
       codeGenerator.println("    case " + i + ": {\n");

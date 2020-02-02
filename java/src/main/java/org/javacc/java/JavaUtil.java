@@ -27,8 +27,8 @@ abstract class JavaUtil {
     Token t = null;
     StringWriter writer = new StringWriter();
     try (PrintWriter printer = new PrintWriter(writer)) {
-      if (JavaCCGlobals.cu_to_insertion_point_1.size() != 0
-          && JavaCCGlobals.cu_to_insertion_point_1.get(0).kind == JavaCCParserConstants.PACKAGE) {
+      if ((JavaCCGlobals.cu_to_insertion_point_1.size() != 0)
+          && (JavaCCGlobals.cu_to_insertion_point_1.get(0).kind == JavaCCParserConstants.PACKAGE)) {
         for (int i = 1; i < JavaCCGlobals.cu_to_insertion_point_1.size(); i++) {
           if (JavaCCGlobals.cu_to_insertion_point_1.get(i).kind == JavaCCParserConstants.SEMICOLON) {
             JavaUtil.printTokenSetup(JavaCCGlobals.cu_to_insertion_point_1.get(0));
@@ -108,7 +108,7 @@ abstract class JavaUtil {
       retval += JavaCCGlobals.printTokenOnly(tt, escape);
       tt = tt.next;
     }
-    if (JavaCCGlobals.ccol != 1 && JavaCCGlobals.cline != t.beginLine) {
+    if ((JavaCCGlobals.ccol != 1) && (JavaCCGlobals.cline != t.beginLine)) {
       retval += "\n";
       JavaCCGlobals.cline++;
       JavaCCGlobals.ccol = 1;

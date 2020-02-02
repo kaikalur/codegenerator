@@ -49,7 +49,7 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
     IO io = (IO) data;
     if (CppCodeGenerator.IS_DEBUG) {
       io.println("/*@bgen(jjtree) " + JavaCCGlobals.getIdString("JJTree", new File(io.getOutputFileName()).getName())
-          + (Options.booleanValue("IGNORE_ACTIONS") ? "" : " */"));
+      + (Options.booleanValue("IGNORE_ACTIONS") ? "" : " */"));
       io.print((Options.booleanValue("IGNORE_ACTIONS") ? "" : "/*") + "@egen*/");
     }
 
@@ -68,20 +68,20 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
      */
 
     NodeScope ns = NodeScope.getEnclosingNodeScope(node);
-    if (ns != null && !ns.isVoid()) {
+    if ((ns != null) && !ns.isVoid()) {
       boolean needClose = true;
       Node sp = node.getScopingParent(ns);
 
       JJTreeNode n = node;
       while (true) {
         Node p = n.jjtGetParent();
-        if (p instanceof ASTBNFSequence || p instanceof ASTBNFTryBlock) {
-          if (n.getOrdinal() != p.jjtGetNumChildren() - 1) {
+        if ((p instanceof ASTBNFSequence) || (p instanceof ASTBNFTryBlock)) {
+          if (n.getOrdinal() != (p.jjtGetNumChildren() - 1)) {
             /* We're not the final unit in the sequence. */
             needClose = false;
             break;
           }
-        } else if (p instanceof ASTBNFZeroOrOne || p instanceof ASTBNFZeroOrMore || p instanceof ASTBNFOneOrMore) {
+        } else if ((p instanceof ASTBNFZeroOrOne) || (p instanceof ASTBNFZeroOrMore) || (p instanceof ASTBNFOneOrMore)) {
           needClose = false;
           break;
         }
@@ -270,7 +270,7 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
   private void insertOpenNodeCode(NodeScope ns, IO io, String indent) {
     String type = ns.node_descriptor.getNodeType();
     final String nodeClass;
-    if (JJTreeOptions.getNodeClass().length() > 0 && !JJTreeOptions.getMulti()) {
+    if ((JJTreeOptions.getNodeClass().length() > 0) && !JJTreeOptions.getMulti()) {
       nodeClass = JJTreeOptions.getNodeClass();
     } else {
       nodeClass = type;
@@ -411,7 +411,7 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
 
     try (CppCodeBuilder builder = CppCodeBuilder.of(options)) {
       builder
-          .setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), "JJT" + JJTreeGlobals.parserName + "State.cc"));
+      .setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), "JJT" + JJTreeGlobals.parserName + "State.cc"));
       builder.setVersion(JJTreeCodeGenerator.JJTStateVersion).addOption(JavaCCGlobals.toolName);
 
       builder.printTemplate("/templates/cpp/JJTTreeState.cc.template");

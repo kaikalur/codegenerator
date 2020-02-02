@@ -58,7 +58,7 @@ class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
    */
   void genClassStart(String mod, String name, String[] superClasses, String[] superInterfaces) {
     print("class " + name);
-    if (superClasses.length > 0 || superInterfaces.length > 0) {
+    if ((superClasses.length > 0) || (superInterfaces.length > 0)) {
       print(" : ");
     }
 
@@ -144,17 +144,17 @@ class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
 
   // HACK
   private void fixupLongLiterals(StringBuffer sb) {
-    for (int i = 0; i < sb.length() - 1; i++) {
+    for (int i = 0; i < (sb.length() - 1); i++) {
       // int beg = i;
       char c1 = sb.charAt(i);
       char c2 = sb.charAt(i + 1);
-      if (Character.isDigit(c1) || (c1 == '0' && c2 == 'x')) {
+      if (Character.isDigit(c1) || ((c1 == '0') && (c2 == 'x'))) {
         i += c1 == '0' ? 2 : 1;
         while (CppCodeBuilder.isHexDigit(sb.charAt(i))) {
           i++;
         }
         // Avoid replacing long long (LL) with unsigned long long (ULL)
-        if (sb.charAt(i) == 'L' && sb.charAt(i + 1) != 'L' && sb.charAt(i - 1) != 'L') {
+        if ((sb.charAt(i) == 'L') && (sb.charAt(i + 1) != 'L') && (sb.charAt(i - 1) != 'L')) {
           // if (sb.charAt(i) == 'L' && (i >= sb.length() || sb.charAt(i + 1) !=
           // 'L')) {
           sb.insert(i, "UL");
@@ -170,7 +170,7 @@ class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
    * @param c
    */
   private static boolean isHexDigit(char c) {
-    return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
+    return ((c >= '0') && (c <= '9')) || ((c >= 'a') && (c <= 'f')) || ((c >= 'A') && (c <= 'F'));
   }
 
   private final void genCommaSeperatedString(String[] strings) {
@@ -205,7 +205,7 @@ class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
     println("static const JJString " + varName + "[] = {");
     for (int i = 0; i < arr.length; i++) {
       print(varName + "_arr_" + i);
-      if (i + 1 < arr.length) {
+      if ((i + 1) < arr.length) {
         print(", ");
       }
       println();

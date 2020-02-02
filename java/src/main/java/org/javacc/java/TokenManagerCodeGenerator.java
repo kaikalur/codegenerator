@@ -37,12 +37,12 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     settings.put("charsVectorSize", ((Character.MAX_VALUE >> 6) + 1));
     settings.put("stateSetSize", tokenizerData.nfa.size());
     settings.put("parserName", tokenizerData.parserName);
-    settings.put("maxLongs", tokenizerData.allMatches.size() / 64 + 1);
+    settings.put("maxLongs", (tokenizerData.allMatches.size() / 64) + 1);
     settings.put("parserName", tokenizerData.parserName);
     settings.put("charStreamName", Options.getCharStreamName());
     settings.put("defaultLexState", tokenizerData.defaultLexState);
     settings.put("decls", tokenizerData.decls);
-    settings.put("superClass", (superClass == null || superClass.equals("")) ? "" : "extends " + superClass);
+    settings.put("superClass", ((superClass == null) || superClass.equals("")) ? "" : "extends " + superClass);
     settings.put("noDfa", Options.getNoDfa());
     settings.put("generatedStates", tokenizerData.nfa.size());
 
@@ -59,7 +59,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
         for (Token t : JavaCCGlobals.cu_to_insertion_point_1) {
           if (t.kind == JavaCCParserConstants.IMPORT) {
             tokens = new ArrayList<>();
-          } else if (tokens != null && t.kind == JavaCCParserConstants.SEMICOLON) {
+          } else if ((tokens != null) && (t.kind == JavaCCParserConstants.SEMICOLON)) {
             codeGenerator.println("import", String.join("", tokens), ";");
             tokens = null;
           } else if (tokens != null) {
@@ -174,7 +174,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
       long[] longs = bits.toLongArray();
       for (int k = 0; k < longs.length; k++) {
         int rep = 1;
-        while (k + rep < longs.length && longs[k + rep] == longs[k]) {
+        while (((k + rep) < longs.length) && (longs[k + rep] == longs[k])) {
           rep++;
         }
         if (k > 0) {
@@ -371,7 +371,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     codeGenerator.println("  switch(" + kindString + ") {");
     for (int i : allMatches.keySet()) {
       TokenizerData.MatchInfo matchInfo = allMatches.get(i);
-      if (matchInfo.action == null || matchInfo.matchType != matchType) {
+      if ((matchInfo.action == null) || (matchInfo.matchType != matchType)) {
         continue;
       }
       codeGenerator.println("    case " + i + ": {\n");

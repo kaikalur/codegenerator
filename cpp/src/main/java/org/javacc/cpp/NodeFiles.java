@@ -234,12 +234,12 @@ final class NodeFiles {
 
   private static String getVisitorArgumentType() {
     String ret = Options.stringValue("VISITOR_DATA_TYPE");
-    return ret == null || ret.equals("") || ret.equals("Object") ? "void *" : ret;
+    return (ret == null) || ret.equals("") || ret.equals("Object") ? "void *" : ret;
   }
 
   private static String getVisitorReturnType() {
     String ret = Options.stringValue("VISITOR_RETURN_TYPE");
-    return ret == null || ret.equals("") || ret.equals("Object") ? "void" : ret;
+    return (ret == null) || ret.equals("") || ret.equals("Object") ? "void" : ret;
   }
 
   private static void generateVisitors() {

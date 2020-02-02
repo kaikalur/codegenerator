@@ -6,6 +6,7 @@ import org.javacc.parser.CodeGenerator;
 import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.Options;
+import org.javacc.parser.TokenizerData;
 
 import java.io.File;
 
@@ -25,7 +26,7 @@ public class CppCodeGenerator implements CodeGenerator {
    * Generate any other support files you need.
    */
   @Override
-  public final boolean generateHelpers(CodeGeneratorSettings settings) {
+  public final boolean generateHelpers(CodeGeneratorSettings settings, TokenizerData tokenizerData) {
     try {
       try (CppCodeBuilder builder = CppCodeBuilder.of(settings)) {
         builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "CharStream.cc"));
@@ -82,7 +83,7 @@ public class CppCodeGenerator implements CodeGenerator {
         builder.printTemplate("/templates/cpp/ErrorHandler.h.template");
       }
 
-      OtherFilesGenCPP.start();
+      OtherFilesGenCPP.start(tokenizerData);
     } catch (Exception e) {
       return false;
     }

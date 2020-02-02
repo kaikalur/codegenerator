@@ -154,7 +154,7 @@ final class NodeFiles {
 
     try (JavaCodeBuilder builder = JavaCodeBuilder.of(CodeGeneratorSettings.create())) {
       builder
-          .setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), JavaTemplates.defaultVisitorClass() + ".java"));
+      .setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), JavaTemplates.defaultVisitorClass() + ".java"));
       builder.setPackageName(JJTreeGlobals.packageName);
 
       builder.println("public class ", JavaTemplates.defaultVisitorClass(), " implements ",

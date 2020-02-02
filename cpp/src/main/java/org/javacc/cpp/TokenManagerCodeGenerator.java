@@ -33,12 +33,12 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     settings.put("charsVectorSize", ((Character.MAX_VALUE >> 6) + 1));
     settings.put("stateSetSize", tokenizerData.nfa.size());
     settings.put("parserName", tokenizerData.parserName);
-    settings.put("maxLongs", tokenizerData.allMatches.size() / 64 + 1);
+    settings.put("maxLongs", (tokenizerData.allMatches.size() / 64) + 1);
     settings.put("parserName", tokenizerData.parserName);
     settings.put("charStreamName", Options.getCharStreamName());
     settings.put("defaultLexState", tokenizerData.defaultLexState);
     settings.put("decls", tokenizerData.decls);
-    settings.put("superClass", (superClass == null || superClass.equals("")) ? "" : "extends " + superClass);
+    settings.put("superClass", ((superClass == null) || superClass.equals("")) ? "" : "extends " + superClass);
     settings.put("noDfa", Options.getNoDfa());
     settings.put("generatedStates", tokenizerData.nfa.size());
 
@@ -136,7 +136,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     codeGenerator.switchToMainFile();
     // Token actions.
     codeGenerator
-        .println("int " + tokenizerData.parserName + "TokenManager::getStartAndSize(int index, int isCount)\n{");
+    .println("int " + tokenizerData.parserName + "TokenManager::getStartAndSize(int index, int isCount)\n{");
     codeGenerator.println("  switch(index) {");
     for (int key : tokenizerData.literalSequence.keySet()) {
       int[] arr = startAndSize.get(key);
@@ -168,7 +168,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
         long[] longs = bits.toLongArray();
         for (int k = 0; k < longs.length; k++) {
           int rep = 1;
-          while (k + rep < longs.length && longs[k + rep] == longs[k]) {
+          while (((k + rep) < longs.length) && (longs[k + rep] == longs[k])) {
             rep++;
           }
           k += rep - 1;
@@ -197,7 +197,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
       codeGenerator.print(lengths[i] + "LL");
       for (int k = 0; k < longs.length; k++) {
         int rep = 1;
-        while (k + rep < longs.length && longs[k + rep] == longs[k]) {
+        while (((k + rep) < longs.length) && (longs[k + rep] == longs[k])) {
           rep++;
         }
         codeGenerator.print(", ", rep + "LL, ");
@@ -390,12 +390,12 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     // Token actions.
     codeGenerator.switchToMainFile();
     codeGenerator
-        .println("void " + tokenizerData.parserName + "TokenManager::TokenLexicalActions(Token * matchedToken) {");
+    .println("void " + tokenizerData.parserName + "TokenManager::TokenLexicalActions(Token * matchedToken) {");
     dumpLexicalActions(allMatches, TokenizerData.MatchType.TOKEN, "matchedToken->kind", codeGenerator);
     codeGenerator.println("}");
 
     codeGenerator
-        .println("void " + tokenizerData.parserName + "TokenManager::SkipLexicalActions(Token * /*matchedToken*/) {");
+    .println("void " + tokenizerData.parserName + "TokenManager::SkipLexicalActions(Token * /*matchedToken*/) {");
     dumpLexicalActions(allMatches, TokenizerData.MatchType.SKIP, "jjmatchedKind", codeGenerator);
     dumpLexicalActions(allMatches, TokenizerData.MatchType.SPECIAL_TOKEN, "jjmatchedKind", codeGenerator);
     codeGenerator.println("}");
@@ -415,7 +415,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     codeGenerator.println("  switch(" + kindString + ") {");
     for (int i : allMatches.keySet()) {
       TokenizerData.MatchInfo matchInfo = allMatches.get(i);
-      if (matchInfo.action == null || matchInfo.matchType != matchType) {
+      if ((matchInfo.action == null) || (matchInfo.matchType != matchType)) {
         continue;
       }
       codeGenerator.println("    case " + i + ": {\n");
