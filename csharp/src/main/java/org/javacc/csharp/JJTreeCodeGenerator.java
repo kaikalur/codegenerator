@@ -63,20 +63,20 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
      */
 
     NodeScope ns = NodeScope.getEnclosingNodeScope(node);
-    if (ns != null && !ns.isVoid()) {
+    if ((ns != null) && !ns.isVoid()) {
       boolean needClose = true;
       Node sp = node.getScopingParent(ns);
 
       JJTreeNode n = node;
       while (true) {
         Node p = n.jjtGetParent();
-        if (p instanceof ASTBNFSequence || p instanceof ASTBNFTryBlock) {
-          if (n.getOrdinal() != p.jjtGetNumChildren() - 1) {
+        if ((p instanceof ASTBNFSequence) || (p instanceof ASTBNFTryBlock)) {
+          if (n.getOrdinal() != (p.jjtGetNumChildren() - 1)) {
             /* We're not the final unit in the sequence. */
             needClose = false;
             break;
           }
-        } else if (p instanceof ASTBNFZeroOrOne || p instanceof ASTBNFZeroOrMore || p instanceof ASTBNFOneOrMore) {
+        } else if ((p instanceof ASTBNFZeroOrOne) || (p instanceof ASTBNFZeroOrMore) || (p instanceof ASTBNFOneOrMore)) {
           needClose = false;
           break;
         }
@@ -254,7 +254,7 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
   private void insertOpenNodeCode(NodeScope ns, IO io, String indent) {
     String type = ns.node_descriptor.getNodeType();
     final String nodeClass;
-    if (JJTreeOptions.getNodeClass().length() > 0 && !JJTreeOptions.getMulti()) {
+    if ((JJTreeOptions.getNodeClass().length() > 0) && !JJTreeOptions.getMulti()) {
       nodeClass = JJTreeOptions.getNodeClass();
     } else {
       nodeClass = type;

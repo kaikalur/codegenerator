@@ -68,7 +68,7 @@ import java.util.Map;
 /**
  * Generate the parser.
  */
-public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
+class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
 
   private static final String           parserTemplate  = "/templates/csharp/ParserDriver.template";
 
@@ -116,7 +116,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
 
     String superClass = (String) settings.get(Options.USEROPTION__TOKEN_MANAGER_SUPER_CLASS);
     settings.put("parserName", parserData.parserName);
-    settings.put("superClass", (superClass == null || superClass.equals("")) ? "" : " :  " + superClass);
+    settings.put("superClass", ((superClass == null) || superClass.equals("")) ? "" : " :  " + superClass);
     if (Options.getNamespace() != null) {
       settings.put("NAMESPACE", Options.getNamespace());
     }
@@ -135,7 +135,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
 
       if (JavaCCGlobals.jjtreeGenerated) {
         codeGenerator
-            .println("  JJT" + parserData.parserName + "State jjtree = new JJT" + parserData.parserName + "State();");
+        .println("  JJT" + parserData.parserName + "State jjtree = new JJT" + parserData.parserName + "State();");
       }
 
       processProductions(settings, codeGenerator);
@@ -296,8 +296,8 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
         // for the preceding LOOKAHEAD (the semantic checks should have made
         // sure that
         // the LOOKAHEAD is suitable).
-        if (unit instanceof NonTerminal && ((NonTerminal) unit).getProd() instanceof CodeProduction) {
-          if (i > 0 && seq.units.get(i - 1) instanceof Lookahead) {
+        if ((unit instanceof NonTerminal) && (((NonTerminal) unit).getProd() instanceof CodeProduction)) {
+          if ((i > 0) && (seq.units.get(i - 1) instanceof Lookahead)) {
             Lookahead la = (Lookahead) seq.units.get(i - 1);
             genFirstSet(la.getLaExpansion());
           }
@@ -363,7 +363,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     String retval = "";
     Lookahead la;
     Token t = null;
-    int tokenMaskSize = (parserData.tokenCount - 1) / 32 + 1;
+    int tokenMaskSize = ((parserData.tokenCount - 1) / 32) + 1;
     int[] tokenMask = null;
 
     // Iterate over all the conditions.
@@ -373,7 +373,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       la = conds[index];
       jj2LA = false;
 
-      if (la.getAmount() == 0 || Semanticize.emptyExpansionExists(la.getLaExpansion())) {
+      if ((la.getAmount() == 0) || Semanticize.emptyExpansionExists(la.getLaExpansion())) {
 
         // This handles the following cases:
         // . If syntactic lookahead is not wanted (and hence explicitly
@@ -421,7 +421,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
           retval += ") {\u0001" + actions[index];
           state = OPENIF;
         }
-      } else if (la.getAmount() == 1 && la.getActionTokens().size() == 0) {
+      } else if ((la.getAmount() == 1) && (la.getActionTokens().size() == 0)) {
         // Special optimal processing when the lookahead is exactly 1, and there
         // is no semantic lookahead.
 
@@ -461,13 +461,12 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
                 tokenMask[i] = 0;
               }
               break;
-            // Don't need to do anything if state is OPENSWITCH.
+              // Don't need to do anything if state is OPENSWITCH.
             case OPENSWITCH:
               retval += " else ";
               break;
           }
           retval += "if (false\u0001";
-          boolean first = true;
           for (int i = 0; i < parserData.tokenCount; i++) {
             if (firstSet[i]) {
               if (!casedValues[i]) {
@@ -582,10 +581,10 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     for (int i = 0; i < str.length(); i++) {
       prevChar = ch;
       ch = str.charAt(i);
-      if (ch == '\n' && prevChar == '\r') {
+      if ((ch == '\n') && (prevChar == '\r')) {
         // do nothing - we've already printed a new line for the '\r'
         // during the previous iteration.
-      } else if (ch == '\n' || ch == '\r') {
+      } else if ((ch == '\n') || (ch == '\r')) {
         if (indentOn) {
           phase1NewLine();
         } else {
@@ -651,7 +650,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       indentamt = 6;
     }
 
-    if (!Options.booleanValue(Options.USEROPTION__IGNORE_ACTIONS) && p.getDeclarationTokens().size() != 0) {
+    if (!Options.booleanValue(Options.USEROPTION__IGNORE_ACTIONS) && (p.getDeclarationTokens().size() != 0)) {
       codeGenerator.printTokenSetup((p.getDeclarationTokens().get(0)));
       for (Object element : p.getDeclarationTokens()) {
         t = (Token) element;
@@ -737,7 +736,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     } else if (e instanceof Action) {
       Action e_nrw = (Action) e;
       retval += "\u0003\n";
-      if (!Options.booleanValue(Options.USEROPTION__IGNORE_ACTIONS) && e_nrw.getActionTokens().size() != 0) {
+      if (!Options.booleanValue(Options.USEROPTION__IGNORE_ACTIONS) && (e_nrw.getActionTokens().size() != 0)) {
         codeGenerator.printTokenSetup((e_nrw.getActionTokens().get(0)));
         for (Object element : e_nrw.getActionTokens()) {
           t = (Token) element;
@@ -896,10 +895,10 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
 
   String genReturn(boolean value) {
     String retval = (value ? "true" : "false");
-    if (Options.getDebugLookahead() && jj3_expansion != null) {
+    if (Options.getDebugLookahead() && (jj3_expansion != null)) {
       String tracecode =
           "trace_return(\"" + codeGenerator.escapeToUnicode(((NormalProduction) jj3_expansion.parent).getLhs())
-              + "(LOOKAHEAD " + (value ? "FAILED" : "SUCCEEDED") + ")\");";
+          + "(LOOKAHEAD " + (value ? "FAILED" : "SUCCEEDED") + ")\");";
       if (Options.getErrorReporting()) {
         tracecode = "if (!jj_rescan) " + tracecode;
       }
@@ -913,7 +912,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
     Expansion seq = e;
     if (internalName(e).equals("")) {
       while (true) {
-        if (seq instanceof Sequence && ((Sequence) seq).units.size() == 2) {
+        if ((seq instanceof Sequence) && (((Sequence) seq).units.size() == 2)) {
           seq = ((Sequence) seq).units.get(1);
         } else if (seq instanceof NonTerminal) {
           NonTerminal e_nrw = (NonTerminal) seq;
@@ -938,7 +937,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       internalIndexes.put(e, gensymindex);
     }
     Phase3Data p3d = (Phase3Data) (phase3table.get(e));
-    if (p3d == null || p3d.count < inf.count) {
+    if ((p3d == null) || (p3d.count < inf.count)) {
       p3d = new Phase3Data(e, inf.count);
       phase3list.add(p3d);
       phase3table.put(e, p3d);
@@ -1023,13 +1022,13 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       codeGenerator.println(" {");
       codeGenerator.println("    if (jj_done) return true;");
       xsp_declared = false;
-      if (Options.getDebugLookahead() && e.parent instanceof NormalProduction) {
+      if (Options.getDebugLookahead() && (e.parent instanceof NormalProduction)) {
         codeGenerator.print("    ");
         if (Options.getErrorReporting()) {
           codeGenerator.print("if (!jj_rescan) ");
         }
         codeGenerator.println("trace_call(\"" + codeGenerator.escapeToUnicode(((NormalProduction) e.parent).getLhs())
-            + "(LOOKING AHEAD...)\");");
+        + "(LOOKING AHEAD...)\");");
         jj3_expansion = e;
       } else {
         jj3_expansion = null;
@@ -1090,7 +1089,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
         if (la.getActionTokens().size() != 0) {
           codeGenerator.print("!jj_semLA || ");
         }
-        if (i != e_nrw.getChoices().size() - 1) {
+        if (i != (e_nrw.getChoices().size() - 1)) {
           codeGenerator.println(genjj_3Call(nested_seq) + ") {");
           codeGenerator.println("    jj_scanpos = xsp;");
         } else {
@@ -1188,7 +1187,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       int min = oldMin;
       Expansion nested_e;
       Choice e_nrw = (Choice) e;
-      for (int i = 0; min > 1 && i < e_nrw.getChoices().size(); i++) {
+      for (int i = 0; (min > 1) && (i < e_nrw.getChoices().size()); i++) {
         nested_e = (e_nrw.getChoices().get(i));
         int min1 = minimumSize(nested_e, min);
         if (min > min1) {
@@ -1204,7 +1203,7 @@ public class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerato
       for (int i = 1; i < e_nrw.units.size(); i++) {
         Expansion eseq = (e_nrw.units.get(i));
         int mineseq = minimumSize(eseq);
-        if (min == Integer.MAX_VALUE || mineseq == Integer.MAX_VALUE) {
+        if ((min == Integer.MAX_VALUE) || (mineseq == Integer.MAX_VALUE)) {
           min = Integer.MAX_VALUE; // Adding infinity to something results in
           // infinity.
         } else {

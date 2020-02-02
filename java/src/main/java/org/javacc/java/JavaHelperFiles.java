@@ -5,13 +5,13 @@ import org.javacc.Version;
 import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.JavaCCErrors;
 import org.javacc.parser.JavaCCGlobals;
-import org.javacc.parser.LexGen;
 import org.javacc.parser.MetaParseException;
 import org.javacc.parser.Options;
 import org.javacc.parser.RStringLiteral;
 import org.javacc.parser.RegExprSpec;
 import org.javacc.parser.RegularExpression;
 import org.javacc.parser.TokenProduction;
+import org.javacc.parser.TokenizerData;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,7 +38,7 @@ abstract class JavaHelperFiles {
        * -- KEEP_LINE_COL
        */
       builder.setVersion(Version.version).addTools(JavaCCGlobals.toolName)
-          .addOption(Options.USEROPTION__KEEP_LINE_COLUMN);
+      .addOption(Options.USEROPTION__KEEP_LINE_COLUMN);
 
       builder.setPackageName(JavaUtil.parsePackage());
       builder.printTemplate(templatePath);
@@ -75,7 +75,7 @@ abstract class JavaHelperFiles {
     try (JavaCodeBuilder builder = JavaCodeBuilder.of(CodeGeneratorSettings.of(Options.getOptions()))) {
       builder.setFile(new File(Options.getOutputDirectory(), "TokenManager.java"));
       builder.setVersion(Version.version).addTools(JavaCCGlobals.toolName)
-          .addOption(Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
+      .addOption(Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
       builder.setPackageName(JavaUtil.parsePackage());
       builder.printTemplate("/templates/TokenManager.template");
     } catch (IOException e) {
@@ -85,7 +85,7 @@ abstract class JavaHelperFiles {
     }
   }
 
-  static void gen_Constants() throws MetaParseException {
+  static void gen_Constants(TokenizerData tokenizerData) throws MetaParseException {
     if (JavaCCErrors.get_error_count() != 0) {
       throw new MetaParseException();
     }
@@ -118,9 +118,9 @@ abstract class JavaHelperFiles {
       }
       builder.println();
       if (!Options.getUserTokenManager() && Options.getBuildTokenManager()) {
-        for (int i = 0; i < LexGen.lexStateName.length; i++) {
+        for (int i = 0; i < tokenizerData.lexStateNames.length; i++) {
           builder.println("  /** Lexical state. */");
-          builder.println("  int " + LexGen.lexStateName[i] + " = " + i + ";");
+          builder.println("  int " + tokenizerData.lexStateNames[i] + " = " + i + ";");
         }
         builder.println();
       }

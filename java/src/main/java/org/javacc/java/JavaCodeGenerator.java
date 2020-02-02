@@ -5,6 +5,7 @@ import org.javacc.jjtree.DefaultJJTreeVisitor;
 import org.javacc.parser.CodeGenerator;
 import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.Options;
+import org.javacc.parser.TokenizerData;
 
 public class JavaCodeGenerator implements CodeGenerator {
 
@@ -20,7 +21,7 @@ public class JavaCodeGenerator implements CodeGenerator {
    * Generate any other support files you need.
    */
   @Override
-  public boolean generateHelpers(CodeGeneratorSettings settings) {
+  public boolean generateHelpers(CodeGeneratorSettings settings, TokenizerData tokenizerData) {
     JavaTemplates templates = JavaTemplates.getTemplates();
 
     try {
@@ -28,7 +29,7 @@ public class JavaCodeGenerator implements CodeGenerator {
           JavaTemplates.getTokenMgrErrorClass() + ".java", settings);
       JavaHelperFiles.generateSimple(templates.getParseExceptionTemplateResourceUrl(), "ParseException.java", settings);
 
-      JavaHelperFiles.gen_Constants();
+      JavaHelperFiles.gen_Constants(tokenizerData);
 
       if (Options.isGenerateBoilerplateCode()) {
         JavaHelperFiles.gen_Token();

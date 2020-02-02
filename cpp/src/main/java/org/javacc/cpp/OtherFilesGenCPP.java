@@ -33,13 +33,13 @@ package org.javacc.cpp;
 import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.JavaCCErrors;
 import org.javacc.parser.JavaCCGlobals;
-import org.javacc.parser.LexGen;
 import org.javacc.parser.MetaParseException;
 import org.javacc.parser.Options;
 import org.javacc.parser.RStringLiteral;
 import org.javacc.parser.RegExprSpec;
 import org.javacc.parser.RegularExpression;
 import org.javacc.parser.TokenProduction;
+import org.javacc.parser.TokenizerData;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ import java.util.List;
  */
 class OtherFilesGenCPP {
 
-  static void start() throws MetaParseException {
+  static void start(TokenizerData tokenizerData) throws MetaParseException {
     if (JavaCCErrors.get_error_count() != 0) {
       throw new MetaParseException();
     }
@@ -85,9 +85,9 @@ class OtherFilesGenCPP {
       builder.println();
 
       if (!Options.getUserTokenManager() && Options.getBuildTokenManager()) {
-        for (int i = 0; i < LexGen.lexStateName.length; i++) {
+        for (int i = 0; i < tokenizerData.lexStateNames.length; i++) {
           builder.println("  /** Lexical state. */");
-          builder.println(constPrefix + "  int " + LexGen.lexStateName[i] + " = " + i + ";");
+          builder.println(constPrefix + "  int " + tokenizerData.lexStateNames[i] + " = " + i + ";");
         }
         builder.println();
       }

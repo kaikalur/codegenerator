@@ -3,6 +3,7 @@ package org.javacc.csharp;
 
 import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.JavaCCGlobals;
+import org.javacc.parser.TokenizerData;
 import org.javacc.utils.CodeBuilder.GenericCodeBuilder;
 
 import java.io.File;
@@ -21,7 +22,7 @@ public class CodeGenerator implements org.javacc.parser.CodeGenerator {
    * Generate any other support files you need.
    */
   @Override
-  public boolean generateHelpers(CodeGeneratorSettings settings) {
+  public boolean generateHelpers(CodeGeneratorSettings settings, TokenizerData tokenizerData) {
     File directory = new File((String) settings.get("OUTPUT_DIRECTORY"));
     try {
       try (GenericCodeBuilder builder = GenericCodeBuilder.of(settings)) {
