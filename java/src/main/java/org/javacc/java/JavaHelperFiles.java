@@ -40,7 +40,7 @@ abstract class JavaHelperFiles {
       builder.setVersion(Version.version).addTools(JavaCCGlobals.toolName)
           .addOption(Options.USEROPTION__KEEP_LINE_COLUMN);
 
-      builder.setPackageName(JavaUtil.parsePackage());
+      builder.setPackageName(JavaUtil.parsePackage(context));
       builder.printTemplate(templatePath);
     } catch (IOException e) {
       System.err.println("Failed to create " + fileName + " " + e);
@@ -53,7 +53,7 @@ abstract class JavaHelperFiles {
     try (JavaCodeBuilder builder = JavaCodeBuilder.of(context, CodeGeneratorSettings.of(Options.getOptions()))) {
       builder.setFile(new File(Options.getOutputDirectory(), "Token.java"));
       builder.setVersion(Version.version).addTools(JavaCCGlobals.toolName);
-      builder.setPackageName(JavaUtil.parsePackage());
+      builder.setPackageName(JavaUtil.parsePackage(context));
 
       /*
        * cba -- 2013/07/22 -- previously wired to a typo version of this option
@@ -76,7 +76,7 @@ abstract class JavaHelperFiles {
       builder.setFile(new File(Options.getOutputDirectory(), "TokenManager.java"));
       builder.setVersion(Version.version).addTools(JavaCCGlobals.toolName)
           .addOption(Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
-      builder.setPackageName(JavaUtil.parsePackage());
+      builder.setPackageName(JavaUtil.parsePackage(context));
       builder.printTemplate("/templates/TokenManager.template");
     } catch (IOException e) {
       System.err.println("Failed to create TokenManager " + e);
@@ -90,12 +90,12 @@ abstract class JavaHelperFiles {
       throw new MetaParseException();
     }
 
-    List<String> toolnames = new ArrayList<>(JavaCCGlobals.toolNames);
+    List<String> toolnames = new ArrayList<>(context.globals().toolNames);
     toolnames.add(JavaCCGlobals.toolName);
 
     try (JavaCodeBuilder builder = JavaCodeBuilder.of(context, CodeGeneratorSettings.create())) {
-      builder.setFile(new File(Options.getOutputDirectory(), JavaCCGlobals.cu_name + "Constants.java"));
-      builder.setPackageName(JavaUtil.parsePackage());
+      builder.setFile(new File(Options.getOutputDirectory(), context.globals().cu_name + "Constants.java"));
+      builder.setPackageName(JavaUtil.parsePackage(context));
       builder.addTools(toolnames.toArray(new String[toolnames.size()]));
 
       builder.println();
@@ -107,12 +107,12 @@ abstract class JavaHelperFiles {
       if (Options.getSupportClassVisibilityPublic()) {
         builder.print("public ");
       }
-      builder.println("interface " + JavaCCGlobals.cu_name + "Constants {");
+      builder.println("interface " + context.globals().cu_name + "Constants {");
       builder.println();
 
       builder.println("  /** End of File. */");
       builder.println("  int EOF = 0;");
-      for (RegularExpression re : JavaCCGlobals.ordered_named_tokens) {
+      for (RegularExpression re : context.globals().ordered_named_tokens) {
         builder.println("  /** RegularExpression Id. */");
         builder.println("  int " + re.label + " = " + re.ordinal + ";");
       }
@@ -128,7 +128,7 @@ abstract class JavaHelperFiles {
       builder.println("  String[] tokenImage = {");
       builder.println("    \"<EOF>\",");
 
-      for (TokenProduction tp : JavaCCGlobals.rexprlist) {
+      for (TokenProduction tp : context.globals().rexprlist) {
         for (RegExprSpec res : tp.respecs) {
           builder.print("    ");
           if (res.rexp instanceof RStringLiteral) {
@@ -148,7 +148,8 @@ abstract class JavaHelperFiles {
       builder.println("  };");
       builder.println("}");
     } catch (java.io.IOException e) {
-      context.errors().semantic_error("Could not open file " + JavaCCGlobals.cu_name + "Constants.java for writing.");
+      context.errors()
+          .semantic_error("Could not open file " + context.globals().cu_name + "Constants.java for writing.");
       throw new Error();
     }
   }
@@ -159,7 +160,7 @@ abstract class JavaHelperFiles {
 
     try (JavaCodeBuilder builder = JavaCodeBuilder.of(context, settings)) {
       builder.setFile(file);
-      builder.setPackageName(JavaUtil.parsePackage());
+      builder.setPackageName(JavaUtil.parsePackage(context));
       builder.printTemplate(template);
     }
   }

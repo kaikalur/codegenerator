@@ -55,12 +55,12 @@ class OtherFilesGenCPP {
       throw new MetaParseException();
     }
 
-    List<String> toolnames = new ArrayList<>(JavaCCGlobals.toolNames);
+    List<String> toolnames = new ArrayList<>(context.globals().toolNames);
     toolnames.add(JavaCCGlobals.toolName);
 
 
     try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(context, CodeGeneratorSettings.create())) {
-      builder.setFile(new File(Options.getOutputDirectory(), JavaCCGlobals.cu_name + "Constants.h"));
+      builder.setFile(new File(Options.getOutputDirectory(), context.globals().cu_name + "Constants.h"));
       builder.addTools(toolnames.toArray(new String[toolnames.size()]));
 
       builder.println();
@@ -78,7 +78,7 @@ class OtherFilesGenCPP {
       String constPrefix = "const";
       builder.println("  /** End of File. */");
       builder.println(constPrefix + "  int _EOF = 0;");
-      for (RegularExpression re : JavaCCGlobals.ordered_named_tokens) {
+      for (RegularExpression re : context.globals().ordered_named_tokens) {
         builder.println("  /** RegularExpression Id. */");
         builder.println(constPrefix + "  int " + re.label + " = " + re.ordinal + ";");
       }
@@ -98,7 +98,7 @@ class OtherFilesGenCPP {
       OtherFilesGenCPP.printCharArray(builder, "<EOF>");
       builder.println(";");
 
-      for (TokenProduction tp : JavaCCGlobals.rexprlist) {
+      for (TokenProduction tp : context.globals().rexprlist) {
         for (RegExprSpec res : tp.respecs) {
           RegularExpression re = res.rexp;
           builder.println("  static const JJChar tokenImage_arr_" + ++cnt + "[] = ");
@@ -126,7 +126,7 @@ class OtherFilesGenCPP {
         builder.println(Options.stringValue("NAMESPACE_CLOSE"));
       }
     } catch (java.io.IOException e) {
-      context.errors().semantic_error("Could not open file " + JavaCCGlobals.cu_name + "Constants.h for writing.");
+      context.errors().semantic_error("Could not open file " + context.globals().cu_name + "Constants.h for writing.");
       throw new Error();
     }
   }

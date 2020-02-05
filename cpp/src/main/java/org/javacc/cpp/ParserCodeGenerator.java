@@ -102,15 +102,15 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
 
   @Override
   public void generateCode(CodeGeneratorSettings settings, ParserData parserData) {
-    List<String> tn = new ArrayList<>(JavaCCGlobals.toolNames);
+    List<String> tn = new ArrayList<>(context.globals().toolNames);
     tn.add(JavaCCGlobals.toolName);
 
     File file = new File(Options.getOutputDirectory(), parserData.parserName + ".cc");
     codeGenerator = CppCodeBuilder.of(context, settings).setFile(file);
 
-    if (JavaCCGlobals.jjtreeGenerated) {
+    if (context.globals().jjtreeGenerated) {
       codeGenerator.switchToStaticsFile();
-      codeGenerator.println("#include \"" + JavaCCGlobals.cu_name + "Tree.h\"\n");
+      codeGenerator.println("#include \"" + context.globals().cu_name + "Tree.h\"\n");
     }
 
     codeGenerator.switchToIncludeFile();
@@ -145,17 +145,17 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     if (Options.getUserTokenManagerConstant().length() > 0) {
       codeGenerator.println("#include \"" + Options.getUserTokenManagerConstant() + "\"");
     } else {
-      codeGenerator.println("#include \"" + JavaCCGlobals.cu_name + "Constants.h\"");
+      codeGenerator.println("#include \"" + context.globals().cu_name + "Constants.h\"");
     }
 
-    if (JavaCCGlobals.jjtreeGenerated) {
-      codeGenerator.println("#include \"JJT" + JavaCCGlobals.cu_name + "State.h\"");
+    if (context.globals().jjtreeGenerated) {
+      codeGenerator.println("#include \"JJT" + context.globals().cu_name + "State.h\"");
     }
 
     codeGenerator.println("#include \"ErrorHandler.h\"");
 
-    if (JavaCCGlobals.jjtreeGenerated) {
-      codeGenerator.println("#include \"" + JavaCCGlobals.cu_name + "Tree.h\"");
+    if (context.globals().jjtreeGenerated) {
+      codeGenerator.println("#include \"" + context.globals().cu_name + "Tree.h\"");
     }
 
     if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
@@ -174,13 +174,13 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
 
 
     String superClass = Options.stringValue(Options.USEROPTION__PARSER_SUPER_CLASS);
-    codeGenerator.genClassStart("", JavaCCGlobals.cu_name, new String[] {},
+    codeGenerator.genClassStart("", context.globals().cu_name, new String[] {},
         superClass == null ? new String[0] : new String[] { "public " + superClass });
 
     codeGenerator.switchToMainFile();
-    if (JavaCCGlobals.cu_to_insertion_point_2.size() != 0) {
-      codeGenerator.printTokenSetup(JavaCCGlobals.cu_to_insertion_point_2.get(0));
-      for (Token token : JavaCCGlobals.cu_to_insertion_point_2) {
+    if (context.globals().cu_to_insertion_point_2.size() != 0) {
+      codeGenerator.printTokenSetup(context.globals().cu_to_insertion_point_2.get(0));
+      for (Token token : context.globals().cu_to_insertion_point_2) {
         codeGenerator.printToken(token);
       }
     }
@@ -215,7 +215,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("private: ");
     codeGenerator.println("  int           jj_ntk;");
 
-    codeGenerator.println("  JJCalls       jj_2_rtns[" + (JavaCCGlobals.jj2index + 1) + "];");
+    codeGenerator.println("  JJCalls       jj_2_rtns[" + (context.globals().jj2index + 1) + "];");
     codeGenerator.println("  bool          jj_rescan;");
     codeGenerator.println("  int           jj_gc;");
     codeGenerator.println("  Token        *jj_scanpos, *jj_lastpos;");
@@ -225,7 +225,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("  bool          jj_semLA;");
 
     codeGenerator.println("  int           jj_gen;");
-    codeGenerator.println("  int           jj_la1[" + (JavaCCGlobals.maskindex + 1) + "];");
+    codeGenerator.println("  int           jj_la1[" + (context.globals().maskindex + 1) + "];");
     codeGenerator.println("  ErrorHandler *errorHandler = nullptr;");
     codeGenerator.println("");
     codeGenerator.println("protected: ");
@@ -233,15 +233,15 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("  bool          delete_tokens = true;");
     codeGenerator.println("  bool          hasError;");
     codeGenerator.println("");
-    int tokenMaskSize = ((JavaCCGlobals.tokenCount - 1) / 32) + 1;
+    int tokenMaskSize = ((context.globals().tokenCount - 1) / 32) + 1;
 
     if (Options.getErrorReporting() && (tokenMaskSize > 0)) {
       codeGenerator.switchToStaticsFile();
       codeGenerator.println("#include \"TokenMgrError.h\"");
       for (int i = 0; i < tokenMaskSize; i++) {
-        if (JavaCCGlobals.maskVals.size() > 0) {
+        if (context.globals().maskVals.size() > 0) {
           codeGenerator.println("  unsigned int jj_la1_" + i + "[] = {");
-          for (int[] tokenMask : JavaCCGlobals.maskVals) {
+          for (int[] tokenMask : context.globals().maskVals) {
             codeGenerator.print("0x" + Integer.toHexString(tokenMask[i]) + ",");
           }
           codeGenerator.println("};");
@@ -254,8 +254,8 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("  private: bool jj_depth_error;");
       codeGenerator.println("  friend class __jj_depth_inc;");
       codeGenerator.println("  class __jj_depth_inc {public:");
-      codeGenerator.println("    " + JavaCCGlobals.cu_name + "* parent;");
-      codeGenerator.println("    __jj_depth_inc(" + JavaCCGlobals.cu_name + "* p): parent(p) { parent->jj_depth++; };");
+      codeGenerator.println("    " + context.globals().cu_name + "* parent;");
+      codeGenerator.println("    __jj_depth_inc(" + context.globals().cu_name + "* p): parent(p) { parent->jj_depth++; };");
       codeGenerator.println("    ~__jj_depth_inc(){ parent->jj_depth--; }");
       codeGenerator.println("  };");
     }
@@ -273,8 +273,8 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("  Token        *head;");
     codeGenerator.println("");
     codeGenerator.println("public: ");
-    codeGenerator.generateMethodDefHeader(" ", JavaCCGlobals.cu_name,
-        JavaCCGlobals.cu_name + "(TokenManager *tokenManager)");
+    codeGenerator.generateMethodDefHeader(" ", context.globals().cu_name,
+        context.globals().cu_name + "(TokenManager *tokenManager)");
     if (superClass != null) {
       codeGenerator.println(" : " + superClass + "()");
     }
@@ -287,13 +287,13 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("}");
 
     codeGenerator.switchToIncludeFile();
-    codeGenerator.println("  virtual ~" + JavaCCGlobals.cu_name + "();");
+    codeGenerator.println("  virtual ~" + context.globals().cu_name + "();");
     codeGenerator.switchToMainFile();
-    codeGenerator.println("" + JavaCCGlobals.cu_name + "::~" + JavaCCGlobals.cu_name + "()");
+    codeGenerator.println("" + context.globals().cu_name + "::~" + context.globals().cu_name + "()");
     codeGenerator.println("{");
     codeGenerator.println("  clear();");
     codeGenerator.println("}");
-    codeGenerator.generateMethodDefHeader("void", JavaCCGlobals.cu_name, "ReInit(TokenManager* tokenManager)");
+    codeGenerator.generateMethodDefHeader("void", context.globals().cu_name, "ReInit(TokenManager* tokenManager)");
     codeGenerator.println("{");
     codeGenerator.println("    clear();");
     codeGenerator.println("    errorHandler = new ErrorHandler();");
@@ -321,7 +321,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     } else {
       codeGenerator.println("    jj_ntk = -1;");
     }
-    if (JavaCCGlobals.jjtreeGenerated) {
+    if (context.globals().jjtreeGenerated) {
       codeGenerator.println("    jjtree.reset();");
     }
     if (Options.getDepthLimit() > 0) {
@@ -330,14 +330,14 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     }
     if (Options.getErrorReporting()) {
       codeGenerator.println("    jj_gen = 0;");
-      if (JavaCCGlobals.maskindex > 0) {
-        codeGenerator.println("    for (int i = 0; i < " + JavaCCGlobals.maskindex + "; i++) jj_la1[i] = -1;");
+      if (context.globals().maskindex > 0) {
+        codeGenerator.println("    for (int i = 0; i < " + context.globals().maskindex + "; i++) jj_la1[i] = -1;");
       }
     }
     codeGenerator.println("  }");
     codeGenerator.println("");
 
-    codeGenerator.generateMethodDefHeader("void", JavaCCGlobals.cu_name, "clear()");
+    codeGenerator.generateMethodDefHeader("void", context.globals().cu_name, "clear()");
     codeGenerator.println("{");
     codeGenerator.println("  //Since token manager was generate from outside,");
     codeGenerator.println("  //parser should not take care of deleting");
@@ -365,7 +365,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.switchToIncludeFile();
       codeGenerator.println(" virtual");
       codeGenerator.switchToMainFile();
-      codeGenerator.generateMethodDefHeader("bool ", JavaCCGlobals.cu_name, "jj_stack_check(bool init)");
+      codeGenerator.generateMethodDefHeader("bool ", context.globals().cu_name, "jj_stack_check(bool init)");
       codeGenerator.println("  {");
       codeGenerator.println("     if(init) {");
       codeGenerator.println("       jj_stack_base = nullptr;");
@@ -385,7 +385,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     }
 
 
-    codeGenerator.generateMethodDefHeader("Token *", JavaCCGlobals.cu_name, "jj_consume_token(int kind)",
+    codeGenerator.generateMethodDefHeader("Token *", context.globals().cu_name, "jj_consume_token(int kind)",
         "ParseException");
     codeGenerator.println("  {");
     if (!Options.getStackLimit().equals("")) {
@@ -410,10 +410,10 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("    if (token->kind == kind) {");
     if (Options.getErrorReporting()) {
       codeGenerator.println("      jj_gen++;");
-      if (JavaCCGlobals.jj2index != 0) {
+      if (context.globals().jj2index != 0) {
         codeGenerator.println("      if (++jj_gc > 100) {");
         codeGenerator.println("        jj_gc = 0;");
-        codeGenerator.println("        for (int i = 0; i < " + JavaCCGlobals.jj2index + "; i++) {");
+        codeGenerator.println("        for (int i = 0; i < " + context.globals().jj2index + "; i++) {");
         codeGenerator.println("          JJCalls *c = &jj_2_rtns[i];");
         codeGenerator.println("          while (c != nullptr) {");
         codeGenerator.println("            if (c->gen < jj_gen) c->first = nullptr;");
@@ -451,9 +451,9 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("  }");
     codeGenerator.println("");
 
-    if (JavaCCGlobals.jj2index != 0) {
+    if (context.globals().jj2index != 0) {
       codeGenerator.switchToMainFile();
-      codeGenerator.generateMethodDefHeader("bool ", JavaCCGlobals.cu_name, "jj_scan_token(int kind)");
+      codeGenerator.generateMethodDefHeader("bool ", context.globals().cu_name, "jj_scan_token(int kind)");
       codeGenerator.println("{");
       if (!Options.getStackLimit().equals("")) {
         codeGenerator.println("    if(kind != -1 && (jj_stack_error || jj_stack_check(false))) {");
@@ -498,7 +498,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     }
     codeGenerator.println("");
     codeGenerator.println("/** Get the next Token. */");
-    codeGenerator.generateMethodDefHeader("Token *", JavaCCGlobals.cu_name, "getNextToken()");
+    codeGenerator.generateMethodDefHeader("Token *", context.globals().cu_name, "getNextToken()");
     codeGenerator.println("{");
     if (Options.getCacheTokens()) {
       codeGenerator.println("    if ((token = jj_nt)->next != nullptr) jj_nt = jj_nt->next;");
@@ -518,9 +518,9 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("  }");
     codeGenerator.println("");
     codeGenerator.println("/** Get the specific Token. */");
-    codeGenerator.generateMethodDefHeader("Token *", JavaCCGlobals.cu_name, "getToken(int index)");
+    codeGenerator.generateMethodDefHeader("Token *", context.globals().cu_name, "getToken(int index)");
     codeGenerator.println("{");
-    if (JavaCCGlobals.lookaheadNeeded) {
+    if (context.globals().lookaheadNeeded) {
       codeGenerator.println("    Token *t = jj_lookingAhead ? jj_scanpos : token;");
     } else {
       codeGenerator.println("    Token *t = token;");
@@ -533,7 +533,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("  }");
     codeGenerator.println("");
     if (!Options.getCacheTokens()) {
-      codeGenerator.generateMethodDefHeader("int", JavaCCGlobals.cu_name, "jj_ntk_f()");
+      codeGenerator.generateMethodDefHeader("int", context.globals().cu_name, "jj_ntk_f()");
       codeGenerator.println("{");
 
       codeGenerator.println("    if ((jj_nt=token->next) == nullptr)");
@@ -550,7 +550,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     if (Options.getErrorReporting()) {
       codeGenerator.println("  int **jj_expentries;");
       codeGenerator.println("  int *jj_expentry;");
-      if (JavaCCGlobals.jj2index != 0) {
+      if (context.globals().jj2index != 0) {
         codeGenerator.switchToStaticsFile();
         // For now we don't support ERROR_REPORTING in the C++ version.
         // codeGenerator.genCodeLine(" static int *jj_lasttokens = new
@@ -558,7 +558,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
         // codeGenerator.genCodeLine(" static int jj_endpos;");
         codeGenerator.println("");
 
-        codeGenerator.generateMethodDefHeader("  void", JavaCCGlobals.cu_name, "jj_add_error_token(int kind, int pos)");
+        codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "jj_add_error_token(int kind, int pos)");
         codeGenerator.println("  {");
         // For now we don't support ERROR_REPORTING in the C++ version.
 
@@ -595,7 +595,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.switchToIncludeFile();
       codeGenerator.println("protected:");
       codeGenerator.println("  /** Generate ParseException. */");
-      codeGenerator.generateMethodDefHeader("  virtual void ", JavaCCGlobals.cu_name, "parseError()");
+      codeGenerator.generateMethodDefHeader("  virtual void ", context.globals().cu_name, "parseError()");
       codeGenerator.println("   {");
       if (Options.getErrorReporting()) {
         codeGenerator.println(
@@ -649,7 +649,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     } else {
       codeGenerator.println("protected:");
       codeGenerator.println("  /** Generate ParseException. */");
-      codeGenerator.generateMethodDefHeader("virtual void ", JavaCCGlobals.cu_name, "parseError()");
+      codeGenerator.generateMethodDefHeader("virtual void ", context.globals().cu_name, "parseError()");
       codeGenerator.println("   {");
       if (Options.getErrorReporting()) {
         codeGenerator.println(
@@ -681,28 +681,28 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("  bool trace = " + Options.getDebugParser() + "; // trace enabled if true");
     codeGenerator.println("");
     codeGenerator.println("public:");
-    codeGenerator.generateMethodDefHeader("  bool", JavaCCGlobals.cu_name, "trace_enabled()");
+    codeGenerator.generateMethodDefHeader("  bool", context.globals().cu_name, "trace_enabled()");
     codeGenerator.println("  {");
     codeGenerator.println("    return trace;");
     codeGenerator.println("  }");
     codeGenerator.println("");
     if (Options.getDebugParser()) {
       codeGenerator.switchToIncludeFile();
-      codeGenerator.generateMethodDefHeader("  void", JavaCCGlobals.cu_name, "enable_tracing()");
+      codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "enable_tracing()");
       codeGenerator.println("{");
       codeGenerator.println("    trace = true;");
       codeGenerator.println("}");
       codeGenerator.println("");
 
       codeGenerator.switchToIncludeFile();
-      codeGenerator.generateMethodDefHeader("  void", JavaCCGlobals.cu_name, "disable_tracing()");
+      codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "disable_tracing()");
       codeGenerator.println("{");
       codeGenerator.println("    trace = false;");
       codeGenerator.println("}");
       codeGenerator.println("");
 
       codeGenerator.switchToIncludeFile();
-      codeGenerator.generateMethodDefHeader("  void", JavaCCGlobals.cu_name, "trace_call(const char *s)");
+      codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "trace_call(const char *s)");
       codeGenerator.println("  {");
       codeGenerator.println("    if (trace_enabled()) {");
       codeGenerator.println("      for (int i = 0; i < indent; i++) { std::clog << \" \"; }");
@@ -713,7 +713,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("");
 
       codeGenerator.switchToIncludeFile();
-      codeGenerator.generateMethodDefHeader("  void", JavaCCGlobals.cu_name, "trace_return(const char *s)");
+      codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "trace_return(const char *s)");
       codeGenerator.println("  {");
       codeGenerator.println("    indent = indent - 2;");
       codeGenerator.println("    if (trace_enabled()) {");
@@ -724,7 +724,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("");
 
       codeGenerator.switchToIncludeFile();
-      codeGenerator.generateMethodDefHeader("  void", JavaCCGlobals.cu_name,
+      codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name,
           "trace_token(Token *t, const char *where)");
       codeGenerator.println("  {");
       codeGenerator.println("    if (trace_enabled()) {");
@@ -744,7 +744,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("");
 
       codeGenerator.switchToIncludeFile();
-      codeGenerator.generateMethodDefHeader("  void", JavaCCGlobals.cu_name, "trace_scan(Token *t1, int t2)");
+      codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "trace_scan(Token *t1, int t2)");
       codeGenerator.println("  {");
       codeGenerator.println("    if (trace_enabled()) {");
       codeGenerator.println("      for (int i = 0; i < indent; i++) { std::clog << \" \"; }");
@@ -764,28 +764,28 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("");
     } else {
       codeGenerator.switchToIncludeFile();
-      codeGenerator.generateMethodDefHeader("  void", JavaCCGlobals.cu_name, "enable_tracing()");
+      codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "enable_tracing()");
       codeGenerator.println("  {");
       codeGenerator.println("  }");
       codeGenerator.switchToIncludeFile();
-      codeGenerator.generateMethodDefHeader("  void", JavaCCGlobals.cu_name, "disable_tracing()");
+      codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "disable_tracing()");
       codeGenerator.println("  {");
       codeGenerator.println("  }");
       codeGenerator.println("");
     }
 
-    if ((JavaCCGlobals.jj2index != 0) && Options.getErrorReporting()) {
-      codeGenerator.generateMethodDefHeader("  void", JavaCCGlobals.cu_name, "jj_rescan_token()");
+    if ((context.globals().jj2index != 0) && Options.getErrorReporting()) {
+      codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "jj_rescan_token()");
       codeGenerator.println("{");
       codeGenerator.println("    jj_rescan = true;");
-      codeGenerator.println("    for (int i = 0; i < " + JavaCCGlobals.jj2index + "; i++) {");
+      codeGenerator.println("    for (int i = 0; i < " + context.globals().jj2index + "; i++) {");
       // codeGenerator.genCodeLine(" try {");
       codeGenerator.println("      JJCalls *p = &jj_2_rtns[i];");
       codeGenerator.println("      do {");
       codeGenerator.println("        if (p->gen > jj_gen) {");
       codeGenerator.println("          jj_la = p->arg; jj_lastpos = jj_scanpos = p->first;");
       codeGenerator.println("          switch (i) {");
-      for (int i = 0; i < JavaCCGlobals.jj2index; i++) {
+      for (int i = 0; i < context.globals().jj2index; i++) {
         codeGenerator.println("            case " + i + ": jj_3_" + (i + 1) + "(); break;");
       }
       codeGenerator.println("          }");
@@ -798,7 +798,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("  }");
       codeGenerator.println("");
 
-      codeGenerator.generateMethodDefHeader("  void", JavaCCGlobals.cu_name, "jj_save(int index, int xla)");
+      codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "jj_save(int index, int xla)");
       codeGenerator.println("{");
       codeGenerator.println("    JJCalls *p = &jj_2_rtns[index];");
       codeGenerator.println("    while (p->gen > jj_gen) {");
@@ -810,10 +810,10 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("");
     }
 
-    if (JavaCCGlobals.cu_from_insertion_point_2.size() != 0) {
+    if (context.globals().cu_from_insertion_point_2.size() != 0) {
       Token t = null;
-      codeGenerator.printTokenSetup((JavaCCGlobals.cu_from_insertion_point_2.get(0)));
-      for (Iterator<Token> it = JavaCCGlobals.cu_from_insertion_point_2.iterator(); it.hasNext();) {
+      codeGenerator.printTokenSetup((context.globals().cu_from_insertion_point_2.get(0)));
+      for (Iterator<Token> it = context.globals().cu_from_insertion_point_2.iterator(); it.hasNext();) {
         t = it.next();
         codeGenerator.printToken(t);
       }
@@ -825,15 +825,15 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.switchToIncludeFile();
 
     // copy other stuff
-    Token t1 = JavaCCGlobals.otherLanguageDeclTokenBeg;
-    Token t2 = JavaCCGlobals.otherLanguageDeclTokenEnd;
+    Token t1 = context.globals().otherLanguageDeclTokenBeg;
+    Token t2 = context.globals().otherLanguageDeclTokenEnd;
     while (t1 != t2) {
       codeGenerator.printToken(t1);
       t1 = t1.next;
     }
     codeGenerator.println("\n");
-    if (JavaCCGlobals.jjtreeGenerated) {
-      codeGenerator.println("  JJT" + JavaCCGlobals.cu_name + "State jjtree;");
+    if (context.globals().jjtreeGenerated) {
+      codeGenerator.println("  JJT" + context.globals().cu_name + "State jjtree;");
     }
     codeGenerator.println("private:");
     codeGenerator.println("  bool jj_done;");
@@ -1037,11 +1037,11 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     // The state variables.
     int state = NOOPENSTM;
     int indentAmt = 0;
-    boolean[] casedValues = new boolean[JavaCCGlobals.tokenCount];
+    boolean[] casedValues = new boolean[context.globals().tokenCount];
     String retval = "";
     Lookahead la;
     Token t = null;
-    int tokenMaskSize = ((JavaCCGlobals.tokenCount - 1) / 32) + 1;
+    int tokenMaskSize = ((context.globals().tokenCount - 1) / 32) + 1;
     int[] tokenMask = null;
 
     // Iterate over all the conditions.
@@ -1084,10 +1084,10 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
             case OPENSWITCH:
               retval += "\u0002\n" + "default:" + "\u0001";
               if (Options.getErrorReporting()) {
-                retval += "\njj_la1[" + JavaCCGlobals.maskindex + "] = jj_gen;";
-                JavaCCGlobals.maskindex++;
+                retval += "\njj_la1[" + context.globals().maskindex + "] = jj_gen;";
+                context.globals().maskindex++;
               }
-              JavaCCGlobals.maskVals.add(tokenMask);
+              context.globals().maskVals.add(tokenMask);
               retval += "\n" + "if (";
               indentAmt++;
           }
@@ -1106,9 +1106,9 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
         // is no semantic lookahead.
 
         if (firstSet == null) {
-          firstSet = new boolean[JavaCCGlobals.tokenCount];
+          firstSet = new boolean[context.globals().tokenCount];
         }
-        for (int i = 0; i < JavaCCGlobals.tokenCount; i++) {
+        for (int i = 0; i < context.globals().tokenCount; i++) {
           firstSet[i] = false;
         }
         // jj2LA is set to false at the beginning of the containing "if"
@@ -1137,7 +1137,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
               } else {
                 retval += "(jj_ntk==-1)?jj_ntk_f():jj_ntk) {\u0001";
               }
-              for (int i = 0; i < JavaCCGlobals.tokenCount; i++) {
+              for (int i = 0; i < context.globals().tokenCount; i++) {
                 casedValues[i] = false;
               }
               indentAmt++;
@@ -1147,7 +1147,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
               }
               // Don't need to do anything if state is OPENSWITCH.
           }
-          for (int i = 0; i < JavaCCGlobals.tokenCount; i++) {
+          for (int i = 0; i < context.globals().tokenCount; i++) {
             if (firstSet[i]) {
               if (!casedValues[i]) {
                 casedValues[i] = true;
@@ -1155,7 +1155,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
                 int j1 = i / 32;
                 int j2 = i % 32;
                 tokenMask[j1] |= 1 << j2;
-                String s = JavaCCGlobals.names_of_tokens.get(Integer.valueOf(i));
+                String s = context.globals().names_of_tokens.get(Integer.valueOf(i));
                 if (s == null) {
                   retval += i;
                 } else {
@@ -1195,17 +1195,17 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
           case OPENSWITCH:
             retval += "\u0002\n" + "default:" + "\u0001";
             if (Options.getErrorReporting()) {
-              retval += "\njj_la1[" + JavaCCGlobals.maskindex + "] = jj_gen;";
-              JavaCCGlobals.maskindex++;
+              retval += "\njj_la1[" + context.globals().maskindex + "] = jj_gen;";
+              context.globals().maskindex++;
             }
-            JavaCCGlobals.maskVals.add(tokenMask);
+            context.globals().maskVals.add(tokenMask);
             retval += "\n" + "if (";
             indentAmt++;
         }
-        JavaCCGlobals.jj2index++;
+        context.globals().jj2index++;
         // At this point, la.la_expansion.internal_name must be "".
-        internalNames.put(la.getLaExpansion(), "_" + JavaCCGlobals.jj2index);
-        internalIndexes.put(la.getLaExpansion(), JavaCCGlobals.jj2index);
+        internalNames.put(la.getLaExpansion(), "_" + context.globals().jj2index);
+        internalIndexes.put(la.getLaExpansion(), context.globals().jj2index);
         phase2list.add(la);
         retval += "jj_2" + internalNames.get(la.getLaExpansion()) + "(" + la.getAmount() + ")";
         if (la.getActionTokens().size() != 0) {
@@ -1241,9 +1241,9 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       case OPENSWITCH:
         retval += "\u0002\n" + "default:" + "\u0001";
         if (Options.getErrorReporting()) {
-          retval += "\njj_la1[" + JavaCCGlobals.maskindex + "] = jj_gen;";
-          JavaCCGlobals.maskVals.add(tokenMask);
-          JavaCCGlobals.maskindex++;
+          retval += "\njj_la1[" + context.globals().maskindex + "] = jj_gen;";
+          context.globals().maskVals.add(tokenMask);
+          context.globals().maskindex++;
         }
         retval += actions[index];
     }
@@ -1332,7 +1332,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     params = sig.toString();
 
     // For now, just ignore comments
-    codeGenerator.generateMethodDefHeader(ret, JavaCCGlobals.cu_name, p.getLhs() + params, sig.toString());
+    codeGenerator.generateMethodDefHeader(ret, context.globals().cu_name, p.getLhs() + params, sig.toString());
 
     // Generate a default value for error return.
     String default_return;
@@ -1463,7 +1463,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       }
       String tail = e_nrw.rhsToken == null ? ");" : ")->" + e_nrw.rhsToken.image + ";";
       if (e_nrw.label.equals("")) {
-        Object label = JavaCCGlobals.names_of_tokens.get(Integer.valueOf(e_nrw.ordinal));
+        Object label = context.globals().names_of_tokens.get(Integer.valueOf(e_nrw.ordinal));
         if (label != null) {
           retval += "jj_consume_token(" + (String) label + tail;
         } else {
@@ -1540,7 +1540,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
         // For C++, since we are not using exceptions, we will protect all the
         // expansion choices with if (!error)
         boolean wrap_in_block = false;
-        if (!JavaCCGlobals.jjtreeGenerated) {
+        if (!context.globals().jjtreeGenerated) {
           // for the last one, if it's an action, we will not protect it.
           Expansion elem = e_nrw.units.get(i);
           if (!(elem instanceof Action) || !(e.parent instanceof BNFProduction) || (i != (e_nrw.units.size() - 1))) {
@@ -1733,7 +1733,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
           seq = ((Sequence) seq).units.get(1);
         } else if (seq instanceof NonTerminal) {
           NonTerminal e_nrw = (NonTerminal) seq;
-          NormalProduction ntprod = JavaCCGlobals.production_table.get(e_nrw.getName());
+          NormalProduction ntprod = context.globals().production_table.get(e_nrw.getName());
           if (ntprod instanceof CodeProduction) {
             break; // nothing to do here
           } else {
@@ -1748,7 +1748,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
         RegularExpression re = (RegularExpression) seq;
         String jj_scan_token = "jj_scan_token";
         if (re.label.equals("")) {
-          Object label = JavaCCGlobals.names_of_tokens.get(Integer.valueOf(re.ordinal));
+          Object label = context.globals().names_of_tokens.get(Integer.valueOf(re.ordinal));
           if (label != null) {
             jj_scan_token += "(" + ParserCodeGenerator.getUserTokenManagerConstantNamespace() + (String) label + ")";
           } else {
@@ -1789,7 +1789,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       // fact, we rely here on the fact that the "name" fields of both these
       // variables are the same.
       NonTerminal e_nrw = (NonTerminal) e;
-      NormalProduction ntprod = JavaCCGlobals.production_table.get(e_nrw.getName());
+      NormalProduction ntprod = context.globals().production_table.get(e_nrw.getName());
       if (ntprod instanceof CodeProduction) {
         // nothing to do here
       } else {
@@ -1873,7 +1873,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     if (e instanceof RegularExpression) {
       RegularExpression e_nrw = (RegularExpression) e;
       if (e_nrw.label.equals("")) {
-        Object label = JavaCCGlobals.names_of_tokens.get(Integer.valueOf(e_nrw.ordinal));
+        Object label = context.globals().names_of_tokens.get(Integer.valueOf(e_nrw.ordinal));
         if (label != null) {
           codeGenerator.println("    if (jj_scan_token(" + ParserCodeGenerator.getUserTokenManagerConstantNamespace()
               + (String) label + ")) " + genReturn(true));
@@ -1892,7 +1892,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       // fact, we rely here on the fact that the "name" fields of both these
       // variables are the same.
       NonTerminal e_nrw = (NonTerminal) e;
-      NormalProduction ntprod = JavaCCGlobals.production_table.get(e_nrw.getName());
+      NormalProduction ntprod = context.globals().production_table.get(e_nrw.getName());
       if (ntprod instanceof CodeProduction) {
         codeGenerator.println("    if (true) { jj_la = 0; jj_scanpos = jj_lastpos; " + genReturn(false) + "}");
       } else {
@@ -1918,7 +1918,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
         Lookahead la = (Lookahead) nested_seq.units.get(0);
         if (la.getActionTokens().size() != 0) {
           // We have semantic lookahead that must be evaluated.
-          JavaCCGlobals.lookaheadNeeded = true;
+          context.globals().lookaheadNeeded = true;
           codeGenerator.println("    jj_lookingAhead = true;");
           codeGenerator.print("    jj_semLA = ");
           codeGenerator.printTokenSetup(la.getActionTokens().get(0));
@@ -2051,7 +2051,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       retval = 1;
     } else if (e instanceof NonTerminal) {
       NonTerminal e_nrw = (NonTerminal) e;
-      NormalProduction ntprod = JavaCCGlobals.production_table.get(e_nrw.getName());
+      NormalProduction ntprod = context.globals().production_table.get(e_nrw.getName());
       if (ntprod instanceof CodeProduction) {
         retval = Integer.MAX_VALUE;
         // Make caller think this is unending (for we do not go beyond JAVACODE
@@ -2116,7 +2116,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     CppCodeProduction cp;
 
     this.codeGenerator = codeGenerator;
-    for (Iterator<NormalProduction> prodIterator = JavaCCGlobals.bnfproductions.iterator(); prodIterator.hasNext();) {
+    for (Iterator<NormalProduction> prodIterator = context.globals().bnfproductions.iterator(); prodIterator.hasNext();) {
       p = prodIterator.next();
       if (p instanceof CppCodeProduction) {
         cp = (CppCodeProduction) p;
@@ -2153,7 +2153,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
         params = sig.toString();
 
         // For now, just ignore comments
-        codeGenerator.generateMethodDefHeader(ret, JavaCCGlobals.cu_name, p.getLhs() + params, sig.toString());
+        codeGenerator.generateMethodDefHeader(ret, context.globals().cu_name, p.getLhs() + params, sig.toString());
         codeGenerator.println(" {");
         if (Options.getDebugParser()) {
           codeGenerator.println("");

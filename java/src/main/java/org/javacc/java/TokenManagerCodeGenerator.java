@@ -3,7 +3,6 @@ package org.javacc.java;
 
 import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.JavaCCContext;
-import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.JavaCCParserConstants;
 import org.javacc.parser.Options;
 import org.javacc.parser.Token;
@@ -56,13 +55,13 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     File file = new File(Options.getOutputDirectory(), tokenizerData.parserName + "TokenManager.java");
     try {
       codeGenerator = JavaCodeBuilder.of(context, settings).setFile(file);
-      codeGenerator.setPackageName(JavaUtil.parsePackage());
+      codeGenerator.setPackageName(JavaUtil.parsePackage(context));
 
-      if (JavaCCGlobals.cu_to_insertion_point_1.size() != 0) {
+      if (context.globals().cu_to_insertion_point_1.size() != 0) {
         List<String> tokens = null;
-        Object firstToken = JavaCCGlobals.cu_to_insertion_point_1.get(0);
+        Object firstToken = context.globals().cu_to_insertion_point_1.get(0);
         codeGenerator.printTokenSetup((Token) firstToken);
-        for (Token t : JavaCCGlobals.cu_to_insertion_point_1) {
+        for (Token t : context.globals().cu_to_insertion_point_1) {
           if (t.kind == JavaCCParserConstants.IMPORT) {
             tokens = new ArrayList<>();
           } else if ((tokens != null) && (t.kind == JavaCCParserConstants.SEMICOLON)) {

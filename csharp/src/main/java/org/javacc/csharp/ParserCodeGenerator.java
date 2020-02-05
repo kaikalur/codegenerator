@@ -140,7 +140,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println(parserData.parserName + "Constants {");
       codeGenerator.println(parserData.decls);
 
-      if (JavaCCGlobals.jjtreeGenerated) {
+      if (context.globals().jjtreeGenerated) {
         codeGenerator
             .println("  JJT" + parserData.parserName + "State jjtree = new JJT" + parserData.parserName + "State();");
       }

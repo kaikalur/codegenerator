@@ -223,8 +223,8 @@ final class NodeFiles {
     }
   }
 
-  static void generateOutputFiles() throws IOException {
-    NodeFiles.generateDefaultNode();
+  static void generateOutputFiles(JavaCCContext context) throws IOException {
+    NodeFiles.generateDefaultNode(context);
 
     if (!NodeFiles.nodesToBuild.isEmpty()) {
       NodeFiles.generateTreeNodes(context);
