@@ -41,7 +41,8 @@ final class NodeFiles {
       builder.setPackageName(JJTreeGlobals.packageName);
 
       for (String node : NodeFiles.nodesToBuild) {
-        File file = new File(JJTreeOptions.getASTNodeDirectory(), node + ".java");
+        File file = new File(JJTreeOptions.getASTNodeDirectory(), JJTreeOptions.getNodePackage());
+        file = new File(file, node + ".java");
         if (file.exists()) {
           continue;
         }
