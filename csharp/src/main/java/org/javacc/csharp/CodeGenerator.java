@@ -2,6 +2,7 @@
 package org.javacc.csharp;
 
 import org.javacc.parser.CodeGeneratorSettings;
+import org.javacc.parser.JavaCCContext;
 import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.TokenizerData;
 import org.javacc.utils.CodeBuilder.GenericCodeBuilder;
@@ -22,25 +23,25 @@ public class CodeGenerator implements org.javacc.parser.CodeGenerator {
    * Generate any other support files you need.
    */
   @Override
-  public boolean generateHelpers(CodeGeneratorSettings settings, TokenizerData tokenizerData) {
+  public boolean generateHelpers(JavaCCContext context, CodeGeneratorSettings settings, TokenizerData tokenizerData) {
     File directory = new File((String) settings.get("OUTPUT_DIRECTORY"));
     try {
-      try (GenericCodeBuilder builder = GenericCodeBuilder.of(settings)) {
+      try (GenericCodeBuilder builder = GenericCodeBuilder.of(context, settings)) {
         builder.setFile(new File(directory, "CharStream.cs"));
         builder.addTools(JavaCCGlobals.toolName).printTemplate("/templates/csharp/CharStream.template");
       }
 
-      try (GenericCodeBuilder builder = GenericCodeBuilder.of(settings)) {
+      try (GenericCodeBuilder builder = GenericCodeBuilder.of(context, settings)) {
         builder.setFile(new File(directory, "TokenMgrError.cs"));
         builder.addTools(JavaCCGlobals.toolName).printTemplate("/templates/csharp/TokenMgrError.template");
       }
 
-      try (GenericCodeBuilder builder = GenericCodeBuilder.of(settings)) {
+      try (GenericCodeBuilder builder = GenericCodeBuilder.of(context, settings)) {
         builder.setFile(new File(directory, "ParseException.cs"));
         builder.addTools(JavaCCGlobals.toolName).printTemplate("/templates/csharp/ParseException.template");
       }
 
-      try (GenericCodeBuilder builder = GenericCodeBuilder.of(settings)) {
+      try (GenericCodeBuilder builder = GenericCodeBuilder.of(context, settings)) {
         builder.addTools(JavaCCGlobals.toolName);
 
         if ((Boolean) settings.get("JAVA_UNICODE_ESCAPE")) {
@@ -62,24 +63,24 @@ public class CodeGenerator implements org.javacc.parser.CodeGenerator {
    * The Token class generator.
    */
   @Override
-  public TokenCodeGenerator getTokenCodeGenerator() {
-    return new TokenCodeGenerator();
+  public TokenCodeGenerator getTokenCodeGenerator(JavaCCContext context) {
+    return new TokenCodeGenerator(context);
   }
 
   /**
    * The TokenManager class generator.
    */
   @Override
-  public TokenManagerCodeGenerator getTokenManagerCodeGenerator() {
-    return new TokenManagerCodeGenerator();
+  public TokenManagerCodeGenerator getTokenManagerCodeGenerator(JavaCCContext context) {
+    return new TokenManagerCodeGenerator(context);
   }
 
   /**
    * The Parser class generator.
    */
   @Override
-  public ParserCodeGenerator getParserCodeGenerator() {
-    return new ParserCodeGenerator();
+  public ParserCodeGenerator getParserCodeGenerator(JavaCCContext context) {
+    return new ParserCodeGenerator(context);
   }
 
   /**

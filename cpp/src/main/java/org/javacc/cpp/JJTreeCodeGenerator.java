@@ -29,6 +29,7 @@ import org.javacc.jjtree.SimpleNode;
 import org.javacc.jjtree.Token;
 import org.javacc.jjtree.TokenUtils;
 import org.javacc.parser.CodeGeneratorSettings;
+import org.javacc.parser.JavaCCContext;
 import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.Options;
 
@@ -405,11 +406,11 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
   }
 
   @Override
-  public void generateHelperFiles() throws java.io.IOException {
+  public void generateHelperFiles(JavaCCContext context) throws java.io.IOException {
     CodeGeneratorSettings options = CodeGeneratorSettings.of(Options.getOptions());
     options.set(Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
 
-    try (CppCodeBuilder builder = CppCodeBuilder.of(options)) {
+    try (CppCodeBuilder builder = CppCodeBuilder.of(context, options)) {
       builder
       .setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), "JJT" + JJTreeGlobals.parserName + "State.cc"));
       builder.setVersion(JJTreeCodeGenerator.JJTStateVersion).addOption(JavaCCGlobals.toolName);
@@ -419,6 +420,6 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
       builder.printTemplate("/templates/cpp/JJTTreeState.h.template");
     }
 
-    NodeFiles.generateOutputFiles();
+    NodeFiles.generateOutputFiles(context);
   }
 }

@@ -30,6 +30,7 @@ import org.javacc.jjtree.SimpleNode;
 import org.javacc.jjtree.Token;
 import org.javacc.jjtree.TokenUtils;
 import org.javacc.parser.CodeGeneratorSettings;
+import org.javacc.parser.JavaCCContext;
 import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.Options;
 
@@ -79,7 +80,8 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
             needClose = false;
             break;
           }
-        } else if ((p instanceof ASTBNFZeroOrOne) || (p instanceof ASTBNFZeroOrMore) || (p instanceof ASTBNFOneOrMore)) {
+        } else if ((p instanceof ASTBNFZeroOrOne) || (p instanceof ASTBNFZeroOrMore)
+            || (p instanceof ASTBNFOneOrMore)) {
           needClose = false;
           break;
         }
@@ -471,18 +473,18 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
   }
 
   @Override
-  public void generateHelperFiles() throws java.io.IOException {
+  public void generateHelperFiles(JavaCCContext context) throws java.io.IOException {
     CodeGeneratorSettings options = CodeGeneratorSettings.of(Options.getOptions());
     options.set(Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
 
-    try (JavaCodeBuilder builder = JavaCodeBuilder.of(options)) {
+    try (JavaCodeBuilder builder = JavaCodeBuilder.of(context, options)) {
       builder
-      .setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), "JJT" + JJTreeGlobals.parserName + "State.java"));
+          .setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), "JJT" + JJTreeGlobals.parserName + "State.java"));
       builder.setVersion(Version.version).addTools(JavaCCGlobals.toolName);
       NodeFiles.generateProlog(builder);
       builder.printTemplate("/templates/JJTTreeState.template");
     }
 
-    NodeFiles.generateOutputFiles();
+    NodeFiles.generateOutputFiles(context);
   }
 }

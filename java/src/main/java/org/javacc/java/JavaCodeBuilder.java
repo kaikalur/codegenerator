@@ -2,6 +2,7 @@
 package org.javacc.java;
 
 import org.javacc.parser.CodeGeneratorSettings;
+import org.javacc.parser.JavaCCContext;
 import org.javacc.utils.CodeBuilder;
 
 import java.util.ArrayList;
@@ -24,8 +25,8 @@ class JavaCodeBuilder extends CodeBuilder<JavaCodeBuilder> {
    *
    * @param options
    */
-  private JavaCodeBuilder(CodeGeneratorSettings options) {
-    super(options);
+  private JavaCodeBuilder(JavaCCContext context, CodeGeneratorSettings options) {
+    super(context, options);
   }
 
   /**
@@ -79,7 +80,7 @@ class JavaCodeBuilder extends CodeBuilder<JavaCodeBuilder> {
    *
    * @param options
    */
-  static JavaCodeBuilder of(CodeGeneratorSettings options) {
-    return new JavaCodeBuilder(options);
+  static JavaCodeBuilder of(JavaCCContext context, CodeGeneratorSettings options) {
+    return new JavaCodeBuilder(context, options);
   }
 }

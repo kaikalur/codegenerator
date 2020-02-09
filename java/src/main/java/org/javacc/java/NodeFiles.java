@@ -6,6 +6,7 @@ import org.javacc.jjtree.ASTNodeDescriptor;
 import org.javacc.jjtree.JJTreeGlobals;
 import org.javacc.jjtree.JJTreeOptions;
 import org.javacc.parser.CodeGeneratorSettings;
+import org.javacc.parser.JavaCCContext;
 import org.javacc.parser.Options;
 
 import java.io.File;
@@ -32,8 +33,8 @@ final class NodeFiles {
     }
   }
 
-  private static void generateTreeNodes() {
-    try (JavaCodeBuilder builder = JavaCodeBuilder.of(CodeGeneratorSettings.create())) {
+  private static void generateTreeNodes(JavaCCContext context) {
+    try (JavaCodeBuilder builder = JavaCodeBuilder.of(context, CodeGeneratorSettings.create())) {
       builder.setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), JJTreeGlobals.parserName + "Tree.java"));
       builder.addTools(JJTreeGlobals.toolName).setVersion(NodeFiles.nodeVersion);
       builder.addOption("MULTI", "NODE_USES_PARSER", "VISITOR", "TRACK_TOKENS", "NODE_PREFIX", "NODE_EXTENDS",
@@ -62,11 +63,11 @@ final class NodeFiles {
     builder.printTemplate("/templates/MultiNode.template", options);
   }
 
-  private static void generateTreeConstants() {
+  private static void generateTreeConstants(JavaCCContext context) {
     List<String> nodeIds = ASTNodeDescriptor.getNodeIds();
     List<String> nodeNames = ASTNodeDescriptor.getNodeNames();
 
-    try (JavaCodeBuilder builder = JavaCodeBuilder.of(CodeGeneratorSettings.create())) {
+    try (JavaCodeBuilder builder = JavaCodeBuilder.of(context, CodeGeneratorSettings.create())) {
       builder.setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), JavaTemplates.nodeConstants() + ".java"));
       NodeFiles.generateProlog(builder);
 
@@ -91,7 +92,7 @@ final class NodeFiles {
     }
   }
 
-  private static void generateVisitor() {
+  private static void generateVisitor(JavaCCContext context) {
     if (!JJTreeOptions.getVisitor()) {
       return;
     }
@@ -104,7 +105,7 @@ final class NodeFiles {
       argumentType = JJTreeOptions.getVisitorDataType();
     }
 
-    try (JavaCodeBuilder builder = JavaCodeBuilder.of(CodeGeneratorSettings.create())) {
+    try (JavaCodeBuilder builder = JavaCodeBuilder.of(context, CodeGeneratorSettings.create())) {
       builder.setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), JavaTemplates.visitorClass() + ".java"));
       NodeFiles.generateProlog(builder);
 
@@ -140,7 +141,7 @@ final class NodeFiles {
     return sb.toString();
   }
 
-  private static void generateDefaultVisitor() {
+  private static void generateDefaultVisitor(JavaCCContext context) {
     if (!JJTreeOptions.getVisitor()) {
       return;
     }
@@ -153,7 +154,7 @@ final class NodeFiles {
     }
     List<String> nodeNames = ASTNodeDescriptor.getNodeNames();
 
-    try (JavaCodeBuilder builder = JavaCodeBuilder.of(CodeGeneratorSettings.create())) {
+    try (JavaCodeBuilder builder = JavaCodeBuilder.of(context, CodeGeneratorSettings.create())) {
       builder
           .setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), JavaTemplates.defaultVisitorClass() + ".java"));
       NodeFiles.generateProlog(builder);
@@ -194,18 +195,18 @@ final class NodeFiles {
     return ve;
   }
 
-  private static void generateDefaultNode() throws IOException {
+  private static void generateDefaultNode(JavaCCContext context) throws IOException {
     CodeGeneratorSettings options = CodeGeneratorSettings.of(Options.getOptions());
     options.set(Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
     options.set("VISITOR_RETURN_TYPE_VOID", Boolean.valueOf(JJTreeOptions.getVisitorReturnType().equals("void")));
 
-    try (JavaCodeBuilder builder = JavaCodeBuilder.of(options)) {
+    try (JavaCodeBuilder builder = JavaCodeBuilder.of(context, options)) {
       builder.setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), "Node.java"));
       NodeFiles.generateProlog(builder);
       builder.printTemplate("/templates/Node.template");
     }
 
-    try (JavaCodeBuilder builder = JavaCodeBuilder.of(options)) {
+    try (JavaCodeBuilder builder = JavaCodeBuilder.of(context, options)) {
       builder.setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), "SimpleNode.java"));
       NodeFiles.generateProlog(builder);
       builder.printTemplate("/templates/SimpleNode.template");
@@ -226,10 +227,10 @@ final class NodeFiles {
     NodeFiles.generateDefaultNode();
 
     if (!NodeFiles.nodesToBuild.isEmpty()) {
-      NodeFiles.generateTreeNodes();
+      NodeFiles.generateTreeNodes(context);
     }
-    NodeFiles.generateTreeConstants();
-    NodeFiles.generateVisitor();
-    NodeFiles.generateDefaultVisitor();
+    NodeFiles.generateTreeConstants(context);
+    NodeFiles.generateVisitor(context);
+    NodeFiles.generateDefaultVisitor(context);
   }
 }

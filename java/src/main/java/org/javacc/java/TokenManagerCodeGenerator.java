@@ -2,6 +2,7 @@
 package org.javacc.java;
 
 import org.javacc.parser.CodeGeneratorSettings;
+import org.javacc.parser.JavaCCContext;
 import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.JavaCCParserConstants;
 import org.javacc.parser.Options;
@@ -25,7 +26,12 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
 
   private static final String tokenManagerTemplate = "/templates/TokenManagerDriver.template";
 
+  private final JavaCCContext context;
   private JavaCodeBuilder     codeGenerator;
+
+  TokenManagerCodeGenerator(JavaCCContext context) {
+    this.context = context;
+  }
 
   @Override
   public void generateCode(CodeGeneratorSettings settings, TokenizerData tokenizerData) {
@@ -49,7 +55,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
 
     File file = new File(Options.getOutputDirectory(), tokenizerData.parserName + "TokenManager.java");
     try {
-      codeGenerator = JavaCodeBuilder.of(settings).setFile(file);
+      codeGenerator = JavaCodeBuilder.of(context, settings).setFile(file);
       codeGenerator.setPackageName(JavaUtil.parsePackage());
 
       if (JavaCCGlobals.cu_to_insertion_point_1.size() != 0) {

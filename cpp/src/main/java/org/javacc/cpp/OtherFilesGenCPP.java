@@ -31,7 +31,7 @@
 package org.javacc.cpp;
 
 import org.javacc.parser.CodeGeneratorSettings;
-import org.javacc.parser.JavaCCErrors;
+import org.javacc.parser.JavaCCContext;
 import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.MetaParseException;
 import org.javacc.parser.Options;
@@ -50,8 +50,8 @@ import java.util.List;
  */
 class OtherFilesGenCPP {
 
-  static void start(TokenizerData tokenizerData) throws MetaParseException {
-    if (JavaCCErrors.get_error_count() != 0) {
+  static void start(JavaCCContext context, TokenizerData tokenizerData) throws MetaParseException {
+    if (context.errors().get_error_count() != 0) {
       throw new MetaParseException();
     }
 
@@ -59,7 +59,7 @@ class OtherFilesGenCPP {
     toolnames.add(JavaCCGlobals.toolName);
 
 
-    try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(CodeGeneratorSettings.create())) {
+    try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(context, CodeGeneratorSettings.create())) {
       builder.setFile(new File(Options.getOutputDirectory(), JavaCCGlobals.cu_name + "Constants.h"));
       builder.addTools(toolnames.toArray(new String[toolnames.size()]));
 
@@ -108,7 +108,7 @@ class OtherFilesGenCPP {
             OtherFilesGenCPP.printCharArray(builder, "\"<" + re.label + ">\"");
           } else {
             if (re.tpContext.kind == TokenProduction.TOKEN) {
-              JavaCCErrors.warning(re, "Consider giving this non-string token a label for better error reporting.");
+              context.errors().warning(re, "Consider giving this non-string token a label for better error reporting.");
             }
             OtherFilesGenCPP.printCharArray(builder, "\"<token of kind " + re.ordinal + ">\"");
           }
@@ -126,7 +126,7 @@ class OtherFilesGenCPP {
         builder.println(Options.stringValue("NAMESPACE_CLOSE"));
       }
     } catch (java.io.IOException e) {
-      JavaCCErrors.semantic_error("Could not open file " + JavaCCGlobals.cu_name + "Constants.h for writing.");
+      context.errors().semantic_error("Could not open file " + JavaCCGlobals.cu_name + "Constants.h for writing.");
       throw new Error();
     }
   }

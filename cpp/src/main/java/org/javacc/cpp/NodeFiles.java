@@ -6,6 +6,7 @@ import org.javacc.jjtree.ASTNodeDescriptor;
 import org.javacc.jjtree.JJTreeGlobals;
 import org.javacc.jjtree.JJTreeOptions;
 import org.javacc.parser.CodeGeneratorSettings;
+import org.javacc.parser.JavaCCContext;
 import org.javacc.parser.Options;
 
 import java.io.File;
@@ -59,23 +60,23 @@ final class NodeFiles {
     return new File(JJTreeOptions.getJJTreeOutputDirectory(), name + ".h").getAbsolutePath();
   }
 
-  static void generateOutputFiles() throws IOException {
-    NodeFiles.generateNodeHeader();
-    NodeFiles.generateSimpleNode();
-    NodeFiles.generateOneTree(false);
-    NodeFiles.generateMultiTree();
-    NodeFiles.generateTreeConstants();
-    NodeFiles.generateVisitors();
+  static void generateOutputFiles(JavaCCContext context) throws IOException {
+    NodeFiles.generateNodeHeader(context);
+    NodeFiles.generateSimpleNode(context);
+    NodeFiles.generateOneTree(context, false);
+    NodeFiles.generateMultiTree(context);
+    NodeFiles.generateTreeConstants(context);
+    NodeFiles.generateVisitors(context);
   }
 
-  private static void generateNodeHeader() {
+  private static void generateNodeHeader(JavaCCContext context) {
     CodeGeneratorSettings optionMap = CodeGeneratorSettings.of(Options.getOptions());
     optionMap.set("PARSER_NAME", JJTreeGlobals.parserName);
     optionMap.set("VISITOR_RETURN_TYPE", NodeFiles.getVisitorReturnType());
     optionMap.set("VISITOR_DATA_TYPE", NodeFiles.getVisitorArgumentType());
     optionMap.set("VISITOR_RETURN_TYPE_VOID", Boolean.valueOf(NodeFiles.getVisitorReturnType().equals("void")));
 
-    try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(optionMap)) {
+    try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(context, optionMap)) {
       builder.setFile(new File(NodeFiles.nodeIncludeFile()));
       builder.setVersion(NodeFiles.nodeVersion).addTools(JJTreeGlobals.toolName);
       builder.addOption("MULTI", "NODE_USES_PARSER", "VISITOR", "TRACK_TOKENS", "NODE_PREFIX", "NODE_EXTENDS",
@@ -88,14 +89,14 @@ final class NodeFiles {
   }
 
 
-  private static void generateSimpleNode() {
+  private static void generateSimpleNode(JavaCCContext context) {
     CodeGeneratorSettings optionMap = CodeGeneratorSettings.of(Options.getOptions());
     optionMap.set(Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
     optionMap.set("VISITOR_RETURN_TYPE", NodeFiles.getVisitorReturnType());
     optionMap.set("VISITOR_DATA_TYPE", NodeFiles.getVisitorArgumentType());
     optionMap.set("VISITOR_RETURN_TYPE_VOID", Boolean.valueOf(NodeFiles.getVisitorReturnType().equals("void")));
 
-    try (CppCodeBuilder builder = CppCodeBuilder.of(optionMap)) {
+    try (CppCodeBuilder builder = CppCodeBuilder.of(context, optionMap)) {
       builder.setFile(new File(NodeFiles.simpleNodeCodeFile()));
       builder.setVersion(NodeFiles.nodeVersion).addTools(JJTreeGlobals.toolName);
       builder.addOption("MULTI", "NODE_USES_PARSER", "VISITOR", "TRACK_TOKENS", "NODE_PREFIX", "NODE_EXTENDS",
@@ -109,7 +110,7 @@ final class NodeFiles {
     }
   }
 
-  private static void generateOneTree(boolean generateOneTreeImpl) {
+  private static void generateOneTree(JavaCCContext context,boolean generateOneTreeImpl) {
     CodeGeneratorSettings optionMap = CodeGeneratorSettings.of(Options.getOptions());
     optionMap.set("PARSER_NAME", JJTreeGlobals.parserName);
     optionMap.set("VISITOR_RETURN_TYPE", NodeFiles.getVisitorReturnType());
@@ -117,7 +118,7 @@ final class NodeFiles {
     optionMap.set("VISITOR_RETURN_TYPE_VOID", Boolean.valueOf(NodeFiles.getVisitorReturnType().equals("void")));
 
     try (CppCodeBuilder builder =
-        generateOneTreeImpl ? CppCodeBuilder.of(optionMap) : CppCodeBuilder.ofHeader(optionMap)) {
+        generateOneTreeImpl ? CppCodeBuilder.of(context, optionMap) : CppCodeBuilder.ofHeader(context, optionMap)) {
       builder.setFile(new File(NodeFiles.jjtreeIncludeFile()));
       builder.setVersion(NodeFiles.nodeVersion).addTools(JJTreeGlobals.toolName);
       builder.addOption("MULTI", "NODE_USES_PARSER", "VISITOR", "TRACK_TOKENS", "NODE_PREFIX", "NODE_EXTENDS",
@@ -139,7 +140,7 @@ final class NodeFiles {
     }
   }
 
-  private static void generateMultiTree() {
+  private static void generateMultiTree(JavaCCContext context) {
     for (String node : NodeFiles.nodesToBuild) {
       if (new File(NodeFiles.jjtreeASTNodeImplFile(node)).exists()) {
         continue;
@@ -152,7 +153,7 @@ final class NodeFiles {
       optionMap.set("VISITOR_RETURN_TYPE_VOID", Boolean.valueOf(NodeFiles.getVisitorReturnType().equals("void")));
       optionMap.set("NODE_TYPE", node);
 
-      try (CppCodeBuilder builder = CppCodeBuilder.of(optionMap)) {
+      try (CppCodeBuilder builder = CppCodeBuilder.of(context, optionMap)) {
         builder.setFile(new File(NodeFiles.jjtreeImplFile(node)));
         builder.setVersion(NodeFiles.nodeVersion).addTools(JJTreeGlobals.toolName);
         builder.addOption("MULTI", "NODE_USES_PARSER", "VISITOR", "TRACK_TOKENS", "NODE_PREFIX", "NODE_EXTENDS",
@@ -171,14 +172,14 @@ final class NodeFiles {
     return JJTreeGlobals.parserName + "TreeConstants";
   }
 
-  private static void generateTreeConstants() {
+  private static void generateTreeConstants(JavaCCContext context) {
     List<String> nodeIds = ASTNodeDescriptor.getNodeIds();
     List<String> nodeNames = ASTNodeDescriptor.getNodeNames();
 
     File file = new File(JJTreeOptions.getJJTreeOutputDirectory(), NodeFiles.nodeConstants() + ".h");
     NodeFiles.headersForJJTreeH.add(file.getName());
 
-    try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(CodeGeneratorSettings.create())) {
+    try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(context, CodeGeneratorSettings.create())) {
       builder.setFile(file);
 
       builder.println("\n#include \"JavaCC.h\"");
@@ -242,12 +243,12 @@ final class NodeFiles {
     return (ret == null) || ret.equals("") || ret.equals("Object") ? "void" : ret;
   }
 
-  private static void generateVisitors() {
+  private static void generateVisitors(JavaCCContext context) {
     if (!JJTreeOptions.getVisitor()) {
       return;
     }
 
-    try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(CodeGeneratorSettings.create())) {
+    try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(context, CodeGeneratorSettings.create())) {
       builder.setFile(new File(NodeFiles.visitorIncludeFile()));
 
       builder.println("\n#include \"JavaCC.h\"");

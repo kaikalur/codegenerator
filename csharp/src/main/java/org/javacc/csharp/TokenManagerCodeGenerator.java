@@ -2,6 +2,7 @@
 package org.javacc.csharp;
 
 import org.javacc.parser.CodeGeneratorSettings;
+import org.javacc.parser.JavaCCContext;
 import org.javacc.parser.Options;
 import org.javacc.parser.TokenizerData;
 import org.javacc.utils.CodeBuilder;
@@ -21,7 +22,14 @@ import java.util.Map;
 class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGenerator {
 
   private static final String tokenManagerTemplate = "/templates/csharp/TokenManagerDriver.template";
+
+  private final JavaCCContext context;
   private GenericCodeBuilder  codeGenerator;
+
+
+  TokenManagerCodeGenerator(JavaCCContext context) {
+    this.context = context;
+  }
 
   @Override
   public void generateCode(CodeGeneratorSettings settings, TokenizerData tokenizerData) {
@@ -46,7 +54,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
 
     File file = new File(Options.getOutputDirectory(), tokenizerData.parserName + "TokenManager.cs");
     try {
-      codeGenerator = GenericCodeBuilder.of(settings).setFile(file);
+      codeGenerator = GenericCodeBuilder.of(context, settings).setFile(file);
       if (Options.getNamespace() != null) {
         codeGenerator.println("namespace " + Options.getNamespace() + " {\n");
       }

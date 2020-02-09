@@ -3,7 +3,7 @@ package org.javacc.java;
 
 import org.javacc.Version;
 import org.javacc.parser.CodeGeneratorSettings;
-import org.javacc.parser.JavaCCErrors;
+import org.javacc.parser.JavaCCContext;
 import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.MetaParseException;
 import org.javacc.parser.Options;
@@ -29,8 +29,8 @@ abstract class JavaHelperFiles {
   private JavaHelperFiles() {}
 
 
-  static void genMiscFile(String fileName, String templatePath) throws Error {
-    try (JavaCodeBuilder builder = JavaCodeBuilder.of(CodeGeneratorSettings.of(Options.getOptions()))) {
+  static void genMiscFile(String fileName, String templatePath, JavaCCContext context) throws Error {
+    try (JavaCodeBuilder builder = JavaCodeBuilder.of(context, CodeGeneratorSettings.of(Options.getOptions()))) {
       builder.setFile(new File(Options.getOutputDirectory(), fileName));
 
       /*
@@ -38,19 +38,19 @@ abstract class JavaHelperFiles {
        * -- KEEP_LINE_COL
        */
       builder.setVersion(Version.version).addTools(JavaCCGlobals.toolName)
-      .addOption(Options.USEROPTION__KEEP_LINE_COLUMN);
+          .addOption(Options.USEROPTION__KEEP_LINE_COLUMN);
 
       builder.setPackageName(JavaUtil.parsePackage());
       builder.printTemplate(templatePath);
     } catch (IOException e) {
       System.err.println("Failed to create " + fileName + " " + e);
-      JavaCCErrors.semantic_error("Could not open file " + fileName + " for writing.");
+      context.errors().semantic_error("Could not open file " + fileName + " for writing.");
       throw new Error();
     }
   }
 
-  static void gen_Token() {
-    try (JavaCodeBuilder builder = JavaCodeBuilder.of(CodeGeneratorSettings.of(Options.getOptions()))) {
+  static void gen_Token(JavaCCContext context) {
+    try (JavaCodeBuilder builder = JavaCodeBuilder.of(context, CodeGeneratorSettings.of(Options.getOptions()))) {
       builder.setFile(new File(Options.getOutputDirectory(), "Token.java"));
       builder.setVersion(Version.version).addTools(JavaCCGlobals.toolName);
       builder.setPackageName(JavaUtil.parsePackage());
@@ -65,35 +65,35 @@ abstract class JavaHelperFiles {
       builder.printTemplate("/templates/Token.template");
     } catch (IOException e) {
       System.err.println("Failed to create Token " + e);
-      JavaCCErrors.semantic_error("Could not open file Token.java for writing.");
+      context.errors().semantic_error("Could not open file Token.java for writing.");
       throw new Error();
     }
   }
 
 
-  static void gen_TokenManager() {
-    try (JavaCodeBuilder builder = JavaCodeBuilder.of(CodeGeneratorSettings.of(Options.getOptions()))) {
+  static void gen_TokenManager(JavaCCContext context) {
+    try (JavaCodeBuilder builder = JavaCodeBuilder.of(context, CodeGeneratorSettings.of(Options.getOptions()))) {
       builder.setFile(new File(Options.getOutputDirectory(), "TokenManager.java"));
       builder.setVersion(Version.version).addTools(JavaCCGlobals.toolName)
-      .addOption(Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
+          .addOption(Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
       builder.setPackageName(JavaUtil.parsePackage());
       builder.printTemplate("/templates/TokenManager.template");
     } catch (IOException e) {
       System.err.println("Failed to create TokenManager " + e);
-      JavaCCErrors.semantic_error("Could not open file TokenManager.java for writing.");
+      context.errors().semantic_error("Could not open file TokenManager.java for writing.");
       throw new Error();
     }
   }
 
-  static void gen_Constants(TokenizerData tokenizerData) throws MetaParseException {
-    if (JavaCCErrors.get_error_count() != 0) {
+  static void gen_Constants(JavaCCContext context, TokenizerData tokenizerData) throws MetaParseException {
+    if (context.errors().get_error_count() != 0) {
       throw new MetaParseException();
     }
 
     List<String> toolnames = new ArrayList<>(JavaCCGlobals.toolNames);
     toolnames.add(JavaCCGlobals.toolName);
 
-    try (JavaCodeBuilder builder = JavaCodeBuilder.of(CodeGeneratorSettings.create())) {
+    try (JavaCodeBuilder builder = JavaCodeBuilder.of(context, CodeGeneratorSettings.create())) {
       builder.setFile(new File(Options.getOutputDirectory(), JavaCCGlobals.cu_name + "Constants.java"));
       builder.setPackageName(JavaUtil.parsePackage());
       builder.addTools(toolnames.toArray(new String[toolnames.size()]));
@@ -138,7 +138,7 @@ abstract class JavaHelperFiles {
             builder.println("\"<" + res.rexp.label + ">\",");
           } else {
             if (res.rexp.tpContext.kind == TokenProduction.TOKEN) {
-              JavaCCErrors.warning(res.rexp,
+              context.errors().warning(res.rexp,
                   "Consider giving this non-string token a label for better error reporting.");
             }
             builder.println("\"<token of kind " + res.rexp.ordinal + ">\",");
@@ -148,16 +148,16 @@ abstract class JavaHelperFiles {
       builder.println("  };");
       builder.println("}");
     } catch (java.io.IOException e) {
-      JavaCCErrors.semantic_error("Could not open file " + JavaCCGlobals.cu_name + "Constants.java for writing.");
+      context.errors().semantic_error("Could not open file " + JavaCCGlobals.cu_name + "Constants.java for writing.");
       throw new Error();
     }
   }
 
-  static void generateSimple(String template, String outputFileName, CodeGeneratorSettings settings)
-      throws IOException {
+  static void generateSimple(String template, String outputFileName, CodeGeneratorSettings settings,
+      JavaCCContext context) throws IOException {
     File file = new File((String) settings.get("OUTPUT_DIRECTORY"), outputFileName);
 
-    try (JavaCodeBuilder builder = JavaCodeBuilder.of(settings)) {
+    try (JavaCodeBuilder builder = JavaCodeBuilder.of(context, settings)) {
       builder.setFile(file);
       builder.setPackageName(JavaUtil.parsePackage());
       builder.printTemplate(template);

@@ -37,6 +37,7 @@ import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.CodeProduction;
 import org.javacc.parser.CppCodeProduction;
 import org.javacc.parser.Expansion;
+import org.javacc.parser.JavaCCContext;
 import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.JavaCCParserConstants;
 import org.javacc.parser.JavaCodeProduction;
@@ -104,14 +105,20 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
   private int                           cline           = 1;
   private int                           ccol            = 1;
 
+  private final JavaCCContext           context;
   private final Map<Expansion, String>  internalNames   = new HashMap<Expansion, String>();
   private final Map<Expansion, Integer> internalIndexes = new HashMap<Expansion, Integer>();
   private ParserData                    parserData;
 
+
+  ParserCodeGenerator(JavaCCContext context) {
+    this.context = context;
+  }
+
   @Override
   public void generateCode(CodeGeneratorSettings settings, ParserData parserData) {
     this.parserData = parserData;
-    codeGenerator = GenericCodeBuilder.of(settings);
+    codeGenerator = GenericCodeBuilder.of(context, settings);
     codeGenerator.setFile(new File(Options.getOutputDirectory(), parserData.parserName + ".cs"));
 
     String superClass = (String) settings.get(Options.USEROPTION__TOKEN_MANAGER_SUPER_CLASS);
@@ -135,7 +142,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
 
       if (JavaCCGlobals.jjtreeGenerated) {
         codeGenerator
-        .println("  JJT" + parserData.parserName + "State jjtree = new JJT" + parserData.parserName + "State();");
+            .println("  JJT" + parserData.parserName + "State jjtree = new JJT" + parserData.parserName + "State();");
       }
 
       processProductions(settings, codeGenerator);
@@ -461,7 +468,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
                 tokenMask[i] = 0;
               }
               break;
-              // Don't need to do anything if state is OPENSWITCH.
+            // Don't need to do anything if state is OPENSWITCH.
             case OPENSWITCH:
               retval += " else ";
               break;
@@ -898,7 +905,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     if (Options.getDebugLookahead() && (jj3_expansion != null)) {
       String tracecode =
           "trace_return(\"" + codeGenerator.escapeToUnicode(((NormalProduction) jj3_expansion.parent).getLhs())
-          + "(LOOKAHEAD " + (value ? "FAILED" : "SUCCEEDED") + ")\");";
+              + "(LOOKAHEAD " + (value ? "FAILED" : "SUCCEEDED") + ")\");";
       if (Options.getErrorReporting()) {
         tracecode = "if (!jj_rescan) " + tracecode;
       }
@@ -1028,7 +1035,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
           codeGenerator.print("if (!jj_rescan) ");
         }
         codeGenerator.println("trace_call(\"" + codeGenerator.escapeToUnicode(((NormalProduction) e.parent).getLhs())
-        + "(LOOKING AHEAD...)\");");
+            + "(LOOKING AHEAD...)\");");
         jj3_expansion = e;
       } else {
         jj3_expansion = null;
