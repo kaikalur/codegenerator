@@ -38,7 +38,7 @@ final class NodeFiles {
       builder.addTools(JJTreeGlobals.toolName).setVersion(NodeFiles.nodeVersion);
       builder.addOption("MULTI", "NODE_USES_PARSER", "VISITOR", "TRACK_TOKENS", "NODE_PREFIX", "NODE_EXTENDS",
           "NODE_FACTORY", Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
-      builder.setPackageName(JJTreeGlobals.packageName);
+      NodeFiles.generateProlog(builder);
 
       for (String node : NodeFiles.nodesToBuild) {
         File file = new File(JJTreeOptions.getASTNodeDirectory(), JJTreeOptions.getNodePackage());
@@ -68,7 +68,7 @@ final class NodeFiles {
 
     try (JavaCodeBuilder builder = JavaCodeBuilder.of(CodeGeneratorSettings.create())) {
       builder.setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), JavaTemplates.nodeConstants() + ".java"));
-      builder.setPackageName(JJTreeGlobals.packageName);
+      NodeFiles.generateProlog(builder);
 
       builder.println("public interface " + JavaTemplates.nodeConstants());
       builder.println("{");
@@ -106,7 +106,7 @@ final class NodeFiles {
 
     try (JavaCodeBuilder builder = JavaCodeBuilder.of(CodeGeneratorSettings.create())) {
       builder.setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), JavaTemplates.visitorClass() + ".java"));
-      builder.setPackageName(JJTreeGlobals.packageName);
+      NodeFiles.generateProlog(builder);
 
       builder.println("public interface " + JavaTemplates.visitorClass());
       builder.println("{");
@@ -155,8 +155,8 @@ final class NodeFiles {
 
     try (JavaCodeBuilder builder = JavaCodeBuilder.of(CodeGeneratorSettings.create())) {
       builder
-      .setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), JavaTemplates.defaultVisitorClass() + ".java"));
-      builder.setPackageName(JJTreeGlobals.packageName);
+          .setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), JavaTemplates.defaultVisitorClass() + ".java"));
+      NodeFiles.generateProlog(builder);
 
       builder.println("public class ", JavaTemplates.defaultVisitorClass(), " implements ",
           JavaTemplates.visitorClass(), "{");
@@ -201,19 +201,30 @@ final class NodeFiles {
 
     try (JavaCodeBuilder builder = JavaCodeBuilder.of(options)) {
       builder.setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), "Node.java"));
-      builder.setPackageName(JJTreeGlobals.packageName);
+      NodeFiles.generateProlog(builder);
       builder.printTemplate("/templates/Node.template");
     }
 
     try (JavaCodeBuilder builder = JavaCodeBuilder.of(options)) {
       builder.setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), "SimpleNode.java"));
-      builder.setPackageName(JJTreeGlobals.packageName);
+      NodeFiles.generateProlog(builder);
       builder.printTemplate("/templates/SimpleNode.template");
+    }
+  }
+
+  // Using when packageName & nodePackageName are different
+  static void generateProlog(JavaCodeBuilder builder) {
+    if (!JJTreeGlobals.nodePackageName.isEmpty() && !JJTreeGlobals.nodePackageName.equals(JJTreeGlobals.packageName)) {
+      builder.setPackageName(JJTreeGlobals.nodePackageName);
+      builder.addImportName(JJTreeGlobals.packageName + ".*");
+    } else {
+      builder.setPackageName(JJTreeGlobals.packageName);
     }
   }
 
   static void generateOutputFiles() throws IOException {
     NodeFiles.generateDefaultNode();
+
     if (!NodeFiles.nodesToBuild.isEmpty()) {
       NodeFiles.generateTreeNodes();
     }
