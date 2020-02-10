@@ -479,7 +479,7 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
       builder
       .setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), "JJT" + JJTreeGlobals.parserName + "State.java"));
       builder.setVersion(Version.version).addTools(JavaCCGlobals.toolName);
-      builder.setPackageName(JJTreeGlobals.packageName);
+      NodeFiles.generateProlog(builder);
       builder.printTemplate("/templates/JJTTreeState.template");
     }
 

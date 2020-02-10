@@ -4,6 +4,9 @@ package org.javacc.java;
 import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.utils.CodeBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * The {@link JavaCodeBuilder} class.
@@ -13,7 +16,8 @@ class JavaCodeBuilder extends CodeBuilder<JavaCodeBuilder> {
   private final StringBuffer buffer = new StringBuffer();
 
 
-  private String packageName;
+  private String             packageName;
+  private final List<String> imports = new ArrayList<>();
 
   /**
    * Constructs an instance of {@link CodeBuilder}.
@@ -42,12 +46,27 @@ class JavaCodeBuilder extends CodeBuilder<JavaCodeBuilder> {
     return this;
   }
 
+  /**
+   * Set the Java import name
+   *
+   * @param importName
+   */
+  JavaCodeBuilder addImportName(String importName) {
+    this.imports.add(importName);
+    return this;
+  }
+
   @Override
   protected final void build() {
     StringBuffer buffer = new StringBuffer();
 
     if (packageName.length() > 0) {
       buffer.append("package ").append(packageName).append(";\n\n");
+    }
+    if (!imports.isEmpty()) {
+      for (String importName : imports) {
+        buffer.append("import ").append(importName).append(";\n\n");
+      }
     }
 
     buffer.append(getBuffer());
