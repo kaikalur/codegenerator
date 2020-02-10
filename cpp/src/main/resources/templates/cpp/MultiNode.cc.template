@@ -8,8 +8,10 @@ namespace ${NAMESPACE_OPEN}
   
   ${NODE_TYPE}::${NODE_TYPE}(int id) : ${NODE_CLASS:-SimpleNode}(id) {
   }
+#if NODE_USES_PARSER
   ${NODE_TYPE}::${NODE_TYPE}(${PARSER_NAME} *parser, int id) : ${NODE_CLASS:-SimpleNode}(parser, id) {
   }
+#fi
   ${NODE_TYPE}::~${NODE_TYPE}() {
   }
 

@@ -3,12 +3,16 @@
 #if NAMESPACE
 namespace ${NAMESPACE_OPEN}
 #fi
+#if NODE_USES_PARSER
 class ${PARSER_NAME};
+#fi
 
 class ${NODE_TYPE} : public ${NODE_CLASS:-SimpleNode} {
 public: 
   ${NODE_TYPE}(int id);
+#if NODE_USES_PARSER
   ${NODE_TYPE}(${PARSER_NAME} *parser, int id);
+#fi
   virtual ~${NODE_TYPE}();
 
 #if VISITOR
