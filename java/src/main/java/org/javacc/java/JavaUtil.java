@@ -1,7 +1,7 @@
 
 package org.javacc.java;
 
-import org.javacc.parser.JavaCCContext;
+import org.javacc.parser.Context;
 import org.javacc.parser.JavaCCParserConstants;
 import org.javacc.parser.Options;
 import org.javacc.parser.Token;
@@ -23,7 +23,7 @@ abstract class JavaUtil {
    *
    * @return
    */
-  public static String parsePackage(JavaCCContext context) {
+  public static String parsePackage(Context context) {
     Token t = null;
     StringWriter writer = new StringWriter();
     try (PrintWriter printer = new PrintWriter(writer)) {
@@ -63,7 +63,7 @@ abstract class JavaUtil {
     return "boolean";
   }
 
-  private static void printTokenSetup(Token t, JavaCCContext context) {
+  private static void printTokenSetup(Token t, Context context) {
     Token tt = t;
     while (tt.specialToken != null) {
       tt = tt.specialToken;
@@ -72,21 +72,21 @@ abstract class JavaUtil {
     context.globals().ccol = tt.beginColumn;
   }
 
-  private static void printToken(Token t, java.io.PrintWriter ostr, boolean escape, JavaCCContext context) {
+  private static void printToken(Token t, java.io.PrintWriter ostr, boolean escape, Context context) {
     Token tt = t.specialToken;
     if (tt != null) {
       while (tt.specialToken != null) {
         tt = tt.specialToken;
       }
       while (tt != null) {
-        ostr.append(context.globals().printTokenOnly(tt, escape));
+        ostr.append(tt.printTokenOnly(context.globals(), escape));
         tt = tt.next;
       }
     }
-    ostr.append(context.globals().printTokenOnly(t, escape));
+    ostr.append(t.printTokenOnly(context.globals(), escape));
   }
 
-  private static void printTrailingComments(Token t, java.io.PrintWriter ostr, boolean escape, JavaCCContext context) {
+  private static void printTrailingComments(Token t, java.io.PrintWriter ostr, boolean escape, Context context) {
     if (t.next == null) {
       return;
     }
@@ -95,7 +95,7 @@ abstract class JavaUtil {
   }
 
 
-  private static String printLeadingComments(Token t, boolean escape, JavaCCContext context) {
+  private static String printLeadingComments(Token t, boolean escape, Context context) {
     String retval = "";
     if (t.specialToken == null) {
       return retval;
@@ -105,7 +105,7 @@ abstract class JavaUtil {
       tt = tt.specialToken;
     }
     while (tt != null) {
-      retval += context.globals().printTokenOnly(tt, escape);
+      retval += tt.printTokenOnly(context.globals(), escape);
       tt = tt.next;
     }
     if ((context.globals().ccol != 1) && (context.globals().cline != t.beginLine)) {

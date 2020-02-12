@@ -139,7 +139,7 @@ final class NodeFiles {
           }
           String nodeType = context.treeOptions().getNodePrefix() + n;
           builder.println("  " + context.treeOptions().getVisitorReturnType() + " " + NodeFiles.getVisitMethodName(nodeType)
-              + "(" + nodeType + " node, " + argumentType + " data)" + ve + ";");
+          + "(" + nodeType + " node, " + argumentType + " data)" + ve + ";");
         }
       }
       builder.println("}");
@@ -191,7 +191,7 @@ final class NodeFiles {
 
       String ret = context.treeOptions().getVisitorReturnType();
       builder
-          .println("  public virtual " + ret + " defaultVisit(SimpleNode node, " + argumentType + " data)" + ve + "{");
+      .println("  public virtual " + ret + " defaultVisit(SimpleNode node, " + argumentType + " data)" + ve + "{");
       builder.println("    node.childrenAccept(this, data);");
       builder.println("    return" + (ret.trim().equals("void") ? "" : " data") + ";");
       builder.println("  }");

@@ -31,7 +31,7 @@
 package org.javacc.cpp;
 
 import org.javacc.parser.CodeGeneratorSettings;
-import org.javacc.parser.JavaCCContext;
+import org.javacc.parser.Context;
 import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.MetaParseException;
 import org.javacc.parser.Options;
@@ -50,7 +50,7 @@ import java.util.List;
  */
 class OtherFilesGenCPP {
 
-  static void start(JavaCCContext context, TokenizerData tokenizerData) throws MetaParseException {
+  static void start(Context context, TokenizerData tokenizerData) throws MetaParseException {
     if (context.errors().get_error_count() != 0) {
       throw new MetaParseException();
     }

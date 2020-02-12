@@ -3,7 +3,7 @@ package org.javacc.csharp;
 
 import org.javacc.jjtree.JJTreeContext;
 import org.javacc.parser.CodeGeneratorSettings;
-import org.javacc.parser.JavaCCContext;
+import org.javacc.parser.Context;
 import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.TokenizerData;
 import org.javacc.utils.CodeBuilder.GenericCodeBuilder;
@@ -24,7 +24,7 @@ public class CodeGenerator implements org.javacc.parser.CodeGenerator {
    * Generate any other support files you need.
    */
   @Override
-  public boolean generateHelpers(JavaCCContext context, CodeGeneratorSettings settings, TokenizerData tokenizerData) {
+  public boolean generateHelpers(Context context, CodeGeneratorSettings settings, TokenizerData tokenizerData) {
     File directory = new File((String) settings.get("OUTPUT_DIRECTORY"));
     try {
       try (GenericCodeBuilder builder = GenericCodeBuilder.of(context, settings)) {
@@ -64,7 +64,7 @@ public class CodeGenerator implements org.javacc.parser.CodeGenerator {
    * The Token class generator.
    */
   @Override
-  public TokenCodeGenerator getTokenCodeGenerator(JavaCCContext context) {
+  public TokenCodeGenerator getTokenCodeGenerator(Context context) {
     return new TokenCodeGenerator(context);
   }
 
@@ -72,7 +72,7 @@ public class CodeGenerator implements org.javacc.parser.CodeGenerator {
    * The TokenManager class generator.
    */
   @Override
-  public TokenManagerCodeGenerator getTokenManagerCodeGenerator(JavaCCContext context) {
+  public TokenManagerCodeGenerator getTokenManagerCodeGenerator(Context context) {
     return new TokenManagerCodeGenerator(context);
   }
 
@@ -80,7 +80,7 @@ public class CodeGenerator implements org.javacc.parser.CodeGenerator {
    * The Parser class generator.
    */
   @Override
-  public ParserCodeGenerator getParserCodeGenerator(JavaCCContext context) {
+  public ParserCodeGenerator getParserCodeGenerator(Context context) {
     return new ParserCodeGenerator(context);
   }
 

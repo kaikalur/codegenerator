@@ -36,9 +36,9 @@ import org.javacc.parser.BNFProduction;
 import org.javacc.parser.Choice;
 import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.CodeProduction;
+import org.javacc.parser.Context;
 import org.javacc.parser.CppCodeProduction;
 import org.javacc.parser.Expansion;
-import org.javacc.parser.JavaCCContext;
 import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.JavaCCParserConstants;
 import org.javacc.parser.JavaCodeProduction;
@@ -90,13 +90,13 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
    * "phase3done" any more. But this has not been removed yet.
    */
 
-  private final JavaCCContext           context;
+  private final Context           context;
   private CppCodeBuilder                codeGenerator;
 
   private final Map<Expansion, String>  internalNames   = new HashMap<>();
   private final Map<Expansion, Integer> internalIndexes = new HashMap<>();
 
-  ParserCodeGenerator(JavaCCContext context) {
+  ParserCodeGenerator(Context context) {
     this.context = context;
   }
 
@@ -459,7 +459,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
         codeGenerator.println("    if(kind != -1 && (jj_stack_error || jj_stack_check(false))) {");
         codeGenerator.println("      if (!jj_stack_error) {");
         codeGenerator
-            .println("        errorHandler->handleOtherError(\"Stack overflow while trying to parse\", this);");
+        .println("        errorHandler->handleOtherError(\"Stack overflow while trying to parse\", this);");
         codeGenerator.println("        jj_stack_error=true;");
         codeGenerator.println("      }");
         codeGenerator.println("      return jj_consume_token(-1);");
@@ -1365,7 +1365,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("  jj_depth_error = true;");
       codeGenerator.println("  jj_consume_token(-1);");
       codeGenerator
-          .println("  errorHandler->handleParseError(token, getToken(1), __FUNCTION__, this), hasError = true;");
+      .println("  errorHandler->handleParseError(token, getToken(1), __FUNCTION__, this), hasError = true;");
       if (!voidReturn) {
         codeGenerator.println("  return __ERROR_RET__;"); // Non-recoverable
         // error
@@ -1702,7 +1702,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     if (Options.getDebugLookahead() && (jj3_expansion != null)) {
       String tracecode =
           "trace_return(\"" + codeGenerator.escapeToUnicode(((NormalProduction) jj3_expansion.parent).getLhs())
-              + "(LOOKAHEAD " + (value ? "FAILED" : "SUCCEEDED") + ")\");";
+          + "(LOOKAHEAD " + (value ? "FAILED" : "SUCCEEDED") + ")\");";
       if (Options.getErrorReporting()) {
         tracecode = "if (!jj_rescan) " + tracecode;
       }
@@ -1864,7 +1864,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
           codeGenerator.print("if (!jj_rescan) ");
         }
         codeGenerator.println("trace_call(\"" + codeGenerator.escapeToUnicode(((NormalProduction) e.parent).getLhs())
-            + "(LOOKING AHEAD...)\");");
+        + "(LOOKING AHEAD...)\");");
         jj3_expansion = e;
       } else {
         jj3_expansion = null;
@@ -1876,13 +1876,13 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
         Object label = context.globals().names_of_tokens.get(Integer.valueOf(e_nrw.ordinal));
         if (label != null) {
           codeGenerator.println("    if (jj_scan_token(" + ParserCodeGenerator.getUserTokenManagerConstantNamespace()
-              + (String) label + ")) " + genReturn(true));
+          + (String) label + ")) " + genReturn(true));
         } else {
           codeGenerator.println("    if (jj_scan_token(" + e_nrw.ordinal + ")) " + genReturn(true));
         }
       } else {
         codeGenerator.println("    if (jj_scan_token(" + ParserCodeGenerator.getUserTokenManagerConstantNamespace()
-            + e_nrw.label + ")) " + genReturn(true));
+        + e_nrw.label + ")) " + genReturn(true));
       }
       // codeGenerator.genCodeLine(" if (jj_la == 0 && jj_scanpos == jj_lastpos)
       // " + genReturn(false));

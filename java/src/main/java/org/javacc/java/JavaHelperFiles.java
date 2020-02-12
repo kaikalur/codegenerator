@@ -3,7 +3,7 @@ package org.javacc.java;
 
 import org.javacc.Version;
 import org.javacc.parser.CodeGeneratorSettings;
-import org.javacc.parser.JavaCCContext;
+import org.javacc.parser.Context;
 import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.MetaParseException;
 import org.javacc.parser.Options;
@@ -29,7 +29,7 @@ abstract class JavaHelperFiles {
   private JavaHelperFiles() {}
 
 
-  static void genMiscFile(String fileName, String templatePath, JavaCCContext context) throws Error {
+  static void genMiscFile(String fileName, String templatePath, Context context) throws Error {
     try (JavaCodeBuilder builder = JavaCodeBuilder.of(context, CodeGeneratorSettings.of(Options.getOptions()))) {
       builder.setFile(new File(Options.getOutputDirectory(), fileName));
 
@@ -38,7 +38,7 @@ abstract class JavaHelperFiles {
        * -- KEEP_LINE_COL
        */
       builder.setVersion(Version.version).addTools(JavaCCGlobals.toolName)
-          .addOption(Options.USEROPTION__KEEP_LINE_COLUMN);
+      .addOption(Options.USEROPTION__KEEP_LINE_COLUMN);
 
       builder.setPackageName(JavaUtil.parsePackage(context));
       builder.printTemplate(templatePath);
@@ -49,7 +49,7 @@ abstract class JavaHelperFiles {
     }
   }
 
-  static void gen_Token(JavaCCContext context) {
+  static void gen_Token(Context context) {
     try (JavaCodeBuilder builder = JavaCodeBuilder.of(context, CodeGeneratorSettings.of(Options.getOptions()))) {
       builder.setFile(new File(Options.getOutputDirectory(), "Token.java"));
       builder.setVersion(Version.version).addTools(JavaCCGlobals.toolName);
@@ -71,11 +71,11 @@ abstract class JavaHelperFiles {
   }
 
 
-  static void gen_TokenManager(JavaCCContext context) {
+  static void gen_TokenManager(Context context) {
     try (JavaCodeBuilder builder = JavaCodeBuilder.of(context, CodeGeneratorSettings.of(Options.getOptions()))) {
       builder.setFile(new File(Options.getOutputDirectory(), "TokenManager.java"));
       builder.setVersion(Version.version).addTools(JavaCCGlobals.toolName)
-          .addOption(Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
+      .addOption(Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
       builder.setPackageName(JavaUtil.parsePackage(context));
       builder.printTemplate("/templates/TokenManager.template");
     } catch (IOException e) {
@@ -85,7 +85,7 @@ abstract class JavaHelperFiles {
     }
   }
 
-  static void gen_Constants(JavaCCContext context, TokenizerData tokenizerData) throws MetaParseException {
+  static void gen_Constants(Context context, TokenizerData tokenizerData) throws MetaParseException {
     if (context.errors().get_error_count() != 0) {
       throw new MetaParseException();
     }
@@ -149,13 +149,13 @@ abstract class JavaHelperFiles {
       builder.println("}");
     } catch (java.io.IOException e) {
       context.errors()
-          .semantic_error("Could not open file " + context.globals().cu_name + "Constants.java for writing.");
+      .semantic_error("Could not open file " + context.globals().cu_name + "Constants.java for writing.");
       throw new Error();
     }
   }
 
   static void generateSimple(String template, String outputFileName, CodeGeneratorSettings settings,
-      JavaCCContext context) throws IOException {
+      Context context) throws IOException {
     File file = new File((String) settings.get("OUTPUT_DIRECTORY"), outputFileName);
 
     try (JavaCodeBuilder builder = JavaCodeBuilder.of(context, settings)) {

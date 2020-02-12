@@ -36,8 +36,8 @@ import org.javacc.parser.BNFProduction;
 import org.javacc.parser.Choice;
 import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.CodeProduction;
+import org.javacc.parser.Context;
 import org.javacc.parser.Expansion;
-import org.javacc.parser.JavaCCContext;
 import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.JavaCCParserConstants;
 import org.javacc.parser.JavaCodeProduction;
@@ -93,11 +93,11 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
 
   private GenericCodeBuilder            codeGenerator;
 
-  private final JavaCCContext           context;
+  private final Context           context;
   private final Map<Expansion, String>  internalNames   = new HashMap<>();
   private final Map<Expansion, Integer> internalIndexes = new HashMap<>();
 
-  ParserCodeGenerator(JavaCCContext context) {
+  ParserCodeGenerator(Context context) {
     this.context = context;
   }
 
@@ -183,43 +183,43 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       }
       if (Options.getUserTokenManager()) {
         codeGenerator.println("  /** User defined Token Manager. */");
-        codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "public TokenManager token_source;");
+        codeGenerator.println("  " + JavaUtil.getStatic() + "public TokenManager token_source;");
       } else {
         codeGenerator.println("  /** Generated Token Manager. */");
         codeGenerator.println(
-            "  " + JavaCCGlobals.staticOpt() + "public " + context.globals().cu_name + "TokenManager token_source;");
+            "  " + JavaUtil.getStatic() + "public " + context.globals().cu_name + "TokenManager token_source;");
         if (!Options.getUserCharStream()) {
           if (Options.getJavaUnicodeEscape()) {
-            codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "JavaCharStream jj_input_stream;");
+            codeGenerator.println("  " + JavaUtil.getStatic() + "JavaCharStream jj_input_stream;");
           } else {
-            codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "SimpleCharStream jj_input_stream;");
+            codeGenerator.println("  " + JavaUtil.getStatic() + "SimpleCharStream jj_input_stream;");
           }
         }
       }
       codeGenerator.println("  /** Current token. */");
-      codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "public Token token;");
+      codeGenerator.println("  " + JavaUtil.getStatic() + "public Token token;");
       codeGenerator.println("  /** Next token. */");
-      codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "public Token jj_nt;");
+      codeGenerator.println("  " + JavaUtil.getStatic() + "public Token jj_nt;");
       if (!Options.getCacheTokens()) {
-        codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "private int jj_ntk;");
+        codeGenerator.println("  " + JavaUtil.getStatic() + "private int jj_ntk;");
       }
       if (Options.getDepthLimit() > 0) {
-        codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "private int jj_depth;");
+        codeGenerator.println("  " + JavaUtil.getStatic() + "private int jj_depth;");
       }
       if (context.globals().jj2index != 0) {
-        codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "private Token jj_scanpos, jj_lastpos;");
-        codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "private int jj_la;");
+        codeGenerator.println("  " + JavaUtil.getStatic() + "private Token jj_scanpos, jj_lastpos;");
+        codeGenerator.println("  " + JavaUtil.getStatic() + "private int jj_la;");
         if (context.globals().lookaheadNeeded) {
           codeGenerator.println("  /** Whether we are looking ahead. */");
           codeGenerator.println(
-              "  " + JavaCCGlobals.staticOpt() + "private " + JavaUtil.getBooleanType() + " jj_lookingAhead = false;");
+              "  " + JavaUtil.getStatic() + "private " + JavaUtil.getBooleanType() + " jj_lookingAhead = false;");
           codeGenerator
-              .println("  " + JavaCCGlobals.staticOpt() + "private " + JavaUtil.getBooleanType() + " jj_semLA;");
+          .println("  " + JavaUtil.getStatic() + "private " + JavaUtil.getBooleanType() + " jj_semLA;");
         }
       }
       if (Options.getErrorReporting()) {
-        codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "private int jj_gen;");
-        codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "final private int[] jj_la1 = new int["
+        codeGenerator.println("  " + JavaUtil.getStatic() + "private int jj_gen;");
+        codeGenerator.println("  " + JavaUtil.getStatic() + "final private int[] jj_la1 = new int["
             + context.globals().maskindex + "];");
         final int tokenMaskSize = ((context.globals().tokenCount - 1) / 32) + 1;
         for (int i = 0; i < tokenMaskSize; i++) {
@@ -241,11 +241,11 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
         }
       }
       if ((context.globals().jj2index != 0) && Options.getErrorReporting()) {
-        codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "final private JJCalls[] jj_2_rtns = new JJCalls["
+        codeGenerator.println("  " + JavaUtil.getStatic() + "final private JJCalls[] jj_2_rtns = new JJCalls["
             + context.globals().jj2index + "];");
         codeGenerator
-            .println("  " + JavaCCGlobals.staticOpt() + "private " + JavaUtil.getBooleanType() + " jj_rescan = false;");
-        codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "private int jj_gc = 0;");
+        .println("  " + JavaUtil.getStatic() + "private " + JavaUtil.getBooleanType() + " jj_rescan = false;");
+        codeGenerator.println("  " + JavaUtil.getStatic() + "private int jj_gc = 0;");
       }
       codeGenerator.println("");
 
@@ -296,7 +296,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
           codeGenerator.println("  }");
           codeGenerator.println("");
           codeGenerator.println("  /** Reinitialise. */");
-          codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "public void ReInit(CharStream stream) {");
+          codeGenerator.println("  " + JavaUtil.getStatic() + "public void ReInit(CharStream stream) {");
 
           if (Options.isTokenManagerRequiresParserAccess()) {
             codeGenerator.println("  token_source.ReInit(this,stream);");
@@ -339,11 +339,11 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
             codeGenerator.println("  }");
             codeGenerator.println("  /** Constructor with InputStream and supplied encoding */");
             codeGenerator
-                .println("  public " + context.globals().cu_name + "(java.io.InputStream stream, String encoding) {");
+            .println("  public " + context.globals().cu_name + "(java.io.InputStream stream, String encoding) {");
             if (Options.getStatic()) {
               codeGenerator.println("  if (jj_initialized_once) {");
               codeGenerator
-                  .println("    System.out.println(\"ERROR: Second call to constructor of static parser.  \");");
+              .println("    System.out.println(\"ERROR: Second call to constructor of static parser.  \");");
               codeGenerator.println("    System.out.println(\"     You must either use ReInit() or "
                   + "set the JavaCC option STATIC to false\");");
               codeGenerator.println("    System.out.println(\"     during parser generation.\");");
@@ -374,7 +374,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
             }
             if (Options.getTokenManagerUsesParser() && !Options.getStatic()) {
               codeGenerator
-                  .println("  token_source = new " + context.globals().cu_name + "TokenManager(this, jj_input_stream);");
+              .println("  token_source = new " + context.globals().cu_name + "TokenManager(this, jj_input_stream);");
             } else {
               codeGenerator.println("  token_source = new " + context.globals().cu_name + "TokenManager(jj_input_stream);");
             }
@@ -401,13 +401,13 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
 
             codeGenerator.println("  /** Reinitialise. */");
             codeGenerator
-                .println("  " + JavaCCGlobals.staticOpt() + "public void ReInit(java.io.InputStream stream) {");
+            .println("  " + JavaUtil.getStatic() + "public void ReInit(java.io.InputStream stream) {");
             codeGenerator.println("   ReInit(stream, null);");
             codeGenerator.println("  }");
 
             codeGenerator.println("  /** Reinitialise. */");
             codeGenerator.println(
-                "  " + JavaCCGlobals.staticOpt() + "public void ReInit(java.io.InputStream stream, String encoding) {");
+                "  " + JavaUtil.getStatic() + "public void ReInit(java.io.InputStream stream, String encoding) {");
             if (!Options.getGenerateChainedException()) {
               codeGenerator.println("  try { jj_input_stream.ReInit(stream, encoding, 1, 1); } "
                   + "catch(java.io.UnsupportedEncodingException e) { "
@@ -471,7 +471,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
           }
           if (Options.getTokenManagerUsesParser() && !Options.getStatic()) {
             codeGenerator
-                .println("  token_source = new " + context.globals().cu_name + "TokenManager(this, jj_input_stream);");
+            .println("  token_source = new " + context.globals().cu_name + "TokenManager(this, jj_input_stream);");
           } else {
             codeGenerator.println("  token_source = new " + context.globals().cu_name + "TokenManager(jj_input_stream);");
           }
@@ -515,7 +515,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
 
           codeGenerator.println("  /** Reinitialise. */");
           codeGenerator
-              .println("  " + JavaCCGlobals.staticOpt() + "public void ReInit(" + readerInterfaceName + " stream) {");
+          .println("  " + JavaUtil.getStatic() + "public void ReInit(" + readerInterfaceName + " stream) {");
           if (Options.getJavaUnicodeEscape()) {
             codeGenerator.println(" if (jj_input_stream == null) {");
             codeGenerator.println("    jj_input_stream = new JavaCharStream(stream, 1, 1);");
@@ -534,7 +534,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
 
           if (Options.getTokenManagerUsesParser() && !Options.getStatic()) {
             codeGenerator
-                .println(" token_source = new " + context.globals().cu_name + "TokenManager(this, jj_input_stream);");
+            .println(" token_source = new " + context.globals().cu_name + "TokenManager(this, jj_input_stream);");
           } else {
             codeGenerator.println(" token_source = new " + context.globals().cu_name + "TokenManager(jj_input_stream);");
           }
@@ -588,7 +588,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
             + "set the JavaCC option STATIC to false\");");
         codeGenerator.println("    System.out.println(\"     during parser generation.\");");
         codeGenerator
-            .println("    throw new " + (Options.isLegacyExceptionHandling() ? "Error" : "RuntimeException") + "();");
+        .println("    throw new " + (Options.isLegacyExceptionHandling() ? "Error" : "RuntimeException") + "();");
         codeGenerator.println("  }");
         codeGenerator.println("  jj_initialized_once = true;");
       }
@@ -645,7 +645,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("  }");
       codeGenerator.println("");
       codeGenerator.println(
-          "  " + JavaCCGlobals.staticOpt() + "private Token jj_consume_token(int kind) throws ParseException {");
+          "  " + JavaUtil.getStatic() + "private Token jj_consume_token(int kind) throws ParseException {");
       if (Options.getCacheTokens()) {
         codeGenerator.println("  Token oldToken = token;");
         codeGenerator.println("  if ((token = jj_nt).next != null) jj_nt = jj_nt.next;");
@@ -698,7 +698,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
         codeGenerator.println("  }");
         codeGenerator.println("  static private final LookaheadSuccess jj_ls = new LookaheadSuccess();");
         codeGenerator.println(
-            "  " + JavaCCGlobals.staticOpt() + "private " + JavaUtil.getBooleanType() + " jj_scan_token(int kind) {");
+            "  " + JavaUtil.getStatic() + "private " + JavaUtil.getBooleanType() + " jj_scan_token(int kind) {");
         codeGenerator.println("  if (jj_scanpos == jj_lastpos) {");
         codeGenerator.println("    jj_la--;");
         codeGenerator.println("    if (jj_scanpos.next == null) {");
@@ -730,7 +730,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       }
       codeGenerator.println("");
       codeGenerator.println("/** Get the next Token. */");
-      codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "final public Token getNextToken() {");
+      codeGenerator.println("  " + JavaUtil.getStatic() + "final public Token getNextToken() {");
       if (Options.getCacheTokens()) {
         codeGenerator.println("  if ((token = jj_nt).next != null) jj_nt = jj_nt.next;");
         codeGenerator.println("  else jj_nt = jj_nt.next = token_source.getNextToken();");
@@ -749,7 +749,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("  }");
       codeGenerator.println("");
       codeGenerator.println("/** Get the specific Token. */");
-      codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "final public Token getToken(int index) {");
+      codeGenerator.println("  " + JavaUtil.getStatic() + "final public Token getToken(int index) {");
       if (context.globals().lookaheadNeeded) {
         codeGenerator.println("  Token t = jj_lookingAhead ? jj_scanpos : token;");
       } else {
@@ -763,7 +763,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("  }");
       codeGenerator.println("");
       if (!Options.getCacheTokens()) {
-        codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "private int jj_ntk_f() {");
+        codeGenerator.println("  " + JavaUtil.getStatic() + "private int jj_ntk_f() {");
         codeGenerator.println("  if ((jj_nt=token.next) == null)");
         codeGenerator.println("    return (jj_ntk = (token.next=token_source.getNextToken()).kind);");
         codeGenerator.println("  else");
@@ -774,19 +774,19 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       if (Options.getErrorReporting()) {
         if (!Options.getGenerateGenerics()) {
           codeGenerator.println(
-              "  " + JavaCCGlobals.staticOpt() + "private java.util.List jj_expentries = new java.util.ArrayList();");
+              "  " + JavaUtil.getStatic() + "private java.util.List jj_expentries = new java.util.ArrayList();");
         } else {
-          codeGenerator.println("  " + JavaCCGlobals.staticOpt()
-              + "private java.util.List<int[]> jj_expentries = new java.util.ArrayList<int[]>();");
+          codeGenerator.println("  " + JavaUtil.getStatic()
+          + "private java.util.List<int[]> jj_expentries = new java.util.ArrayList<int[]>();");
         }
-        codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "private int[] jj_expentry;");
-        codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "private int jj_kind = -1;");
+        codeGenerator.println("  " + JavaUtil.getStatic() + "private int[] jj_expentry;");
+        codeGenerator.println("  " + JavaUtil.getStatic() + "private int jj_kind = -1;");
         if (context.globals().jj2index != 0) {
-          codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "private int[] jj_lasttokens = new int[100];");
-          codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "private int jj_endpos;");
+          codeGenerator.println("  " + JavaUtil.getStatic() + "private int[] jj_lasttokens = new int[100];");
+          codeGenerator.println("  " + JavaUtil.getStatic() + "private int jj_endpos;");
           codeGenerator.println("");
           codeGenerator
-              .println("  " + JavaCCGlobals.staticOpt() + "private void jj_add_error_token(int kind, int pos) {");
+          .println("  " + JavaUtil.getStatic() + "private void jj_add_error_token(int kind, int pos) {");
           codeGenerator.println("  if (pos >= 100) {");
           codeGenerator.println("   return;");
           codeGenerator.println("  }");
@@ -832,7 +832,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
         }
         codeGenerator.println("");
         codeGenerator.println("  /** Generate ParseException. */");
-        codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "public ParseException generateParseException() {");
+        codeGenerator.println("  " + JavaUtil.getStatic() + "public ParseException generateParseException() {");
         codeGenerator.println("  jj_expentries.clear();");
         codeGenerator.println("  " + JavaUtil.getBooleanType() + "[] la1tokens = new " + JavaUtil.getBooleanType() + "["
             + context.globals().tokenCount + "];");
@@ -888,7 +888,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
         codeGenerator.println("  }");
       } else {
         codeGenerator.println("  /** Generate ParseException. */");
-        codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "public ParseException generateParseException() {");
+        codeGenerator.println("  " + JavaUtil.getStatic() + "public ParseException generateParseException() {");
         codeGenerator.println("  Token errortok = token.next;");
         if (Options.getKeepLineColumn()) {
           codeGenerator.println("  int line = errortok.beginLine, column = errortok.beginColumn;");
@@ -906,27 +906,27 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("");
 
       codeGenerator
-          .println("  " + JavaCCGlobals.staticOpt() + "private " + JavaUtil.getBooleanType() + " trace_enabled;");
+      .println("  " + JavaUtil.getStatic() + "private " + JavaUtil.getBooleanType() + " trace_enabled;");
       codeGenerator.println("");
       codeGenerator.println("/** Trace enabled. */");
-      codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "final public boolean trace_enabled() {");
+      codeGenerator.println("  " + JavaUtil.getStatic() + "final public boolean trace_enabled() {");
       codeGenerator.println("  return trace_enabled;");
       codeGenerator.println("  }");
       codeGenerator.println("");
 
       if (Options.getDebugParser()) {
-        codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "private int trace_indent = 0;");
+        codeGenerator.println("  " + JavaUtil.getStatic() + "private int trace_indent = 0;");
         codeGenerator.println("/** Enable tracing. */");
-        codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "final public void enable_tracing() {");
+        codeGenerator.println("  " + JavaUtil.getStatic() + "final public void enable_tracing() {");
         codeGenerator.println("  trace_enabled = true;");
         codeGenerator.println("  }");
         codeGenerator.println("");
         codeGenerator.println("/** Disable tracing. */");
-        codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "final public void disable_tracing() {");
+        codeGenerator.println("  " + JavaUtil.getStatic() + "final public void disable_tracing() {");
         codeGenerator.println("  trace_enabled = false;");
         codeGenerator.println("  }");
         codeGenerator.println("");
-        codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "protected void trace_call(String s) {");
+        codeGenerator.println("  " + JavaUtil.getStatic() + "protected void trace_call(String s) {");
         codeGenerator.println("  if (trace_enabled) {");
         codeGenerator.println("    for (int i = 0; i < trace_indent; i++) { System.out.print(\" \"); }");
         codeGenerator.println("    System.out.println(\"Call: \" + s);");
@@ -934,7 +934,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
         codeGenerator.println("  trace_indent = trace_indent + 2;");
         codeGenerator.println("  }");
         codeGenerator.println("");
-        codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "protected void trace_return(String s) {");
+        codeGenerator.println("  " + JavaUtil.getStatic() + "protected void trace_return(String s) {");
         codeGenerator.println("  trace_indent = trace_indent - 2;");
         codeGenerator.println("  if (trace_enabled) {");
         codeGenerator.println("    for (int i = 0; i < trace_indent; i++) { System.out.print(\" \"); }");
@@ -942,26 +942,26 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
         codeGenerator.println("  }");
         codeGenerator.println("  }");
         codeGenerator.println("");
-        codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "protected void trace_token(Token t, String where) {");
+        codeGenerator.println("  " + JavaUtil.getStatic() + "protected void trace_token(Token t, String where) {");
         codeGenerator.println("  if (trace_enabled) {");
         codeGenerator.println("    for (int i = 0; i < trace_indent; i++) { System.out.print(\" \"); }");
         codeGenerator.println("    System.out.print(\"Consumed token: <\" + tokenImage[t.kind]);");
         codeGenerator.println("    if (t.kind != 0 && !tokenImage[t.kind].equals(\"\\\"\" + t.image + \"\\\"\")) {");
         codeGenerator.println("    System.out.print(\": \\\"\" + " + JavaTemplates.getTokenMgrErrorClass()
-            + ".addEscapes(" + "t.image) + \"\\\"\");");
+        + ".addEscapes(" + "t.image) + \"\\\"\");");
         codeGenerator.println("    }");
         codeGenerator.println(
             "    System.out.println(\" at line \" + t.beginLine + " + "\" column \" + t.beginColumn + \">\" + where);");
         codeGenerator.println("  }");
         codeGenerator.println("  }");
         codeGenerator.println("");
-        codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "protected void trace_scan(Token t1, int t2) {");
+        codeGenerator.println("  " + JavaUtil.getStatic() + "protected void trace_scan(Token t1, int t2) {");
         codeGenerator.println("  if (trace_enabled) {");
         codeGenerator.println("    for (int i = 0; i < trace_indent; i++) { System.out.print(\" \"); }");
         codeGenerator.println("    System.out.print(\"Visited token: <\" + tokenImage[t1.kind]);");
         codeGenerator.println("    if (t1.kind != 0 && !tokenImage[t1.kind].equals(\"\\\"\" + t1.image + \"\\\"\")) {");
         codeGenerator.println("    System.out.print(\": \\\"\" + " + JavaTemplates.getTokenMgrErrorClass()
-            + ".addEscapes(" + "t1.image) + \"\\\"\");");
+        + ".addEscapes(" + "t1.image) + \"\\\"\");");
         codeGenerator.println("    }");
         codeGenerator.println("    System.out.println(\" at line \" + t1.beginLine + \""
             + " column \" + t1.beginColumn + \">; Expected token: <\" + tokenImage[t2] + \">\");");
@@ -970,17 +970,17 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
         codeGenerator.println("");
       } else {
         codeGenerator.println("  /** Enable tracing. */");
-        codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "final public void enable_tracing() {");
+        codeGenerator.println("  " + JavaUtil.getStatic() + "final public void enable_tracing() {");
         codeGenerator.println("  }");
         codeGenerator.println("");
         codeGenerator.println("  /** Disable tracing. */");
-        codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "final public void disable_tracing() {");
+        codeGenerator.println("  " + JavaUtil.getStatic() + "final public void disable_tracing() {");
         codeGenerator.println("  }");
         codeGenerator.println("");
       }
 
       if ((context.globals().jj2index != 0) && Options.getErrorReporting()) {
-        codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "private void jj_rescan_token() {");
+        codeGenerator.println("  " + JavaUtil.getStatic() + "private void jj_rescan_token() {");
         codeGenerator.println("  jj_rescan = true;");
         codeGenerator.println("  for (int i = 0; i < " + context.globals().jj2index + "; i++) {");
         codeGenerator.println("    try {");
@@ -1003,7 +1003,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
         codeGenerator.println("  jj_rescan = false;");
         codeGenerator.println("  }");
         codeGenerator.println("");
-        codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "private void jj_save(int index, int xla) {");
+        codeGenerator.println("  " + JavaUtil.getStatic() + "private void jj_save(int index, int xla) {");
         codeGenerator.println("  JJCalls p = jj_2_rtns[index];");
         codeGenerator.println("  while (p.gen > jj_gen) {");
         codeGenerator.println("    if (p.next == null) { p = p.next = new JJCalls(); break; }");
@@ -1484,7 +1484,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.printTokenSetup(t);
     codeGenerator.printLeadingComments(t);
     codeGenerator.print(
-        "  " + JavaCCGlobals.staticOpt() + "final " + (p.getAccessMod() != null ? p.getAccessMod() : "public") + " ");
+        "  " + JavaUtil.getStatic() + "final " + (p.getAccessMod() != null ? p.getAccessMod() : "public") + " ");
     codeGenerator.printTokenOnly(t);
     for (int i = 1; i < p.getReturnTypeTokens().size(); i++) {
       t = p.getReturnTypeTokens().get(i);
@@ -1768,7 +1768,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
 
   private void buildPhase2Routine(Lookahead la) {
     Expansion e = la.getLaExpansion();
-    codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "private " + JavaUtil.getBooleanType() + " jj_2"
+    codeGenerator.println("  " + JavaUtil.getStatic() + "private " + JavaUtil.getBooleanType() + " jj_2"
         + internalNames.get(e) + "(int xla)");
     codeGenerator.println(" {");
     codeGenerator.println("    jj_la = xla; jj_lastpos = jj_scanpos = token;");
@@ -1782,7 +1782,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("    catch(LookaheadSuccess ls) { return true; }");
     if (Options.getErrorReporting()) {
       codeGenerator
-          .println("    finally { jj_save(" + (Integer.parseInt(internalNames.get(e).substring(1)) - 1) + ", xla); }");
+      .println("    finally { jj_save(" + (Integer.parseInt(internalNames.get(e).substring(1)) - 1) + ", xla); }");
     }
     codeGenerator.println("  }");
     codeGenerator.println("");
@@ -1800,7 +1800,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     if (Options.getDebugLookahead() && (jj3_expansion != null)) {
       String tracecode =
           "trace_return(\"" + JavaCCGlobals.addUnicodeEscapes(((NormalProduction) jj3_expansion.parent).getLhs())
-              + "(LOOKAHEAD " + (value ? "FAILED" : "SUCCEEDED") + ")\");";
+          + "(LOOKAHEAD " + (value ? "FAILED" : "SUCCEEDED") + ")\");";
       if (Options.getErrorReporting()) {
         tracecode = "if (!jj_rescan) " + tracecode;
       }
@@ -1915,8 +1915,9 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     }
 
     if (!recursive_call) {
-      codeGenerator.println("  " + JavaCCGlobals.staticOpt() + "private " + JavaUtil.getBooleanType() + " jj_3"
-          + internalNames.get(e) + "()");
+      codeGenerator.println(
+          "  " + JavaUtil.getStatic() + "private " + JavaUtil.getBooleanType() + " jj_3"
+              + internalNames.get(e) + "()");
       codeGenerator.println(" {");
       genStackCheck(false);
       xsp_declared = false;
@@ -1926,7 +1927,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
           codeGenerator.print("if (!jj_rescan) ");
         }
         codeGenerator.println("trace_call(\"" + JavaCCGlobals.addUnicodeEscapes(((NormalProduction) e.parent).getLhs())
-            + "(LOOKING AHEAD...)\");");
+        + "(LOOKING AHEAD...)\");");
         jj3_expansion = e;
       } else {
         jj3_expansion = null;
@@ -2166,7 +2167,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
         t = jp.getReturnTypeTokens().get(0);
         codeBuilder.printTokenSetup(t);
         codeBuilder.printLeadingComments(t);
-        codeBuilder.print("  " + JavaCCGlobals.staticOpt() + (p.getAccessMod() != null ? p.getAccessMod() + " " : ""));
+        codeBuilder.print("  " + JavaUtil.getStatic() + (p.getAccessMod() != null ? p.getAccessMod() + " " : ""));
         codeBuilder.printTokenOnly(t);
         for (int i = 1; i < jp.getReturnTypeTokens().size(); i++) {
           t = jp.getReturnTypeTokens().get(i);

@@ -2,7 +2,7 @@
 package org.javacc.cpp;
 
 import org.javacc.parser.CodeGeneratorSettings;
-import org.javacc.parser.JavaCCContext;
+import org.javacc.parser.Context;
 import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.Options;
 
@@ -11,9 +11,9 @@ import java.io.IOException;
 
 class TokenCodeGenerator implements org.javacc.parser.TokenCodeGenerator {
 
-  private final JavaCCContext context;
+  private final Context context;
 
-  TokenCodeGenerator(JavaCCContext context) {
+  TokenCodeGenerator(Context context) {
     this.context = context;
   }
 

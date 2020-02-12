@@ -38,7 +38,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
-  
+
   private final JJTreeContext context;
 
   JJTreeCodeGenerator(JJTreeContext context) {
@@ -484,7 +484,7 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
 
     try (JavaCodeBuilder builder = JavaCodeBuilder.of(context, options)) {
       builder
-          .setFile(new File(context.treeOptions().getJJTreeOutputDirectory(), "JJT" + JJTreeGlobals.parserName + "State.java"));
+      .setFile(new File(context.treeOptions().getJJTreeOutputDirectory(), "JJT" + JJTreeGlobals.parserName + "State.java"));
       builder.setVersion(Version.version).addTools(JavaCCGlobals.toolName);
       NodeFiles.generateProlog(builder);
       builder.printTemplate("/templates/JJTTreeState.template");

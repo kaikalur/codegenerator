@@ -37,7 +37,7 @@ import java.io.File;
 class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
 
   private static final String JJTStateVersion = Version.version;
-  
+
   private final JJTreeContext context;
 
   JJTreeCodeGenerator(JJTreeContext context) {

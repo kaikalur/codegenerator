@@ -2,7 +2,7 @@
 package org.javacc.java;
 
 import org.javacc.parser.CodeGeneratorSettings;
-import org.javacc.parser.JavaCCContext;
+import org.javacc.parser.Context;
 import org.javacc.parser.JavaCCParserConstants;
 import org.javacc.parser.Options;
 import org.javacc.parser.Token;
@@ -25,10 +25,10 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
 
   private static final String tokenManagerTemplate = "/templates/TokenManagerDriver.template";
 
-  private final JavaCCContext context;
+  private final Context context;
   private JavaCodeBuilder     codeGenerator;
 
-  TokenManagerCodeGenerator(JavaCCContext context) {
+  TokenManagerCodeGenerator(Context context) {
     this.context = context;
   }
 

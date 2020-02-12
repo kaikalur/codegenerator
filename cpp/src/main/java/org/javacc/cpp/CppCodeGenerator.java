@@ -5,7 +5,7 @@ import org.javacc.jjtree.DefaultJJTreeVisitor;
 import org.javacc.jjtree.JJTreeContext;
 import org.javacc.parser.CodeGenerator;
 import org.javacc.parser.CodeGeneratorSettings;
-import org.javacc.parser.JavaCCContext;
+import org.javacc.parser.Context;
 import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.Options;
 import org.javacc.parser.TokenizerData;
@@ -28,7 +28,7 @@ public class CppCodeGenerator implements CodeGenerator {
    * Generate any other support files you need.
    */
   @Override
-  public final boolean generateHelpers(JavaCCContext context, CodeGeneratorSettings settings, TokenizerData tokenizerData) {
+  public final boolean generateHelpers(Context context, CodeGeneratorSettings settings, TokenizerData tokenizerData) {
     try {
       try (CppCodeBuilder builder = CppCodeBuilder.of(context, settings)) {
         builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "CharStream.cc"));
@@ -97,7 +97,7 @@ public class CppCodeGenerator implements CodeGenerator {
    * The Token class generator.
    */
   @Override
-  public final TokenCodeGenerator getTokenCodeGenerator(JavaCCContext context) {
+  public final TokenCodeGenerator getTokenCodeGenerator(Context context) {
     return new TokenCodeGenerator(context);
   }
 
@@ -105,7 +105,7 @@ public class CppCodeGenerator implements CodeGenerator {
    * The TokenManager class generator.
    */
   @Override
-  public final TokenManagerCodeGenerator getTokenManagerCodeGenerator(JavaCCContext context) {
+  public final TokenManagerCodeGenerator getTokenManagerCodeGenerator(Context context) {
     return new TokenManagerCodeGenerator(context);
   }
 
@@ -113,7 +113,7 @@ public class CppCodeGenerator implements CodeGenerator {
    * The Parser class generator.
    */
   @Override
-  public final ParserCodeGenerator getParserCodeGenerator(JavaCCContext context) {
+  public final ParserCodeGenerator getParserCodeGenerator(Context context) {
     return new ParserCodeGenerator(context);
   }
 

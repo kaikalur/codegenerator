@@ -39,7 +39,7 @@ import java.io.IOException;
 class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
 
   private static final String JJTStateVersion = Version.version;
-  
+
   private final JJTreeContext context;
 
   JJTreeCodeGenerator(JJTreeContext context) {

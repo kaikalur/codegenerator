@@ -155,7 +155,7 @@ final class NodeFiles {
 
     try (JavaCodeBuilder builder = JavaCodeBuilder.of(context, CodeGeneratorSettings.create())) {
       builder
-          .setFile(new File(context.treeOptions().getJJTreeOutputDirectory(), JavaTemplates.defaultVisitorClass() + ".java"));
+      .setFile(new File(context.treeOptions().getJJTreeOutputDirectory(), JavaTemplates.defaultVisitorClass() + ".java"));
       NodeFiles.generateProlog(builder);
 
       builder.println("public class ", JavaTemplates.defaultVisitorClass(), " implements ",

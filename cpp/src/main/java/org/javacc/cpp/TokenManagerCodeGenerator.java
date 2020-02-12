@@ -2,7 +2,7 @@
 package org.javacc.cpp;
 
 import org.javacc.parser.CodeGeneratorSettings;
-import org.javacc.parser.JavaCCContext;
+import org.javacc.parser.Context;
 import org.javacc.parser.Options;
 import org.javacc.parser.TokenizerData;
 
@@ -22,10 +22,10 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
   private static final String TokenManagerTemplate  = "/templates/cpp/TableDrivenTokenManager.template";
   private static final String TokenManagerTemplateH = "/templates/cpp/TableDrivenTokenManager.h.template";
 
-  private final JavaCCContext context;
+  private final Context context;
   private CppCodeBuilder      codeGenerator;
 
-  TokenManagerCodeGenerator(JavaCCContext context) {
+  TokenManagerCodeGenerator(Context context) {
     this.context = context;
   }
 
@@ -142,7 +142,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     codeGenerator.switchToMainFile();
     // Token actions.
     codeGenerator
-        .println("int " + tokenizerData.parserName + "TokenManager::getStartAndSize(int index, int isCount)\n{");
+    .println("int " + tokenizerData.parserName + "TokenManager::getStartAndSize(int index, int isCount)\n{");
     codeGenerator.println("  switch(index) {");
     for (int key : tokenizerData.literalSequence.keySet()) {
       int[] arr = startAndSize.get(key);
@@ -396,12 +396,12 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     // Token actions.
     codeGenerator.switchToMainFile();
     codeGenerator
-        .println("void " + tokenizerData.parserName + "TokenManager::TokenLexicalActions(Token * matchedToken) {");
+    .println("void " + tokenizerData.parserName + "TokenManager::TokenLexicalActions(Token * matchedToken) {");
     dumpLexicalActions(allMatches, TokenizerData.MatchType.TOKEN, "matchedToken->kind", codeGenerator);
     codeGenerator.println("}");
 
     codeGenerator
-        .println("void " + tokenizerData.parserName + "TokenManager::SkipLexicalActions(Token * /*matchedToken*/) {");
+    .println("void " + tokenizerData.parserName + "TokenManager::SkipLexicalActions(Token * /*matchedToken*/) {");
     dumpLexicalActions(allMatches, TokenizerData.MatchType.SKIP, "jjmatchedKind", codeGenerator);
     dumpLexicalActions(allMatches, TokenizerData.MatchType.SPECIAL_TOKEN, "jjmatchedKind", codeGenerator);
     codeGenerator.println("}");

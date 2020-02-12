@@ -2,7 +2,7 @@
 package org.javacc.csharp;
 
 import org.javacc.parser.CodeGeneratorSettings;
-import org.javacc.parser.JavaCCContext;
+import org.javacc.parser.Context;
 import org.javacc.parser.Options;
 import org.javacc.parser.TokenizerData;
 import org.javacc.utils.CodeBuilder;
@@ -23,11 +23,11 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
 
   private static final String tokenManagerTemplate = "/templates/csharp/TokenManagerDriver.template";
 
-  private final JavaCCContext context;
+  private final Context context;
   private GenericCodeBuilder  codeGenerator;
 
 
-  TokenManagerCodeGenerator(JavaCCContext context) {
+  TokenManagerCodeGenerator(Context context) {
     this.context = context;
   }
 

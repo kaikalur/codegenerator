@@ -5,7 +5,7 @@ import org.javacc.jjtree.DefaultJJTreeVisitor;
 import org.javacc.jjtree.JJTreeContext;
 import org.javacc.parser.CodeGenerator;
 import org.javacc.parser.CodeGeneratorSettings;
-import org.javacc.parser.JavaCCContext;
+import org.javacc.parser.Context;
 import org.javacc.parser.Options;
 import org.javacc.parser.TokenizerData;
 
@@ -23,7 +23,7 @@ public class JavaCodeGenerator implements CodeGenerator {
    * Generate any other support files you need.
    */
   @Override
-  public boolean generateHelpers(JavaCCContext context, CodeGeneratorSettings settings, TokenizerData tokenizerData) {
+  public boolean generateHelpers(Context context, CodeGeneratorSettings settings, TokenizerData tokenizerData) {
     JavaTemplates templates = JavaTemplates.getTemplates();
 
     try {
@@ -70,7 +70,7 @@ public class JavaCodeGenerator implements CodeGenerator {
    * The Token class generator.
    */
   @Override
-  public final TokenCodeGenerator getTokenCodeGenerator(JavaCCContext context) {
+  public final TokenCodeGenerator getTokenCodeGenerator(Context context) {
     return new TokenCodeGenerator(context);
   }
 
@@ -78,7 +78,7 @@ public class JavaCodeGenerator implements CodeGenerator {
    * The TokenManager class generator.
    */
   @Override
-  public final TokenManagerCodeGenerator getTokenManagerCodeGenerator(JavaCCContext context) {
+  public final TokenManagerCodeGenerator getTokenManagerCodeGenerator(Context context) {
     return new TokenManagerCodeGenerator(context);
   }
 
@@ -86,7 +86,7 @@ public class JavaCodeGenerator implements CodeGenerator {
    * The Parser class generator.
    */
   @Override
-  public final ParserCodeGenerator getParserCodeGenerator(JavaCCContext context) {
+  public final ParserCodeGenerator getParserCodeGenerator(Context context) {
     return new ParserCodeGenerator(context);
   }
 
