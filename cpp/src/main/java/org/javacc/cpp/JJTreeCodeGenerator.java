@@ -19,9 +19,9 @@ import org.javacc.jjtree.ASTJavacodeBody;
 import org.javacc.jjtree.ASTNodeDescriptor;
 import org.javacc.jjtree.DefaultJJTreeVisitor;
 import org.javacc.jjtree.IO;
+import org.javacc.jjtree.JJTreeContext;
 import org.javacc.jjtree.JJTreeGlobals;
 import org.javacc.jjtree.JJTreeNode;
-import org.javacc.jjtree.JJTreeOptions;
 import org.javacc.jjtree.JJTreeParserConstants;
 import org.javacc.jjtree.Node;
 import org.javacc.jjtree.NodeScope;
@@ -29,7 +29,6 @@ import org.javacc.jjtree.SimpleNode;
 import org.javacc.jjtree.Token;
 import org.javacc.jjtree.TokenUtils;
 import org.javacc.parser.CodeGeneratorSettings;
-import org.javacc.parser.JavaCCContext;
 import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.Options;
 
@@ -38,6 +37,12 @@ import java.io.File;
 class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
 
   private static final String JJTStateVersion = Version.version;
+  
+  private final JJTreeContext context;
+
+  JJTreeCodeGenerator(JJTreeContext context) {
+    this.context = context;
+  }
 
   @Override
   public Object defaultVisit(SimpleNode node, Object data) {
@@ -269,10 +274,10 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
   }
 
   private void insertOpenNodeCode(NodeScope ns, IO io, String indent) {
-    String type = ns.node_descriptor.getNodeType();
+    String type = ns.node_descriptor.getNodeType(context);
     final String nodeClass;
-    if ((JJTreeOptions.getNodeClass().length() > 0) && !JJTreeOptions.getMulti()) {
-      nodeClass = JJTreeOptions.getNodeClass();
+    if ((context.treeOptions().getNodeClass().length() > 0) && !context.treeOptions().getMulti()) {
+      nodeClass = context.treeOptions().getNodeClass();
     } else {
       nodeClass = type;
     }
@@ -284,13 +289,13 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
 
     io.print(indent + nodeClass + " *" + ns.nodeVar + " = ");
     String p = Options.getStatic() ? "null" : "this";
-    String parserArg = JJTreeOptions.getNodeUsesParser() ? (p + ", ") : "";
+    String parserArg = context.treeOptions().getNodeUsesParser() ? (p + ", ") : "";
 
-    if (JJTreeOptions.getNodeFactory().equals("*")) {
+    if (context.treeOptions().getNodeFactory().equals("*")) {
       // Old-style multiple-implementations.
       io.println(
           "(" + nodeClass + "*)" + nodeClass + "::jjtCreate(" + parserArg + ns.node_descriptor.getNodeId() + ");");
-    } else if (JJTreeOptions.getNodeFactory().length() > 0) {
+    } else if (context.treeOptions().getNodeFactory().length() > 0) {
       io.println("(" + nodeClass + "*)nodeFactory->jjtCreate(" + parserArg + ns.node_descriptor.getNodeId() + ");");
     } else {
       io.println("new " + nodeClass + "(" + parserArg + ns.node_descriptor.getNodeId() + ");");
@@ -300,11 +305,11 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
       io.println(indent + "bool " + ns.closedVar + " = true;");
     }
     io.println(indent + ns.node_descriptor.openNode(ns.nodeVar));
-    if (JJTreeOptions.getNodeScopeHook()) {
+    if (context.treeOptions().getNodeScopeHook()) {
       io.println(indent + "jjtreeOpenNodeScope(" + ns.nodeVar + ");");
     }
 
-    if (JJTreeOptions.getTrackTokens()) {
+    if (context.treeOptions().getTrackTokens()) {
       io.println(indent + ns.nodeVar + "->jjtSetFirstToken(getToken(1));");
     }
   }
@@ -316,13 +321,13 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
     if (ns.usesCloseNodeVar() && !isFinal) {
       io.println(indent + ns.closedVar + " = false;");
     }
-    if (JJTreeOptions.getNodeScopeHook()) {
+    if (context.treeOptions().getNodeScopeHook()) {
       io.println(indent + "if (jjtree.nodeCreated()) {");
       io.println(indent + " jjtreeCloseNodeScope(" + ns.nodeVar + ");");
       io.println(indent + "}");
     }
 
-    if (JJTreeOptions.getTrackTokens()) {
+    if (context.treeOptions().getTrackTokens()) {
       io.println(indent + ns.nodeVar + "->jjtSetLastToken(getToken(0));");
     }
   }
@@ -406,13 +411,13 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
   }
 
   @Override
-  public void generateHelperFiles(JavaCCContext context) throws java.io.IOException {
+  public void generateHelperFiles() throws java.io.IOException {
     CodeGeneratorSettings options = CodeGeneratorSettings.of(Options.getOptions());
     options.set(Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
 
     try (CppCodeBuilder builder = CppCodeBuilder.of(context, options)) {
       builder
-      .setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), "JJT" + JJTreeGlobals.parserName + "State.cc"));
+      .setFile(new File(context.treeOptions().getJJTreeOutputDirectory(), "JJT" + JJTreeGlobals.parserName + "State.cc"));
       builder.setVersion(JJTreeCodeGenerator.JJTStateVersion).addOption(JavaCCGlobals.toolName);
 
       builder.printTemplate("/templates/cpp/JJTTreeState.cc.template");

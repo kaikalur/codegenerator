@@ -2,6 +2,7 @@
 package org.javacc.java;
 
 import org.javacc.jjtree.DefaultJJTreeVisitor;
+import org.javacc.jjtree.JJTreeContext;
 import org.javacc.parser.CodeGenerator;
 import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.JavaCCContext;
@@ -94,7 +95,7 @@ public class JavaCodeGenerator implements CodeGenerator {
    * generator. The JJTree preprocesor.
    */
   @Override
-  public final DefaultJJTreeVisitor getJJTreeCodeGenerator() {
-    return new JJTreeCodeGenerator();
+  public final DefaultJJTreeVisitor getJJTreeCodeGenerator(JJTreeContext context) {
+    return new JJTreeCodeGenerator(context);
   }
 }

@@ -1,6 +1,7 @@
 
 package org.javacc.csharp;
 
+import org.javacc.jjtree.JJTreeContext;
 import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.JavaCCContext;
 import org.javacc.parser.JavaCCGlobals;
@@ -88,8 +89,8 @@ public class CodeGenerator implements org.javacc.parser.CodeGenerator {
    * generator. The JJTree preprocesor.
    */
   @Override
-  public org.javacc.jjtree.DefaultJJTreeVisitor getJJTreeCodeGenerator() {
-    return new JJTreeCodeGenerator();
+  public org.javacc.jjtree.DefaultJJTreeVisitor getJJTreeCodeGenerator(JJTreeContext context) {
+    return new JJTreeCodeGenerator(context);
   }
 
 }
