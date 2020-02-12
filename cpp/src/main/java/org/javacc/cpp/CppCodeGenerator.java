@@ -2,8 +2,10 @@
 package org.javacc.cpp;
 
 import org.javacc.jjtree.DefaultJJTreeVisitor;
+import org.javacc.jjtree.JJTreeContext;
 import org.javacc.parser.CodeGenerator;
 import org.javacc.parser.CodeGeneratorSettings;
+import org.javacc.parser.Context;
 import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.Options;
 import org.javacc.parser.TokenizerData;
@@ -26,9 +28,9 @@ public class CppCodeGenerator implements CodeGenerator {
    * Generate any other support files you need.
    */
   @Override
-  public final boolean generateHelpers(CodeGeneratorSettings settings, TokenizerData tokenizerData) {
+  public final boolean generateHelpers(Context context, CodeGeneratorSettings settings, TokenizerData tokenizerData) {
     try {
-      try (CppCodeBuilder builder = CppCodeBuilder.of(settings)) {
+      try (CppCodeBuilder builder = CppCodeBuilder.of(context, settings)) {
         builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "CharStream.cc"));
         builder.addTools(JavaCCGlobals.toolName);
         builder.addOption(Options.USEROPTION__STATIC, Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
@@ -38,7 +40,7 @@ public class CppCodeGenerator implements CodeGenerator {
         builder.printTemplate("/templates/cpp/CharStream.h.template");
       }
 
-      try (CppCodeBuilder builder = CppCodeBuilder.of(settings)) {
+      try (CppCodeBuilder builder = CppCodeBuilder.of(context, settings)) {
         builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "TokenMgrError.cc"));
         builder.addTools(JavaCCGlobals.toolName);
         builder.addOption(Options.USEROPTION__STATIC, Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
@@ -48,7 +50,7 @@ public class CppCodeGenerator implements CodeGenerator {
         builder.printTemplate("/templates/cpp/TokenMgrError.h.template");
       }
 
-      try (CppCodeBuilder builder = CppCodeBuilder.of(settings)) {
+      try (CppCodeBuilder builder = CppCodeBuilder.of(context, settings)) {
         builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "ParseException.cc"));
         builder.addTools(JavaCCGlobals.toolName);
         builder.addOption(Options.USEROPTION__STATIC, Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
@@ -58,7 +60,7 @@ public class CppCodeGenerator implements CodeGenerator {
         builder.printTemplate("/templates/cpp/ParseException.h.template");
       }
 
-      try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(settings)) {
+      try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(context, settings)) {
         builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "TokenManager.h"));
         builder.addTools(JavaCCGlobals.toolName);
         builder.addOption(Options.USEROPTION__STATIC, Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
@@ -66,7 +68,7 @@ public class CppCodeGenerator implements CodeGenerator {
         builder.printTemplate("/templates/cpp/TokenManager.h.template");
       }
 
-      try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(settings)) {
+      try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(context, settings)) {
         builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "JavaCC.h"));
         builder.addTools(JavaCCGlobals.toolName);
         builder.addOption(Options.USEROPTION__STATIC, Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
@@ -74,7 +76,7 @@ public class CppCodeGenerator implements CodeGenerator {
         builder.printTemplate("/templates/cpp/JavaCC.h.template");
       }
 
-      try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(settings)) {
+      try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(context, settings)) {
         builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "ErrorHandler.h"));
         builder.addTools(JavaCCGlobals.toolName);
         builder.addOption(Options.USEROPTION__STATIC, Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC,
@@ -83,7 +85,7 @@ public class CppCodeGenerator implements CodeGenerator {
         builder.printTemplate("/templates/cpp/ErrorHandler.h.template");
       }
 
-      OtherFilesGenCPP.start(tokenizerData);
+      OtherFilesGenCPP.start(context, tokenizerData);
     } catch (Exception e) {
       return false;
     }
@@ -95,24 +97,24 @@ public class CppCodeGenerator implements CodeGenerator {
    * The Token class generator.
    */
   @Override
-  public final TokenCodeGenerator getTokenCodeGenerator() {
-    return new TokenCodeGenerator();
+  public final TokenCodeGenerator getTokenCodeGenerator(Context context) {
+    return new TokenCodeGenerator(context);
   }
 
   /**
    * The TokenManager class generator.
    */
   @Override
-  public final TokenManagerCodeGenerator getTokenManagerCodeGenerator() {
-    return new TokenManagerCodeGenerator();
+  public final TokenManagerCodeGenerator getTokenManagerCodeGenerator(Context context) {
+    return new TokenManagerCodeGenerator(context);
   }
 
   /**
    * The Parser class generator.
    */
   @Override
-  public final ParserCodeGenerator getParserCodeGenerator() {
-    return new ParserCodeGenerator();
+  public final ParserCodeGenerator getParserCodeGenerator(Context context) {
+    return new ParserCodeGenerator(context);
   }
 
   /**
@@ -120,8 +122,8 @@ public class CppCodeGenerator implements CodeGenerator {
    * generator. The JJTree preprocesor.
    */
   @Override
-  public final DefaultJJTreeVisitor getJJTreeCodeGenerator() {
-    return new JJTreeCodeGenerator();
+  public final DefaultJJTreeVisitor getJJTreeCodeGenerator(JJTreeContext context) {
+    return new JJTreeCodeGenerator(context);
   }
 
 }

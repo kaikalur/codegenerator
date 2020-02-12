@@ -1,7 +1,7 @@
 
 package org.javacc.java;
 
-import org.javacc.parser.JavaCCGlobals;
+import org.javacc.parser.Context;
 import org.javacc.parser.JavaCCParserConstants;
 import org.javacc.parser.Options;
 import org.javacc.parser.Token;
@@ -23,20 +23,20 @@ abstract class JavaUtil {
    *
    * @return
    */
-  public static String parsePackage() {
+  public static String parsePackage(Context context) {
     Token t = null;
     StringWriter writer = new StringWriter();
     try (PrintWriter printer = new PrintWriter(writer)) {
-      if ((JavaCCGlobals.cu_to_insertion_point_1.size() != 0)
-          && (JavaCCGlobals.cu_to_insertion_point_1.get(0).kind == JavaCCParserConstants.PACKAGE)) {
-        for (int i = 1; i < JavaCCGlobals.cu_to_insertion_point_1.size(); i++) {
-          if (JavaCCGlobals.cu_to_insertion_point_1.get(i).kind == JavaCCParserConstants.SEMICOLON) {
-            JavaUtil.printTokenSetup(JavaCCGlobals.cu_to_insertion_point_1.get(0));
+      if ((context.globals().cu_to_insertion_point_1.size() != 0)
+          && (context.globals().cu_to_insertion_point_1.get(0).kind == JavaCCParserConstants.PACKAGE)) {
+        for (int i = 1; i < context.globals().cu_to_insertion_point_1.size(); i++) {
+          if (context.globals().cu_to_insertion_point_1.get(i).kind == JavaCCParserConstants.SEMICOLON) {
+            JavaUtil.printTokenSetup(context.globals().cu_to_insertion_point_1.get(0), context);
             for (int j = 0; j <= i; j++) {
-              t = JavaCCGlobals.cu_to_insertion_point_1.get(j);
-              JavaUtil.printToken(t, printer, true);
+              t = context.globals().cu_to_insertion_point_1.get(j);
+              JavaUtil.printToken(t, printer, true, context);
             }
-            JavaUtil.printTrailingComments(t, printer, true);
+            JavaUtil.printTrailingComments(t, printer, true, context);
             printer.println("");
             printer.println("");
             break;
@@ -63,39 +63,39 @@ abstract class JavaUtil {
     return "boolean";
   }
 
-  private static void printTokenSetup(Token t) {
+  private static void printTokenSetup(Token t, Context context) {
     Token tt = t;
     while (tt.specialToken != null) {
       tt = tt.specialToken;
     }
-    JavaCCGlobals.cline = tt.beginLine;
-    JavaCCGlobals.ccol = tt.beginColumn;
+    context.globals().cline = tt.beginLine;
+    context.globals().ccol = tt.beginColumn;
   }
 
-  private static void printToken(Token t, java.io.PrintWriter ostr, boolean escape) {
+  private static void printToken(Token t, java.io.PrintWriter ostr, boolean escape, Context context) {
     Token tt = t.specialToken;
     if (tt != null) {
       while (tt.specialToken != null) {
         tt = tt.specialToken;
       }
       while (tt != null) {
-        ostr.append(JavaCCGlobals.printTokenOnly(tt, escape));
+        ostr.append(tt.printTokenOnly(context.globals(), escape));
         tt = tt.next;
       }
     }
-    ostr.append(JavaCCGlobals.printTokenOnly(t, escape));
+    ostr.append(t.printTokenOnly(context.globals(), escape));
   }
 
-  private static void printTrailingComments(Token t, java.io.PrintWriter ostr, boolean escape) {
+  private static void printTrailingComments(Token t, java.io.PrintWriter ostr, boolean escape, Context context) {
     if (t.next == null) {
       return;
     }
 
-    JavaUtil.printLeadingComments(t.next, escape);
+    JavaUtil.printLeadingComments(t.next, escape, context);
   }
 
 
-  private static String printLeadingComments(Token t, boolean escape) {
+  private static String printLeadingComments(Token t, boolean escape, Context context) {
     String retval = "";
     if (t.specialToken == null) {
       return retval;
@@ -105,13 +105,13 @@ abstract class JavaUtil {
       tt = tt.specialToken;
     }
     while (tt != null) {
-      retval += JavaCCGlobals.printTokenOnly(tt, escape);
+      retval += tt.printTokenOnly(context.globals(), escape);
       tt = tt.next;
     }
-    if ((JavaCCGlobals.ccol != 1) && (JavaCCGlobals.cline != t.beginLine)) {
+    if ((context.globals().ccol != 1) && (context.globals().cline != t.beginLine)) {
       retval += "\n";
-      JavaCCGlobals.cline++;
-      JavaCCGlobals.ccol = 1;
+      context.globals().cline++;
+      context.globals().ccol = 1;
     }
     return retval;
   }

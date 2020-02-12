@@ -35,9 +35,9 @@ import org.javacc.parser.BNFProduction;
 import org.javacc.parser.Choice;
 import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.CodeProduction;
+import org.javacc.parser.Context;
 import org.javacc.parser.CppCodeProduction;
 import org.javacc.parser.Expansion;
-import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.JavaCCParserConstants;
 import org.javacc.parser.JavaCodeProduction;
 import org.javacc.parser.Lookahead;
@@ -104,14 +104,20 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
   private int                           cline           = 1;
   private int                           ccol            = 1;
 
+  private final Context           context;
   private final Map<Expansion, String>  internalNames   = new HashMap<Expansion, String>();
   private final Map<Expansion, Integer> internalIndexes = new HashMap<Expansion, Integer>();
   private ParserData                    parserData;
 
+
+  ParserCodeGenerator(Context context) {
+    this.context = context;
+  }
+
   @Override
   public void generateCode(CodeGeneratorSettings settings, ParserData parserData) {
     this.parserData = parserData;
-    codeGenerator = GenericCodeBuilder.of(settings);
+    codeGenerator = GenericCodeBuilder.of(context, settings);
     codeGenerator.setFile(new File(Options.getOutputDirectory(), parserData.parserName + ".cs"));
 
     String superClass = (String) settings.get(Options.USEROPTION__TOKEN_MANAGER_SUPER_CLASS);
@@ -133,7 +139,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println(parserData.parserName + "Constants {");
       codeGenerator.println(parserData.decls);
 
-      if (JavaCCGlobals.jjtreeGenerated) {
+      if (context.globals().jjtreeGenerated) {
         codeGenerator
         .println("  JJT" + parserData.parserName + "State jjtree = new JJT" + parserData.parserName + "State();");
       }

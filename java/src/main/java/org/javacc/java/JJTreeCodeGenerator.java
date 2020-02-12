@@ -21,9 +21,9 @@ import org.javacc.jjtree.ASTNodeDescriptor;
 import org.javacc.jjtree.ASTProduction;
 import org.javacc.jjtree.DefaultJJTreeVisitor;
 import org.javacc.jjtree.IO;
+import org.javacc.jjtree.JJTreeContext;
 import org.javacc.jjtree.JJTreeGlobals;
 import org.javacc.jjtree.JJTreeNode;
-import org.javacc.jjtree.JJTreeOptions;
 import org.javacc.jjtree.Node;
 import org.javacc.jjtree.NodeScope;
 import org.javacc.jjtree.SimpleNode;
@@ -38,6 +38,12 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
+
+  private final JJTreeContext context;
+
+  JJTreeCodeGenerator(JJTreeContext context) {
+    this.context = context;
+  }
 
   @Override
   public Object defaultVisit(SimpleNode node, Object data) {
@@ -79,7 +85,8 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
             needClose = false;
             break;
           }
-        } else if ((p instanceof ASTBNFZeroOrOne) || (p instanceof ASTBNFZeroOrMore) || (p instanceof ASTBNFOneOrMore)) {
+        } else if ((p instanceof ASTBNFZeroOrOne) || (p instanceof ASTBNFZeroOrMore)
+            || (p instanceof ASTBNFOneOrMore)) {
           needClose = false;
           break;
         }
@@ -292,10 +299,10 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
   }
 
   private void insertOpenNodeCode(NodeScope ns, IO io, String indent) {
-    String type = ns.node_descriptor.getNodeType();
+    String type = ns.node_descriptor.getNodeType(context);
     final String nodeClass;
-    if ((JJTreeOptions.getNodeClass().length() > 0) && !JJTreeOptions.getMulti()) {
-      nodeClass = JJTreeOptions.getNodeClass();
+    if ((context.treeOptions().getNodeClass().length() > 0) && !context.treeOptions().getMulti()) {
+      nodeClass = context.treeOptions().getNodeClass();
     } else {
       nodeClass = type;
     }
@@ -307,13 +314,13 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
 
     io.print(indent + nodeClass + " " + ns.nodeVar + " = ");
     String p = Options.getStatic() ? "null" : "this";
-    String parserArg = JJTreeOptions.getNodeUsesParser() ? (p + ", ") : "";
+    String parserArg = context.treeOptions().getNodeUsesParser() ? (p + ", ") : "";
 
-    if (JJTreeOptions.getNodeFactory().equals("*")) {
+    if (context.treeOptions().getNodeFactory().equals("*")) {
       // Old-style multiple-implementations.
       io.println("(" + nodeClass + ")" + nodeClass + ".jjtCreate(" + parserArg + ns.node_descriptor.getNodeId() + ");");
-    } else if (JJTreeOptions.getNodeFactory().length() > 0) {
-      io.println("(" + nodeClass + ")" + JJTreeOptions.getNodeFactory() + ".jjtCreate(" + parserArg
+    } else if (context.treeOptions().getNodeFactory().length() > 0) {
+      io.println("(" + nodeClass + ")" + context.treeOptions().getNodeFactory() + ".jjtCreate(" + parserArg
           + ns.node_descriptor.getNodeId() + ");");
     } else {
       io.println("new " + nodeClass + "(" + parserArg + ns.node_descriptor.getNodeId() + ");");
@@ -323,11 +330,11 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
       io.println(indent + "boolean " + ns.closedVar + " = true;");
     }
     io.println(indent + ns.node_descriptor.openNode(ns.nodeVar));
-    if (JJTreeOptions.getNodeScopeHook()) {
+    if (context.treeOptions().getNodeScopeHook()) {
       io.println(indent + "jjtreeOpenNodeScope(" + ns.nodeVar + ");");
     }
 
-    if (JJTreeOptions.getTrackTokens()) {
+    if (context.treeOptions().getTrackTokens()) {
       io.println(indent + ns.nodeVar + ".jjtSetFirstToken(getToken(1));");
     }
   }
@@ -339,13 +346,13 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
     if (ns.usesCloseNodeVar() && !isFinal) {
       io.println(indent + ns.closedVar + " = false;");
     }
-    if (JJTreeOptions.getNodeScopeHook()) {
+    if (context.treeOptions().getNodeScopeHook()) {
       io.println(indent + "if (jjtree.nodeCreated()) {");
       io.println(indent + " jjtreeCloseNodeScope(" + ns.nodeVar + ");");
       io.println(indent + "}");
     }
 
-    if (JJTreeOptions.getTrackTokens()) {
+    if (context.treeOptions().getTrackTokens()) {
       io.println(indent + ns.nodeVar + ".jjtSetLastToken(getToken(0));");
     }
   }
@@ -475,14 +482,14 @@ class JJTreeCodeGenerator extends DefaultJJTreeVisitor {
     CodeGeneratorSettings options = CodeGeneratorSettings.of(Options.getOptions());
     options.set(Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
 
-    try (JavaCodeBuilder builder = JavaCodeBuilder.of(options)) {
+    try (JavaCodeBuilder builder = JavaCodeBuilder.of(context, options)) {
       builder
-      .setFile(new File(JJTreeOptions.getJJTreeOutputDirectory(), "JJT" + JJTreeGlobals.parserName + "State.java"));
+      .setFile(new File(context.treeOptions().getJJTreeOutputDirectory(), "JJT" + JJTreeGlobals.parserName + "State.java"));
       builder.setVersion(Version.version).addTools(JavaCCGlobals.toolName);
       NodeFiles.generateProlog(builder);
       builder.printTemplate("/templates/JJTTreeState.template");
     }
 
-    NodeFiles.generateOutputFiles();
+    NodeFiles.generateOutputFiles(context);
   }
 }

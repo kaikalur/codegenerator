@@ -2,6 +2,7 @@
 package org.javacc.cpp;
 
 import org.javacc.parser.CodeGeneratorSettings;
+import org.javacc.parser.Context;
 import org.javacc.utils.CodeBuilder;
 
 import java.io.File;
@@ -31,8 +32,8 @@ class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
    *
    * @param options
    */
-  private CppCodeBuilder(CodeGeneratorSettings options, boolean headeOnly) {
-    super(options);
+  private CppCodeBuilder(Context context, CodeGeneratorSettings options, boolean headeOnly) {
+    super(context, options);
     this.headeOnly = headeOnly;
     kind = headeOnly ? Buffer.Include : Buffer.Main;
   }
@@ -236,8 +237,8 @@ class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
    *
    * @param options
    */
-  static CppCodeBuilder of(CodeGeneratorSettings options) {
-    return new CppCodeBuilder(options, false);
+  static CppCodeBuilder of(Context context, CodeGeneratorSettings options) {
+    return new CppCodeBuilder(context, options, false);
   }
 
   /**
@@ -245,7 +246,7 @@ class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
    *
    * @param options
    */
-  static CppCodeBuilder ofHeader(CodeGeneratorSettings options) {
-    return new CppCodeBuilder(options, true);
+  static CppCodeBuilder ofHeader(Context context, CodeGeneratorSettings options) {
+    return new CppCodeBuilder(context, options, true);
   }
 }

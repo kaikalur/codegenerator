@@ -2,6 +2,7 @@
 package org.javacc.cpp;
 
 import org.javacc.parser.CodeGeneratorSettings;
+import org.javacc.parser.Context;
 import org.javacc.parser.Options;
 import org.javacc.parser.TokenizerData;
 
@@ -21,7 +22,12 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
   private static final String TokenManagerTemplate  = "/templates/cpp/TableDrivenTokenManager.template";
   private static final String TokenManagerTemplateH = "/templates/cpp/TableDrivenTokenManager.h.template";
 
+  private final Context context;
   private CppCodeBuilder      codeGenerator;
+
+  TokenManagerCodeGenerator(Context context) {
+    this.context = context;
+  }
 
   @Override
   public void generateCode(CodeGeneratorSettings settings, TokenizerData tokenizerData) {
@@ -44,7 +50,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
 
     File file = new File(Options.getOutputDirectory(), tokenizerData.parserName + "TokenManager.cc");
     try {
-      codeGenerator = CppCodeBuilder.of(settings).setFile(file);
+      codeGenerator = CppCodeBuilder.of(context, settings).setFile(file);
 
       if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
         codeGenerator.println("namespace " + Options.stringValue("NAMESPACE_OPEN"));
