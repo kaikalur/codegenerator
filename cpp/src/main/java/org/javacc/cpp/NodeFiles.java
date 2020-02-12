@@ -29,17 +29,17 @@ final class NodeFiles {
   private static Set<String>  nodesToBuild      = new HashSet<>();
 
   static void generateNodeType(String nodeType) {
-    if (!nodeType.equals("Node") && !nodeType.equals("SimpleNode")) {
+    if (!nodeType.equals("Tree") && !nodeType.equals("Node")) {
       NodeFiles.nodesToBuild.add(nodeType);
     }
   }
 
   private static String nodeIncludeFile() {
-    return new File(JJTreeOptions.getJJTreeOutputDirectory(), "Node.h").getAbsolutePath();
+    return new File(JJTreeOptions.getJJTreeOutputDirectory(), "Tree.h").getAbsolutePath();
   }
 
   private static String simpleNodeCodeFile() {
-    return new File(JJTreeOptions.getJJTreeOutputDirectory(), "SimpleNode.cc").getAbsolutePath();
+    return new File(JJTreeOptions.getJJTreeOutputDirectory(), "Node.cc").getAbsolutePath();
   }
 
   private static String jjtreeIncludeFile() {
@@ -81,7 +81,7 @@ final class NodeFiles {
       builder.addOption("MULTI", "NODE_USES_PARSER", "VISITOR", "TRACK_TOKENS", "NODE_PREFIX", "NODE_EXTENDS",
           "NODE_FACTORY", "SUPPORT_CLASS_VISIBILITY_PUBLIC");
 
-      builder.printTemplate("/templates/cpp/Node.h.template");
+      builder.printTemplate("/templates/cpp/Tree.h.template");
     } catch (IOException e) {
       throw new Error(e.toString());
     }
@@ -101,9 +101,9 @@ final class NodeFiles {
       builder.addOption("MULTI", "NODE_USES_PARSER", "VISITOR", "TRACK_TOKENS", "NODE_PREFIX", "NODE_EXTENDS",
           "NODE_FACTORY", Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
 
-      builder.printTemplate("/templates/cpp/SimpleNode.cc.template");
+      builder.printTemplate("/templates/cpp/Node.cc.template");
       builder.switchToIncludeFile();
-      builder.printTemplate("/templates/cpp/SimpleNode.h.template");
+      builder.printTemplate("/templates/cpp/Node.h.template");
     } catch (IOException e) {
       throw new Error(e.toString());
     }
@@ -124,7 +124,7 @@ final class NodeFiles {
           "NODE_FACTORY", "SUPPORT_CLASS_VISIBILITY_PUBLIC");
 
       builder.switchToIncludeFile();
-      builder.println("#include \"SimpleNode.h\"");
+      builder.println("#include \"Node.h\"");
       for (String s : NodeFiles.nodesToBuild) {
         builder.println("#include \"" + s + ".h\"");
         if (generateOneTreeImpl) {
@@ -283,7 +283,7 @@ final class NodeFiles {
     }
     builder.println("public:");
 
-    builder.println("  virtual " + returnType + " visit(const SimpleNode *node, " + argumentType + " data) = 0;");
+    builder.println("  virtual " + returnType + " visit(const Node *node, " + argumentType + " data) = 0;");
     if (JJTreeOptions.getMulti()) {
       for (String n : nodeNames) {
         if (n.equals("void")) {
@@ -313,9 +313,9 @@ final class NodeFiles {
     String ret = NodeFiles.getVisitorReturnType();
 
     builder.println("public:");
-    builder.println("  virtual " + ret + " defaultVisit(const SimpleNode *node, " + argumentType + " data) = 0;");
+    builder.println("  virtual " + ret + " defaultVisit(const Node *node, " + argumentType + " data) = 0;");
 
-    builder.println("  virtual " + ret + " visit(const SimpleNode *node, " + argumentType + " data) {");
+    builder.println("  virtual " + ret + " visit(const Node *node, " + argumentType + " data) {");
     builder.println("    " + (ret.trim().equals("void") ? "" : "return ") + "defaultVisit(node, data);");
     builder.println("  }");
 

@@ -1,4 +1,4 @@
-\#include "${NODE_CLASS:-SimpleNode}.h"
+\#include "${NODE_CLASS:-Node}.h"
 
 #if NAMESPACE
 namespace ${NAMESPACE_OPEN}
@@ -7,7 +7,7 @@ namespace ${NAMESPACE_OPEN}
 class ${PARSER_NAME};
 #fi
 
-class ${NODE_TYPE} : public ${NODE_CLASS:-SimpleNode} {
+class ${NODE_TYPE} : public ${NODE_CLASS:-Node} {
 public: 
   ${NODE_TYPE}(int id);
 #if NODE_USES_PARSER

@@ -6,10 +6,10 @@
 namespace ${NAMESPACE_OPEN}
 #fi
   
-  ${NODE_TYPE}::${NODE_TYPE}(int id) : ${NODE_CLASS:-SimpleNode}(id) {
+  ${NODE_TYPE}::${NODE_TYPE}(int id) : ${NODE_CLASS:-Node}(id) {
   }
 #if NODE_USES_PARSER
-  ${NODE_TYPE}::${NODE_TYPE}(${PARSER_NAME} *parser, int id) : ${NODE_CLASS:-SimpleNode}(parser, id) {
+  ${NODE_TYPE}::${NODE_TYPE}(${PARSER_NAME} *parser, int id) : ${NODE_CLASS:-Node}(parser, id) {
   }
 #fi
   ${NODE_TYPE}::~${NODE_TYPE}() {
