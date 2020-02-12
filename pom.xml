@@ -15,9 +15,6 @@
 
 	<name>JavaCC code generator</name>
 
-	<properties>
-		<core>8.0.0</core>
-	</properties>
 
 	<modules>
 		<module>cpp</module>
