@@ -1,4 +1,4 @@
-class ${NODE_TYPE} extends ${NODE_CLASS:-SimpleNode} {
+class ${NODE_TYPE} extends ${NODE_CLASS:-Node} {
   public ${NODE_TYPE}(int id) {
     super(id);
   }

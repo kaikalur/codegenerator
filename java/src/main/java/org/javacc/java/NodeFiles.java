@@ -27,7 +27,7 @@ final class NodeFiles {
   private static Set<String>  nodesToBuild = new HashSet<>();
 
   static void generateNodeType(String nodeType) {
-    if (!nodeType.equals("Node") && !nodeType.equals("SimpleNode")) {
+    if (!nodeType.equals("Tree") && !nodeType.equals("Node")) {
       NodeFiles.nodesToBuild.add(nodeType);
     }
   }
@@ -110,7 +110,7 @@ final class NodeFiles {
 
       builder.println("public interface " + JavaTemplates.visitorClass());
       builder.println("{");
-      builder.println("  public ", context.treeOptions().getVisitorReturnType(), " visit(SimpleNode node, ", argumentType,
+      builder.println("  public ", context.treeOptions().getVisitorReturnType(), " visit(Node node, ", argumentType,
           " data)", ve, ";");
 
       if (context.treeOptions().getMulti()) {
@@ -160,11 +160,11 @@ final class NodeFiles {
 
       builder.println("public class ", JavaTemplates.defaultVisitorClass(), " implements ",
           JavaTemplates.visitorClass(), "{");
-      builder.println("  public ", ret, " defaultVisit(SimpleNode node, ", argumentType, " data)", ve, "{");
+      builder.println("  public ", ret, " defaultVisit(Node node, ", argumentType, " data)", ve, "{");
       builder.println("    node.childrenAccept(this, data);");
       builder.println("    return", (ret.trim().equals("void") ? "" : " data"), ";");
       builder.println("  }");
-      builder.println("  public ", ret, " visit(SimpleNode node, ", argumentType, " data)", ve, "{");
+      builder.println("  public ", ret, " visit(Node node, ", argumentType, " data)", ve, "{");
       builder.println("    ", (ret.trim().equals("void") ? "" : "return "), "defaultVisit(node, data);");
       builder.println("  }");
 
@@ -200,15 +200,15 @@ final class NodeFiles {
     options.set("VISITOR_RETURN_TYPE_VOID", Boolean.valueOf(context.treeOptions().getVisitorReturnType().equals("void")));
 
     try (JavaCodeBuilder builder = JavaCodeBuilder.of(context, options)) {
-      builder.setFile(new File(context.treeOptions().getJJTreeOutputDirectory(), "Node.java"));
+      builder.setFile(new File(context.treeOptions().getJJTreeOutputDirectory(), "Tree.java"));
       NodeFiles.generateProlog(builder);
-      builder.printTemplate("/templates/Node.template");
+      builder.printTemplate("/templates/Tree.template");
     }
 
     try (JavaCodeBuilder builder = JavaCodeBuilder.of(context, options)) {
-      builder.setFile(new File(context.treeOptions().getJJTreeOutputDirectory(), "SimpleNode.java"));
+      builder.setFile(new File(context.treeOptions().getJJTreeOutputDirectory(), "Node.java"));
       NodeFiles.generateProlog(builder);
-      builder.printTemplate("/templates/SimpleNode.template");
+      builder.printTemplate("/templates/Node.template");
     }
   }
 
