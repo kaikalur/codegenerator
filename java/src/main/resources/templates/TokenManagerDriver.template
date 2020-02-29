@@ -485,7 +485,7 @@ public ${STATIC?static :} Token getNextToken() {
         try {
           curChar = input_stream.readChar();
 #if IGNORE_CASE
-          curChar = (int)Character.toLowerCase((char)curChar)
+          curChar = (int)Character.toLowerCase((char)curChar);
 #fi
           continue;
         }
