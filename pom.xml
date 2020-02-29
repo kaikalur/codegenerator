@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org</groupId>
 		<artifactId>javacc</artifactId>
-		<version>8.0.0</version>
+		<version>8.0.0-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.javacc</groupId>
@@ -26,6 +26,7 @@
 		<dependency>
 			<groupId>org.javacc</groupId>
 			<artifactId>parser</artifactId>
+			<version>${javacc.parser}</version>
 		</dependency>
 	</dependencies>
 </project>
