@@ -23,7 +23,7 @@ namespace ${NAMESPACE_OPEN}
        << ") after : \"" << errorAfter.c_str() << "\"";
     return (JJString)ss.rdbuf()->str();
 \#endif
-    return EMPTY;
+    return JJEMPTY;
   }
 
   /**
