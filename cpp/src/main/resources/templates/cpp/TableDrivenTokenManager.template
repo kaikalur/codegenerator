@@ -6,7 +6,7 @@ bool ${parserName}TokenManager::moveToNextChar() {
 
   curChar = input_stream->readChar();
 #if IGNORE_CASE
-  curChar = (int) Character.toLowerCase((char)curChar);
+  curChar = towlower(curChar);
 #fi
   return true;
 }
@@ -345,7 +345,7 @@ Token * ${parserName}TokenManager::getNextToken() {
     // First see if we have any input at all.
     curChar = input_stream->BeginToken();
 #if IGNORE_CASE
-    curChar = Character.toLowerCase(curChar);
+    curChar = towlower(curChar);
 #fi
 
 #if DEBUG_TOKEN_MANAGER
@@ -434,7 +434,7 @@ Token * ${parserName}TokenManager::getNextToken() {
         do {
           curChar = input_stream->readChar();
 #if IGNORE_CASE
-          curChar = (int) Character.toLowerCase((char)curChar)
+          curChar = towlower(curChar);
 #fi
         } while(curChar >= 0);
       }

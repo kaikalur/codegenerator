@@ -2,6 +2,7 @@
 \#include <memory>
 \#include <cassert>
 \#include <cstdint>
+\#include <cctype>
 \#include <functional>
 \#include <iostream>
 
