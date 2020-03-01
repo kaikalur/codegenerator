@@ -441,7 +441,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
       if (i > 0) {
         codeGenerator.print(", ");
       }
-      codeGenerator.print("" + Long.toString(longs[i]) + "ULL");
+      codeGenerator.print("" + Long.toUnsignedString(longs[i]) + "ULL");
     }
     codeGenerator.println("};");
   }
