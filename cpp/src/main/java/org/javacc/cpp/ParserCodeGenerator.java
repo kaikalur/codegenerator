@@ -100,6 +100,15 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     this.context = context;
   }
 
+  void printInclude(String include) {
+	if (include != null && include.length() > 0) {
+      if (include.charAt(0) == '<') {
+        codeGenerator.println("#include " + include);
+      } else {
+        codeGenerator.println("#include \"" + include + "\"");
+      }
+    }
+  }
   @Override
   public void generateCode(CodeGeneratorSettings settings, ParserData parserData) {
     List<String> tn = new ArrayList<>(context.globals().toolNames);
@@ -108,37 +117,28 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     File file = new File(Options.getOutputDirectory(), parserData.parserName + ".cc");
     codeGenerator = CppCodeBuilder.of(context, settings).setFile(file);
 
+    
     if (context.globals().jjtreeGenerated) {
       codeGenerator.switchToStaticsFile();
       codeGenerator.println("#include \"" + context.globals().cu_name + "Tree.h\"\n");
     }
 
     codeGenerator.switchToIncludeFile();
+    String guard = "JAVACC_" + parserData.parserName.toUpperCase() + "_H";
+    codeGenerator.println("#ifndef " + guard);
+    codeGenerator.println("#define " + guard);
+    codeGenerator.println();
     codeGenerator.println("#include \"JavaCC.h\"");
     codeGenerator.println("#include \"CharStream.h\"");
     codeGenerator.println("#include \"Token.h\"");
     codeGenerator.println("#include \"TokenManager.h\"");
 
-    Object object = Options.objectValue(Options.USEROPTION__CPP_PARSER_INCLUDES);
+    printInclude(Options.getParserInclude());
 
-    if (object instanceof String) {
-      String include = (String) object;
-      if (include.length() > 0) {
-        if (include.charAt(0) == '<') {
-          codeGenerator.println("#include " + include);
-        } else {
-          codeGenerator.println("#include \"" + include + "\"");
-        }
-      }
-    } else if (object instanceof List<?>) {
-      for (String include : (List<String>) object) {
-        if (include.length() > 0) {
-          if (include.charAt(0) == '<') {
-            codeGenerator.println("#include " + include);
-          } else {
-            codeGenerator.println("#include \"" + include + "\"");
-          }
-        }
+    List<String> includes = Options.getParserIncludes();
+    if (includes != null) {
+      for (String include : includes) {
+          printInclude(include);
       }
     }
 
@@ -845,8 +845,11 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
   public void finish(CodeGeneratorSettings settings, ParserData parserData) {
     if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
       codeGenerator.println(Options.stringValue("NAMESPACE_CLOSE"));
+      codeGenerator.println("#endif");
       codeGenerator.switchToMainFile();
       codeGenerator.println(Options.stringValue("NAMESPACE_CLOSE"));
+    } else {
+        codeGenerator.println("#endif");
     }
 
     try {

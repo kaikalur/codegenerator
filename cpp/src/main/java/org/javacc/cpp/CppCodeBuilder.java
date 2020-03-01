@@ -81,8 +81,6 @@ class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
     // includeBuffer.append(Options.stringValue("NAMESPACE_CLOSE") + "\n");
     // }
 
-    includeBuffer.insert(0, "#pragma once\n\n");
-
     fixupLongLiterals(includeBuffer);
     store(includeFile, includeBuffer);
 

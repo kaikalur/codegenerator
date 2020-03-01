@@ -17,7 +17,6 @@ namespace ${NAMESPACE_OPEN}
 #fi
 class ${parserName};
 
-/** Token Manager. */
 class ${parserName}TokenManager : public TokenManager {
 public:
 \#ifndef JAVACC_CHARSTREAM

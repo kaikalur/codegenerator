@@ -124,6 +124,10 @@ final class NodeFiles {
           "NODE_FACTORY", "SUPPORT_CLASS_VISIBILITY_PUBLIC");
 
       builder.switchToIncludeFile();
+      String guard = "JAVACC_" + "ONE_TREE_H";
+      builder.println("#ifndef " + guard);
+      builder.println("#define " + guard);
+      builder.println();
       builder.println("#include \"Node.h\"");
       for (String s : NodeFiles.nodesToBuild) {
         builder.println("#include \"" + s + ".h\"");
@@ -134,6 +138,7 @@ final class NodeFiles {
           builder.switchToIncludeFile();
         }
       }
+      builder.println("#endif");
     } catch (IOException e) {
       throw new Error(e.toString());
     }
@@ -181,7 +186,11 @@ final class NodeFiles {
     try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(context, CodeGeneratorSettings.create())) {
       builder.setFile(file);
 
-      builder.println("\n#include \"JavaCC.h\"");
+      String guard = "JAVACC_" + nodeConstants().toUpperCase() + "_H";
+      builder.println("#ifndef " + guard);
+      builder.println("#define " + guard);
+      builder.println();
+      builder.println("#include \"JavaCC.h\"");
 
       boolean hasNamespace = Options.stringValue("NAMESPACE").length() > 0;
       if (hasNamespace) {
@@ -211,6 +220,7 @@ final class NodeFiles {
       if (hasNamespace) {
         builder.println(Options.stringValue("NAMESPACE_CLOSE"));
       }
+      builder.println("#endif");
     } catch (IOException e) {
       throw new Error(e);
     }
@@ -250,7 +260,11 @@ final class NodeFiles {
     try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(context, CodeGeneratorSettings.create())) {
       builder.setFile(new File(NodeFiles.visitorIncludeFile(context.treeOptions().getJJTreeOutputDirectory())));
 
-      builder.println("\n#include \"JavaCC.h\"");
+      String guard = "JAVACC_" + JJTreeGlobals.parserName.toUpperCase() + "_VISITOR_H";
+      builder.println("#ifndef " + guard);
+      builder.println("#define " + guard);
+      builder.println();
+      builder.println("#include \"JavaCC.h\"");
       builder.println("#include \"" + JJTreeGlobals.parserName + "Tree.h" + "\"");
 
       boolean hasNamespace = Options.stringValue("NAMESPACE").length() > 0;
@@ -264,6 +278,7 @@ final class NodeFiles {
       if (hasNamespace) {
         builder.println(Options.stringValue("NAMESPACE_CLOSE"));
       }
+      builder.println("#endif");
     } catch (IOException e) {
       throw new Error(e);
     }

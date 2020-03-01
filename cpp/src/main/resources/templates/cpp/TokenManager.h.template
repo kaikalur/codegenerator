@@ -4,6 +4,9 @@
 \#include <iostream>
 \#include "JavaCC.h"
 \#include "Token.h"
+#if TOKEN_INCLUDE
+\#include ${TOKEN_INCLUDE}
+#fi
 
 #if NAMESPACE
 namespace ${NAMESPACE_OPEN}
