@@ -1,3 +1,6 @@
+\#ifndef JAVACC_PARSER_EXCEPTION_H
+\#define JAVACC_PARSER_EXCEPTION_H
+
 \#include "JavaCC.h"
 \#include "Token.h"
 
@@ -88,3 +91,5 @@ class ParseException {
 #if NAMESPACE
 ${NAMESPACE_CLOSE}
 #fi
+
+\#endif

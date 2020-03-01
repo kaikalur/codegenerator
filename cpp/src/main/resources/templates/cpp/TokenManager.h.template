@@ -1,3 +1,6 @@
+\#ifndef JAVACC_TOKEN_MANAGER_H
+\#define JAVACC_TOKEN_MANAGER_H
+
 \#include <iostream>
 \#include "JavaCC.h"
 \#include "Token.h"
@@ -29,3 +32,5 @@ public:
 #if NAMESPACE
 ${NAMESPACE_CLOSE}
 #fi
+
+\#endif

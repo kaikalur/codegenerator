@@ -1,3 +1,6 @@
+\#ifndef JAVACC_${parserName}TokenManager_H
+\#define JAVACC_${parserName}TokenManager_H
+
 \#include "stdio.h"
 \#include "JavaCC.h"
 \#include "CharStream.h"
@@ -89,3 +92,5 @@ public:
 #if NAMESPACE
 ${NAMESPACE_CLOSE}
 #fi
+
+\#endif

@@ -1,3 +1,6 @@
+\#ifndef JAVACC_${NODE_TYPE}_H
+\#define JAVACC_${NODE_TYPE}_H
+
 \#include "${NODE_CLASS:-Node}.h"
 
 #if NAMESPACE
@@ -24,3 +27,5 @@ public:
 #if NAMESPACE
 ${NAMESPACE_CLOSE}
 #fi
+
+\#endif
