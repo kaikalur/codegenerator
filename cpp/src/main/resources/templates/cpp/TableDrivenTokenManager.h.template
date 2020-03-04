@@ -11,13 +11,25 @@
 #if TOKEN_MANAGER_USES_PARSER
 \#include "${parserName}.h"
 #fi
+#if TOKEN_MANAGER_INCLUDE
+\#include "${TOKEN_MANAGER_INCLUDE}"
+#fi
+
+#if TOKEN_MANAGER_INCLUDES
+\#include "${TOKEN_MANAGER_INCLUDES}"
+#fi
 
 #if NAMESPACE
 namespace ${NAMESPACE_OPEN}
 #fi
 class ${parserName};
 
-class ${parserName}TokenManager : public TokenManager {
+class ${parserName}TokenManager 
+	: public TokenManager
+#if TOKEN_MANAGER_SUPER_CLASS
+ 	, public ${TOKEN_MANAGER_SUPER_CLASS}
+#fi
+ {
 public:
 \#ifndef JAVACC_CHARSTREAM
 \#define JAVACC_CHARSTREAM CharStream
