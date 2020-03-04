@@ -3,6 +3,10 @@
 
 \#include "JavaCC.h"
 
+#if TOKEN_INCLUDE
+\#include "${TOKEN_INCLUDE}"
+#fi
+
 #if TOKEN_INCLUDES
 \#include "${TOKEN_INCLUDES}"
 #fi
