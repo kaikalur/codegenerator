@@ -75,8 +75,7 @@ public:
  * token and it is the implementation's responsibility to do this right.
  */
   virtual inline void backup(int amount) {
-    inBuf += amount;
-    bufpos -= amount;
+    inBuf += amount; bufpos -= amount;
     if (bufpos < 0) {
       bufpos += bufsize;
     }
@@ -173,13 +172,12 @@ public:
     return inBuf == 0 && bufpos + 1 >= maxNextCharInd && inputStream->endOfInput();
   }
 
-  CharStream(const JJChar *buf, int sz, int startline,
-                      int startcolumn, int buffersize) :
+  CharStream(const JJChar *buf, int sz, int startline, int startcolumn, int buffersize) :
     bufline(nullptr), bufcolumn(nullptr), buffer(nullptr), bufpos(0), bufsize(0), 
     tokenBegin(0), column(0), line(0), prevCharIsCR(false), prevCharIsLF(false),
     available(0), maxNextCharInd(0), inBuf(0), tabSize(1), trackLineColumn(true),
     inputStream(nullptr), deleteStream(false) {
-    ReInit(JJString(buf, sz), startline, startcolumn, buffersize);
+	ReInit(JJString(buf, sz), startline, startcolumn, buffersize);
   }
 
   CharStream(const JJChar *buf, int sz, int startline, int startcolumn) :
@@ -190,8 +188,7 @@ public:
     ReInit(JJString(buf, sz), startline, startcolumn, INITIAL_BUFFER_SIZE);
   }
 
-  CharStream(const JJString& str, int startline,
-                      int startcolumn, int buffersize) :
+  CharStream(const JJString& str, int startline, int startcolumn, int buffersize) :
     bufline(nullptr), bufcolumn(nullptr), buffer(nullptr), bufpos(0), bufsize(0), 
     tokenBegin(0), column(0), line(0), prevCharIsCR(false), prevCharIsLF(false),
     available(0), maxNextCharInd(0), inBuf(0), tabSize(1), trackLineColumn(true),
@@ -207,8 +204,7 @@ public:
     ReInit(str, startline, startcolumn, INITIAL_BUFFER_SIZE);
   }
 
-  CharStream(ReaderStream *input_stream, int startline,
-             int startcolumn, int buffersize) :
+  CharStream(ReaderStream *input_stream, int startline, int startcolumn, int buffersize) :
     bufline(nullptr), bufcolumn(nullptr), buffer(nullptr), bufpos(0), bufsize(0), 
     tokenBegin(0), column(0), line(0), prevCharIsCR(false), prevCharIsLF(false),
     available(0), maxNextCharInd(0), inBuf(0), tabSize(1), trackLineColumn(true),
@@ -242,11 +238,9 @@ public:
     ReInit(input_stream, 1, 1, INITIAL_BUFFER_SIZE);
   }
 
-  virtual void ReInit(const JJString& str, int startline,
-                      int startcolumn, int buffersize);
+  virtual void ReInit(const JJString& str, int startline, int startcolumn, int buffersize);
 
-  virtual void ReInit(const JJString& str, int startline,
-                      int startcolumn) {
+  virtual void ReInit(const JJString& str, int startline, int startcolumn) {
     ReInit(str, startline, startcolumn, INITIAL_BUFFER_SIZE);
   }
 

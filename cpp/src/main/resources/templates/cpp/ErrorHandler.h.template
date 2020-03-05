@@ -16,8 +16,13 @@ JJSimpleString addUnicodeEscapes(const JJString& str);
   class ErrorHandler {
     friend class ${PARSER_NAME}TokenManager;
     friend class ${PARSER_NAME};
+    public:
+               ErrorHandler() { error_count = 0; }
+      virtual ~ErrorHandler() {}
+      
     protected:
       int error_count;
+      
     public:
       // Called when the parser encounters a different token when expecting to
       // consume a specific kind of token.
@@ -28,6 +33,8 @@ JJSimpleString addUnicodeEscapes(const JJString& str);
         error_count++;
         std::cerr << "Expecting " << addUnicodeEscapes(expectedToken) << " at: " << actual->beginLine << ":" << actual->beginColumn << "but got " << addUnicodeEscapes(actual->image) << std::endl;
       }
+      
+      
       // Called when the parser cannot continue parsing.
       // last - the last token successfully parsed.
       // unexpected - the token at which the error occurs.
@@ -36,14 +43,13 @@ JJSimpleString addUnicodeEscapes(const JJString& str);
         error_count++;
         std::cerr << "Encountered: " << addUnicodeEscapes(unexpected->image) << " at: " << unexpected->beginLine << ":" << unexpected->beginColumn << "while parsing: " << production << std::endl;
       }
+      
       virtual int getErrorCount() {
         return error_count;
       }
       virtual void handleOtherError(const JJString & message, ${PARSER_NAME} * /*parser*/) {
         std::cerr << "Error: " << message << std::endl;
       }
-      virtual ~ErrorHandler() {}
-      ErrorHandler() { error_count = 0; }
   };
 #fi
 
@@ -51,8 +57,11 @@ JJSimpleString addUnicodeEscapes(const JJString& str);
   class ${PARSER_NAME}TokenManager;
   class TokenManagerErrorHandler {
     friend class ${PARSER_NAME}TokenManager;
+    public:
+      virtual ~TokenManagerErrorHandler() {}
     protected:
       int error_count;
+    
     public:
       // Returns a detailed message for the Error when it is thrown by the
       // token manager to indicate a lexical error.
@@ -68,11 +77,11 @@ JJSimpleString addUnicodeEscapes(const JJString& str);
         // by default, we just print an error message and return.
         std::cerr << "Lexical error at: " << errorLine << ":" << errorColumn << ". Encountered: " << curChar << " after: " << errorAfter << "." << std::endl;
       }
+      
       virtual void lexicalError(const JJString & errorMessage, ${PARSER_NAME}TokenManager* /*token_manager*/) {
         std::cerr << errorMessage << std::endl;
       }
-      virtual ~TokenManagerErrorHandler() {}
-  };
+   };
 #fi
 
 #if NAMESPACE
