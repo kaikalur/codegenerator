@@ -14,7 +14,7 @@ namespace ${NAMESPACE_OPEN}
    *    curJJChar     : the offending character
    * Note: You can customize the lexical error message by modifying this method.
    */
-    JJString TokenMgrError::LexicalError(bool /*EOFSeen*/, int /*lexState*/, int /*errorLine*/, int /*errorColumn*/, const JJString & /*errorAfter*/, JJChar /*curChar*/) {
+    JJString TokenMgrError::LexicalError(bool EOFSeen, int lexState, int errorLine, int errorColumn, const JJString & errorAfte, JJChar curChar) {
 \#if 0
     JJString s;
     stringstream<JJString> ss;
@@ -39,23 +39,16 @@ namespace ${NAMESPACE_OPEN}
     return message;
   }
 
-  /*
-   * Constructors of various flavors follow.
-   */
-
-  /** No arg constructor. */
   TokenMgrError::TokenMgrError() {
   }
-
-  /** Constructor with message and reason. */
-  TokenMgrError::TokenMgrError(const JJString & /*message*/, int reason) {
+  TokenMgrError::TokenMgrError(const JJString & message, int reason) {
     errorCode = reason;
   }
-
-  /** Full Constructor. */
   TokenMgrError::TokenMgrError(bool EOFSeen, int lexState, int errorLine, int errorColumn, const JJString& errorAfter, JJChar curChar, int reason) {
     message = LexicalError(EOFSeen, lexState, errorLine, errorColumn, errorAfter, curChar);
    errorCode = reason;
+  }
+  TokenMgrError::~TokenMgrError() { 
   }
 
 // i < 16 - guaranteed

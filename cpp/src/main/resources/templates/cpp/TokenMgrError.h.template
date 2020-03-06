@@ -8,33 +8,19 @@ namespace ${NAMESPACE_OPEN}
 #fi
 
 enum LexerErrors {
-  /**
-   * Lexical error occurred.
-   */
-  LEXICAL_ERROR = 0,
-
-  /**
-   * An attempt was made to create a second instance of a  token manager.
-   */
-  STATIC_LEXER_ERROR = 1,
-
-  /**
-   * Tried to change to an invalid lexical state.
-   */
-  INVALID_LEXICAL_STATE = 2,
-
-  /**
-   * Detected (and bailed out of) an infinite loop in the token manager.
-   */
-  LOOP_DETECTED = 3,
+  LEXICAL_ERROR = 0,			// Lexical error occurred.
+  STATIC_LEXER_ERROR = 1,		// An attempt was made to create a second instance of a  token manager.
+  INVALID_LEXICAL_STATE = 2,	// Tried to change to an invalid lexical state.
+  LOOP_DETECTED = 3,			// Detected (and bailed out of) an infinite loop in the token manager.
 };
 
 class TokenMgrError {
 public:
-  /*
-   * Ordinals for various reasons why an Error of this type can be thrown.
-   */
-
+  TokenMgrError();
+  TokenMgrError(const JJString& message, int reason);
+  TokenMgrError(bool EOFSeen, int lexState, int errorLine, int errorColumn, const JJString& errorAfter, JJChar curChar, int reason) ;
+  virtual ~TokenMgrError();
+  
   /**
    * Indicates the reason why the exception is thrown. It will have
    * one of the above 4 values.
@@ -53,10 +39,7 @@ public:
    *    curchar     : the offending character
    * Note: You can customize the lexical error message by modifying this method.
    */
-    JJString LexicalError(bool EOFSeen, int lexState, int errorLine, int errorColumn, const JJString& errorAfter, JJChar curChar);
-
-private:
-   JJString message;
+   virtual JJString LexicalError(bool EOFSeen, int lexState, int errorLine, int errorColumn, const JJString& errorAfter, JJChar curChar);
 
   /**
    * You can also modify the body of this method to customize your error messages.
@@ -69,19 +52,10 @@ private:
    */
 public:
   JJString getMessage() ;
+  
+private:
+  JJString message;
 
-  /*
-   * Constructors of various flavors follow.
-   */
-
-  /** No arg constructor. */
-  TokenMgrError() ;
-
-  /** Constructor with message and reason. */
-  TokenMgrError(const JJString& message, int reason) ;
-
-  /** Full Constructor. */
-  TokenMgrError(bool EOFSeen, int lexState, int errorLine, int errorColumn, const JJString& errorAfter, JJChar curChar, int reason) ;
 };
 
 #if NAMESPACE
