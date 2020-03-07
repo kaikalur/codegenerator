@@ -205,12 +205,10 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("    delete_eh = false;");
     codeGenerator.println("  }");
     codeGenerator.println("");
-    codeGenerator.println("  TokenManager *token_source = nullptr;");
-    codeGenerator.println("  CharStream   *jj_input_stream = nullptr;");
-    codeGenerator.println("  /** Current token. */");
-    codeGenerator.println("  Token        *token = nullptr;");
-    codeGenerator.println("  /** Next token. */");
-    codeGenerator.println("  Token        *jj_nt = nullptr;");
+    codeGenerator.println("  TokenManager* token_source = nullptr;");
+    codeGenerator.println("  CharStream*   jj_input_stream = nullptr;");
+    codeGenerator.println("  Token*        token = nullptr;  // Current token.");
+    codeGenerator.println("  Token*        jj_nt = nullptr;  // Next token.");
     codeGenerator.println("");
     codeGenerator.println("private: ");
     codeGenerator.println("  int           jj_ntk;");
@@ -218,15 +216,15 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("  JJCalls       jj_2_rtns[" + (context.globals().jj2index + 1) + "];");
     codeGenerator.println("  bool          jj_rescan;");
     codeGenerator.println("  int           jj_gc;");
-    codeGenerator.println("  Token        *jj_scanpos, *jj_lastpos;");
+    codeGenerator.println("  Token*        jj_scanpos;");
+    codeGenerator.println("  Token*        jj_lastpos;");
     codeGenerator.println("  int           jj_la;");
-    codeGenerator.println("  /** Whether we are looking ahead. */");
-    codeGenerator.println("  bool          jj_lookingAhead;");
+    codeGenerator.println("  bool          jj_lookingAhead;  // Whether we are looking ahead.");
     codeGenerator.println("  bool          jj_semLA;");
 
     codeGenerator.println("  int           jj_gen;");
     codeGenerator.println("  int           jj_la1[" + (context.globals().maskindex + 1) + "];");
-    codeGenerator.println("  ErrorHandler *errorHandler = nullptr;");
+    codeGenerator.println("  ErrorHandler* errorHandler = nullptr;");
     codeGenerator.println("");
     codeGenerator.println("protected: ");
     codeGenerator.println("  bool          delete_eh     = false;");
@@ -270,7 +268,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("  /** Constructor with user supplied TokenManager. */");
 
     codeGenerator.switchToIncludeFile(); // TEMP
-    codeGenerator.println("  Token        *head;");
+    codeGenerator.println("  Token*        head;");
     codeGenerator.println("");
     codeGenerator.println("public: ");
     codeGenerator.generateMethodDefHeader(" ", context.globals().cu_name,
@@ -343,7 +341,8 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("  //parser should not take care of deleting");
     codeGenerator.println("  //if (token_source) delete token_source;");
     codeGenerator.println("  if (delete_tokens && head) {");
-    codeGenerator.println("    Token *next, *t = head;");
+    codeGenerator.println("    Token* next;");
+    codeGenerator.println("    Token* t = head;");
     codeGenerator.println("    while (t) {");
     codeGenerator.println("      next = t->next;");
     codeGenerator.println("      delete t;");
@@ -398,11 +397,11 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("    }");
     }
     if (Options.getCacheTokens()) {
-      codeGenerator.println("    Token *oldToken = token;");
+      codeGenerator.println("    Token* oldToken = token;");
       codeGenerator.println("    if ((token = jj_nt)->next != nullptr) jj_nt = jj_nt->next;");
       codeGenerator.println("    else jj_nt = jj_nt->next = token_source->getNextToken();");
     } else {
-      codeGenerator.println("    Token *oldToken;");
+      codeGenerator.println("    Token* oldToken;");
       codeGenerator.println("    if ((oldToken = token)->next != nullptr) token = token->next;");
       codeGenerator.println("    else token = token->next = token_source->getNextToken();");
       codeGenerator.println("    jj_ntk = -1;");
@@ -498,7 +497,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     }
     codeGenerator.println("");
     codeGenerator.println("/** Get the next Token. */");
-    codeGenerator.generateMethodDefHeader("Token *", context.globals().cu_name, "getNextToken()");
+    codeGenerator.generateMethodDefHeader("Token* ", context.globals().cu_name, "getNextToken()");
     codeGenerator.println("{");
     if (Options.getCacheTokens()) {
       codeGenerator.println("    if ((token = jj_nt)->next != nullptr) jj_nt = jj_nt->next;");
@@ -521,9 +520,9 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.generateMethodDefHeader("Token *", context.globals().cu_name, "getToken(int index)");
     codeGenerator.println("{");
     if (context.globals().lookaheadNeeded) {
-      codeGenerator.println("    Token *t = jj_lookingAhead ? jj_scanpos : token;");
+      codeGenerator.println("    Token* t = jj_lookingAhead ? jj_scanpos : token;");
     } else {
-      codeGenerator.println("    Token *t = token;");
+      codeGenerator.println("    Token* t = token;");
     }
     codeGenerator.println("    for (int i = 0; i < index; i++) {");
     codeGenerator.println("      if (t->next != nullptr) t = t->next;");
@@ -548,8 +547,8 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("private:");
     codeGenerator.println("  int jj_kind;");
     if (Options.getErrorReporting()) {
-      codeGenerator.println("  int **jj_expentries;");
-      codeGenerator.println("  int *jj_expentry;");
+      codeGenerator.println("  int** jj_expentries;");
+      codeGenerator.println("  int*  jj_expentry;");
       if (context.globals().jj2index != 0) {
         codeGenerator.switchToStaticsFile();
         // For now we don't support ERROR_REPORTING in the C++ version.
@@ -1832,7 +1831,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
   }
 
   private String getTypeForToken() {
-    return "Token *";
+    return "Token*";
   }
 
   private String genjj_3Call(Expansion e) {
