@@ -20,18 +20,16 @@ JJSimpleString addUnicodeEscapes(const JJString& str);
                ErrorHandler() { error_count = 0; }
       virtual ~ErrorHandler() {}
       
-    protected:
-      int error_count;
-      
-    public:
-      // Called when the parser encounters a different token when expecting to
-      // consume a specific kind of token.
+      // Called when the parser encounters a different token when expecting to consume a specific kind of token.
       // expectedKind - token kind that the parser was trying to consume.
       // expectedToken - the image of the token - tokenImages[expectedKind].
       // actual - the actual token that the parser got instead.
-      virtual void handleUnexpectedToken(int /*expectedKind*/, const JJString & expectedToken, Token *actual, ${PARSER_NAME} * /*parser*/) {
+      virtual void handleUnexpectedToken(int expectedKind, const JJString&& expectedToken, Token* actual, ${PARSER_NAME}* parser) {
         error_count++;
-        std::cerr << "Expecting " << addUnicodeEscapes(expectedToken) << " at: " << actual->beginLine << ":" << actual->beginColumn << "but got " << addUnicodeEscapes(actual->image) << std::endl;
+        std::cerr 
+        	<< "Expecting " << addUnicodeEscapes(expectedToken) << " at: " 
+        	<< actual->beginLine << ":" << actual->beginColumn << "but got " 
+        	<< addUnicodeEscapes(actual->image) << std::endl;
       }
       
       
@@ -39,17 +37,24 @@ JJSimpleString addUnicodeEscapes(const JJString& str);
       // last - the last token successfully parsed.
       // unexpected - the token at which the error occurs.
       // production - the production in which this error occurrs.
-      virtual void handleParseError(Token * /*last*/, Token *unexpected, const JJSimpleString & production, ${PARSER_NAME} * /*parser*/) {
+      virtual void handleParseError(Token* last, Token* unexpected, const JJSimpleString& production, ${PARSER_NAME}* parser) {
         error_count++;
-        std::cerr << "Encountered: " << addUnicodeEscapes(unexpected->image) << " at: " << unexpected->beginLine << ":" << unexpected->beginColumn << "while parsing: " << production << std::endl;
+        std::cerr 
+        	<< "Encountered: " << addUnicodeEscapes(unexpected->image) << " at: " 
+        	<< unexpected->beginLine << ":" << unexpected->beginColumn << "while parsing: " << production << std::endl;
       }
       
       virtual int getErrorCount() {
         return error_count;
       }
+      
       virtual void handleOtherError(const JJString & message, ${PARSER_NAME} * /*parser*/) {
         std::cerr << "Error: " << message << std::endl;
       }
+
+    protected:
+      int error_count;
+      
   };
 #fi
 
