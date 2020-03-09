@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.javacc</groupId>
 		<artifactId>codegen</artifactId>
-		<version>${javacc.parser}</version>
+		<version>${javacc.core}</version>
 	</parent>
 
 	<groupId>org.javacc.codegen</groupId>
