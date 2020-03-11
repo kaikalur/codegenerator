@@ -415,9 +415,9 @@ Token * ${parserName}TokenManager::getNextToken() {
               matchedToken->specialToken = specialToken;
               specialToken = (specialToken->next = matchedToken);
             }
-            SkipLexicalActions(matchedToken);
+            skipLexicalActions(matchedToken);
           } else {
-            SkipLexicalActions(nullptr);
+            skipLexicalActions(nullptr);
           }
           if (jjnewLexState[jjmatchedKind] != -1) {
             curLexState = jjnewLexState[jjmatchedKind];

@@ -401,13 +401,13 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     codeGenerator.println("}");
 
     codeGenerator
-    .println("void " + tokenizerData.parserName + "TokenManager::SkipLexicalActions(Token * /*matchedToken*/) {");
+    .println("void " + tokenizerData.parserName + "TokenManager::skipLexicalActions(Token * /*matchedToken*/) {");
     dumpLexicalActions(allMatches, TokenizerData.MatchType.SKIP, "jjmatchedKind", codeGenerator);
     dumpLexicalActions(allMatches, TokenizerData.MatchType.SPECIAL_TOKEN, "jjmatchedKind", codeGenerator);
     codeGenerator.println("}");
 
     // More actions.
-    codeGenerator.println("void " + tokenizerData.parserName + "TokenManager::MoreLexicalActions() {");
+    codeGenerator.println("void " + tokenizerData.parserName + "TokenManager::moreLexicalActions() {");
     codeGenerator.println("jjimageLen += (lengthOfMatch = jjmatchedPos + 1);");
     dumpLexicalActions(allMatches, TokenizerData.MatchType.MORE, "jjmatchedKind", codeGenerator);
     codeGenerator.println("}");
