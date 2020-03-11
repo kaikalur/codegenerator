@@ -15,9 +15,9 @@ ${decls}
 
 #if TOKEN_MANAGER_USES_PARSER && !STATIC
 /** Constructor with parser. */
-${parserName}TokenManager::${parserName}TokenManager(${parserName}* parser, JAVACC_CHARSTREAM* stream, int lexState)
+${parserName}TokenManager::${parserName}TokenManager(${parserName}* parser, JAVACC_CHARSTREAM* stream, int lexState) : parser(parser)
 {
-    ReInit(parser, stream, lexState);
+    ReInit(stream, lexState);
 }
 #else
 /** Constructor. */
@@ -28,11 +28,7 @@ ${parserName}TokenManager::${parserName}TokenManager(JAVACC_CHARSTREAM* stream, 
 #fi
 
 /** Reinitialise parser. */
-#if TOKEN_MANAGER_USES_PARSER && !STATIC
-void ${parserName}TokenManager::ReInit(${parserName}* parser, JAVACC_CHARSTREAM* stream, int lexState) : parser(parser)
-#else
 void ${parserName}TokenManager::ReInit(JAVACC_CHARSTREAM* stream, int lexState)
-#fi
 {
     defaultLexState = ${defaultLexState};
     curLexState = ${defaultLexState};
@@ -395,7 +391,7 @@ Token * ${parserName}TokenManager::getNextToken() {
           // Matched kind is a real TOKEN.
           matchedToken = jjFillToken();
           matchedToken->specialToken = specialToken;
-          TokenLexicalActions(matchedToken);
+          tokenLexicalActions(matchedToken);
           if (jjnewLexState[jjmatchedKind] != -1) {
             curLexState = jjnewLexState[jjmatchedKind];
           }

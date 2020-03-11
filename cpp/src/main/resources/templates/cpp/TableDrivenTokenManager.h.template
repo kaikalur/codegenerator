@@ -46,6 +46,7 @@ private:
   int newStateSet[${generatedStates}];
   int moved[${generatedStates}];
   int moveIndex;
+  
   unsigned long long        jjChars[${nfaSize}][${charsVectorSize}];
     
   JJString                  jjimage;
@@ -68,33 +69,28 @@ public:
 #fi
   virtual ~${parserName}TokenManager() {}
 
-  Token * getNextToken();
+  Token* getNextToken();
 
 protected:
-  bool moveToNextChar();
+  bool   moveToNextChar();
  #if TOKEN_MANAGER_USES_PARSER
   ${parserName}*   parser;
  #fi
   
-#if TOKEN_MANAGER_USES_PARSER
-  void ReInit(${parserName}* parser, JAVACC_CHARSTREAM* stream, int lexState = 0);
-#else
-  void ReInit(JAVACC_CHARSTREAM* stream, int lexState = 0);
-#fi
-
-  void SwitchTo(int lexState);
+  void   ReInit(JAVACC_CHARSTREAM* stream, int lexState = 0);
+  void   SwitchTo(int lexState);
 
 
 private:
-  void TokenLexicalActions(Token* matchedToken);
-  void SkipLexicalActions(Token* matchedToken);
-  void MoreLexicalActions();
+  void   tokenLexicalActions(Token* matchedToken);
+  void   skipLexicalActions(Token* matchedToken);
+  void   moreLexicalActions();
 
-  int getStartAndSize(int index, int isCount);
-  int jjRunStringLiteralMatch();
+  int    getStartAndSize(int index, int isCount);
+  int    jjRunStringLiteralMatch();
 
-  int jjMoveNfa(int startState, int curPos);
-  Token * jjFillToken();
+  int    jjMoveNfa(int startState, int curPos);
+  Token* jjFillToken();
 
 public:
   void setErrorHandler(TokenManagerErrorHandler* eh) {
