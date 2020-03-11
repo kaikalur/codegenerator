@@ -22,7 +22,9 @@
 #if NAMESPACE
 namespace ${NAMESPACE_OPEN}
 #fi
+#if TOKEN_MANAGER_USES_PARSER
 class ${parserName};
+#fi
 
 class ${parserName}TokenManager 
 	: public TokenManager
@@ -61,9 +63,9 @@ private:
 
 public: 
 #if TOKEN_MANAGER_USES_PARSER && !STATIC
-  ${parserName}TokenManager(${parserName} parserArg, JAVACC_CHARSTREAM * stream, int lexState = 0);
+  ${parserName}TokenManager(${parserName}& parser, JAVACC_CHARSTREAM* stream, int lexState = 0);
 #else
-  ${parserName}TokenManager(JAVACC_CHARSTREAM * stream, int lexState = 0);
+  ${parserName}TokenManager(JAVACC_CHARSTREAM* stream, int lexState = 0);
 #fi
   virtual ~${parserName}TokenManager() {}
 
@@ -73,17 +75,17 @@ protected:
   bool moveToNextChar();
   
 #if TOKEN_MANAGER_USES_PARSER
-  void ReInit( ${parserName} parserArg, JAVACC_CHARSTREAM * stream, int lexState = 0);
+  void ReInit( ${parserName}& parser, JAVACC_CHARSTREAM* stream, int lexState = 0);
 #else
-  void ReInit(JAVACC_CHARSTREAM * stream, int lexState = 0);
+  void ReInit(JAVACC_CHARSTREAM* stream, int lexState = 0);
 #fi
 
   void SwitchTo(int lexState);
 
 
 private:
-  void TokenLexicalActions(Token * matchedToken);
-  void SkipLexicalActions(Token * matchedToken);
+  void TokenLexicalActions(Token* matchedToken);
+  void SkipLexicalActions(Token* matchedToken);
   void MoreLexicalActions();
 
   int getStartAndSize(int index, int isCount);
