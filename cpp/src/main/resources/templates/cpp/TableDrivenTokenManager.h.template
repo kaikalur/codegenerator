@@ -8,9 +8,7 @@
 \#include "ErrorHandler.h"
 \#include "TokenManager.h"
 \#include "${parserName}Constants.h"
-#if TOKEN_MANAGER_USES_PARSER
-\#include "${parserName}.h"
-#fi
+
 #if TOKEN_MANAGER_INCLUDE
 \#include "${TOKEN_MANAGER_INCLUDE}"
 #fi
@@ -19,11 +17,12 @@
 \#include "${TOKEN_MANAGER_INCLUDES}"
 #fi
 
+#if TOKEN_MANAGER_USES_PARSER
+\#include "${parserName}.h"
+#fi
+
 #if NAMESPACE
 namespace ${NAMESPACE_OPEN}
-#fi
-#if TOKEN_MANAGER_USES_PARSER
-class ${parserName};
 #fi
 
 class ${parserName}TokenManager 
@@ -63,7 +62,7 @@ private:
 
 public: 
 #if TOKEN_MANAGER_USES_PARSER && !STATIC
-  ${parserName}TokenManager(${parserName}& parser, JAVACC_CHARSTREAM* stream, int lexState = 0);
+  ${parserName}TokenManager(${parserName}* parser, JAVACC_CHARSTREAM* stream, int lexState = 0);
 #else
   ${parserName}TokenManager(JAVACC_CHARSTREAM* stream, int lexState = 0);
 #fi
@@ -73,9 +72,12 @@ public:
 
 protected:
   bool moveToNextChar();
+ #if TOKEN_MANAGER_USES_PARSER
+  ${parserName}*   parser;
+ #fi
   
 #if TOKEN_MANAGER_USES_PARSER
-  void ReInit(${parserName}& parser, JAVACC_CHARSTREAM* stream, int lexState = 0);
+  void ReInit(${parserName}* parser, JAVACC_CHARSTREAM* stream, int lexState = 0);
 #else
   void ReInit(JAVACC_CHARSTREAM* stream, int lexState = 0);
 #fi

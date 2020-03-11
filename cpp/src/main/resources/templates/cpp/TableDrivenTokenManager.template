@@ -15,7 +15,7 @@ ${decls}
 
 #if TOKEN_MANAGER_USES_PARSER && !STATIC
 /** Constructor with parser. */
-${parserName}TokenManager::${parserName}TokenManager(${parserName}& parser, JAVACC_CHARSTREAM* stream, int lexState)
+${parserName}TokenManager::${parserName}TokenManager(${parserName}* parser, JAVACC_CHARSTREAM* stream, int lexState)
 {
     ReInit(parser, stream, lexState);
 }
@@ -29,7 +29,7 @@ ${parserName}TokenManager::${parserName}TokenManager(JAVACC_CHARSTREAM* stream, 
 
 /** Reinitialise parser. */
 #if TOKEN_MANAGER_USES_PARSER && !STATIC
-void ${parserName}TokenManager::ReInit(${parserName}& parser, JAVACC_CHARSTREAM* stream, int lexState)
+void ${parserName}TokenManager::ReInit(${parserName}* parser, JAVACC_CHARSTREAM* stream, int lexState) : parser(parser)
 #else
 void ${parserName}TokenManager::ReInit(JAVACC_CHARSTREAM* stream, int lexState)
 #fi
