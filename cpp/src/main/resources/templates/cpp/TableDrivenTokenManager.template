@@ -15,17 +15,24 @@ ${decls}
 
 #if TOKEN_MANAGER_USES_PARSER && !STATIC
 /** Constructor with parser. */
-${parserName}TokenManager::${parserName}TokenManager (${parserName}& parser, JAVACC_CHARSTREAM* stream, int lexState)
+${parserName}TokenManager::${parserName}TokenManager(${parserName}& parser, JAVACC_CHARSTREAM* stream, int lexState)
+{
+    ReInit(parser, stream, lexState);
+}
 #else
 /** Constructor. */
-${parserName}TokenManager::${parserName}TokenManager (JAVACC_CHARSTREAM* stream, int lexState)
-#fi
+${parserName}TokenManager::${parserName}TokenManager(JAVACC_CHARSTREAM* stream, int lexState)
 {
     ReInit(stream, lexState);
 }
+#fi
 
 /** Reinitialise parser. */
+#if TOKEN_MANAGER_USES_PARSER && !STATIC
+void ${parserName}TokenManager::ReInit(${parserName}& parser, JAVACC_CHARSTREAM* stream, int lexState)
+#else
 void ${parserName}TokenManager::ReInit(JAVACC_CHARSTREAM* stream, int lexState)
+#fi
 {
     defaultLexState = ${defaultLexState};
     curLexState = ${defaultLexState};
