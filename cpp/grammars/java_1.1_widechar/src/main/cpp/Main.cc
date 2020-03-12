@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
   Node *root = (Node*)parser.jjtree.peekNode();
   if (root) {
     JJString buffer;
-#if WIDE_CHAR
+#if (JAVACC_CHAR_TYPE_SIZEOF != 1)
     //root->dumpToBuffer(L" ", L"\n", &buffer);
     //wcout << buffer << "\n";
     root->dump(L" ");
