@@ -6,6 +6,7 @@
 		<artifactId>codegen</artifactId>
 		<version>8.0.0-SNAPSHOT</version>
 	</parent>
+	<name>JavaCC grammars c++</name>
 	<groupId>org.javacc.codegen.cpp</groupId>
 	<artifactId>grammars</artifactId>
 	<packaging>pom</packaging>
@@ -13,10 +14,10 @@
 		<module>asn1</module>
 		<module>c</module>
 		<module>chemical</module>
+  		<module>ecma</module>
 		<module>java_1.5</module>
 <!-- 
  		<module>java_1.1</module>
-  		<module>ecma</module>
  -->
  		<module>cobol</module>
 		<module>dtd</module>
@@ -54,5 +55,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	<name>JavaCC grammars c++</name>
 </project>

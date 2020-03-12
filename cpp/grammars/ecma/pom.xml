@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.javacc.grammars</groupId>
-    <artifactId>cpp</artifactId>
+    <groupId>org.javacc.codegen.cpp</groupId>
+    <artifactId>grammars</artifactId>
     <version>8.0.0-SNAPSHOT</version>
   </parent>
-  <groupId>org.javacc.grammars.cpp</groupId>
+  <groupId>org.javacc.codegen.cpp.grammars</groupId>
   <artifactId>ecma</artifactId>
 	<packaging>nar</packaging>
 	<name>JavaCC grammars C++  ECMA</name>
@@ -22,7 +22,8 @@
 							<goal>jjtree-javacc</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.basedir}/target/generated-sources/cpp</outputDirectory>
+							<outputDirectory>target/generated-sources/cpp</outputDirectory>
+							<nodeDirectory>src/main/cpp</nodeDirectory>
 						</configuration>
 					</execution>
 				</executions>
@@ -44,10 +45,10 @@
 								<path>${project.basedir}/src/main/cpp</path>
 							</includePath>
 							<includePath>
-								<path>${project.basedir}/target/generated-sources/cpp/org/dojo/jsl/core</path>
+								<path>${project.basedir}/target/generated-sources/cpp</path>
 							</includePath>
 							<includePath>
-								<path>${project.basedir}/target/generated-sources/jjtree/org/dojo/jsl/core</path>
+								<path>${project.basedir}/target/generated-sources/jjtree</path>
 							</includePath>
 						</includePaths>
 					</cpp>
