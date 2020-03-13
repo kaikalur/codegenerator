@@ -45,7 +45,7 @@ void CharStream::ReInit(ReaderStream *input_stream, int startline,
   }
 
   if (buffer) {
-    DeleteBuffers();
+    deleteBuffers();
   }
 
   available = bufsize = buffersize;
@@ -62,7 +62,7 @@ void CharStream::ReInit(ReaderStream *input_stream, int startline,
   deleteStream = false;
 }
 
-void CharStream::DeleteBuffers() {
+void CharStream::deleteBuffers() {
   delete[] buffer;
   delete[] bufline;
   delete[] bufcolumn;
@@ -108,7 +108,7 @@ void CharStream::adjustBeginLineColumn(int newLine, int newCol) {
   column = bufcolumn[j];
 }
 
-void CharStream::ExpandBuff(bool wrapAround) {
+void CharStream::expandBuff(bool wrapAround) {
   JJChar *newbuffer = new JJChar[bufsize + 2048];
   int *newbufline = new int[bufsize + 2048];
   int *newbufcolumn = new int[bufsize + 2048];
@@ -129,7 +129,7 @@ void CharStream::ExpandBuff(bool wrapAround) {
   }
 
   maxNextCharInd = bufpos;
-  DeleteBuffers();
+  deleteBuffers();
   buffer = newbuffer;
   bufline = newbufline;
   bufcolumn = newbufcolumn;
@@ -138,7 +138,7 @@ void CharStream::ExpandBuff(bool wrapAround) {
   tokenBegin = 0;
 }
 
-void CharStream::FillBuff() {
+void CharStream::fillBuff() {
   if (maxNextCharInd == available) {
     if (available == bufsize) {
       if (tokenBegin > 2048) {
@@ -147,12 +147,12 @@ void CharStream::FillBuff() {
       } else if (tokenBegin < 0) {
         bufpos = maxNextCharInd = 0;
       } else {
-        ExpandBuff(false);
+        expandBuff(false);
       }
     } else if (available > tokenBegin) {
       available = bufsize;
     } else if ((tokenBegin - available) < 2048) {
-      ExpandBuff(true);
+      expandBuff(true);
     } else {
       available = tokenBegin;
     }
@@ -170,7 +170,7 @@ void CharStream::FillBuff() {
   }
 }
 
-void CharStream::UpdateLineColumn(JJChar c) {
+void CharStream::updateLineColumn(JJChar c) {
   column++;
   if (prevCharIsLF) {
     prevCharIsLF = false;

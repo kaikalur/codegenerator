@@ -57,12 +57,12 @@ public:
   virtual int getBeginColumn()   { return getBufcolumn(tokenBegin); }
   virtual int getBeginLine()     { return getBufline(tokenBegin); }
 #else
-  virtual int  getColumn()       { return -1; }
-  virtual int  getLine()         { return -1; }
-  virtual int  getEndColumn()    { return -1; }
-  virtual int  getEndLine()      { return -1; }
-  virtual int  getBeginColumn()  { return -1; }
-  virtual int  getBeginLine()    { return -1; }
+  virtual int getColumn()        { return -1; }
+  virtual int getLine()          { return -1; }
+  virtual int getEndColumn()     { return -1; }
+  virtual int getEndLine()       { return -1; }
+  virtual int getBeginColumn()   { return -1; }
+  virtual int getBeginLine()     { return -1; }
 #fi
 
   virtual bool getTrackLineColumn()         { return trackLineColumn; }
@@ -86,7 +86,7 @@ public:
  * All characters must remain in the buffer between two successive calls
  * to this method to implement backup correctly.
  */
-  virtual inline JJChar BeginToken() {
+  virtual inline JJChar beginToken() {
     tokenBegin = -1;
     JJChar c = readChar();
     tokenBegin = bufpos;
@@ -111,23 +111,21 @@ public:
 
     ++bufpos;
     if (bufpos >= maxNextCharInd) {
-      FillBuff();
+      fillBuff();
     }
 
     JJChar c = buffer[bufpos];
 
 #if KEEP_LINE_COLUMN
     if (trackLineColumn) {
-      UpdateLineColumn(c);
+      updateLineColumn(c);
     }
 #fi
-
     return c;
   }
 
-
-  virtual void ExpandBuff(bool wrapAround);
-  virtual void FillBuff();
+  virtual void expandBuff(bool wrapAround);
+  virtual void fillBuff();
 
   /**
    * Returns a string made up of characters from the marked token beginning
@@ -135,7 +133,7 @@ public:
    * anything that they want to. For example, for efficiency, one might decide
    * to just return NULL, which is a valid implementation.
    */
-  virtual JJString GetImage() {
+  virtual JJString getImage() {
     if (bufpos >= tokenBegin)
       return JJString(buffer + tokenBegin, bufpos - tokenBegin + 1);
     else
@@ -148,7 +146,7 @@ public:
    * for use in actions in the case of MORE. A simple and inefficient
    * implementation of this is as follows :
    */
-  virtual JJString GetSuffix(int len) {
+  virtual JJString getSuffix(int len) {
     if ((bufpos + 1) >= len) {
       return JJString(buffer + bufpos - len + 1, len);
     }
@@ -159,13 +157,13 @@ public:
    * The lexer calls this function to indicate that it is done with the stream
    * and hence implementations can free any resources held by this class.
    */
-  virtual void DeleteBuffers();
+  virtual void deleteBuffers();
 
   virtual ~CharStream() {
     if (deleteStream) {
      delete inputStream;
     }
-    DeleteBuffers();
+    deleteBuffers();
   }
 
   bool endOfInput() {
@@ -247,7 +245,7 @@ public:
   virtual void adjustBeginLineColumn(int newLine, int newCol);
 
 protected:
-  virtual void UpdateLineColumn(JJChar c);
+  virtual void updateLineColumn(JJChar c);
 
   int*               bufline;
   int*               bufcolumn;

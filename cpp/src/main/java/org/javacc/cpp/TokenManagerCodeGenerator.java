@@ -313,7 +313,29 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     codeGenerator.println("};");
     codeGenerator.println();
   }
-
+ 
+  private void printWide(String image, boolean needed) {
+	  String prefix = "";
+	  if (needed)
+		  prefix = "L";
+      if (image != null) {
+        codeGenerator.print(prefix + "\"");
+        for (int j = 0; j < image.length(); j++) {
+          if (image.charAt(j) <= 0xff) {
+            codeGenerator.print("\\" + Integer.toOctalString(image.charAt(j)));
+          } else {
+            String hexVal = Integer.toHexString(image.charAt(j));
+            if (hexVal.length() == 3) {
+              hexVal = "0" + hexVal;
+            }
+            codeGenerator.print("\\u" + hexVal);
+          }
+        }
+        codeGenerator.print("\"");
+      } else {
+        codeGenerator.println(prefix + "\"\"");
+      }
+  }
   private void dumpMatchInfo(CppCodeBuilder codeGenerator, TokenizerData tokenizerData) {
     Map<Integer, TokenizerData.MatchInfo> allMatches = tokenizerData.allMatches;
 
@@ -330,47 +352,59 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     toSpecial.set(allMatches.size() + 1, true);
     // Kind map.
     codeGenerator.println("static const JJString jjstrLiteralImages[] = {");
-
-    int k = 0;
+    codeGenerator.println("#if (JAVACC_CHAR_TYPE_SIZEOF == 1)");
+	int k = 0;
     for (int i : allMatches.keySet()) {
-      TokenizerData.MatchInfo matchInfo = allMatches.get(i);
-      switch (matchInfo.matchType) {
-        case SKIP:
-          toSkip.set(i);
-          break;
-        case SPECIAL_TOKEN:
-          toSpecial.set(i);
-          break;
-        case MORE:
-          toMore.set(i);
-          break;
-        case TOKEN:
-          toToken.set(i);
-          break;
-      }
-      newStates[i] = matchInfo.newLexState;
-      String image = matchInfo.image;
-      if (k++ > 0) {
-        codeGenerator.println(", ");
-      }
-      if (image != null) {
-        codeGenerator.print("\"");
-        for (int j = 0; j < image.length(); j++) {
-          if (image.charAt(j) <= 0xff) {
-            codeGenerator.print("\\" + Integer.toOctalString(image.charAt(j)));
-          } else {
-            String hexVal = Integer.toHexString(image.charAt(j));
-            if (hexVal.length() == 3) {
-              hexVal = "0" + hexVal;
-            }
-            codeGenerator.print("\\u" + hexVal);
-          }
-        }
-        codeGenerator.print("\"");
-      } else {
-        codeGenerator.println("\"\"");
-      }
+	      TokenizerData.MatchInfo matchInfo = allMatches.get(i);
+	      switch (matchInfo.matchType) {
+	        case SKIP:
+	          toSkip.set(i);
+	          break;
+	        case SPECIAL_TOKEN:
+	          toSpecial.set(i);
+	          break;
+	        case MORE:
+	          toMore.set(i);
+	          break;
+	        case TOKEN:
+	          toToken.set(i);
+	          break;
+	      }
+	      newStates[i] = matchInfo.newLexState;
+	      String image = matchInfo.image;
+	      if (k++ > 0) {
+	        codeGenerator.println(", ");
+	      }
+	      printWide(image, false);
     }
+    codeGenerator.println();
+    codeGenerator.println("#else");
+    k = 0;
+    for (int i : allMatches.keySet()) {
+	      TokenizerData.MatchInfo matchInfo = allMatches.get(i);
+	      switch (matchInfo.matchType) {
+	        case SKIP:
+	          toSkip.set(i);
+	          break;
+	        case SPECIAL_TOKEN:
+	          toSpecial.set(i);
+	          break;
+	        case MORE:
+	          toMore.set(i);
+	          break;
+	        case TOKEN:
+	          toToken.set(i);
+	          break;
+	      }
+	      newStates[i] = matchInfo.newLexState;
+	      String image = matchInfo.image;
+	      if (k++ > 0) {
+	        codeGenerator.println(", ");
+	      }
+	      printWide(image, true);
+  }
+    codeGenerator.println();
+    codeGenerator.println("#endif");
     codeGenerator.println("};");
     codeGenerator.println();
 

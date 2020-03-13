@@ -597,8 +597,13 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.generateMethodDefHeader("  virtual void ", context.globals().cu_name, "parseError()");
       codeGenerator.println("   {");
       if (Options.getErrorReporting()) {
-        codeGenerator.println(
-            "      std::cerr << \"Parse error at : \" << token->beginLine << \":\" << token->beginColumn << \" after token: \" << addUnicodeEscapes(token->image) << \" encountered: \" << addUnicodeEscapes(getToken(1)->image) << std::endl;");
+    	  codeGenerator.println("#if ( JAVACC_CHAR_TYPE_SIZEOF == 1)");
+          codeGenerator.println(
+                  "      std::cerr << \"Parse error at : \" << token->beginLine << \":\" << token->beginColumn << \" after token: \" << addUnicodeEscapes(token->image) << \" encountered: \" << addUnicodeEscapes(getToken(1)->image) << std::endl;");
+          codeGenerator.println("#else");
+          codeGenerator.println(
+                  "      std::wcerr << L\"Parse error at : \" << token->beginLine << L\":\" << token->beginColumn << L\" after token: \" << addUnicodeEscapes(token->image) << L\" encountered: \" << addUnicodeEscapes(getToken(1)->image) << std::endl;");
+          codeGenerator.println("#endif");   	  
       }
       codeGenerator.println("   }");
       /*
@@ -651,8 +656,13 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.generateMethodDefHeader("virtual void ", context.globals().cu_name, "parseError()");
       codeGenerator.println("   {");
       if (Options.getErrorReporting()) {
-        codeGenerator.println(
-            "      std::cerr << \"Parse error at : \" << token->beginLine << \":\" << token->beginColumn << \" after token: \" << addUnicodeEscapes(token->image) << \" encountered: \" << addUnicodeEscapes(getToken(1)->image)) << std::endl;");
+    	  codeGenerator.println("#if ( JAVACC_CHAR_TYPE_SIZEOF == 1)");
+          codeGenerator.println(
+                  "      std::cerr << \"Parse error at : \" << token->beginLine << \":\" << token->beginColumn << \" after token: \" << addUnicodeEscapes(token->image) << \" encountered: \" << addUnicodeEscapes(getToken(1)->image) << std::endl;");
+          codeGenerator.println("#else");
+          codeGenerator.println(
+                  "      std::wcerr << L\"Parse error at : \" << token->beginLine << L\":\" << token->beginColumn << L\" after token: \" << addUnicodeEscapes(token->image) << L\" encountered: \" << addUnicodeEscapes(getToken(1)->image) << std::endl;");
+          codeGenerator.println("#endif");   	  
       }
       codeGenerator.println("   }");
       /*
@@ -1367,7 +1377,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("  jj_depth_error = true;");
       codeGenerator.println("  jj_consume_token(-1);");
       codeGenerator
-      .println("  errorHandler->handleParseError(token, getToken(1), __FUNCTION__, this), hasError = true;");
+      .println("  errorHandler->handleParseError(token, getToken(1), JAVACC_WIDEN(__FUNCTION__), this), hasError = true;");
       if (!voidReturn) {
         codeGenerator.println("  return __ERROR_RET__;"); // Non-recoverable
         // error
@@ -1521,7 +1531,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       conds = new Lookahead[e_nrw.getChoices().size()];
       actions = new String[e_nrw.getChoices().size() + 1];
       actions[e_nrw.getChoices().size()] = "\n" + "jj_consume_token(-1);\n"
-          + "errorHandler->handleParseError(token, getToken(1), __FUNCTION__, this), hasError = true;"
+          + "errorHandler->handleParseError(token, getToken(1), JAVACC_WIDEN(__FUNCTION__), this), hasError = true;"
           + (Options.booleanValue(Options.USEROPTION__CPP_STOP_ON_FIRST_ERROR) ? "return __ERROR_RET__;\n" : "");
 
       // In previous line, the "throw" never throws an exception since the

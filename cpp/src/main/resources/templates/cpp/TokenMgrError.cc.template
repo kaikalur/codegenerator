@@ -63,36 +63,55 @@ char hexChar(int i) {
  * Replaces unprintable characters by their escaped (or unicode escaped)
  * equivalents in the given string
  */
-JJSimpleString addUnicodeEscapes(const JJString& str) {
-  JJSimpleString retval;
+\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
+\#define JJB "\\b"
+\#define JJT "\\t"
+\#define JJN "\\n"
+\#define JJF "\\f"
+\#define JJR "\\r"
+\#define JJS "\\\\"
+\#define JJU "\\u"
+\#define JJM 0xff
+\#else
+\#define JJB L"\\b"
+\#define JJT L"\\t"
+\#define JJN L"\\n"
+\#define JJF L"\\f"
+\#define JJR L"\\r"
+\#define JJS L"\\\\"
+\#define JJU L"\\u"
+\#define JJM 0xffff
+\#endif
+JJString addUnicodeEscapes(const JJString& str) {
+  JJString retval;
   for (size_t i = 0; i < str.size(); i++) {
     JJChar ch = str[i];
     switch (ch)
     {
       case '\b':
-        retval.append("\\b");
+        retval.append(JJB);
         continue;
       case '\t':
-        retval.append("\\t");
+        retval.append(JJT);
         continue;
       case '\n':
-        retval.append("\\n");
+        retval.append(JJN);
         continue;
       case '\f':
-        retval.append("\\f");
+        retval.append(JJF);
         continue;
       case '\r':
-        retval.append("\\r");
+        retval.append(JJR);
         continue;
       case '\\':
-        retval.append("\\\\");
+        retval.append(JJS);
         continue;
       default:
-        if (ch < 0xff) {
+        if (ch < JJM) {
           retval += ch;
           continue;
         }
-        retval.append("\\u");
+        retval.append(JJU);
         retval += (hexChar(ch >> 12));
         retval += (hexChar((ch & 0x0f00) >> 8));
         retval += (hexChar((ch & 0x00f0) >> 4));
@@ -102,6 +121,14 @@ JJSimpleString addUnicodeEscapes(const JJString& str) {
   }
   return retval;
 }
+\#undef JJB
+\#undef JJT
+\#undef JJN
+\#undef JJF
+\#undef JJR
+\#undef JJS
+\#undef JJU
+\#undef JJM
 
 #if NAMESPACE
 ${NAMESPACE_CLOSE}

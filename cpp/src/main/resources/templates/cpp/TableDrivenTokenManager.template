@@ -59,12 +59,12 @@ void ${parserName}TokenManager::SwitchTo(int lexState)
 {
     if (lexState >= 1 || lexState < 0) {
       JJString message;
-\#ifdef WIDE_CHAR
-      message += L"Error: Ignoring invalid lexical state : ";
-      message += lexState; message += L". State unchanged.";
-\#else
+\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
       message += "Error: Ignoring invalid lexical state : ";
       message += lexState; message += ". State unchanged.";
+\#else
+      message += L"Error: Ignoring invalid lexical state : ";
+      message += lexState; message += L". State unchanged.";
 \#endif
       throw new TokenMgrError(message, INVALID_LEXICAL_STATE);
     } else
@@ -283,7 +283,11 @@ Token * ${parserName}TokenManager::jjFillToken() {
 #fi
   if (jjmatchedPos < 0) {
     if (image.length() == 0) {
+\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
       curTokenImage = "";
+\#else
+      curTokenImage = L"";
+\#endif
     } else {
       curTokenImage = image;
     }
@@ -293,7 +297,7 @@ Token * ${parserName}TokenManager::jjFillToken() {
 #fi
   } else {
     JJString im = jjstrLiteralImages[jjmatchedKind];
-    curTokenImage = (im.length() == 0) ? input_stream->GetImage() : im;
+    curTokenImage = (im.length() == 0) ? input_stream->getImage() : im;
 #if KEEP_LINE_COLUMN
     beginLine = input_stream->getBeginLine();
     beginColumn = input_stream->getBeginColumn();
@@ -346,7 +350,7 @@ Token * ${parserName}TokenManager::getNextToken() {
     }
 
     // First see if we have any input at all.
-    curChar = input_stream->BeginToken();
+    curChar = input_stream->beginToken();
 #if IGNORE_CASE
     curChar = towlower(curChar);
 #fi
@@ -443,12 +447,20 @@ Token * ${parserName}TokenManager::getNextToken() {
       }
       int error_line = input_stream->getEndLine();
       int error_column = input_stream->getEndColumn();
+\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
       JJString error_after = "";
+\#else
+     JJString error_after = L"";
+\#endif
       bool EOFSeen = false;
 
       if(input_stream->endOfInput()) {
         EOFSeen = true;
-        error_after = lastReadPosition <= 1 ? "" : input_stream->GetImage();
+\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
+        error_after = lastReadPosition <= 1 ? "" : input_stream->getImage();
+\#else
+        error_after = lastReadPosition <= 1 ? L"" : input_stream->getImage();
+\#endif
         if (curChar == '\n' || curChar == '\r') {
            error_line++;
            error_column = 0;
@@ -457,7 +469,11 @@ Token * ${parserName}TokenManager::getNextToken() {
            error_column++;
       }
       if (!EOFSeen) {
-        error_after = lastReadPosition <= 1 ? "" : input_stream->GetImage();
+\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
+        error_after = lastReadPosition <= 1 ? "" : input_stream->getImage();
+\#else
+        error_after = lastReadPosition <= 1 ? L"" : input_stream->getImage();
+\#endif
       }
       errorHandler->lexicalError(EOFSeen, curLexState, error_line, error_column, error_after, curChar, this);
       goto EOFLoop;
