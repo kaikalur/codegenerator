@@ -41,13 +41,13 @@ public class CppCodeGenerator implements CodeGenerator {
       }
 
       try (CppCodeBuilder builder = CppCodeBuilder.of(context, settings)) {
-        builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "TokenMgrError.cc"));
+        builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "TokenManagerError.cc"));
         builder.addTools(JavaCCGlobals.toolName);
         builder.addOption(Options.USEROPTION__STATIC, Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
 
-        builder.printTemplate("/templates/cpp/TokenMgrError.cc.template");
+        builder.printTemplate("/templates/cpp/TokenManagerError.cc.template");
         builder.switchToIncludeFile();
-        builder.printTemplate("/templates/cpp/TokenMgrError.h.template");
+        builder.printTemplate("/templates/cpp/TokenManagerError.h.template");
       }
 
       try (CppCodeBuilder builder = CppCodeBuilder.of(context, settings)) {

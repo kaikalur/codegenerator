@@ -14,7 +14,7 @@ namespace ${NAMESPACE_OPEN}
    *    curJJChar     : the offending character
    * Note: You can customize the lexical error message by modifying this method.
    */
-    JJString TokenMgrError::LexicalError(bool EOFSeen, int lexState, int errorLine, int errorColumn, const JJString & errorAfte, JJChar curChar) {
+    JJString TokenManagerError::LexicalError(bool EOFSeen, int lexState, int errorLine, int errorColumn, const JJString & errorAfte, JJChar curChar) {
 \#if 0
     JJString s;
     stringstream<JJString> ss;
@@ -35,20 +35,20 @@ namespace ${NAMESPACE_OPEN}
    *
    * from this method for such cases in the release version of your parser.
    */
-  JJString TokenMgrError::getMessage() {
+  JJString TokenManagerError::getMessage() {
     return message;
   }
 
-  TokenMgrError::TokenMgrError() {
+  TokenManagerError::TokenManagerError() {
   }
-  TokenMgrError::TokenMgrError(const JJString & message, int reason) {
+  TokenManagerError::TokenManagerError(const JJString & message, int reason) {
     errorCode = reason;
   }
-  TokenMgrError::TokenMgrError(bool EOFSeen, int lexState, int errorLine, int errorColumn, const JJString& errorAfter, JJChar curChar, int reason) {
+  TokenManagerError::TokenManagerError(bool EOFSeen, int lexState, int errorLine, int errorColumn, const JJString& errorAfter, JJChar curChar, int reason) {
     message = LexicalError(EOFSeen, lexState, errorLine, errorColumn, errorAfter, curChar);
    errorCode = reason;
   }
-  TokenMgrError::~TokenMgrError() { 
+  TokenManagerError::~TokenManagerError() { 
   }
 
 // i < 16 - guaranteed

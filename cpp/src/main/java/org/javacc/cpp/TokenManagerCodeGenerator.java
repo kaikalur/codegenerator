@@ -64,7 +64,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
           .set("lexStateNameLength", tokenizerData.lexStateNames.length);
       codeGenerator.printTemplate(TokenManagerCodeGenerator.TokenManagerTemplateH, options);
       codeGenerator.switchToStaticsFile();
-      codeGenerator.println("#include \"TokenMgrError.h\"");
+      codeGenerator.println("#include \"TokenManagerError.h\"");
 
       dumpDfaTables(codeGenerator, tokenizerData);
       dumpNfaTables(codeGenerator, tokenizerData);

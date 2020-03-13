@@ -103,8 +103,8 @@ eg1:
    [javacc] File "Token.h" does not exist.  Will create one.
    [javacc] File "Token.cc" does not exist.  Will create one.
    [javacc] File "TokenManager.h" does not exist.  Will create one.
-   [javacc] File "TokenMgrError.h" does not exist.  Will create one.
-   [javacc] File "TokenMgrError.cc" does not exist.  Will create one.
+   [javacc] File "TokenManagerError.h" does not exist.  Will create one.
+   [javacc] File "TokenManagerError.cc" does not exist.  Will create one.
    [javacc] File "ParseException.h" does not exist.  Will create one.
    [javacc] File "ParseException.cc" does not exist.  Will create one.
    [javacc] File "Token.h" is being rebuilt.
@@ -212,8 +212,8 @@ eg2:
    [javacc] File "Token.h" does not exist.  Will create one.
    [javacc] File "Token.cc" does not exist.  Will create one.
    [javacc] File "TokenManager.h" does not exist.  Will create one.
-   [javacc] File "TokenMgrError.h" does not exist.  Will create one.
-   [javacc] File "TokenMgrError.cc" does not exist.  Will create one.
+   [javacc] File "TokenManagerError.h" does not exist.  Will create one.
+   [javacc] File "TokenManagerError.cc" does not exist.  Will create one.
    [javacc] File "ParseException.h" does not exist.  Will create one.
    [javacc] File "ParseException.cc" does not exist.  Will create one.
    [javacc] File "Token.h" is being rebuilt.

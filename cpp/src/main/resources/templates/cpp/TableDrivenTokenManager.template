@@ -66,7 +66,7 @@ void ${parserName}TokenManager::SwitchTo(int lexState)
       message += L"Error: Ignoring invalid lexical state : ";
       message += lexState; message += L". State unchanged.";
 \#endif
-      throw new TokenMgrError(message, INVALID_LEXICAL_STATE);
+      throw new TokenManagerError(message, INVALID_LEXICAL_STATE);
     } else
       curLexState = lexState;
 }

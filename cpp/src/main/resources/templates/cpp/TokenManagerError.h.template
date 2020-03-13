@@ -1,5 +1,5 @@
-\#ifndef JAVACC_TOKEN_MGR_ERROR_H
-\#define JAVACC_TOKEN_MGR_ERROR_H
+\#ifndef JAVACC_TOKEN_MANAGER_ERROR_H
+\#define JAVACC_TOKEN_MANAGER_ERROR_H
 
 \#include "JavaCC.h"
 
@@ -14,12 +14,12 @@ enum LexerErrors {
   LOOP_DETECTED = 3,			// Detected (and bailed out of) an infinite loop in the token manager.
 };
 
-class TokenMgrError {
+class TokenManagerError {
 public:
-  TokenMgrError();
-  TokenMgrError(const JJString& message, int reason);
-  TokenMgrError(bool EOFSeen, int lexState, int errorLine, int errorColumn, const JJString& errorAfter, JJChar curChar, int reason) ;
-  virtual ~TokenMgrError();
+  TokenManagerError();
+  TokenManagerError(const JJString& message, int reason);
+  TokenManagerError(bool EOFSeen, int lexState, int errorLine, int errorColumn, const JJString& errorAfter, JJChar curChar, int reason) ;
+  virtual ~TokenManagerError();
   
   /**
    * Indicates the reason why the exception is thrown. It will have
