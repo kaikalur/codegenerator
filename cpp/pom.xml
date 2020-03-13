@@ -77,9 +77,6 @@
 									<projectsDirectory>grammars</projectsDirectory>
 									<settingsFile>grammars/settings.xml</settingsFile>
 									<cloneProjectsTo>${project.build.directory}/grammars</cloneProjectsTo>
-									<pomExcludes>
-										<pomExclude>java_1.1_widechar/pom.xml</pomExclude>
-									</pomExcludes>
 								</configuration>
 							</execution>
 						</executions>

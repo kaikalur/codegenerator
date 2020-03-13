@@ -23,7 +23,7 @@
 							<goal>javacc</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.basedir}/target/generated-sources/cpp</outputDirectory>
+							<outputDirectory>target/generated-sources/cpp</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>
