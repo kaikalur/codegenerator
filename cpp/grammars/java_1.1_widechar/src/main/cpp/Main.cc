@@ -38,8 +38,8 @@ int main(int argc, char **argv) {
   if (root) {
     JJString buffer;
 #if (JAVACC_CHAR_TYPE_SIZEOF != 1)
-    //root->dumpToBuffer(L" ", L"\n", &buffer);
-    //wcout << buffer << "\n";
+   	root->dumpToBuffer(L" ", L"\n", &buffer);
+    wcout << buffer << "\n";
     root->dump(L" ");
 #else
     root->dumpToBuffer(" ", "\n", &buffer);

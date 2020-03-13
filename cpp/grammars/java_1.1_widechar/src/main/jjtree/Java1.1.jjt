@@ -1678,5 +1678,12 @@ void TryStatement() :
 
 <*>TOKEN:
 {
-  <ILLEGAL_CHAR: ~[]> { int i; i = 10; fprintf(stderr, "error: %d\n", i); }
+  <ILLEGAL_CHAR: ~[]> {
+   		int i = 10;
+#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
+   		std::cerr << "error: "   << matchedToken->kind << std::endl;
+#else
+   		std::wcerr << L"error: " << matchedToken->kind << std::endl;
+#endif
+	}
 }

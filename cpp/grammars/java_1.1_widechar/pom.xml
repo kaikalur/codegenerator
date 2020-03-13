@@ -37,12 +37,14 @@
 						<library>
 							<type>executable</type>
 							<run>true</run>
+							<args>
+								<arg>${project.basedir}/java/HelloWorld.java</arg>
+							</args>
 						</library>
 					</libraries>
 					<cpp>
 						<defines>
 							<define>JAVACC_CHAR_TYPE=wchar_t</define>
-							<define>WIDE_CHAR</define>
 						</defines>
 						<includePaths>
 							<includePath>
