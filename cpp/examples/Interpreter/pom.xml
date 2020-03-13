@@ -6,6 +6,7 @@
 		<artifactId>examples</artifactId>
 		<version>8.0.0-SNAPSHOT</version>
 	</parent>
+	<name>JavaCC examples C++  Interpreter</name>
 	<groupId>org.javacc.codegen.cpp.examples</groupId>
 	<artifactId>interpreter</artifactId>
 	<packaging>pom</packaging>
@@ -13,5 +14,4 @@
   		<module>AST</module>
  		<module>VST</module>
 	</modules>
-	<name>JavaCC examples C++  Interpreter</name>
 </project>

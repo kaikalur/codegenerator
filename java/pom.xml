@@ -49,6 +49,10 @@
 						<configuration>
 							<failIfNoProjects>true</failIfNoProjects>
 							<ignoreFailures>false</ignoreFailures>
+							<postBuildHookScript>verify.bsh</postBuildHookScript>
+							<localRepositoryPath>local-repo</localRepositoryPath>
+							<debug>false</debug>
+							<streamLogs>false</streamLogs>
 						</configuration>
 						<executions>
 							<execution>
@@ -61,10 +65,9 @@
 									<projectsDirectory>examples</projectsDirectory>
 									<settingsFile>examples/settings.xml</settingsFile>
 									<cloneProjectsTo>${project.build.directory}/examples</cloneProjectsTo>
-									<postBuildHookScript>verify.bsh</postBuildHookScript>
-									<localRepositoryPath>local-repo</localRepositoryPath>
-									<debug>false</debug>
-									<streamLogs>false</streamLogs>
+									<pomExcludes>
+										<pomExclude>GUIParsing/pom.xml</pomExclude>
+									</pomExcludes>
 								</configuration>
 							</execution>
 							<execution>
