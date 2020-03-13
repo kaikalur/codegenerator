@@ -21,7 +21,7 @@ class Main
                new JavaParser(s).CompilationUnit();
             }
             catch(ParseException e) { e.printStackTrace(); }
-            catch(TokenMgrError tme) { tme.printStackTrace(); }
+            catch(TokenManagerError tme) { tme.printStackTrace(); }
          }
       }
       catch(Exception e) { e.printStackTrace(); }
