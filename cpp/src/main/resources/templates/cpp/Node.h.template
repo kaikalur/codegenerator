@@ -28,7 +28,6 @@ protected:
   std::vector<Node*> children;
   Node*              parent = nullptr;
   void*              value  = nullptr;
-//int                numChildren;
 #if TRACK_TOKENS
   Token*             firstToken = nullptr;
   Token*             lastToken  = nullptr;
@@ -64,17 +63,17 @@ public:
 
 #fi
 #if VISITOR
-  virtual ${VISITOR_RETURN_TYPE:-void} jjtAccept(${PARSER_NAME}Visitor *visitor, ${VISITOR_DATA_TYPE:-void *} data) const;
+  virtual ${VISITOR_RETURN_TYPE:-void}       jjtAccept(${PARSER_NAME}Visitor *visitor, ${VISITOR_DATA_TYPE:-void *} data) const;
   virtual void           jjtChildrenAccept(${PARSER_NAME}Visitor *visitor, ${VISITOR_DATA_TYPE:-void *} data) const;
   virtual void           jjtChildAccept(int childNo, ${PARSER_NAME}Visitor *visitor, ${VISITOR_DATA_TYPE:-void *} data) const;
 #fi
-  virtual std::vector<Node*> jjtExtractChildrenForDestruction();
+  virtual std::vector<Node*>& jjtChildren();
   
   /* You can override these two methods in subclasses of Node to customize the way the node appears when the tree is dumped.
      If your output uses more than one line you should override toString(string), otherwise overriding toString() is probably all
      you need to do. */   
-  virtual JJString toString() const;
-  virtual JJString toString(const JJString& prefix) const;
+  virtual JJString      toString() const;
+  virtual JJString      toString(const JJString& prefix) const;
 
   /* Override this method if you want to customize how the node dumps out its children. */
   virtual void          dump(const JJString& prefix) const;

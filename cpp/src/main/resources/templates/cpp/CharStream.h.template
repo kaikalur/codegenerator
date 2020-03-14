@@ -3,10 +3,6 @@
 
 \#include "JavaCC.h"
 
-\#ifndef INITIAL_BUFFER_SIZE
-\#define INITIAL_BUFFER_SIZE 4096
-\#endif
-
 #if NAMESPACE
 namespace ${NAMESPACE_OPEN}
 #fi
@@ -25,12 +21,13 @@ namespace ${NAMESPACE_OPEN}
  * by the lexer. Hence their implementation won't affect the generated lexer's
  * operation.
  */
-
+ 
+static const int initialBufferSize = 4096;
 
 class CharStream {
 public:
-   void setTabSize(int i) { tabSize = i; }
-   int  getTabSize() { return tabSize; }
+  void setTabSize(int i) { tabSize = i; }
+  int  getTabSize()      { return tabSize; }
 
 #if KEEP_LINE_COLUMN
 private:
@@ -101,8 +98,7 @@ public:
  */
   virtual inline JJChar readChar() {
     if (inBuf > 0) {
-      --inBuf;
-      ++bufpos;
+      --inBuf; ++bufpos;
       if (bufpos == bufsize) {
         bufpos = 0;
       }
@@ -183,7 +179,7 @@ public:
     tokenBegin(0), column(0), line(0), prevCharIsCR(false), prevCharIsLF(false),
     available(0), maxNextCharInd(0), inBuf(0), tabSize(1), trackLineColumn(true),
     inputStream(nullptr), deleteStream(false) {
-    ReInit(JJString(buf, sz), startline, startcolumn, INITIAL_BUFFER_SIZE);
+    ReInit(JJString(buf, sz), startline, startcolumn, initialBufferSize);
   }
 
   CharStream(const JJString& str, int startline, int startcolumn, int buffersize) :
@@ -199,7 +195,7 @@ public:
     tokenBegin(0), column(0), line(0), prevCharIsCR(false), prevCharIsLF(false),
     available(0), maxNextCharInd(0), inBuf(0), tabSize(1), trackLineColumn(true),
     inputStream(nullptr), deleteStream(false) {
-    ReInit(str, startline, startcolumn, INITIAL_BUFFER_SIZE);
+    ReInit(str, startline, startcolumn, initialBufferSize);
   }
 
   CharStream(ReaderStream *input_stream, int startline, int startcolumn, int buffersize) :
@@ -215,7 +211,7 @@ public:
     tokenBegin(0), column(0), line(0), prevCharIsCR(false), prevCharIsLF(false),
     available(0), maxNextCharInd(0), inBuf(0), tabSize(1), trackLineColumn(true),
     inputStream(nullptr), deleteStream(false) {
-    ReInit(input_stream, startline, startcolumn, INITIAL_BUFFER_SIZE);
+    ReInit(input_stream, startline, startcolumn, initialBufferSize);
   }
 
   CharStream(ReaderStream *input_stream) :
@@ -223,23 +219,23 @@ public:
     tokenBegin(0), column(0), line(0), prevCharIsCR(false), prevCharIsLF(false),
     available(0), maxNextCharInd(0), inBuf(0), tabSize(1), trackLineColumn(true),
     inputStream(nullptr), deleteStream(false) {
-    ReInit(input_stream, 1, 1, INITIAL_BUFFER_SIZE);
+    ReInit(input_stream, 1, 1, initialBufferSize);
   }
 
   virtual void ReInit(ReaderStream *input_stream, int startline, int startcolumn, int buffersize);
 
   virtual void ReInit(ReaderStream *input_stream, int startline, int startcolumn) {
-    ReInit(input_stream, startline, startcolumn, INITIAL_BUFFER_SIZE);
+    ReInit(input_stream, startline, startcolumn, initialBufferSize);
   }
 
   virtual void ReInit(ReaderStream *input_stream) {
-    ReInit(input_stream, 1, 1, INITIAL_BUFFER_SIZE);
+    ReInit(input_stream, 1, 1, initialBufferSize);
   }
 
   virtual void ReInit(const JJString& str, int startline, int startcolumn, int buffersize);
 
   virtual void ReInit(const JJString& str, int startline, int startcolumn) {
-    ReInit(str, startline, startcolumn, INITIAL_BUFFER_SIZE);
+    ReInit(str, startline, startcolumn, initialBufferSize);
   }
 
   virtual void adjustBeginLineColumn(int newLine, int newCol);

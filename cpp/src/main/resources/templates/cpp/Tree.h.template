@@ -52,7 +52,7 @@ public:
 
 private: 
   // Clear list of children, and return children that we have before. Used in destructor to do linear destruction of tree.
-  virtual std::vector<Node *> jjtExtractChildrenForDestruction() = 0;
+  virtual std::vector<Node*>& jjtChildren() = 0;
 
 public:
            Tree() { }

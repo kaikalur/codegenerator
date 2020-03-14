@@ -18,18 +18,7 @@ namespace ${NAMESPACE_OPEN}
  * mechanisms so long as you retain the fields.
  */
 class ParseException {
-  public:
-
-  /**
-   * This constructor is used by the method "generateParseException"
-   * in the generated parser.  Calling this constructor generates
-   * a new object of this type with the fields "currentToken",
-   * "expectedTokenSequences", and "tokenImage" set.
-   */
-  ParseException(Token currentTokenVal,
-                        int** expectedTokenSequencesVal,
-                        JJString* tokenImageVal
-                       );
+public:
 
   /**
    * The following constructors are for use by you for whatever
@@ -40,11 +29,16 @@ class ParseException {
    * relevant information.  The JavaCC generated code does not use
    * these constructors.
    */
-
   ParseException();
-
-  /** Constructor with message. */
   ParseException(const JJString& message);
+
+  /**
+   * This constructor is used by the method "generateParseException"
+   * in the generated parser.  Calling this constructor generates
+   * a new object of this type with the fields "currentToken",
+   * "expectedTokenSequences", and "tokenImage" set.
+   */
+  ParseException(const Token& currentToken, const int** expectedTokenSequences, const JJString* tokenImage);
 
 
   /**
@@ -59,15 +53,16 @@ class ParseException {
    * of integers represents a sequence of tokens (by their ordinal
    * values) that is expected at this point of the parse.
    */
-  int** expectedTokenSequences;
+  const int** expectedTokenSequences;
 
   /**
    * This is a reference to the "tokenImage" array of the generated
    * parser within which the parse error occurred.  This array is
    * defined in the generated ...Constants class.
    */
-  JJString* tokenImage;
+  const JJString* tokenImage;
 
+private:
   /**
    * It uses "currentToken" and "expectedTokenSequences" to generate a parse
    * error message and returns it.  If this object has been created
@@ -75,17 +70,14 @@ class ParseException {
    * from the parser) the correct error message
    * gets displayed.
    */
-  private:  JJString initialise(Token currentToken,
-                           int** expectedTokenSequences,
-                           JJString* tokenImage);
+  JJString initialise(const Token& currentToken, const int** expectedTokenSequences, const JJString* tokenImage);
 
   /**
    * Used to convert raw characters to their escaped version
    * when these raw version cannot be used as part of an ASCII
    * string literal.
    */
-   JJString add_escapes(const JJString& str);
-
+  JJString addEscapes(const JJString& str);
 };
 
 #if NAMESPACE

@@ -12,110 +12,109 @@ namespace ${NAMESPACE_OPEN}
 JJString addUnicodeEscapes(const JJString& str);
 
 #if BUILD_PARSER
-  class ${PARSER_NAME};
-  class ErrorHandler {
-    friend class ${PARSER_NAME}TokenManager;
-    friend class ${PARSER_NAME};
-    public:
-               ErrorHandler() { error_count = 0; }
-      virtual ~ErrorHandler() {}
+class ${PARSER_NAME};
+class ErrorHandler {
+  friend class ${PARSER_NAME}TokenManager;
+  friend class ${PARSER_NAME};
+public:
+             ErrorHandler() { error_count = 0; }
+    virtual ~ErrorHandler() {}
       
-      // Called when the parser encounters a different token when expecting to consume a specific kind of token.
-      // expectedKind - token kind that the parser was trying to consume.
-      // expectedToken - the image of the token - tokenImages[expectedKind].
-      // actual - the actual token that the parser got instead.
-      virtual void handleUnexpectedToken(int expectedKind, const JJString&& expectedToken, Token* actual, ${PARSER_NAME}* parser) {
-        error_count++;
+  // Called when the parser encounters a different token when expecting to consume a specific kind of token.
+  // expectedKind - token kind that the parser was trying to consume.
+  // expectedToken - the image of the token - tokenImages[expectedKind].
+  // actual - the actual token that the parser got instead.
+  virtual void handleUnexpectedToken(int expectedKind, const JJString&& expectedToken, Token* actual, ${PARSER_NAME}* parser) {
+    error_count++;
 \#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-        std::clog 
-        	<< "Expecting " << addUnicodeEscapes(expectedToken) << " at: " 
-        	<< actual->beginLine << ":" << actual->beginColumn << "but got " 
-        	<< addUnicodeEscapes(actual->image) << std::endl;
+     std::clog 
+       << "Expecting " << addUnicodeEscapes(expectedToken) << " at: " 
+       << actual->beginLine << ":" << actual->beginColumn << "but got " 
+       << addUnicodeEscapes(actual->image) << std::endl;
 \#else
-        std::wclog 
-        	<< L"Expecting " << addUnicodeEscapes(expectedToken) << L" at: " 
-        	<< actual->beginLine << L":" << actual->beginColumn << L"but got " 
-        	<< addUnicodeEscapes(actual->image) << std::endl;
+     std::wclog 
+       << L"Expecting " << addUnicodeEscapes(expectedToken) << L" at: " 
+       << actual->beginLine << L":" << actual->beginColumn << L"but got " 
+       << addUnicodeEscapes(actual->image) << std::endl;
 \#endif
-      }
+  }
       
       
-      // Called when the parser cannot continue parsing.
-      // last - the last token successfully parsed.
-      // unexpected - the token at which the error occurs.
-      // production - the production in which this error occurrs.
-      virtual void handleParseError(Token* last, Token* unexpected, const JJString& production, ${PARSER_NAME}* parser) {
-        error_count++;
+  // Called when the parser cannot continue parsing.
+  // last - the last token successfully parsed.
+  // unexpected - the token at which the error occurs.
+  // production - the production in which this error occurrs.
+  virtual void handleParseError(Token* last, Token* unexpected, const JJString& production, ${PARSER_NAME}* parser) {
+    error_count++;
 \#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-        std::clog 
-        	<< "Encountered: " << addUnicodeEscapes(unexpected->image) << " at: " 
-        	<< unexpected->beginLine << ":" << unexpected->beginColumn << "while parsing: " << production << std::endl;
+    std::clog 
+        << "Encountered: " << addUnicodeEscapes(unexpected->image) << " at: " 
+        << unexpected->beginLine << ":" << unexpected->beginColumn << "while parsing: " << production << std::endl;
 \#else
-         std::wclog 
-        	<< L"Encountered: " << addUnicodeEscapes(unexpected->image) << L" at: " 
-        	<< unexpected->beginLine << L":" << unexpected->beginColumn << L"while parsing: " << production << std::endl;
+    std::wclog 
+        << L"Encountered: " << addUnicodeEscapes(unexpected->image) << L" at: " 
+        << unexpected->beginLine << L":" << unexpected->beginColumn << L"while parsing: " << production << std::endl;
 \#endif
-      }
+  }
       
-      virtual int getErrorCount() {
-        return error_count;
-      }
+  virtual int getErrorCount() {
+    return error_count;
+  }
       
-      virtual void handleOtherError(const JJString& message, ${PARSER_NAME}* parser) {
+  virtual void handleOtherError(const JJString& message, ${PARSER_NAME}* parser) {
 \#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-        std::clog << "Error: " << message << std::endl;
+    std::clog << "Error: " << message << std::endl;
 \#else
-         std::wclog << L"Error: " << message << std::endl;
+    std::wclog << L"Error: " << message << std::endl;
 \#endif
-      }
+  }
 
-    protected:
-      int error_count;
+protected:
+  int error_count;
       
-  };
+};
 #fi
 
 #if BUILD_TOKEN_MANAGER
-  class ${PARSER_NAME}TokenManager;
-  class TokenManagerErrorHandler {
-    friend class ${PARSER_NAME}TokenManager;
-    public:
-      virtual ~TokenManagerErrorHandler() {}
-    protected:
-      int error_count;
+class ${PARSER_NAME}TokenManager;
+class TokenManagerErrorHandler {
+  friend class ${PARSER_NAME}TokenManager;
+public:
+  virtual ~TokenManagerErrorHandler() {}
+protected:
+  int error_count;
     
-    public:
-      // Returns a detailed message for the Error when it is thrown by the
-      // token manager to indicate a lexical error.
-      // Parameters :
-      //    EOFSeen     : indicates if EOF caused the lexical error
-      //    curLexState : lexical state in which this error occurred
-      //    errorLine   : line number when the error occurred
-      //    errorColumn : column number when the error occurred
-      //    errorAfter  : prefix that was seen before this error occurred
-      //    curchar     : the offending character
-      //
-      virtual void lexicalError(bool EOFSeen, int lexState, int errorLine, int errorColumn, JJString errorAfter, JJChar curChar, ${PARSER_NAME}TokenManager* tokenManager) {
-        // by default, we just print an error message and return.
+public:
+  // Returns a detailed message for the Error when it is thrown by the
+  // token manager to indicate a lexical error.
+  // Parameters :
+  //    EOFSeen     : indicates if EOF caused the lexical error
+  //    curLexState : lexical state in which this error occurred
+  //    errorLine   : line number when the error occurred
+  //    errorColumn : column number when the error occurred
+  //    errorAfter  : prefix that was seen before this error occurred
+  //    curchar     : the offending character
+  //
+  virtual void lexicalError(bool EOFSeen, int lexState, int errorLine, int errorColumn, JJString errorAfter, JJChar curChar, ${PARSER_NAME}TokenManager* tokenManager) {
 \#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-         std::clog 
-         	<< "Lexical error at: " << errorLine << ":" << errorColumn << "."
-         	<< " Encountered: " << curChar << " after: " << errorAfter << "." << std::endl;
+    std::clog 
+      << "Lexical error at: " << errorLine << ":" << errorColumn << "."
+      << " Encountered: " << curChar << " after: " << errorAfter << "." << std::endl;
 \#else
-         std::wclog 
-         	<< L"Lexical error at: " << errorLine << L":" << errorColumn << L"."
-         	<< L" Encountered: " << curChar << L" after: " << errorAfter << L"." << std::endl;
+    std::wclog 
+      << L"Lexical error at: " << errorLine << L":" << errorColumn << L"."
+      << L" Encountered: " << curChar << L" after: " << errorAfter << L"." << std::endl;
 \#endif
-      }
+  }
       
-      virtual void lexicalError(const JJString& errorMessage, ${PARSER_NAME}TokenManager* tokenManager) {
+  virtual void lexicalError(const JJString& errorMessage, ${PARSER_NAME}TokenManager* tokenManager) {
 \#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-        std::clog << errorMessage << std::endl;
+    std::clog  << errorMessage << std::endl;
 \#else
-        std::wclog << errorMessage << std::endl;
+    std::wclog << errorMessage << std::endl;
 \#endif
-      }
-   };
+  }
+};
 #fi
 
 #if NAMESPACE

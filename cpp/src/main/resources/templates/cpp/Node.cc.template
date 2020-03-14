@@ -93,19 +93,19 @@ void Node::jjtChildAccept(int childNo, ${PARSER_NAME}Visitor *visitor, ${VISITOR
 
 #fi
 
-std::vector<Node *> Node::jjtExtractChildrenForDestruction() {
+std::vector<Node*>& Node::jjtChildren() {
     return children;
 }
 
-JJString Node::toString() const { return jjtNodeName[id]; }
+JJString Node::toString() const                       { return jjtNodeName[id]; }
 JJString Node::toString(const JJString& prefix) const { return prefix + toString(); }
 
-static JJChar space_char_arr_[] = { ' ', '\0' };
-static JJChar newline_char_arr_[] = { '\n', '\0' };
-static JJString space = space_char_arr_;
-static JJString newline = newline_char_arr_;
+static const JJChar spaces[]   = { ' ', '\0' };
+static const JJChar newlines[] = { '\n', '\0' };
+static const JJString space    = spaces;
+static const JJString newline  = newlines;
 
-void Node::dumpToBuffer(const JJString& prefix, const JJString& separator, JJString *buffer) const {
+void Node::dumpToBuffer(const JJString& prefix, const JJString& separator, JJString* buffer) const {
     buffer->append(toString(prefix));
     buffer->append(separator);
     for (int i = 0; i < children.size(); ++i) {

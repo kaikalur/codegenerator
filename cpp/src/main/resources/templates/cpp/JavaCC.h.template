@@ -18,39 +18,39 @@
 \#endif
 
 \#ifndef JAVACC_STRING_TYPE
-\#define JAVACC_STRING_TYPE std::basic_string<JAVACC_CHAR_TYPE>
+\#define JAVACC_STRING_TYPE   std::basic_string<JAVACC_CHAR_TYPE>
 \#endif
 
 \#define JAVACC_SIMPLE_STRING std::basic_string<char>
 
-typedef JAVACC_CHAR_TYPE     JJChar;
-typedef JAVACC_STRING_TYPE   JJString;
-typedef JAVACC_SIMPLE_STRING JJSimpleString;
+typedef JAVACC_CHAR_TYPE      JJChar;
+typedef JAVACC_STRING_TYPE    JJString;
+typedef JAVACC_SIMPLE_STRING  JJSimpleString;
+
+const   JJChar                JJEMPTY[] = { 0 };
 
 // Abstraction on stream classes to read a block of data into a buffer.
 class ReaderStream {
 public:
   // Read block of data into a buffer and return the actual number read.
-  virtual size_t read(JJChar * /*buffer*/, int /*offset*/, size_t /*len*/) { return 0; }
+  virtual size_t read(JJChar* buffer, int offset, size_t len) { return 0; }
   virtual bool   endOfInput() { return true; }
   virtual ~ReaderStream() {}
 };
 
-const JJChar JJEMPTY[] = { 0 };
 
 template<typename T>
 struct JJEnter
 {
-    JJEnter(T f_) : f{f_} {f();}
+    JJEnter(T f) : f{f} {f();}
     ~JJEnter(){}
     T f;
 };
 template<typename T>
 struct JJExit
 {
-    JJExit(T f_) : f{f_} {}
+    JJExit(T f) : f{f} {}
     ~JJExit(){f();}
     T f;
 };
-
 \#endif
