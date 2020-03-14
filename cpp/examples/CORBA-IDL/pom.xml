@@ -38,10 +38,10 @@
 							<type>executable</type>
 							<run>true</run>
 							<args>
-								<arg>${project.basedir}/Hello.idl</arg>
-								<arg>${project.basedir}/idl.in</arg>
-								<arg>${project.basedir}/idl.out</arg>
-								<arg>${project.basedir}/idl.err</arg>
+								<arg>${project.basedir}/idl/Hello.idl</arg>
+								<arg>${project.basedir}/idl/idl.in</arg>
+								<arg>${project.basedir}/idl/idl.out</arg>
+								<arg>${project.basedir}/idl/idl.err</arg>
 							</args>
 						</library>
 					</libraries>
@@ -66,14 +66,14 @@
 						</goals>
 						<configuration>
 							<target unless="maven.test.skip">
-								<available file="${project.basedir}/idl.out" property="isActualAvailable" />
-								<fail unless="isActualAvailable" message="${project.basedir}/idl.out does not exist!" />
-								<available file="${project.basedir}/idl.ref" property="isExpectedAvailable" />
-								<fail unless="isExpectedAvailable" message="${project.basedir}/idl.ref does not exist!" />
+								<available file="${project.basedir}/idl/idl.out" property="isActualAvailable" />
+								<fail unless="isActualAvailable" message="${project.basedir}/idl/idl.out does not exist!" />
+								<available file="${project.basedir}/idl/idl.ref" property="isExpectedAvailable" />
+								<fail unless="isExpectedAvailable" message="${project.basedir}/idl/idl.ref does not exist!" />
 								<condition property="files.match">
-									<filesmatch file1="${project.basedir}/idl.out" file2="${project.basedir}/idl.ref" />
+									<filesmatch file1="${project.basedir}/idl/idl.out" file2="${project.basedir}/idl/idl.ref" />
 								</condition>
-								<fail unless="files.match" message="${project.basedir}/idl.out does not match ${project.basedir}/idl.ref!" />
+								<fail unless="files.match" message="${project.basedir}/idl/idl.out does not match ${project.basedir}/idl/idl.ref!" />
 							</target>
 						</configuration>
 					</execution>
