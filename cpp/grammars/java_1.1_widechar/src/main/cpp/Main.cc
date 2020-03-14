@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
   CharStream *stream = new CharStream(s.c_str(), s.size() - 1, 1, 1);
   JavaParserTokenManager *scanner = new JavaParserTokenManager(stream);
   JavaParser parser(scanner);
-  parser.setErrorHandler(new MyErrorHandler());
+  //parser.setErrorHandler(new MyErrorHandler());
   parser.CompilationUnit();
   Node *root = (Node*)parser.jjtree.peekNode();
 #if 0
