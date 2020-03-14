@@ -2,19 +2,9 @@
 namespace ${NAMESPACE_OPEN}
 #fi
 
-  /**
-   * Returns a detailed message for the Error when it is thrown by the
-   * token manager to indicate a lexical error.
-   * Parameters :
-   *    EOFSeen     : indicates if EOF caused the lexical error
-   *    curLexState : lexical state in which this error occurred
-   *    errorLine   : line number when the error occurred
-   *    errorColumn : column number when the error occurred
-   *    errorAfter  : prefix that was seen before this error occurred
-   *    curJJChar     : the offending character
-   * Note: You can customize the lexical error message by modifying this method.
-   */
-    JJString TokenManagerError::LexicalError(bool EOFSeen, int lexState, int errorLine, int errorColumn, const JJString & errorAfte, JJChar curChar) {
+
+static const   JJChar  JJEMPTY[] = { 0 };
+JJString TokenManagerError::lexicalError(bool EOFSeen, int lexState, int errorLine, int errorColumn, const JJString & errorAfte, JJChar curChar) {
 \#if 0
     JJString s;
     stringstream<JJString> ss;
@@ -26,30 +16,21 @@ namespace ${NAMESPACE_OPEN}
     return JJEMPTY;
   }
 
-  /**
-   * You can also modify the body of this method to customize your error messages.
-   * For example, cases like LOOP_DETECTED and INVALID_LEXICAL_STATE are not
-   * of end-users concern, so you can return something like :
-   *
-   *     "Internal Error : Please file a bug report .... "
-   *
-   * from this method for such cases in the release version of your parser.
-   */
-  JJString TokenManagerError::getMessage() {
-    return message;
-  }
+JJString TokenManagerError::getMessage() {
+  return message;
+}
 
-  TokenManagerError::TokenManagerError() {
-  }
-  TokenManagerError::TokenManagerError(const JJString & message, int reason) {
-    errorCode = reason;
-  }
-  TokenManagerError::TokenManagerError(bool EOFSeen, int lexState, int errorLine, int errorColumn, const JJString& errorAfter, JJChar curChar, int reason) {
-    message = LexicalError(EOFSeen, lexState, errorLine, errorColumn, errorAfter, curChar);
-   errorCode = reason;
-  }
-  TokenManagerError::~TokenManagerError() { 
-  }
+TokenManagerError::TokenManagerError() {
+}
+TokenManagerError::TokenManagerError(const JJString & message, int reason) {
+  errorCode = reason;
+}
+TokenManagerError::TokenManagerError(bool EOFSeen, int lexState, int errorLine, int errorColumn, const JJString& errorAfter, JJChar curChar, int reason) {
+  message = lexicalError(EOFSeen, lexState, errorLine, errorColumn, errorAfter, curChar);
+  errorCode = reason;
+}
+TokenManagerError::~TokenManagerError() { 
+}
 
 // i < 16 - guaranteed
 char hexChar(int i) {

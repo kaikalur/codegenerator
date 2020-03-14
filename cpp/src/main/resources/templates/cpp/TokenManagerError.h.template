@@ -39,7 +39,7 @@ public:
    *    curchar     : the offending character
    * Note: You can customize the lexical error message by modifying this method.
    */
-   virtual JJString LexicalError(bool EOFSeen, int lexState, int errorLine, int errorColumn, const JJString& errorAfter, JJChar curChar);
+   virtual JJString lexicalError(bool EOFSeen, int lexState, int errorLine, int errorColumn, const JJString& errorAfter, JJChar curChar);
 
   /**
    * You can also modify the body of this method to customize your error messages.

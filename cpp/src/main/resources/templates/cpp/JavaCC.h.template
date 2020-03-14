@@ -27,8 +27,6 @@ typedef JAVACC_CHAR_TYPE      JJChar;
 typedef JAVACC_STRING_TYPE    JJString;
 typedef JAVACC_SIMPLE_STRING  JJSimpleString;
 
-const   JJChar                JJEMPTY[] = { 0 };
-
 // Abstraction on stream classes to read a block of data into a buffer.
 class ReaderStream {
 public:
