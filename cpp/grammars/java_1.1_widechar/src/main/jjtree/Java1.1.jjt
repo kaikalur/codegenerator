@@ -39,7 +39,7 @@ options {
   TOKEN_EXTENDS = "TokenBase";
   TOKEN_INCLUDE = "TokenBase.h";
   DEBUG_PARSER = true;
-  DEBUG_TOKEN_MANAGER = true;
+//DEBUG_TOKEN_MANAGER = true;
 }
 
 PARSER_BEGIN(JavaParser)

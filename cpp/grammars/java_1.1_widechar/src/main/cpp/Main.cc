@@ -35,6 +35,7 @@ int main(int argc, char **argv) {
   parser.setErrorHandler(new MyErrorHandler());
   parser.CompilationUnit();
   Node *root = (Node*)parser.jjtree.peekNode();
+#if 0
   if (root) {
     JJString buffer;
 #if (JAVACC_CHAR_TYPE_SIZEOF != 1)
@@ -46,4 +47,5 @@ int main(int argc, char **argv) {
     printf("%s\n", buffer.c_str());
 #endif
   }
+#endif
 }
