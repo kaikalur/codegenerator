@@ -49,7 +49,74 @@ import java.util.List;
  * Generates the Constants file.
  */
 class OtherFilesGenCPP {
+	  static void printTokenImages(CppCodeBuilder builder, Context context) {
+	      builder.println("  /** Literal token image. */");
+	      int cnt = 0;
+	      builder.println("  static const JJChar tokenImage_" + cnt + "[] = ");
+	      OtherFilesGenCPP.printCharArray(builder, "<EOF>");
+	      builder.println(";");
 
+	      for (TokenProduction tp : context.globals().rexprlist) {
+	        for (RegExprSpec res : tp.respecs) {
+	          RegularExpression re = res.rexp;
+	          builder.println("  static const JJChar tokenImage_" + ++cnt + "[] = ");
+	          if (re instanceof RStringLiteral) {
+	        	String image = ((RStringLiteral) re).image;
+	            OtherFilesGenCPP.printCharArray(builder, image);
+	          } else if (!re.label.equals("")) {
+	            OtherFilesGenCPP.printCharArray(builder, "<" + re.label + ">");
+	          } else {
+	            if (re.tpContext.kind == TokenProduction.TOKEN) {
+	              context.errors().warning(re, "Consider giving this non-string token a label for better error reporting.");
+	            }
+	            OtherFilesGenCPP.printCharArray(builder, "<token of kind " + re.ordinal + ">");
+	          }
+	          builder.println(";");
+	        }
+	      }
+
+	      builder.println("  static const JJChar* const tokenImages[] = {");
+	      for (int i = 0; i <= cnt; i++) {
+	        builder.println("tokenImage_" + i + ", ");
+	      }
+	      builder.println("  };");
+	      builder.println();
+
+	  }
+	  static void printTokenLabels(CppCodeBuilder builder, Context context) {
+	      builder.println("  /** Literal token label. */");
+	      int cnt = 0;
+	      builder.println("  static const JJChar tokenLabel_" + cnt + "[] = ");
+	      OtherFilesGenCPP.printCharArray(builder, "<EOF>");
+	      builder.println(";");
+
+	      for (TokenProduction tp : context.globals().rexprlist) {
+	        for (RegExprSpec res : tp.respecs) {
+	          RegularExpression re = res.rexp;
+	          builder.println("  static const JJChar tokenLabel_" + ++cnt + "[] = ");
+	          if (re instanceof RStringLiteral) {
+	        	String label = ((RStringLiteral) re).label;
+	            OtherFilesGenCPP.printCharArray(builder, "<" + label + ">");
+	          } else if (!re.label.equals("")) {
+	            OtherFilesGenCPP.printCharArray(builder, "<" + re.label + ">");
+	          } else {
+	            if (re.tpContext.kind == TokenProduction.TOKEN) {
+	              context.errors().warning(re, "Consider giving this non-string token a label for better error reporting.");
+	            }
+	            OtherFilesGenCPP.printCharArray(builder, "<token of kind " + re.ordinal + ">");
+	          }
+	          builder.println(";");
+	        }
+	      }
+
+	      builder.println("  static const JJChar* const tokenLabels[] = {");
+	      for (int i = 0; i <= cnt; i++) {
+	        builder.println("tokenLabel_" + i + ", ");
+	      }
+	      builder.println("  };");
+	      builder.println();
+
+	  }
   static void start(Context context, TokenizerData tokenizerData) throws MetaParseException {
     if (context.errors().get_error_count() != 0) {
       throw new MetaParseException();
@@ -95,37 +162,9 @@ class OtherFilesGenCPP {
         }
         builder.println();
       }
-      builder.println("  /** Literal token values. */");
-
-      int cnt = 0;
-      builder.println("  static const JJChar tokenImage_arr_" + cnt + "[] = ");
-      OtherFilesGenCPP.printCharArray(builder, "<EOF>");
-      builder.println(";");
-
-      for (TokenProduction tp : context.globals().rexprlist) {
-        for (RegExprSpec res : tp.respecs) {
-          RegularExpression re = res.rexp;
-          builder.println("  static const JJChar tokenImage_arr_" + ++cnt + "[] = ");
-          if (re instanceof RStringLiteral) {
-            OtherFilesGenCPP.printCharArray(builder, "\"" + ((RStringLiteral) re).image + "\"");
-          } else if (!re.label.equals("")) {
-            OtherFilesGenCPP.printCharArray(builder, "\"<" + re.label + ">\"");
-          } else {
-            if (re.tpContext.kind == TokenProduction.TOKEN) {
-              context.errors().warning(re, "Consider giving this non-string token a label for better error reporting.");
-            }
-            OtherFilesGenCPP.printCharArray(builder, "\"<token of kind " + re.ordinal + ">\"");
-          }
-          builder.println(";");
-        }
-      }
-
-      builder.println("  static const JJChar* const tokenImage[] = {");
-      for (int i = 0; i <= cnt; i++) {
-        builder.println("tokenImage_arr_" + i + ", ");
-      }
-      builder.println("  };");
-      builder.println();
+      printTokenImages(builder, context);
+      printTokenLabels(builder, context);
+      
       if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
         builder.println(Options.stringValue("NAMESPACE_CLOSE"));
       }

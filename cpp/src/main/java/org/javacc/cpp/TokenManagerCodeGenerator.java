@@ -430,12 +430,12 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     // Token actions.
     codeGenerator.switchToMainFile();
     codeGenerator
-    .println("void " + tokenizerData.parserName + "TokenManager::tokenLexicalActions(Token * matchedToken) {");
+    .println("void " + tokenizerData.parserName + "TokenManager::tokenLexicalActions(Token* matchedToken) {");
     dumpLexicalActions(allMatches, TokenizerData.MatchType.TOKEN, "matchedToken->kind", codeGenerator);
     codeGenerator.println("}");
 
     codeGenerator
-    .println("void " + tokenizerData.parserName + "TokenManager::skipLexicalActions(Token * /*matchedToken*/) {");
+    .println("void " + tokenizerData.parserName + "TokenManager::skipLexicalActions(Token* /*matchedToken*/) {");
     dumpLexicalActions(allMatches, TokenizerData.MatchType.SKIP, "jjmatchedKind", codeGenerator);
     dumpLexicalActions(allMatches, TokenizerData.MatchType.SPECIAL_TOKEN, "jjmatchedKind", codeGenerator);
     codeGenerator.println("}");
