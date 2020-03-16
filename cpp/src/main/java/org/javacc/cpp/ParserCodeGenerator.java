@@ -384,8 +384,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     }
 
 
-    codeGenerator.generateMethodDefHeader("Token* ", context.globals().cu_name, "jj_consume_token(int kind)",
-        "ParseException");
+    codeGenerator.generateMethodDefHeader("Token* ", context.globals().cu_name, "jj_consume_token(int kind)", "ParseException");
     codeGenerator.println("  {");
     if (!Options.getStackLimit().equals("")) {
       codeGenerator.println("    if(kind != -1 && (jj_stack_error || jj_stack_check(false))) {");
@@ -438,9 +437,9 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     if (!Options.getStackLimit().equals("")) {
       codeGenerator.println("    if (!jj_stack_error) {");
     }
-    codeGenerator.println("    JJString image = kind >= 0 ? " + getTokenImages() + "[kind] : "
+    codeGenerator.println("    const JJString& image = kind >= 0 ? " + getTokenImages() + "[kind] : "
             + ParserCodeGenerator.getTokenImages() + "[0];");
-    codeGenerator.println("    JJString label = kind >= 0 ? " + getTokenLabels() + "[kind] : "
+    codeGenerator.println("    const JJString& label = kind >= 0 ? " + getTokenLabels() + "[kind] : "
             + ParserCodeGenerator.getTokenLabels() + "[0];");
     codeGenerator.println(
         "    errorHandler->handleUnexpectedToken(kind, image, label, getToken(1), this);");
