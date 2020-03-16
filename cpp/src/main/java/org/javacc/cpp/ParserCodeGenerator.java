@@ -735,8 +735,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("");
 
       codeGenerator.switchToIncludeFile();
-      codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name,
-          "trace_token(Token* token, const char* where)");
+      codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "trace_token(const Token* token, const char* where)");
       codeGenerator.println("  {");
       codeGenerator.println("    if (trace_enabled()) {");
       codeGenerator.println("#if (JAVACC_CHAR_TYPE_SIZEOF == 1)");
@@ -757,7 +756,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("");
 
       codeGenerator.switchToIncludeFile();
-      codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "trace_scan(Token* token, int t2)");
+      codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "trace_scan(const Token* token, int t2)");
       codeGenerator.println("  {");
       codeGenerator.println("    if (trace_enabled()) {");
       codeGenerator.println("#if (JAVACC_CHAR_TYPE_SIZEOF == 1)");
