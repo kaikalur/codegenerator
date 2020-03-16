@@ -13,19 +13,11 @@ bool ${parserName}TokenManager::moveToNextChar() {
 
 ${decls}
 
-#if TOKEN_MANAGER_USES_PARSER && !STATIC
-/** Constructor with parser. */
-${parserName}TokenManager::${parserName}TokenManager(${parserName}* parser, JAVACC_CHARSTREAM* stream, int lexState) : parser(parser)
-{
-    ReInit(stream, lexState);
-}
-#else
 /** Constructor. */
 ${parserName}TokenManager::${parserName}TokenManager(JAVACC_CHARSTREAM* stream, int lexState)
 {
     ReInit(stream, lexState);
 }
-#fi
 
 /** Reinitialise parser. */
 void ${parserName}TokenManager::ReInit(JAVACC_CHARSTREAM* stream, int lexState)
@@ -485,7 +477,8 @@ Token * ${parserName}TokenManager::getNextToken() {
 \#endif
 #fi
           return matchedToken;
-        } else if (isSkip(jjmatchedKind) || isSpecial(jjmatchedKind)) {
+        } else
+        if (isSkip(jjmatchedKind) || isSpecial(jjmatchedKind)) {
 #if DEBUG_TOKEN_MANAGER
 \#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
           std::clog  <<  "Found a SKIP match." << std::endl;

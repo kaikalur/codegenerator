@@ -62,20 +62,20 @@ private:
   bool 						delete_eh;
 
 public: 
-#if TOKEN_MANAGER_USES_PARSER && !STATIC
-  ${parserName}TokenManager(${parserName}* parser, JAVACC_CHARSTREAM* stream, int lexState = 0);
-#else
   ${parserName}TokenManager(JAVACC_CHARSTREAM* stream, int lexState = 0);
-#fi
   virtual ~${parserName}TokenManager() {}
 
   Token* getNextToken();
 
+#if COMMON_TOKEN_ACTION
+  void CommonTokenAction(Token* token);
+#fi
+
 protected:
   bool   moveToNextChar();
- #if TOKEN_MANAGER_USES_PARSER
+#if TOKEN_MANAGER_USES_PARSER
   ${parserName}*   parser;
- #fi
+#fi
   
   void   ReInit(JAVACC_CHARSTREAM* stream, int lexState = 0);
   void   SwitchTo(int lexState);
