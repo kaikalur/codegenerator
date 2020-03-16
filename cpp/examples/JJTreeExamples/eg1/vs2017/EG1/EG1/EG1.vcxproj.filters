@@ -36,7 +36,7 @@
     <ClCompile Include="..\..\..\target\generated-sources\cpp\Token.cc">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\target\generated-sources\cpp\TokenMgrError.cc">
+    <ClCompile Include="..\..\..\target\generated-sources\cpp\TokenManagerError.cc">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\target\generated-sources\jjtree\JJTParserState.cc">
@@ -77,7 +77,7 @@
     <ClInclude Include="..\..\..\target\generated-sources\cpp\TokenManager.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\target\generated-sources\cpp\TokenMgrError.h">
+    <ClInclude Include="..\..\..\target\generated-sources\cpp\TokenManagerError.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\target\generated-sources\jjtree\JJTParserState.h">

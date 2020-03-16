@@ -26,7 +26,7 @@
     <ClCompile Include="..\..\..\target\generated-sources\cpp\Parser.cc" />
     <ClCompile Include="..\..\..\target\generated-sources\cpp\ParserTokenManager.cc" />
     <ClCompile Include="..\..\..\target\generated-sources\cpp\Token.cc" />
-    <ClCompile Include="..\..\..\target\generated-sources\cpp\TokenMgrError.cc" />
+    <ClCompile Include="..\..\..\target\generated-sources\cpp\TokenManagerError.cc" />
     <ClCompile Include="..\..\..\target\generated-sources\jjtree\JJTParserState.cc" />
     <ClCompile Include="..\..\..\target\generated-sources\jjtree\Node.cc" />
   </ItemGroup>
@@ -43,7 +43,7 @@
     <ClInclude Include="..\..\..\target\generated-sources\cpp\ParserTokenManager.h" />
     <ClInclude Include="..\..\..\target\generated-sources\cpp\Token.h" />
     <ClInclude Include="..\..\..\target\generated-sources\cpp\TokenManager.h" />
-    <ClInclude Include="..\..\..\target\generated-sources\cpp\TokenMgrError.h" />
+    <ClInclude Include="..\..\..\target\generated-sources\cpp\TokenManagerError.h" />
     <ClInclude Include="..\..\..\target\generated-sources\jjtree\JJTParserState.h" />
     <ClInclude Include="..\..\..\target\generated-sources\jjtree\Node.h" />
     <ClInclude Include="..\..\..\target\generated-sources\jjtree\ParserTree.h" />
