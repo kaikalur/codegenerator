@@ -82,8 +82,8 @@ protected:
 
 
 private:
-  void   tokenLexicalActions(Token* matchedToken);
-  void   skipLexicalActions(Token* matchedToken);
+  void   tokenLexicalActions(const Token* matchedToken);
+  void   skipLexicalActions(const Token* matchedToken);
   void   moreLexicalActions();
 
   int    getStartAndSize(int index, int isCount);
