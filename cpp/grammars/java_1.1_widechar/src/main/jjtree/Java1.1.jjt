@@ -41,16 +41,31 @@ options {
   DEBUG_PARSER = true;
 //DEBUG_TOKEN_MANAGER = true;
 //DEBUG_LOOKAHEAD = true;
+  COMMON_TOKEN_ACTION = true;
+  TOKEN_MANAGER_USES_PARSER = true;
 }
 
 PARSER_BEGIN(JavaParser)
 
 PARSER_END(JavaParser)
 
-TOKEN_MGR_DECLS:
-{
-}
+TOKEN_MGR_DECLS : {
+	int braceCount = 0;
+	int bracketCount = 0;
+	int parenthesisCount = 0;
+	int stringSize;
+	int linesCommentCount = 0;
 
+	int foo(const JJString& i) {
+		return 0;
+	}
+
+	void JavaParserTokenManager::CommonTokenAction(Token* token) {
+		if (parser) {
+			int i = 2;
+		}
+	}
+}
 
 /* WHITE SPACE */
 
