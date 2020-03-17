@@ -12,7 +12,17 @@
 using namespace java::parser;
 using namespace std;
 
-JJString ReadFileFully(char *file_name) {
+static JJString readHelloWorld() {
+	JJString s;
+	s =
+L"public class HelloWorld\n {\n"
+L"	public static void main(String args[]) {\n"
+L"		System.out.println(\"Hello World!\"); \n"
+L"	}\n"
+L"}\n";
+	return s;
+}
+static JJString ReadFileFully(char *file_name) {
   JJString s;
   wifstream fp_in;
   fp_in.open(file_name, ios::in);
@@ -24,15 +34,14 @@ JJString ReadFileFully(char *file_name) {
 }
 
 int main(int argc, char **argv) {
-  if (argc < 2) {
-    cout << "Usage: wjavaparser <java inputfile>" << endl;
-    exit(1);
-  }
-  JJString s = ReadFileFully(argv[1]);
+	JJString s;
+  if (argc < 2)
+	s = readHelloWorld();
+  else
+	s = ReadFileFully(argv[1]);
   CharStream *stream = new CharStream(s.c_str(), s.size() - 1, 1, 1);
   JavaParserTokenManager *scanner = new JavaParserTokenManager(stream);
   JavaParser parser(scanner);
-  //parser.setErrorHandler(new MyErrorHandler());
   parser.CompilationUnit();
   Node *root = (Node*)parser.jjtree.peekNode();
 #if 0
