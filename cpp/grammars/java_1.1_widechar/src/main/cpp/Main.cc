@@ -55,6 +55,15 @@ int main(int argc, char **argv) {
     root->dumpToBuffer(" ", "\n", &buffer);
     printf("%s\n", buffer.c_str());
 #endif
+	JJString jjs;
+	const JJString a = "";
+	const JJString* b = &a;
+	const JJString* const c = &a;
+	const JJString const * d = &a;
+
+	c = &s;
+	d = &s;
+
   }
 #endif
 }
