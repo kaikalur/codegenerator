@@ -166,59 +166,38 @@ public:
     return inBuf == 0 && bufpos + 1 >= maxNextCharInd && inputStream->endOfInput();
   }
 
-  CharStream(const JJChar *buf, int sz, int startline, int startcolumn, int buffersize) :
-    bufline(nullptr), bufcolumn(nullptr), buffer(nullptr), bufpos(0), bufsize(0), 
-    tokenBegin(0), column(0), line(0), prevCharIsCR(false), prevCharIsLF(false),
-    available(0), maxNextCharInd(0), inBuf(0), tabSize(1), trackLineColumn(true),
-    inputStream(nullptr), deleteStream(false) {
+  CharStream(const JJChar *buf, int sz, int startline, int startcolumn, int buffersize)
+  {
 	ReInit(JJString(buf, sz), startline, startcolumn, buffersize);
   }
 
-  CharStream(const JJChar *buf, int sz, int startline, int startcolumn) :
-    bufline(nullptr), bufcolumn(nullptr), buffer(nullptr), bufpos(0), bufsize(0), 
-    tokenBegin(0), column(0), line(0), prevCharIsCR(false), prevCharIsLF(false),
-    available(0), maxNextCharInd(0), inBuf(0), tabSize(1), trackLineColumn(true),
-    inputStream(nullptr), deleteStream(false) {
+  CharStream(const JJChar *buf, int sz, int startline, int startcolumn)
+  {
     ReInit(JJString(buf, sz), startline, startcolumn, initialBufferSize);
   }
 
-  CharStream(const JJString& str, int startline, int startcolumn, int buffersize) :
-    bufline(nullptr), bufcolumn(nullptr), buffer(nullptr), bufpos(0), bufsize(0), 
-    tokenBegin(0), column(0), line(0), prevCharIsCR(false), prevCharIsLF(false),
-    available(0), maxNextCharInd(0), inBuf(0), tabSize(1), trackLineColumn(true),
-    inputStream(nullptr), deleteStream(false) {
+  CharStream(const JJString& str, int startline, int startcolumn, int buffersize)
+  {
     ReInit(str, startline, startcolumn, buffersize);
   }
 
-  CharStream(const JJString& str, int startline, int startcolumn) :
-    bufline(nullptr), bufcolumn(nullptr), buffer(nullptr), bufpos(0), bufsize(0), 
-    tokenBegin(0), column(0), line(0), prevCharIsCR(false), prevCharIsLF(false),
-    available(0), maxNextCharInd(0), inBuf(0), tabSize(1), trackLineColumn(true),
-    inputStream(nullptr), deleteStream(false) {
+  CharStream(const JJString& str, int startline, int startcolumn)
+  {
     ReInit(str, startline, startcolumn, initialBufferSize);
   }
 
-  CharStream(ReaderStream *input_stream, int startline, int startcolumn, int buffersize) :
-    bufline(nullptr), bufcolumn(nullptr), buffer(nullptr), bufpos(0), bufsize(0), 
-    tokenBegin(0), column(0), line(0), prevCharIsCR(false), prevCharIsLF(false),
-    available(0), maxNextCharInd(0), inBuf(0), tabSize(1), trackLineColumn(true),
-    inputStream(nullptr), deleteStream(false) {
+  CharStream(ReaderStream *input_stream, int startline, int startcolumn, int buffersize)
+  {
     ReInit(input_stream, startline, startcolumn, buffersize);
   }
 
-  CharStream(ReaderStream *input_stream, int startline, int startcolumn) :
-    bufline(nullptr), bufcolumn(nullptr), buffer(nullptr), bufpos(0), bufsize(0), 
-    tokenBegin(0), column(0), line(0), prevCharIsCR(false), prevCharIsLF(false),
-    available(0), maxNextCharInd(0), inBuf(0), tabSize(1), trackLineColumn(true),
-    inputStream(nullptr), deleteStream(false) {
+  CharStream(ReaderStream *input_stream, int startline, int startcolumn)
+  {
     ReInit(input_stream, startline, startcolumn, initialBufferSize);
   }
 
-  CharStream(ReaderStream *input_stream) :
-    bufline(nullptr), bufcolumn(nullptr), buffer(nullptr), bufpos(0), bufsize(0), 
-    tokenBegin(0), column(0), line(0), prevCharIsCR(false), prevCharIsLF(false),
-    available(0), maxNextCharInd(0), inBuf(0), tabSize(1), trackLineColumn(true),
-    inputStream(nullptr), deleteStream(false) {
+  CharStream(ReaderStream *input_stream)
+  {
     ReInit(input_stream, 1, 1, initialBufferSize);
   }
 
@@ -243,23 +222,23 @@ public:
 protected:
   virtual void updateLineColumn(JJChar c);
 
-  int*               bufline;
-  int*               bufcolumn;
-  JJChar*  	         buffer;
-  int                bufpos;
-  int                bufsize;
-  int                tokenBegin;
-  int                column;
-  int                line;
-  bool               prevCharIsCR;
-  bool               prevCharIsLF;
-  int                available;
-  int                maxNextCharInd;
-  int                inBuf;
-  int                tabSize;
-  bool               trackLineColumn;
-  ReaderStream*      inputStream;
-  bool               deleteStream;
+  int*               bufline        	= nullptr;
+  int*               bufcolumn      	= nullptr;
+  JJChar*  	         buffer         	= nullptr;
+  int                bufpos				= 0;
+  int                bufsize			= 0;
+  int                tokenBegin			= 0;
+  int                column				= 0;
+  int                line				= 0;
+  bool               prevCharIsCR		= false;
+  bool               prevCharIsLF		= false;
+  int                available			= 0;
+  int                maxNextCharInd		= 0;
+  int                inBuf				= 0;
+  int                tabSize			= 8;
+  bool               trackLineColumn	= true;
+  ReaderStream*      inputStream    	= nullptr;
+  bool               deleteStream		= false;
 };
 
 #if NAMESPACE

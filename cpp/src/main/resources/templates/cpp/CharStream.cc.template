@@ -31,15 +31,13 @@ class StringReaderStream : public ReaderStream {
 #if NAMESPACE
 namespace ${NAMESPACE_OPEN}
 #fi
-void CharStream::ReInit(const JJString& str, int startline,
-                        int startcolumn, int buffersize) {
+void CharStream::ReInit(const JJString& str, int startline, int startcolumn, int buffersize) {
   StringReaderStream *stream = new StringReaderStream(str);
   ReInit(stream, startline, startcolumn, buffersize);
   deleteStream = true;
 }
 
-void CharStream::ReInit(ReaderStream *input_stream, int startline,
-                        int startcolumn, int buffersize) {
+void CharStream::ReInit(ReaderStream *input_stream, int startline, int startcolumn, int buffersize) {
   if (deleteStream) {
    delete inputStream;
   }

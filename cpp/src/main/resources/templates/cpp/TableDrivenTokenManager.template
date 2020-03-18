@@ -471,9 +471,9 @@ Token * ${parserName}TokenManager::getNextToken() {
 #fi
 #if DEBUG_TOKEN_MANAGER
 \#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-          std::clog  <<  "Returning token: '"  << addUnicodeEscapes(matchedToken->image).c_str() << "'" << std::endl;
+          std::clog  <<  "Returning token: '"  << addUnicodeEscapes(matchedToken->image) << "'"  << std::endl;
 \#else
-          std::wclog << L"Returning token: '"  << addUnicodeEscapes(matchedToken->image).c_str() << L"'" << std::endl;
+          std::wclog << L"Returning token: '"  << addUnicodeEscapes(matchedToken->image) << L"'" << std::endl;
 \#endif
 #fi
           return matchedToken;
@@ -537,7 +537,7 @@ Token * ${parserName}TokenManager::getNextToken() {
       if(input_stream->endOfInput()) {
         EOFSeen = true;
 \#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-        error_after = lastReadPosition <= 1 ? "" : input_stream->getImage();
+        error_after = lastReadPosition <= 1 ? ""  : input_stream->getImage();
 \#else
         error_after = lastReadPosition <= 1 ? L"" : input_stream->getImage();
 \#endif
@@ -550,7 +550,7 @@ Token * ${parserName}TokenManager::getNextToken() {
       }
       if (!EOFSeen) {
 \#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-        error_after = lastReadPosition <= 1 ? "" : input_stream->getImage();
+        error_after = lastReadPosition <= 1 ? ""  : input_stream->getImage();
 \#else
         error_after = lastReadPosition <= 1 ? L"" : input_stream->getImage();
 \#endif

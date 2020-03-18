@@ -3,17 +3,32 @@ namespace ${NAMESPACE_OPEN}
 #fi
 
 
-static const   JJChar  JJEMPTY[] = { 0 };
-JJString TokenManagerError::lexicalError(bool EOFSeen, int lexState, int errorLine, int errorColumn, const JJString & errorAfte, JJChar curChar) {
-\#if 0
+JJString TokenManagerError::lexicalError(bool EOFSeen, int lexState, int errorLine, int errorColumn, const JJString& errorAfter, JJChar curChar) {
     JJString s;
-    stringstream<JJString> ss;
-    ss << "Lexical error at line " << errorLine << " column " << errorColumn
-       << ".  Encountered: " << curChar << "(" << (int)curChar
-       << ") after : \"" << errorAfter.c_str() << "\"";
-    return (JJString)ss.rdbuf()->str();
+\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
+     s += "Lexical error at line ";
+     s += std::to_string(errorLine);
+     s += ":";
+     s += std::to_string(errorColumn);
+     s += ".  Encountered: ";
+     s += curChar;
+     s += "(";
+     s += std::to_string((int)curChar);
+     s += ") after: ";
+     s += errorAfter;
+\#else
+     s += L"Lexical error at line ";
+     s += std::to_wstring(errorLine);
+     s += L":";
+     s += std::to_wstring(errorColumn);
+     s += L".  Encountered: ";
+     s += curChar;
+     s += L"(";
+     s += std::to_wstring((int)curChar);
+     s += L") after: ";
+     s += errorAfter;
 \#endif
-    return JJEMPTY;
+    return s;
   }
 
 JJString TokenManagerError::getMessage() {

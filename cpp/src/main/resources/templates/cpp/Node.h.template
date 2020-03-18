@@ -63,9 +63,9 @@ public:
 
 #fi
 #if VISITOR
-  virtual ${VISITOR_RETURN_TYPE:-void}       jjtAccept(${PARSER_NAME}Visitor *visitor, ${VISITOR_DATA_TYPE:-void *} data) const;
-  virtual void           jjtChildrenAccept(${PARSER_NAME}Visitor *visitor, ${VISITOR_DATA_TYPE:-void *} data) const;
-  virtual void           jjtChildAccept(int childNo, ${PARSER_NAME}Visitor *visitor, ${VISITOR_DATA_TYPE:-void *} data) const;
+  virtual ${VISITOR_RETURN_TYPE:-void}       jjtAccept(${PARSER_NAME}Visitor* visitor, ${VISITOR_DATA_TYPE:-void*} data) const;
+  virtual void           jjtChildrenAccept(${PARSER_NAME}Visitor* visitor, ${VISITOR_DATA_TYPE:-void*} data) const;
+  virtual void           jjtChildAccept(int childNo, ${PARSER_NAME}Visitor* visitor, ${VISITOR_DATA_TYPE:-void*} data) const;
 #fi
   virtual std::vector<Node*>& jjtChildren();
   
@@ -77,7 +77,7 @@ public:
 
   /* Override this method if you want to customize how the node dumps out its children. */
   virtual void          dump(const JJString& prefix) const;
-  virtual void          dumpToBuffer(const JJString& prefix, const JJString& separator, JJString *sb) const;
+  virtual void          dumpToBuffer(const JJString& prefix, const JJString& separator, JJString* sb) const;
   virtual int           getId() const { return id;  }
 };
 #if NAMESPACE
