@@ -142,8 +142,8 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       }
     }
 
-    if (Options.getUserTokenManagerConstant().length() > 0) {
-      codeGenerator.println("#include \"" + Options.getUserTokenManagerConstant() + "\"");
+    if (Options.getUserTokenManagerConstantInclude().length() > 0) {
+      codeGenerator.println("#include \"" + Options.getUserTokenManagerConstantInclude() + "\"");
     } else {
       codeGenerator.println("#include \"" + context.globals().cu_name + "Constants.h\"");
     }
@@ -1731,9 +1731,8 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
 
   private static String getUserTokenManagerConstantNamespace() {
     String namespace = "";
-    if ((Options.getUserTokenManagerConstant().length() > 0)
-        && (Options.getUserTokenManagerConstantNamespace().length() > 0)) {
-      namespace += Options.getUserTokenManagerConstantNamespace() + "::";
+    if (Options.getUserTokenNamespace().length() > 0) {
+      namespace += Options.getUserTokenNamespace() + "::";
     }
     return namespace;
   }

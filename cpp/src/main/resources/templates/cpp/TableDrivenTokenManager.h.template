@@ -82,7 +82,7 @@ protected:
 
 
 private:
-  void   tokenLexicalActions(const Token* matchedToken);
+  void   tokenLexicalActions(Token* matchedToken);
   void   skipLexicalActions(const Token* matchedToken);
   void   moreLexicalActions();
 
