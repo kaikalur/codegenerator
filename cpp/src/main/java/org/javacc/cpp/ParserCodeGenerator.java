@@ -130,9 +130,12 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println();
     codeGenerator.println("#include \"JavaCC.h\"");
     codeGenerator.println("#include \"CharStream.h\"");
-    codeGenerator.println("#include \"Token.h\"");
-    codeGenerator.println("#include \"TokenManager.h\"");
-
+    if (Options.getUserTokenIncude().length() > 0) {
+        codeGenerator.println("#include " + Options.getUserTokenIncude() +"\"");
+    } else {
+    	codeGenerator.println("#include \"Token.h\"");
+    	codeGenerator.println("#include \"TokenManager.h\"");
+    }
     printInclude(Options.getParserInclude());
 
     List<String> includes = Options.getParserIncludes();
@@ -166,7 +169,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("    int        gen;");
     codeGenerator.println("    int        arg;");
     codeGenerator.println("    JJCalls*   next;");
-    codeGenerator.println("    Token*     first;");
+    codeGenerator.println("    " + getTypeForToken() + "     first;");
     codeGenerator.println("    ~JJCalls() { if (next) delete next; }");
     codeGenerator.println("     JJCalls() { next = nullptr; arg = 0; gen = -1; first = nullptr; }");
     codeGenerator.println("  };");
@@ -207,8 +210,8 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("");
     codeGenerator.println("  TokenManager* token_source = nullptr;");
     codeGenerator.println("  CharStream*   jj_input_stream = nullptr;");
-    codeGenerator.println("  Token*        token = nullptr;  // Current token.");
-    codeGenerator.println("  Token*        jj_nt = nullptr;  // Next token.");
+    codeGenerator.println("  " + getTypeForToken() + "        token = nullptr;  // Current token.");
+    codeGenerator.println("  " + getTypeForToken() + "        jj_nt = nullptr;  // Next token.");
     codeGenerator.println("");
     codeGenerator.println("private: ");
     codeGenerator.println("  int           jj_ntk;");
@@ -216,8 +219,8 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("  JJCalls       jj_2_rtns[" + (context.globals().jj2index + 1) + "];");
     codeGenerator.println("  bool          jj_rescan;");
     codeGenerator.println("  int           jj_gc;");
-    codeGenerator.println("  Token*        jj_scanpos;");
-    codeGenerator.println("  Token*        jj_lastpos;");
+    codeGenerator.println("  " + getTypeForToken() + "        jj_scanpos;");
+    codeGenerator.println("  " + getTypeForToken() + "        jj_lastpos;");
     codeGenerator.println("  int           jj_la;");
     codeGenerator.println("  bool          jj_lookingAhead;  // Whether we are looking ahead.");
     codeGenerator.println("  bool          jj_semLA;");
@@ -268,7 +271,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("  /** Constructor with user supplied TokenManager. */");
 
     codeGenerator.switchToIncludeFile(); // TEMP
-    codeGenerator.println("  Token*        head;");
+    codeGenerator.println("  " + getTypeForToken() + "        head;");
     codeGenerator.println("");
     codeGenerator.println("public: ");
     codeGenerator.generateMethodDefHeader(" ", context.globals().cu_name,
@@ -287,7 +290,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.switchToIncludeFile();
     codeGenerator.println("  virtual ~" + context.globals().cu_name + "();");
     codeGenerator.switchToMainFile();
-    codeGenerator.println("" + context.globals().cu_name + "::~" + context.globals().cu_name + "()");
+    codeGenerator.println(context.globals().cu_name + "::~" + context.globals().cu_name + "()");
     codeGenerator.println("{");
     codeGenerator.println("  clear();");
     codeGenerator.println("}");
@@ -341,8 +344,8 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("  //parser should not take care of deleting");
     codeGenerator.println("  //if (token_source) delete token_source;");
     codeGenerator.println("  if (delete_tokens && head) {");
-    codeGenerator.println("    Token* next;");
-    codeGenerator.println("    Token* t = head;");
+    codeGenerator.println("    " + getTypeForToken() + " next;");
+    codeGenerator.println("    " + getTypeForToken() + " t = head;");
     codeGenerator.println("    while (t) {");
     codeGenerator.println("      next = t->next;");
     codeGenerator.println("      delete t;");
@@ -384,7 +387,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     }
 
 
-    codeGenerator.generateMethodDefHeader("Token* ", context.globals().cu_name, "jj_consume_token(int kind)", "ParseException");
+    codeGenerator.generateMethodDefHeader(getTypeForToken() + " ", context.globals().cu_name, "jj_consume_token(int kind)", "ParseException");
     codeGenerator.println("  {");
     if (!Options.getStackLimit().equals("")) {
       codeGenerator.println("    if(kind != -1 && (jj_stack_error || jj_stack_check(false))) {");
@@ -396,11 +399,11 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("    }");
     }
     if (Options.getCacheTokens()) {
-      codeGenerator.println("    Token* oldToken = token;");
+      codeGenerator.println("    " + getTypeForToken() + " oldToken = token;");
       codeGenerator.println("    if ((token = jj_nt)->next != nullptr) jj_nt = jj_nt->next;");
       codeGenerator.println("    else jj_nt = jj_nt->next = token_source->getNextToken();");
     } else {
-      codeGenerator.println("    Token* oldToken;");
+      codeGenerator.println("    " + getTypeForToken() + " oldToken;");
       codeGenerator.println("    if ((oldToken = token)->next != nullptr) token = token->next;");
       codeGenerator.println("    else token = token->next = token_source->getNextToken();");
       codeGenerator.println("    jj_ntk = -1;");
@@ -477,7 +480,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("    }");
       if (Options.getErrorReporting()) {
         codeGenerator.println("    if (jj_rescan) {");
-        codeGenerator.println("      int i = 0; Token* tok = token;");
+        codeGenerator.println("      int i = 0; " + getTypeForToken() + " tok = token;");
         codeGenerator.println("      while (tok != nullptr && tok != jj_scanpos) { i++; tok = tok->next; }");
         codeGenerator.println("      if (tok != nullptr) jj_add_error_token(kind, i);");
         if (Options.getDebugLookahead()) {
@@ -498,7 +501,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     }
     codeGenerator.println("");
     codeGenerator.println("/** Get the next Token. */");
-    codeGenerator.generateMethodDefHeader("Token* ", context.globals().cu_name, "getNextToken()");
+    codeGenerator.generateMethodDefHeader(getTypeForToken() + " ", context.globals().cu_name, "getNextToken()");
     codeGenerator.println("{");
     if (Options.getCacheTokens()) {
       codeGenerator.println("    if ((token = jj_nt)->next != nullptr) jj_nt = jj_nt->next;");
@@ -518,12 +521,12 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("  }");
     codeGenerator.println("");
     codeGenerator.println("/** Get the specific Token. */");
-    codeGenerator.generateMethodDefHeader("Token* ", context.globals().cu_name, "getToken(int index)");
+    codeGenerator.generateMethodDefHeader(getTypeForToken() + " ", context.globals().cu_name, "getToken(int index)");
     codeGenerator.println("{");
     if (context.globals().lookaheadNeeded) {
-      codeGenerator.println("    Token* t = jj_lookingAhead ? jj_scanpos : token;");
+      codeGenerator.println("    " + getTypeForToken() + " t = jj_lookingAhead ? jj_scanpos : token;");
     } else {
-      codeGenerator.println("    Token* t = token;");
+      codeGenerator.println("    " + getTypeForToken() + " t = token;");
     }
     codeGenerator.println("    for (int i = 0; i < index; i++) {");
     codeGenerator.println("      if (t->next != nullptr) t = t->next;");
@@ -669,7 +672,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       /*
        * generateMethodDefHeader("ParseException", cu_name,
        * "generateParseException()"); codeGenerator.genCodeLine("   {");
-       * codeGenerator.genCodeLine("    Token* errortok = token->next;"); if
+       * codeGenerator.genCodeLine("    " + getTypeForToken() + " errortok = token->next;"); if
        * (Options.getKeepLineColumn()) codeGenerator.
        * genCodeLine("    int line = errortok.beginLine, column = errortok.beginColumn;"
        * ); codeGenerator.
@@ -734,7 +737,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("");
 
       codeGenerator.switchToIncludeFile();
-      codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "trace_token(const Token* token, const char* where)");
+      codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "trace_token(const " + getTypeForToken() + " token, const char* where)");
       codeGenerator.println("  {");
       codeGenerator.println("    if (trace_enabled()) {");
       codeGenerator.println("#if (JAVACC_CHAR_TYPE_SIZEOF == 1)");
@@ -755,7 +758,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("");
 
       codeGenerator.switchToIncludeFile();
-      codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "trace_scan(const Token* token, int t2)");
+      codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "trace_scan(const " + getTypeForToken() + " token, int t2)");
       codeGenerator.println("  {");
       codeGenerator.println("    if (trace_enabled()) {");
       codeGenerator.println("#if (JAVACC_CHAR_TYPE_SIZEOF == 1)");
@@ -1849,7 +1852,13 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
   }
 
   private String getTypeForToken() {
-    return "Token*";
+	  String name ="Token*";
+	  if (Options.getUserTokenNamespace().length() > 0) 
+		  name = Options.getUserTokenNamespace() + "::";
+	  if (Options.getUserTokenName().length() > 0) 
+		  name += Options.getUserTokenName() + "Token*";
+	  
+    return name;
   }
 
   private String genjj_3Call(Expansion e) {
