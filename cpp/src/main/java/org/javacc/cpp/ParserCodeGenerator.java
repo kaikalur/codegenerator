@@ -238,7 +238,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("#include \"TokenManagerError.h\"");
       for (int i = 0; i < tokenMaskSize; i++) {
         if (context.globals().maskVals.size() > 0) {
-          codeGenerator.println("  unsigned int jj_la1_" + i + "[] = {");
+          codeGenerator.println("static unsigned int jj_la1_" + i + "[] = {");
           for (int[] tokenMask : context.globals().maskVals) {
             codeGenerator.print("0x" + Integer.toHexString(tokenMask[i]) + ",");
           }
