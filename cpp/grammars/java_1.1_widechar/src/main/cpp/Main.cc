@@ -8,6 +8,7 @@
 #include "CharStream.h"
 #include "JavaParser.h"
 #include "JavaParserTokenManager.h"
+#include "ErrorHandler.h"
 
 using namespace java::parser;
 using namespace std;
