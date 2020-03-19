@@ -213,12 +213,12 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
 \#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
       std::clog  << "Looking to move from state: " << state << " for: "
                  << (jjmatchKinds[state] != 0x7fffffff
-                    ? addUnicodeEscapes(tokenImages[jjmatchKinds[state]]).c_str() :  " <UNKNOWN>")
+                    ? addUnicodeEscapes(tokenImages[jjmatchKinds[state]]) :  " <UNKNOWN>")
                  << std::endl;
 \#else
       std::wclog << L"Looking to move from state: " << state << L" for: "
                  << (jjmatchKinds[state] != 0x7fffffff
-                    ? addUnicodeEscapes(tokenImages[jjmatchKinds[state]]).c_str() : L" <UNKNOWN>")
+                    ? addUnicodeEscapes(tokenImages[jjmatchKinds[state]]) : L" <UNKNOWN>")
                  << std::endl;
 \#endif
 #fi
@@ -383,12 +383,12 @@ Token * ${parserName}TokenManager::getNextToken() {
     if(input_stream->endOfInput()) {
 #if DEBUG_TOKEN_MANAGER
 \#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-      std::clog  <<  "<" << addUnicodeEscapes(lexStateNames[curLexState]).c_str() << "> " 
+      std::clog  <<  "<" << addUnicodeEscapes(lexStateNames[curLexState]) << "> " 
                  <<  "Reached EOF at " << input_stream->getBeginLine()
                  <<  ":" << input_stream->getBeginColumn()
                  << std::endl;
 \#else
-      std::wclog << L"<" << addUnicodeEscapes(lexStateNames[curLexState]).c_str() << L"> " 
+      std::wclog << L"<" << addUnicodeEscapes(lexStateNames[curLexState]) << L"> " 
                  << L"Reached EOF at " << input_stream->getBeginLine()
                  << L":" << input_stream->getBeginColumn()
                  << std::endl;
@@ -410,13 +410,13 @@ Token * ${parserName}TokenManager::getNextToken() {
 
 #if DEBUG_TOKEN_MANAGER
 \#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-      std::clog  <<  "<" << addUnicodeEscapes(lexStateNames[curLexState]).c_str() << "> " 
+      std::clog  <<  "<" << addUnicodeEscapes(lexStateNames[curLexState]) << "> " 
                  <<  " Current character: '" << (char)curChar
                  <<  "' at " << input_stream->getBeginLine()
                  <<  ":" << input_stream->getBeginColumn()
                  <<  std::endl;
 \#else
-      std::wclog << L"<" << addUnicodeEscapes(lexStateNames[curLexState]).c_str() << L"> " 
+      std::wclog << L"<" << addUnicodeEscapes(lexStateNames[curLexState]) << L"> " 
                  << L" Current character: '" << (char)curChar
                  << "' at " << input_stream->getBeginLine()
                  << L":" << input_stream->getBeginColumn()
