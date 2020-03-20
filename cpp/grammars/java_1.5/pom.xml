@@ -39,7 +39,6 @@
 							<run>true</run>
 							<args>
 								<arg>${project.basedir}/java/JavaGenerics.java</arg>
-								<arg>${project.basedir}/java/JavaGenerics.in</arg>
 								<arg>${project.basedir}/java/JavaGenerics.out</arg>
 								<arg>${project.basedir}/java/JavaGenerics.err</arg>
 							</args>

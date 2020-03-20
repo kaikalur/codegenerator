@@ -19,7 +19,7 @@ import java.util.Map;
  */
 class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGenerator {
 
-  private static final String TokenManagerTemplate  = "/templates/cpp/TableDrivenTokenManager.template";
+  private static final String TokenManagerTemplate  = "/templates/cpp/TableDrivenTokenManager.cc.template";
   private static final String TokenManagerTemplateH = "/templates/cpp/TableDrivenTokenManager.h.template";
 
   private final Context context;
@@ -44,7 +44,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     settings.put("charStreamName", Options.getCharStreamName());
     settings.put("defaultLexState", tokenizerData.defaultLexState);
     settings.put("decls", tokenizerData.decls);
-    settings.put("superClass", ((superClass == null) || superClass.equals("")) ? "" : "extends " + superClass);
+    settings.put("superClass", ((superClass == null) || superClass.equals("")) ? "" : superClass);
     settings.put("noDfa", Options.getNoDfa());
     settings.put("generatedStates", tokenizerData.nfa.size());
 
@@ -60,9 +60,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
 
       codeGenerator.switchToIncludeFile(); // remaining variables
 
-      CodeGeneratorSettings options = CodeGeneratorSettings.create().set("charStreamName", "CharStream")
-          .set("lexStateNameLength", tokenizerData.lexStateNames.length);
-      codeGenerator.printTemplate(TokenManagerCodeGenerator.TokenManagerTemplateH, options);
+      codeGenerator.printTemplate(TokenManagerCodeGenerator.TokenManagerTemplateH, settings);
       codeGenerator.switchToStaticsFile();
       codeGenerator.println("#include \"TokenManagerError.h\"");
 

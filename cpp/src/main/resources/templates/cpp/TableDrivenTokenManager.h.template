@@ -1,7 +1,6 @@
 \#ifndef JAVACC_${parserName}_TOKEN_MANAGER_H
 \#define JAVACC_${parserName}_TOKEN_MANAGER_H
 
-\#include "stdio.h"
 \#include "JavaCC.h"
 \#include "CharStream.h"
 \#include "Token.h"
@@ -13,8 +12,8 @@
 \#include "${TOKEN_MANAGER_INCLUDE}"
 #fi
 
-#if TOKEN_MANAGER_INCLUDES
-\#include "${TOKEN_MANAGER_INCLUDES}"
+#if INCLUDE_FOR_TOKEN_MANAGER
+\#include "${INCLUDE_FOR_TOKEN_MANAGER}"
 #fi
 
 #if TOKEN_MANAGER_USES_PARSER

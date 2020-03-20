@@ -16,7 +16,7 @@ class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
   private enum Buffer {
     Main,
     Include,
-    Statistic;
+    Static;
   }
 
   private final boolean      headeOnly;
@@ -46,7 +46,7 @@ class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
     switch (kind) {
       case Include:
         return includeBuffer;
-      case Statistic:
+      case Static:
         return staticsBuffer;
       default:
     }
@@ -65,7 +65,7 @@ class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
 
     genCommaSeperatedString(superClasses);
     genCommaSeperatedString(superInterfaces);
-    println(" {");
+    println("{");
     println("public:");
   }
 
@@ -227,7 +227,7 @@ class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
   }
 
   void switchToStaticsFile() {
-    kind = Buffer.Statistic;
+    kind = Buffer.Static;
   }
 
   /**

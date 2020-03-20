@@ -13,7 +13,7 @@ using namespace std;
 
 JJString ReadFileFully() {
 	JJString code;
-#if 1
+
 	code =
 		"import java.util.*;\n"
 
@@ -28,19 +28,17 @@ JJString ReadFileFully() {
 		"		boolean b = 5 > 6;\n"
 		"   }\n"
 		"}\n";
-#else
-	code = "int foo;\nfoo = 3 + 4 * 5 + 6;\nwrite foo;\n";
-#endif
 
 	return code;
 }
 static void usage(int argc, const char** argv) {
 }
+using namespace Java;
+
 int main(int argc, const char** argv) {
 	istream*	input  = &cin;
 	ostream*	output = &cout;
 	ostream*	error  = &cerr;
-	ifstream	spl;
 	ifstream	ifs;
 	ofstream	ofs;
 	ofstream	efs;
@@ -48,18 +46,17 @@ int main(int argc, const char** argv) {
 	CharStream *	cs = nullptr;
 
 	try {
-		if (argc == 5) {
-			spl.open(argv[1]);
-			ifs.open(argv[2]);
-			ofs.open(argv[3]);
-			efs.open(argv[4]);
-			if (ifs.is_open() && ofs.is_open() && efs.is_open() && spl.is_open()) {
+		if (argc == 4) {
+			ifs.open(argv[1]);
+			ofs.open(argv[2]);
+			efs.open(argv[3]);
+			if (ifs.is_open() && ofs.is_open() && efs.is_open()) {
 				input = &ifs;	output = &ofs;	error = &efs;
-				sr = new StreamReader(spl);
+				sr = new StreamReader(ifs);
 				cs = new CharStream(sr);
 			}
 			else {
-				cerr << "cannot open spl or in or out or err file" << endl;
+				cerr << "cannot open in or out or err file" << endl;
 				return 8;
 			}
 		} else
@@ -70,19 +67,20 @@ int main(int argc, const char** argv) {
 		}
 		else {
 			usage(argc, argv);
-			return 0;
+			return 4;
 		}
 
 		JavaParserTokenManager *scanner = new JavaParserTokenManager(cs);
 		JavaParser parser(scanner);
+		ofs << "parsing ";
 		parser.CompilationUnit();
+		ofs << "parsed" << endl;
 	} catch (const ParseException& e) {
 		clog << e.expectedTokenSequences << endl;
 	}
 	catch (...) {
 
 	}
-	if (spl.is_open()) spl.close();
 	if (ifs.is_open()) ifs.close();
 	if (ofs.is_open()) ofs.close();
 	if (efs.is_open()) efs.close();

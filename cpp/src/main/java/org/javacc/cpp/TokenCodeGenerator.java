@@ -26,7 +26,7 @@ class TokenCodeGenerator implements org.javacc.parser.TokenCodeGenerator {
       builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "Token.cc"));
       builder.addTools(JavaCCGlobals.toolName);
       builder.addOption(Options.USEROPTION__STATIC, Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC,
-    		  Options.USEROPTION__CPP_TOKEN_INCLUDE, Options.USEROPTION__CPP_TOKEN_INCLUDES, Options.USEROPTION__TOKEN_EXTENDS);
+    		  Options.USEROPTION__CPP_TOKEN_INCLUDE, Options.USEROPTION__CPP_INCLUDES_FOR_TOKEN, Options.USEROPTION__TOKEN_EXTENDS);
 
       builder.printTemplate("/templates/cpp/Token.cc.template");
       builder.switchToIncludeFile();
