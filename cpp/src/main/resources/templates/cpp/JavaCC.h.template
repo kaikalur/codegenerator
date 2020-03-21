@@ -12,6 +12,9 @@
 \#ifndef JAVACC_CHAR_TYPE
 \#define JAVACC_CHAR_TYPE char
 \#define JAVACC_CHAR_TYPE_SIZEOF 1
+\#define JAVACC_WIDE(x) x
+\#else
+\#define JAVACC_WIDE(x) L#x
 \#endif
 
 \#ifndef JAVACC_STRING_TYPE

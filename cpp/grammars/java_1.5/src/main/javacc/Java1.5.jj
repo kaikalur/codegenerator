@@ -28,14 +28,14 @@
 
 options {
 	JAVA_UNICODE_ESCAPE = true;
-	ERROR_REPORTING = false;
+	ERROR_REPORTING = true;
 	STATIC = false;
 	COMMON_TOKEN_ACTION = false;
 	TOKEN_FACTORY = "MyToken";
 	INCLUDE_FOR_TOKEN_MANAGER="MyToken.h";
-	INCLUDES_FOR_PARSER=("ModifierSet.h", "MyToken.h", "ParseException.h");
+	INCLUDE_FOR_PARSER="Parser.jjh";
 	NAMESPACE="Java";
-//	DEBUG_PARSER=true;
+	DEBUG_PARSER=true;
 //	DEBUG_TOKEN_MANAGER=true;
 }
 

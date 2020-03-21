@@ -136,15 +136,17 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     if (Options.getUserTokenManagerInclude().length() > 0) {
     	codeGenerator.println("#include \"" + Options.getUserTokenManagerInclude() +" \"");
     }
-    printInclude(Options.getParserInclude());
+    printInclude(Options.getIncludeForParser());
 
-    List<String> includes = Options.getIncludesForParser();
+/*
+     List<String> includes = Options.getIncludesForParser();
+
     if (includes != null) {
       for (String include : includes) {
           printInclude(include);
       }
     }
-
+ */
     if (Options.getUserTokenManagerConstantInclude().length() > 0) {
       codeGenerator.println("#include \"" + Options.getUserTokenManagerConstantInclude() + "\"");
     } else {

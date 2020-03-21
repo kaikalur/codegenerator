@@ -59,7 +59,7 @@ abstract class JavaHelperFiles {
        * cba -- 2013/07/22 -- previously wired to a typo version of this option
        * -- KEEP_LINE_COL
        */
-      builder.addOption(Options.USEROPTION__TOKEN_EXTENDS, Options.USEROPTION__KEEP_LINE_COLUMN,
+      builder.addOption(Options.USEROPTION__TOKEN_SUPER_CLASS, Options.USEROPTION__KEEP_LINE_COLUMN,
           Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
 
       builder.printTemplate("/templates/Token.template");
