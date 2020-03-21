@@ -603,13 +603,8 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.generateMethodDefHeader("  virtual void ", context.globals().cu_name, "parseError()");
       codeGenerator.println("   {");
       if (Options.getErrorReporting()) {
-    	  codeGenerator.println("#if ( JAVACC_CHAR_TYPE_SIZEOF == 1)");
           codeGenerator.println(
-                  "      std::cerr << \"Parse error at : \" << token->beginLine << \":\" << token->beginColumn << \" after token: \" << addUnicodeEscapes(token->image) << \" encountered: \" << addUnicodeEscapes(getToken(1)->image) << std::endl;");
-          codeGenerator.println("#else");
-          codeGenerator.println(
-                  "      std::wcerr << L\"Parse error at : \" << token->beginLine << L\":\" << token->beginColumn << L\" after token: \" << addUnicodeEscapes(token->image) << L\" encountered: \" << addUnicodeEscapes(getToken(1)->image) << std::endl;");
-          codeGenerator.println("#endif");   	  
+                  "      JAVACC_CERR << JAVACC_WIDE(\"Parse error at : \") << token->beginLine << JAVACC_WIDE(\":\") << token->beginColumn << JAVACC_WIDE(\" after token: \") << addUnicodeEscapes(token->image) << JAVACC_WIDE(\" encountered: \") << addUnicodeEscapes(getToken(1)->image) << std::endl;");
       }
       codeGenerator.println("   }");
       /*
@@ -662,13 +657,11 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.generateMethodDefHeader("virtual void ", context.globals().cu_name, "parseError()");
       codeGenerator.println("   {");
       if (Options.getErrorReporting()) {
-    	  codeGenerator.println("#if ( JAVACC_CHAR_TYPE_SIZEOF == 1)");
           codeGenerator.println(
-                  "      std::cerr << \"Parse error at : \" << token->beginLine << \":\" << token->beginColumn << \" after token: \" << addUnicodeEscapes(token->image) << \" encountered: \" << addUnicodeEscapes(getToken(1)->image) << std::endl;");
-          codeGenerator.println("#else");
-          codeGenerator.println(
-                  "      std::wcerr << L\"Parse error at : \" << token->beginLine << L\":\" << token->beginColumn << L\" after token: \" << addUnicodeEscapes(token->image) << L\" encountered: \" << addUnicodeEscapes(getToken(1)->image) << std::endl;");
-          codeGenerator.println("#endif");   	  
+                  "      JAVACC_CERR << "
+        		  + "JAVACC_WIDE(\"Parse error at : \") << token->beginLine << JAVACC_WIDE(\":\") "
+                  + "<< token->beginColumn << JAVACC_WIDE(\" after token: \") << addUnicodeEscapes(token->image)"
+        		  + " << JAVACC_WIDE(\" encountered: \") << addUnicodeEscapes(getToken(1)->image) << std::endl;");
       }
       codeGenerator.println("   }");
       /*
@@ -742,19 +735,11 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "trace_token(const " + getTypeForToken() + "* token, const char* where)");
       codeGenerator.println("  {");
       codeGenerator.println("    if (trace_enabled()) {");
-      codeGenerator.println("#if (JAVACC_CHAR_TYPE_SIZEOF == 1)");
-      codeGenerator.println("      for (int no = 0; no < indent; no++) { std::clog << \" \"; }");
-      codeGenerator.println("      std::clog << \"Consumed token: \" << addUnicodeEscapes(" 
-    	  + getTokenLabels() + "[token->kind]) << \", '\" << addUnicodeEscapes(token->image);");
-      codeGenerator.println(
-          "      std::clog << \"' at \" << token->beginLine << \":\" << token->beginColumn << *where << std::endl;");
-      codeGenerator.println("#else");
       codeGenerator.println("      for (int no = 0; no < indent; no++) { std::wclog << \" \"; }");
-      codeGenerator.println("      std::wclog << L\"Consumed token: \" << addUnicodeEscapes("
-          + getTokenLabels() + "[token->kind]) << L\", '\" << addUnicodeEscapes(token->image);");
+      codeGenerator.println("      JAVACC_CLOG << JAVACC_WIDE(\"Consumed token: \") << addUnicodeEscapes("
+          + getTokenLabels() + "[token->kind]) << JAVACC_WIDE(\", '\") << addUnicodeEscapes(token->image);");
       codeGenerator.println(
-              "      std::wclog << L\"' at \" << token->beginLine << L\":\" << token->beginColumn << *where << std::endl;");
-      codeGenerator.println("#endif");
+              "      JAVACC_CLOG << JAVACC_WIDE(\"' at \") << token->beginLine << JAVACC_WIDE(\":\") << token->beginColumn << *where << std::endl;");
       codeGenerator.println("    }");
       codeGenerator.println("  }");
       codeGenerator.println("");
@@ -763,21 +748,12 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "trace_scan(const " + getTypeForToken() + "* token, int t2)");
       codeGenerator.println("  {");
       codeGenerator.println("    if (trace_enabled()) {");
-      codeGenerator.println("#if (JAVACC_CHAR_TYPE_SIZEOF == 1)");
-      codeGenerator.println("      for (int no = 0; no < indent; no++) { std::clog << \" \"; }");
-      codeGenerator.println("      std::clog << \"Visited  token: \" << addUnicodeEscapes("
-          + getTokenLabels() + "[token->kind]) << \", '\" << addUnicodeEscapes(token->image);");
-      codeGenerator.println(
-          "      std::clog << \"' at \" << token->beginLine << \":\" << token->beginColumn << \", Expected token: \" << addUnicodeEscapes("
-              + getTokenLabels() + "[t2]) << std::endl;");
-      codeGenerator.println("#else");
       codeGenerator.println("      for (int no = 0; no < indent; no++) { std::wclog << L\" \"; }");
-      codeGenerator.println("      std::wclog << L\"Visited  token: \" << addUnicodeEscapes("
-          + getTokenLabels() + "[token->kind]) << L\", '\" << addUnicodeEscapes(token->image);");
+      codeGenerator.println("      JAVACC_CLOG << JAVACC_WIDE(\"Visited  token: \") << addUnicodeEscapes("
+          + getTokenLabels() + "[token->kind]) << JAVACC_WIDE(\", '\") << addUnicodeEscapes(token->image);");
       codeGenerator.println(
-          "      std::wclog << L\"' at \" << token->beginLine << L\":\" << token->beginColumn << L\", Expected token: \" << addUnicodeEscapes("
+          "      JAVACC_CLOG << JAVACC_WIDE(\"' at \") << token->beginLine << JAVACC_WIDE(\":\") << token->beginColumn << JAVACC_WIDE(\", Expected token: \") << addUnicodeEscapes("
               + getTokenLabels() + "[t2]) << std::endl;");
-      codeGenerator.println("#endif");
       codeGenerator.println("    }");
       codeGenerator.println("  }");
       codeGenerator.println("");

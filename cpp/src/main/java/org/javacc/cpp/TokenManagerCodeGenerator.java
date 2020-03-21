@@ -312,12 +312,9 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     codeGenerator.println();
   }
  
-  private void printWide(String image, boolean needed) {
-	  String prefix = "";
-	  if (needed)
-		  prefix = "L";
+  private void printWide(String image) {
       if (image != null) {
-        codeGenerator.print(prefix + "\"");
+        codeGenerator.print("JAVACC_WIDE(\"");
         for (int j = 0; j < image.length(); j++) {
           if (image.charAt(j) <= 0xff) {
             codeGenerator.print("\\" + Integer.toOctalString(image.charAt(j)));
@@ -329,9 +326,9 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
             codeGenerator.print("\\u" + hexVal);
           }
         }
-        codeGenerator.print("\"");
+        codeGenerator.print("\")");
       } else {
-        codeGenerator.println(prefix + "\"\"");
+        codeGenerator.println("JAVACC_WIDE(\"\")");
       }
   }
   private void dumpMatchInfo(CppCodeBuilder codeGenerator, TokenizerData tokenizerData) {
@@ -350,7 +347,6 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     toSpecial.set(allMatches.size() + 1, true);
     // Kind map.
     codeGenerator.println("static const JJString jjstrLiteralImages[] = {");
-    codeGenerator.println("#if (JAVACC_CHAR_TYPE_SIZEOF == 1)");
 	int k = 0;
     for (int i : allMatches.keySet()) {
 	      TokenizerData.MatchInfo matchInfo = allMatches.get(i);
@@ -373,36 +369,9 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
 	      if (k++ > 0) {
 	        codeGenerator.println(", ");
 	      }
-	      printWide(image, false);
+	      printWide(image);
     }
     codeGenerator.println();
-    codeGenerator.println("#else");
-    k = 0;
-    for (int i : allMatches.keySet()) {
-	      TokenizerData.MatchInfo matchInfo = allMatches.get(i);
-	      switch (matchInfo.matchType) {
-	        case SKIP:
-	          toSkip.set(i);
-	          break;
-	        case SPECIAL_TOKEN:
-	          toSpecial.set(i);
-	          break;
-	        case MORE:
-	          toMore.set(i);
-	          break;
-	        case TOKEN:
-	          toToken.set(i);
-	          break;
-	      }
-	      newStates[i] = matchInfo.newLexState;
-	      String image = matchInfo.image;
-	      if (k++ > 0) {
-	        codeGenerator.println(", ");
-	      }
-	      printWide(image, true);
-  }
-    codeGenerator.println();
-    codeGenerator.println("#endif");
     codeGenerator.println("};");
     codeGenerator.println();
 
