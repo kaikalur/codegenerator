@@ -56,34 +56,31 @@
 					</cpp>
 				</configuration>
 			</plugin>
-<!-- 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>compare-eg1</id>
+						<id>compare-out</id>
 						<phase>test</phase>
 						<goals>
 							<goal>run</goal>
 						</goals>
 						<configuration>
-							<skip>true</skip>
 							<target unless="maven.test.skip">
-								<available file="${project.basedir}/eg1.out" property="isActualAvailable" />
-								<fail unless="isActualAvailable" message="${project.basedir}/eg1.out does not exist!" />
-								<available file="${project.basedir}/eg1.ref" property="isExpectedAvailable" />
-								<fail unless="isExpectedAvailable" message="${project.basedir}/eg1.ref does not exist!" />
+								<available file="${project.basedir}/java/JavaGenerics.out" property="isActualAvailable" />
+								<fail unless="isActualAvailable" message="${project.basedir}/java/JavaGenerics.out does not exist!" />
+								<available file="${project.basedir}/java/JavaGenerics.ref" property="isExpectedAvailable" />
+								<fail unless="isExpectedAvailable" message="${project.basedir}/java/JavaGenerics.ref does not exist!" />
 								<condition property="files.match">
-									<filesmatch file1="${project.basedir}/eg1.out" file2="${project.basedir}/eg1.ref" />
+									<filesmatch file1="${project.basedir}/java/JavaGenerics.out" file2="${project.basedir}/java/JavaGenerics.ref" />
 								</condition>
-								<fail unless="files.match" message="${project.basedir}/eg1.out does not match ${project.basedir}/eg1.ref!" />
+								<fail unless="files.match" message="${project.basedir}/java/JavaGenerics.out does not match ${project.basedir}/java/JavaGenerics.ref!" />
 							</target>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
- -->
-		</plugins>
+ 		</plugins>
 	</build>
 </project>
