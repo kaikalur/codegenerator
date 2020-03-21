@@ -8,10 +8,6 @@
 \#include "TokenManager.h"
 \#include "${parserName}Constants.h"
 
-#if TOKEN_MANAGER_INCLUDE
-\#include "${TOKEN_MANAGER_INCLUDE}"
-#fi
-
 #if INCLUDE_FOR_TOKEN_MANAGER
 \#include "${INCLUDE_FOR_TOKEN_MANAGER}"
 #fi
