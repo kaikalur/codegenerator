@@ -1,5 +1,3 @@
-
-
 bool ${parserName}TokenManager::moveToNextChar() {
   if(input_stream->endOfInput())
     return false;
@@ -51,13 +49,8 @@ void ${parserName}TokenManager::SwitchTo(int lexState)
 {
     if (lexState >= 1 || lexState < 0) {
       JJString message;
-\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-      message += "Error: Ignoring invalid lexical state : ";
-      message += lexState; message += ". State unchanged.";
-\#else
-      message += L"Error: Ignoring invalid lexical state : ";
-      message += lexState; message += L". State unchanged.";
-\#endif
+      message += JAVACC_WIDE(Error: Ignoring invalid lexical state : );
+      message += lexState; message += JAVACC_WIDE(. State unchanged.);
       throw new TokenManagerError(message, INVALID_LEXICAL_STATE);
     } else
       curLexState = lexState;
@@ -74,23 +67,14 @@ int ${parserName}TokenManager::jjRunStringLiteralMatch() {
       int len = (int) stringLiterals[index++];
       int ignoreCase = (int) stringLiterals[index++];
 #if DEBUG_TOKEN_MANAGER
-\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-      std::clog  << "Looking for string literal match of kind: " << stringLiterals[index + len]
-                 << "; token image: " << addUnicodeEscapes(tokenImages[stringLiterals[index + len]])
+      JAVACC_CLOG<< JAVACC_WIDE(Looking for string literal match of kind: ) << stringLiterals[index + len]
+                 << JAVACC_WIDE(; token image:) << JJSPACE 
+                 << JJQUOTE << addUnicodeEscapes(tokenImages[stringLiterals[index + len]]) << JJQUOTE
                  << std::endl;
-\#else
-      std::wclog << L"Looking for string literal match of kind: " << stringLiterals[index + len]
-                 << L"; token image: " << addUnicodeEscapes(tokenImages[stringLiterals[index + len]])
-                 << std::endl;
-\#endif
 #fi
       do {
 #if DEBUG_TOKEN_MANAGER
-\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-        std::clog  <<  "  Current character: '" << ((char)curChar) <<  "'" << std::endl;
-\#else
-        std::wclog << L"  Current character: '" << ((char)curChar) << L"'" << std::endl;
-\#endif
+        JAVACC_CLOG << JJSPACE << JJSPACE << JAVACC_WIDE(Current character:) << JJSPACE << JJQUOTE  << ((char)curChar) << JJQUOTE << std::endl;
 #fi
         if (curChar != stringLiterals[index + curPos] &&
             (ignoreCase == 0 || curChar != stringLiterals[index + len + curPos])) break;
@@ -105,17 +89,11 @@ int ${parserName}TokenManager::jjRunStringLiteralMatch() {
         jjmatchedPos = curPos;
         startState = (int) stringLiterals[index + len + (ignoreCase * len) + 1];
 #if DEBUG_TOKEN_MANAGER
-\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-        std::clog <<  "Currently matched the first: " << jjmatchedPos
-            <<  " chars as kind: " << stringLiterals[index + len]
-            <<  "; with image: " << addUnicodeEscapes(tokenImages[jjmatchedKind])
-            << std::endl;
-\#else
-        std::wclog << L"Currently matched the first: " << jjmatchedPos
-            << L" chars as kind: " << stringLiterals[index + len]
-            << L"; with image: " << addUnicodeEscapes(tokenImages[jjmatchedKind])
-            << std::endl;
-\#endif
+        JAVACC_CLOG << JJSPACE << JJSPACE 
+                    << JAVACC_WIDE(Currently matched the first:) << JJSPACE << jjmatchedPos << JJSPACE
+                    << JAVACC_WIDE(chars as kind:) << JJSPACE << stringLiterals[index + len]
+                    << JAVACC_WIDE(, with image:) << JJSPACE << addUnicodeEscapes(tokenImages[jjmatchedKind])
+                    << std::endl;
 #fi
         if (!moveToNextChar()) {
           return curPos;
@@ -133,11 +111,7 @@ int ${parserName}TokenManager::jjRunStringLiteralMatch() {
     }
   } else {
 #if DEBUG_TOKEN_MANAGER
-\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-      std::clog  <<  "No string literal start with char: '" << ((char)curChar) <<  "'" << std::endl;
-\#else
-      std::wclog << L"No string literal start with char: '" << ((char)curChar) << L"'" << std::endl;
-\#endif
+	JAVACC_CLOG << JAVACC_WIDE(No string literal start with char:) << JJSPACE << JJQUOTE << ((char)curChar) << JJQUOTE << std::endl;
 #fi
   }
   return jjMoveNfa(startState, curPos);
@@ -148,11 +122,7 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
 
   if (startState < 0) {
 #if DEBUG_TOKEN_MANAGER
-\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-    std::clog  <<  "No NFA state at pos: " << curPos << std::endl;
-\#else
-    std::wclog << L"No NFA state at pos: " << curPos << std::endl;
-\#endif
+    JAVACC_CLOG << JAVACC_WIDE(No NFA state at pos:) << JJSPACE << curPos << std::endl;
 #fi
     return curPos;
   }
@@ -183,19 +153,11 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
   }
 
 #if DEBUG_TOKEN_MANAGER
-\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-  std::clog  <<  "Starting NFA with start state: " << startState << std::endl;
-\#else
-  std::wclog << L"Starting NFA with start state: " << startState << std::endl;
-\#endif
+  JAVACC_CLOG << JAVACC_WIDE(Starting NFA with start state: ) << JJSPACE << startState << std::endl;
 #fi
   do {
 #if DEBUG_TOKEN_MANAGER
-\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-    std::clog  <<  "Current character: '" << (char)curChar <<  "'" << std::endl;
-\#else
-    std::wclog << L"Current character: '" << (char)curChar << L"'" << std::endl;
-\#endif
+    JAVACC_CLOG << JAVACC_WIDE(Current character:) << JJSPACE << JJQUOTE << (char)curChar << JJQUOTE << std::endl;
 #fi
     int newCnt = 0;
     int kind = 0x7fffffff;
@@ -210,17 +172,10 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
     do {
       int state = stateSet[--cnt];
 #if DEBUG_TOKEN_MANAGER
-\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-      std::clog  << "Looking to move from state: " << state << " for: "
+      JAVACC_CLOG<< JAVACC_WIDE(Looking to move from state: ) << JJSPACE << state << JJSPACE << JAVACC_WIDE(for:) << JJSPACE
                  << (jjmatchKinds[state] != 0x7fffffff
-                    ? addUnicodeEscapes(tokenImages[jjmatchKinds[state]]) :  " <UNKNOWN>")
+                    ? addUnicodeEscapes(tokenImages[jjmatchKinds[state]]) : JAVACC_WIDE( <UNKNOWN>))
                  << std::endl;
-\#else
-      std::wclog << L"Looking to move from state: " << state << L" for: "
-                 << (jjmatchKinds[state] != 0x7fffffff
-                    ? addUnicodeEscapes(tokenImages[jjmatchKinds[state]]) : L" <UNKNOWN>")
-                 << std::endl;
-\#endif
 #fi
       if ((jjChars[state][vectorIndex] & bitpattern) != 0L) {
         // Current input character can move this NFA state. So add all the
@@ -239,15 +194,9 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
           // what's already matched.
           kind = newKind;
 #if DEBUG_TOKEN_MANAGER
-\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-          std::clog  <<  "Found a match of kind: " << kind << "; kind: "
-                     <<  addUnicodeEscapes(tokenImages[kind]) <<  " using the first: " << curPos
-                     <<  " characters." << std::endl;
-\#else
-          std::wclog << L"Found a match of kind: " << kind << L"; kind: "
-                     <<  addUnicodeEscapes(tokenImages[kind]) << L" using the first: " << curPos
-                     << L" characters." << std::endl;
-\#endif
+          JAVACC_CLOG<< JAVACC_WIDE(Found a match of kind: ) << kind << JAVACC_WIDE(; kind: ) << JJSPACE
+                     << addUnicodeEscapes(tokenImages[kind]) << JJSPACE << JAVACC_WIDE(using the first:) << JJSPACE
+                     << curPos << JJSPACE << JAVACC_WIDE(characters.) << std::endl;
 #fi
         }
       }
@@ -275,11 +224,7 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
       // There were no transitions from any of the current states on the
       // current input. So we are done.
 #if DEBUG_TOKEN_MANAGER
-\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-      std::clog  <<  "Done with NFA at pos: " << curPos << std::endl;
-\#else
-      std::wclog << L"Done with NFA at pos: " << curPos << std::endl;
-\#endif
+      JAVACC_CLOG << JAVACC_WIDE(Done with NFA at pos: ) << JJSPACE << curPos << std::endl;
 #fi
       return curPos;
     }
@@ -287,11 +232,7 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
     if (!moveToNextChar()) {
       // EOF reached!
 #if DEBUG_TOKEN_MANAGER
-\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-      std::clog  <<  "Reached EOF here at pos: " << curPos << std::endl;
-\#else
-      std::wclog << L"Reached EOF here at pos: " << curPos << std::endl;
-\#endif
+      JAVACC_CLOG << JAVACC_WIDE(Reached EOF here at pos: ) << JJSPACE << curPos << std::endl;
 #fi
       return curPos;
     }
@@ -329,11 +270,7 @@ Token * ${parserName}TokenManager::jjFillToken() {
 #fi
   if (jjmatchedPos < 0) {
     if (image.length() == 0) {
-\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-      curTokenImage = "";
-\#else
-      curTokenImage = L"";
-\#endif
+      curTokenImage = JJEMPTY;
     } else {
       curTokenImage = image;
     }
@@ -382,17 +319,10 @@ Token * ${parserName}TokenManager::getNextToken() {
   for (;;) {
     if(input_stream->endOfInput()) {
 #if DEBUG_TOKEN_MANAGER
-\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-      std::clog  <<  "<" << addUnicodeEscapes(lexStateNames[curLexState]) << "> " 
-                 <<  "Reached EOF at " << input_stream->getBeginLine()
-                 <<  ":" << input_stream->getBeginColumn()
+      JAVACC_CLOG<< JAVACC_WIDE(<) << addUnicodeEscapes(lexStateNames[curLexState]) << JAVACC_WIDE(> )  << JJSPACE
+                 << JAVACC_WIDE(Reached EOF at ) << JJSPACE << input_stream->getBeginLine()
+                 << JAVACC_WIDE(:) << input_stream->getBeginColumn()
                  << std::endl;
-\#else
-      std::wclog << L"<" << addUnicodeEscapes(lexStateNames[curLexState]) << L"> " 
-                 << L"Reached EOF at " << input_stream->getBeginLine()
-                 << L":" << input_stream->getBeginColumn()
-                 << std::endl;
-\#endif
 #fi
       // No input. So return EOF token.
       jjmatchedKind = _EOF;
@@ -409,19 +339,11 @@ Token * ${parserName}TokenManager::getNextToken() {
 #fi
 
 #if DEBUG_TOKEN_MANAGER
-\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-      std::clog  <<  "<" << addUnicodeEscapes(lexStateNames[curLexState]) << "> " 
-                 <<  " Current character: '" << (char)curChar
-                 <<  "' at " << input_stream->getBeginLine()
-                 <<  ":" << input_stream->getBeginColumn()
-                 <<  std::endl;
-\#else
-      std::wclog << L"<" << addUnicodeEscapes(lexStateNames[curLexState]) << L"> " 
-                 << L" Current character: '" << (char)curChar
-                 << "' at " << input_stream->getBeginLine()
-                 << L":" << input_stream->getBeginColumn()
+      JAVACC_CLOG<< JAVACC_WIDE(<) << addUnicodeEscapes(lexStateNames[curLexState]) << JAVACC_WIDE(>)  << JJSPACE
+                 << JAVACC_WIDE( Current character:) << JJSPACE << JJQUOTE << (char)curChar << JJQUOTE << JJSPACE
+                 << JAVACC_WIDE( at ) << JJSPACE << input_stream->getBeginLine()
+                 << JAVACC_WIDE(:) << input_stream->getBeginColumn()
                  << std::endl;
-\#endif
 #fi
 
     // Set matched kind to a MAX VALUE to implement largest, first occuring rule
@@ -441,15 +363,9 @@ Token * ${parserName}TokenManager::getNextToken() {
       if (jjmatchedPos == 0 && jjmatchedKind > canMatchAnyChar[curLexState]) {
         jjmatchedKind = canMatchAnyChar[curLexState];
 #if DEBUG_TOKEN_MANAGER
-\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-        std::clog  << "Matched current char: '" << (char)curChar
-                   <<  "' as a wildcard kind: " << jjmatchedKind
+        JAVACC_CLOG<< JAVACC_WIDE(Matched current char:) << JJSPACE << JJQUOTE << (char)curChar << JJQUOTE << JJSPACE 
+                   << JAVACC_WIDE(as a wildcard kind:)  << JJSPACE << jjmatchedKind
                    << std::endl;
-\#else
-        std::wclog << L"Matched current char: '" << (char)curChar
-                   << L"' as a wildcard kind: " << jjmatchedKind
-                   << std::endl;
-\#endif
 #fi
       }
 
@@ -470,21 +386,15 @@ Token * ${parserName}TokenManager::getNextToken() {
           CommonTokenAction(matchedToken);
 #fi
 #if DEBUG_TOKEN_MANAGER
-\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-          std::clog  <<  "Returning token: '"  << addUnicodeEscapes(matchedToken->image) << "'"  << std::endl;
-\#else
-          std::wclog << L"Returning token: '"  << addUnicodeEscapes(matchedToken->image) << L"'" << std::endl;
-\#endif
+          JAVACC_CLOG << JAVACC_WIDE(Returning token:) << JJSPACE << JJQUOTE
+                      << addUnicodeEscapes(matchedToken->image) << JJQUOTE << JJSPACE
+                      << std::endl;
 #fi
           return matchedToken;
         } else
         if (isSkip(jjmatchedKind) || isSpecial(jjmatchedKind)) {
 #if DEBUG_TOKEN_MANAGER
-\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-          std::clog  <<  "Found a SKIP match." << std::endl;
-\#else
-          std::wclog << L"Found a SKIP match." << std::endl;
-\#endif
+          JAVACC_CLOG << JAVACC_WIDE(Found a SKIP match.) << std::endl;
 #fi
           // Matched kind is a SKIP or SPECIAL_TOKEN.
           if (isSpecial(jjmatchedKind)) {
@@ -505,11 +415,7 @@ Token * ${parserName}TokenManager::getNextToken() {
           goto EOFLoop;
         }
 #if DEBUG_TOKEN_MANAGER
-\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-        std::clog  <<  "Found a MORE match." << std::endl;
-\#else
-        std::wclog << L"Found a MORE match." << std::endl;
-\#endif
+        JAVACC_CLOG << JAVACC_WIDE(Found a MORE match.) << std::endl;
 #fi
         // Here it's a MORE.
         moreLexicalActions();
@@ -527,20 +433,12 @@ Token * ${parserName}TokenManager::getNextToken() {
       }
       int error_line = input_stream->getEndLine();
       int error_column = input_stream->getEndColumn();
-\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-      JJString error_after = "";
-\#else
-     JJString error_after = L"";
-\#endif
+      JJString error_after = JJEMPTY;
       bool EOFSeen = false;
 
       if(input_stream->endOfInput()) {
         EOFSeen = true;
-\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-        error_after = lastReadPosition <= 1 ? ""  : input_stream->getImage();
-\#else
-        error_after = lastReadPosition <= 1 ? L"" : input_stream->getImage();
-\#endif
+        error_after = lastReadPosition <= 1 ? JJEMPTY : input_stream->getImage();
         if (curChar == '\n' || curChar == '\r') {
            error_line++;
            error_column = 0;
@@ -549,11 +447,7 @@ Token * ${parserName}TokenManager::getNextToken() {
            error_column++;
       }
       if (!EOFSeen) {
-\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-        error_after = lastReadPosition <= 1 ? ""  : input_stream->getImage();
-\#else
-        error_after = lastReadPosition <= 1 ? L"" : input_stream->getImage();
-\#endif
+        error_after = lastReadPosition <= 1 ? JJEMPTY : input_stream->getImage();
       }
       errorHandler->lexicalError(EOFSeen, curLexState, error_line, error_column, error_after, curChar, this);
       goto EOFLoop;

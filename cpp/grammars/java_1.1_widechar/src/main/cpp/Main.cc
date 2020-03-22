@@ -40,6 +40,7 @@ int main(int argc, char **argv) {
 	s = readHelloWorld();
   else
 	s = ReadFileFully(argv[1]);
+  std::wclog << s;
   CharStream *stream = new CharStream(s.c_str(), s.size() - 1, 1, 1);
   JavaParserTokenManager *scanner = new JavaParserTokenManager(stream);
   JavaParser parser(scanner);
@@ -47,7 +48,7 @@ int main(int argc, char **argv) {
   Node *root = (Node*)parser.jjtree.peekNode();
 #if 0
   if (root) {
-    JJString buffer;
+    JJString buffer; 
 #if (JAVACC_CHAR_TYPE_SIZEOF != 1)
    	root->dumpToBuffer(L" ", L"\n", &buffer);
     wcout << buffer << "\n";

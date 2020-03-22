@@ -314,7 +314,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
  
   private void printWide(String image) {
       if (image != null) {
-        codeGenerator.print("JAVACC_WIDE(\"");
+        codeGenerator.print("JAVACC_WIDE(");
         for (int j = 0; j < image.length(); j++) {
           if (image.charAt(j) <= 0xff) {
             codeGenerator.print("\\" + Integer.toOctalString(image.charAt(j)));
@@ -326,9 +326,9 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
             codeGenerator.print("\\u" + hexVal);
           }
         }
-        codeGenerator.print("\")");
+        codeGenerator.print(")");
       } else {
-        codeGenerator.println("JAVACC_WIDE(\"\")");
+        codeGenerator.print("JJEMPTY");
       }
   }
   private void dumpMatchInfo(CppCodeBuilder codeGenerator, TokenizerData tokenizerData) {

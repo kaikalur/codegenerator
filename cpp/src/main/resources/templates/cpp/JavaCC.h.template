@@ -16,7 +16,7 @@
 \#define JAVACC_COUT std::cout
 \#define JAVACC_CERR std::cerr
 \#define JAVACC_CLOG std::clog
-\#define JAVACC_WIDE(x) x
+\#define JAVACC_WIDE(x) #x
 \#else
 \#define JAVACC_CIN  std::wcin
 \#define JAVACC_COUT std::wcout
@@ -34,6 +34,11 @@
 typedef JAVACC_CHAR_TYPE      JJChar;
 typedef JAVACC_STRING_TYPE    JJString;
 typedef JAVACC_SIMPLE_STRING  JJSimpleString;
+
+static const JJChar JJEMPTY[] = { 0 };
+static const JJChar JJSPACE[] = { ' ', 0 };
+static const JJChar JJCOMMA[] = { ',', 0 };
+static const JJChar JJQUOTE[] = { '\'', 0 };
 
 // Abstraction on stream classes to read a block of data into a buffer.
 class ReaderStream {
