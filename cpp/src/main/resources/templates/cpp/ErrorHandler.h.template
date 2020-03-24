@@ -26,17 +26,10 @@ public:
   // actual - the actual token that the parser got instead.
   virtual void handleUnexpectedToken(int expectedKind, const JJString& expectedImage, const JJString& expectedLabel, const ${USER_TOKEN_TYPE}* actual, ${PARSER_NAME}* parser) {
     error_count++;
-\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-     std::clog 
-       << "Expecting " << addUnicodeEscapes(expectedImage) << " at: " 
-       << actual->beginLine << ":" << actual->beginColumn << " but got " 
+     JAVACC_CLOG 
+       << JAVACC_WIDE(Expecting) << JJSPACE << addUnicodeEscapes(expectedImage) << JJSPACE << JAVACC_WIDE(at) << JJSPACE 
+       << actual->beginLine << JAVACC_WIDE(:) << actual->beginColumn << JJSPACE << JAVACC_WIDE(but got) << JJSPACE 
        << addUnicodeEscapes(actual->image) << std::endl;
-\#else
-     std::wclog 
-       << L"Expecting " << addUnicodeEscapes(expectedImage) << L" at: " 
-       << actual->beginLine << L":" << actual->beginColumn << L" but got " 
-       << addUnicodeEscapes(actual->image) << std::endl;
-\#endif
   }
       
       
@@ -46,16 +39,9 @@ public:
   // production - the production in which this error occurrs.
   virtual void handleParseError(const Token* last, const ${USER_TOKEN_TYPE}* unexpected, const JJSimpleString& production, ${PARSER_NAME}* parser) {
     error_count++;
-\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-    std::clog 
-        << "Encountered: " << addUnicodeEscapes(unexpected->image) << " at: " 
-        << unexpected->beginLine << ":" << unexpected->beginColumn << "while parsing: " << production << std::endl;
-\#else
-\#define JAVACC_WIDEN(x) L#x
-    std::wclog 
-        << L"Encountered: " << addUnicodeEscapes(unexpected->image) << L" at: " 
-        << unexpected->beginLine << L":" << unexpected->beginColumn << L"while parsing: " << JAVACC_WIDEN(production) << std::endl;
-\#endif
+    JAVACC_CLOG 
+        << JAVACC_WIDE(Encountered:) << JJSPACE << addUnicodeEscapes(unexpected->image) << JJSPACE<< JAVACC_WIDE(at) << JJSPACE
+        << unexpected->beginLine << JAVACC_WIDE(:) << unexpected->beginColumn << JAVACC_WIDE(while parsing:) << JJSPACE << JAVACC_WIDE(production) << std::endl;
   }
       
   virtual int getErrorCount() {
@@ -63,11 +49,7 @@ public:
   }
       
   virtual void handleOtherError(const JJString& message, ${PARSER_NAME}* parser) {
-\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-    std::clog <<  "Error: "  << message << std::endl;
-\#else
-    std::wclog << L"Error: " << message << std::endl;
-\#endif
+    JAVACC_CLOG << JAVACC_WIDE(Error:) << JJSPACE  << message << std::endl;
   }
 
 protected:
@@ -97,23 +79,13 @@ public:
   //    curchar     : the offending character
   //
   virtual void lexicalError(bool EOFSeen, int lexState, int errorLine, int errorColumn, JJString errorAfter, JJChar curChar, ${PARSER_NAME}TokenManager* tokenManager) {
-\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-    std::clog 
-      << "Lexical error at: " << errorLine << ":" << errorColumn << "."
-      << " Encountered: " << curChar << " after: " << errorAfter << "." << std::endl;
-\#else
-    std::wclog 
-      << L"Lexical error at: " << errorLine << L":" << errorColumn << L"."
-      << L" Encountered: " << curChar << L" after: " << errorAfter << L"." << std::endl;
-\#endif
+    JAVACC_CLOG 
+      << JAVACC_WIDE(Lexical error at)  << JJSPACE << errorLine << JAVACC_WIDE(:) << errorColumn << JAVACC_WIDE(.)
+      << JAVACC_WIDE( Encountered:)  << JJSPACE << curChar <<JAVACC_WIDE( after:)  << JJSPACE << errorAfter << JAVACC_WIDE(.) << std::endl;
   }
       
   virtual void lexicalError(const JJString& errorMessage, ${PARSER_NAME}TokenManager* tokenManager) {
-\#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-    std::clog  << errorMessage << std::endl;
-\#else
-    std::wclog << errorMessage << std::endl;
-\#endif
+    JAVACC_CLOG << errorMessage << std::endl;
   }
 };
 #fi
