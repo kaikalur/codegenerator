@@ -68,7 +68,7 @@ int ${parserName}TokenManager::jjRunStringLiteralMatch() {
       int ignoreCase = (int) stringLiterals[index++];
 #if DEBUG_TOKEN_MANAGER
       JAVACC_CLOG<< JAVACC_WIDE(Looking for string literal match of kind: ) << stringLiterals[index + len]
-                 << JAVACC_WIDE(; token image:) << JJSPACE 
+                 << JJSPACE << JAVACC_WIDE(token image:) << JJSPACE 
                  << JJQUOTE << addUnicodeEscapes(tokenImages[stringLiterals[index + len]]) << JJQUOTE
                  << std::endl;
 #fi
@@ -153,11 +153,11 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
   }
 
 #if DEBUG_TOKEN_MANAGER
-  JAVACC_CLOG << JAVACC_WIDE(Starting NFA with start state: ) << JJSPACE << startState << std::endl;
+  JAVACC_CLOG << JAVACC_WIDE(Starting NFA with start state:) << JJSPACE << startState << std::endl;
 #fi
   do {
 #if DEBUG_TOKEN_MANAGER
-    JAVACC_CLOG << JAVACC_WIDE(Current character:) << JJSPACE << JJQUOTE << (char)curChar << JJQUOTE << std::endl;
+    JAVACC_CLOG << JJSPACE << JJSPACE << JAVACC_WIDE(Current character:) << JJSPACE << JJQUOTE << (char)curChar << JJQUOTE << std::endl;
 #fi
     int newCnt = 0;
     int kind = 0x7fffffff;
@@ -195,7 +195,7 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
           kind = newKind;
 #if DEBUG_TOKEN_MANAGER
           JAVACC_CLOG<< JAVACC_WIDE(Found a match of kind: ) << kind << JAVACC_WIDE(; kind: ) << JJSPACE
-                     << addUnicodeEscapes(tokenImages[kind]) << JJSPACE << JAVACC_WIDE(using the first:) << JJSPACE
+                     << addUnicodeEscapes(tokenLabels[kind]) << JJSPACE << JAVACC_WIDE(using the first:) << JJSPACE
                      << curPos << JJSPACE << JAVACC_WIDE(characters.) << std::endl;
 #fi
         }
@@ -339,8 +339,8 @@ Token * ${parserName}TokenManager::getNextToken() {
 #fi
 
 #if DEBUG_TOKEN_MANAGER
-      JAVACC_CLOG<< JAVACC_WIDE(<) << addUnicodeEscapes(lexStateNames[curLexState]) << JAVACC_WIDE(>)  << JJSPACE
-                 << JAVACC_WIDE( Current character:) << JJSPACE << JJQUOTE << (char)curChar << JJQUOTE << JJSPACE
+      JAVACC_CLOG<< JAVACC_WIDE(<) << addUnicodeEscapes(lexStateNames[curLexState]) << JAVACC_WIDE(>)  << std::endl 
+      			 << JJSPACE << JJSPACE << JAVACC_WIDE( Current character:) << JJSPACE << JJQUOTE << (char)curChar << JJQUOTE << JJSPACE
                  << JAVACC_WIDE( at ) << JJSPACE << input_stream->getBeginLine()
                  << JAVACC_WIDE(:) << input_stream->getBeginColumn()
                  << std::endl;
