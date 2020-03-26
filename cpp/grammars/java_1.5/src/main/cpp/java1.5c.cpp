@@ -70,7 +70,7 @@ int main(int argc, const char** argv) {
 			return 4;
 		}
 
-		JavaParserTokenManager *scanner = new JavaParserTokenManager(cs);
+		TokenManager *scanner = new JavaParserTokenManager(cs);
 		JavaParser parser(scanner);
 		ofs << "parsing ";
 		parser.CompilationUnit();

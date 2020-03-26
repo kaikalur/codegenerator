@@ -39,10 +39,11 @@ options {
   TOKEN_SUPER_CLASS = "TokenBase";
   INCLUDE_FOR_TOKEN = "TokenBase.h";
   DEBUG_PARSER = true;
-  DEBUG_TOKEN_MANAGER = true;
+  //DEBUG_TOKEN_MANAGER = true;
   //DEBUG_LOOKAHEAD = true;
   COMMON_TOKEN_ACTION = true;
   TOKEN_MANAGER_USES_PARSER = true;
+  BUILD_TOKEN_MANAGER = true;
 }
 
 PARSER_BEGIN(JavaParser)
