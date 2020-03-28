@@ -112,9 +112,9 @@ class Token
    * to the following switch statement. Then you can cast matchedToken
    * variable to the appropriate type and use sit in your lexical actions.
    */
-  static Token *newToken(int ofKind, const JJString& image);
+  static Token* newToken(int ofKind, const JJString& image);
 
-  static Token *newToken(int ofKind);
+  static Token* newToken(int ofKind);
 };
 
 #if NAMESPACE
