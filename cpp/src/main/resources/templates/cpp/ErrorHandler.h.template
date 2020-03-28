@@ -21,27 +21,28 @@ public:
     virtual ~ErrorHandler() {}
       
   // Called when the parser encounters a different token when expecting to consume a specific kind of token.
-  // expectedKind - token kind that the parser was trying to consume.
+  // expectedKind  - token kind that the parser was trying to consume.
   // expectedToken - the image of the token - tokenImages[expectedKind].
-  // actual - the actual token that the parser got instead.
+  // actual        - the actual token that the parser got instead.
   virtual void handleUnexpectedToken(int expectedKind, const JJString& expectedImage, const JJString& expectedLabel, const ${USER_TOKEN_TYPE}* actual, ${PARSER_NAME}* parser) {
     error_count++;
      JAVACC_CLOG 
-       << JAVACC_WIDE(Expecting) << JJSPACE << addUnicodeEscapes(expectedImage) << JJSPACE << JAVACC_WIDE(at) << JJSPACE 
-       << actual->beginLine << JAVACC_WIDE(:) << actual->beginColumn << JJSPACE << JAVACC_WIDE(but got) << JJSPACE 
-       << addUnicodeEscapes(actual->image) << std::endl;
+       << JAVACC_WIDE(Expecting) << JJSPACE << addUnicodeEscapes(expectedLabel) << JAVACC_WIDE(:) << JJQUOTE << addUnicodeEscapes(expectedImage) << JJQUOTE
+       << JJSPACE << JAVACC_WIDE(at) << JJSPACE << actual->beginLine << JAVACC_WIDE(:) << actual->beginColumn << JJSPACE 
+       << JAVACC_WIDE(but got) << JJSPACE << JJQUOTE << addUnicodeEscapes(actual->image) << JJQUOTE << std::endl;
   }
       
       
   // Called when the parser cannot continue parsing.
-  // last - the last token successfully parsed.
-  // unexpected - the token at which the error occurs.
-  // production - the production in which this error occurrs.
-  virtual void handleParseError(const Token* last, const ${USER_TOKEN_TYPE}* unexpected, const JJSimpleString& production, ${PARSER_NAME}* parser) {
+  // last         - the last token successfully parsed.
+  // unexpected   - the token at which the error occurs.
+  // production   - the production in which this error occurs.
+  virtual void handleParseError(const Token* last, const ${USER_TOKEN_TYPE}* unexpected, const JJString& production, ${PARSER_NAME}* parser) {
     error_count++;
     JAVACC_CLOG 
-        << JAVACC_WIDE(Encountered:) << JJSPACE << addUnicodeEscapes(unexpected->image) << JJSPACE<< JAVACC_WIDE(at) << JJSPACE
-        << unexpected->beginLine << JAVACC_WIDE(:) << unexpected->beginColumn << JAVACC_WIDE(while parsing:) << JJSPACE << JAVACC_WIDE(production) << std::endl;
+        << JAVACC_WIDE(Encountered:) << JJSPACE << JJQUOTE << addUnicodeEscapes(unexpected->image) << JJQUOTE << JJSPACE 
+        << JAVACC_WIDE(at) << JJSPACE << unexpected->beginLine << JAVACC_WIDE(:) << unexpected->beginColumn 
+        << JAVACC_WIDE(while parsing:) << JJSPACE << production << std::endl;
   }
       
   virtual int getErrorCount() {
