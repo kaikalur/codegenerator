@@ -51,7 +51,7 @@ int main(int argc, char**argv) {
 		if (argc == 1) {
 			JJString s = ReadFileFully();
 			*output << s << endl;
-			cs = new CharStream(s.c_str(), s.size() - 1, 1, 1);
+			cs = new CharStream(s, 1, 1);
 		}
 		else {
 			usage(argc, argv);
