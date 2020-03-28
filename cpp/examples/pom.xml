@@ -18,6 +18,7 @@
 		<module>Interpreter</module>
 		<module>JJTreeExamples</module>
 		<module>MailProcessing</module>
+		<module>UserTokenManager</module>
 	</modules>
 	<build>
 		<pluginManagement>
