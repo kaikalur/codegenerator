@@ -1365,7 +1365,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("  jj_depth_error = true;");
       codeGenerator.println("  jj_consume_token(-1);");
       codeGenerator
-      .println("  errorHandler->handleParseError(token, getToken(1), __FUNCTION__, this), hasError = true;");
+      .println("  errorHandler->handleParseError(token, getToken(1), JAVACC_WIDE(__FUNCTION__), this), hasError = true;");
       if (!voidReturn) {
         codeGenerator.println("  return __ERROR_RET__;"); // Non-recoverable
         // error
@@ -1519,7 +1519,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       conds = new Lookahead[e_nrw.getChoices().size()];
       actions = new String[e_nrw.getChoices().size() + 1];
       actions[e_nrw.getChoices().size()] = "\n" + "jj_consume_token(-1);\n"
-          + "errorHandler->handleParseError(token, getToken(1), __FUNCTION__, this), hasError = true;"
+          + "errorHandler->handleParseError(token, getToken(1), JAVACC_WIDE(__FUNCTION__), this), hasError = true;"
           + (Options.booleanValue(Options.USEROPTION__CPP_STOP_ON_FIRST_ERROR) ? "return __ERROR_RET__;\n" : "");
 
       // In previous line, the "throw" never throws an exception since the
