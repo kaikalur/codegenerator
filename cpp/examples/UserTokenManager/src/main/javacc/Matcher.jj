@@ -3,6 +3,7 @@ options {
 	BUILD_TOKEN_MANAGER=false;
 	USER_TOKEN_MANAGER=true;
 	NAMESPACE="Basic";
+	DEBUG_PARSER=true;
 }	
 PARSER_BEGIN(Matcher)
 static const int simple = 4;
