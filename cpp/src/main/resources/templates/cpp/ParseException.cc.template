@@ -8,7 +8,7 @@ namespace ${NAMESPACE_OPEN}
   ParseException::ParseException(const JJString& message) {
   }
 
-  ParseException::ParseException(const Token& currentToken, const int** expectedTokenSequences, const JJString* tokenImage)
+  ParseException::ParseException(const Token* currentToken, const int** expectedTokenSequences, const JJString* tokenImage)
   {
     initialise(currentToken, expectedTokenSequences, tokenImage);
     this->currentToken = currentToken;
@@ -16,7 +16,7 @@ namespace ${NAMESPACE_OPEN}
     this->tokenImage = tokenImage;
   }
 
-  JJString ParseException::initialise(const Token& currentToken, const int** expectedTokenSequences, const JJString* tokenImage) {
+  JJString ParseException::initialise(const Token* currentToken, const int** expectedTokenSequences, const JJString* tokenImage) {
 \#if 0
     //JJString eol = System.getProperty("line.separator", "\n");
      expected = new JJString();

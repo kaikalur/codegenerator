@@ -3,7 +3,7 @@
 
 \#include "JavaCC.h"
 \#include "CharStream.h"
-\#include "Token.h"
+\#include "DefaultToken.h"
 \#include "ErrorHandler.h"
 \#include "TokenManager.h"
 \#include "${parserName}Constants.h"

@@ -28,8 +28,8 @@ public:
     error_count++;
      JAVACC_CLOG 
        << JAVACC_WIDE(Expecting) << JJSPACE << addUnicodeEscapes(expectedLabel) << JAVACC_WIDE(:) << JJQUOTE << addUnicodeEscapes(expectedImage) << JJQUOTE
-       << JJSPACE << JAVACC_WIDE(at) << JJSPACE << actual->beginLine << JAVACC_WIDE(:) << actual->beginColumn << JJSPACE 
-       << JAVACC_WIDE(but got) << JJSPACE << JJQUOTE << addUnicodeEscapes(actual->image) << JJQUOTE << std::endl;
+       << JJSPACE << JAVACC_WIDE(at) << JJSPACE << actual->beginLine() << JAVACC_WIDE(:) << actual->beginColumn() << JJSPACE 
+       << JAVACC_WIDE(but got) << JJSPACE << JJQUOTE << addUnicodeEscapes(actual->image()) << JJQUOTE << std::endl;
   }
       
       
@@ -40,8 +40,8 @@ public:
   virtual void handleParseError(const Token* last, const ${USER_TOKEN_TYPE}* unexpected, const JJString& production, ${PARSER_NAME}* parser) {
     error_count++;
     JAVACC_CLOG 
-        << JAVACC_WIDE(Encountered:) << JJSPACE << JJQUOTE << addUnicodeEscapes(unexpected->image) << JJQUOTE << JJSPACE 
-        << JAVACC_WIDE(at) << JJSPACE << unexpected->beginLine << JAVACC_WIDE(:) << unexpected->beginColumn 
+        << JAVACC_WIDE(Encountered:) << JJSPACE << JJQUOTE << addUnicodeEscapes(unexpected->image()) << JJQUOTE << JJSPACE 
+        << JAVACC_WIDE(at) << JJSPACE << unexpected->beginLine() << JAVACC_WIDE(:) << unexpected->beginColumn() 
         << JAVACC_WIDE(while parsing:) << JJSPACE << production << std::endl;
   }
       

@@ -292,18 +292,18 @@ Token * ${parserName}TokenManager::jjFillToken() {
 #if TOKEN_FACTORY
     t = ${TOKEN_FACTORY}::newToken(jjmatchedKind, curTokenImage);
 #elif BINARY_NEW_TOKEN
-    t = Token::newToken(jjmatchedKind, curTokenImage);
+    t = DefaultToken::newToken(jjmatchedKind, curTokenImage);
 #else
-   t = Token::newToken(jjmatchedKind);
-   t->kind = jjmatchedKind;
-   t->image = curTokenImage;
+   t = DefaultToken::newToken(jjmatchedKind);
+   t->kind() = jjmatchedKind;
+   t->image() = curTokenImage;
 #fi
 
 #if KEEP_LINE_COLUMN
-   t->beginLine = beginLine;
-   t->endLine = endLine;
-   t->beginColumn = beginColumn;
-   t->endColumn = endColumn;
+   t->beginLine() = beginLine;
+   t->endLine() = endLine;
+   t->beginColumn() = beginColumn;
+   t->endColumn() = endColumn;
 #fi
 
    return t;
@@ -328,7 +328,7 @@ Token * ${parserName}TokenManager::getNextToken() {
       jjmatchedKind = _EOF;
       jjmatchedPos = -1;
       matchedToken = jjFillToken();
-      matchedToken->specialToken = specialToken;
+      matchedToken->specialToken() = specialToken;
       return matchedToken;
     }
 
@@ -377,7 +377,7 @@ Token * ${parserName}TokenManager::getNextToken() {
         if (isToken(jjmatchedKind)) {
           // Matched kind is a real TOKEN.
           matchedToken = jjFillToken();
-          matchedToken->specialToken = specialToken;
+          matchedToken->specialToken() = specialToken;
           tokenLexicalActions(matchedToken);
           if (jjnewLexState[jjmatchedKind] != -1) {
             curLexState = jjnewLexState[jjmatchedKind];
@@ -387,7 +387,7 @@ Token * ${parserName}TokenManager::getNextToken() {
 #fi
 #if DEBUG_TOKEN_MANAGER
           JAVACC_CLOG << JAVACC_WIDE(Returning token:) << JJSPACE << JJQUOTE
-                      << addUnicodeEscapes(matchedToken->image) << JJQUOTE << JJSPACE
+                      << addUnicodeEscapes(matchedToken->image()) << JJQUOTE << JJSPACE
                       << std::endl;
 #fi
           return matchedToken;
@@ -402,8 +402,8 @@ Token * ${parserName}TokenManager::getNextToken() {
             if (specialToken == nullptr) {
               specialToken = matchedToken;
             } else {
-              matchedToken->specialToken = specialToken;
-              specialToken = (specialToken->next = matchedToken);
+              matchedToken->specialToken() = specialToken;
+              specialToken = (specialToken->next() = matchedToken);
             }
             skipLexicalActions(matchedToken);
           } else {
