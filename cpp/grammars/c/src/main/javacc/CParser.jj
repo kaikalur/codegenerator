@@ -173,7 +173,7 @@ void StorageClassSpecifier() : {}
 void TypeSpecifier() : {}
 {
 	( <VOID> | <CHAR> | <SHORT> | <INT> | <LONG> | <FLOAT> | <DOUBLE> | <SIGNED> |
-	  <UNSIGNED> | StructOrUnionSpecifier() | EnumSpecifier() | LOOKAHEAD( { isType(getToken(1)->image) } )TypedefName() )
+	  <UNSIGNED> | StructOrUnionSpecifier() | EnumSpecifier() | LOOKAHEAD( { isType(getToken(1)->image()) } )TypedefName() )
 }
 
 void TypeQualifier() : {}
@@ -268,7 +268,7 @@ void DirectDeclarator() : { Token* t;}
 	( t = <IDENTIFIER>
 
 	{ if(!(typedefParsingStack.empty()) && (typedefParsingStack.top())){
-				addType(t->image);
+				addType(t->image());
 	  }
 	}
 	 | "(" Declarator() ")" )

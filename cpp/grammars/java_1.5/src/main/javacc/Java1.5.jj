@@ -922,17 +922,17 @@ TOKEN :
 {
   < _RUNSIGNEDSHIFT: ">>>" >
   {
-     matchedToken->kind = GT;
+     matchedToken->kind() = GT;
      ((MyToken*)matchedToken)->realKind = _RUNSIGNEDSHIFT;
      input_stream->backup(2);
-     matchedToken->image = ">";
+     matchedToken->image() = ">";
   }
 | < _RSIGNEDSHIFT: ">>" >
   {
-     matchedToken->kind = GT;
+     matchedToken->kind() = GT;
      ((MyToken*)matchedToken)->realKind = _RSIGNEDSHIFT;
      input_stream->backup(1);
-     matchedToken->image = ">";
+     matchedToken->image() = ">";
   }
 | < GT: ">" >
 }
@@ -1868,7 +1868,7 @@ void TryStatement():
 void RUNSIGNEDSHIFT():
 {}
 {
-  ( LOOKAHEAD({ getToken(1)->kind == GT && ((MyToken*)getToken(1))->realKind == _RUNSIGNEDSHIFT} )
+  ( LOOKAHEAD({ getToken(1)->kind() == GT && ((MyToken*)getToken(1))->realKind == _RUNSIGNEDSHIFT} )
    ">" ">" ">"
   )
 }
@@ -1876,7 +1876,7 @@ void RUNSIGNEDSHIFT():
 void RSIGNEDSHIFT():
 {}
 {
-  ( LOOKAHEAD({ getToken(1)->kind == GT && ((MyToken*)getToken(1))->realKind == _RSIGNEDSHIFT} )
+  ( LOOKAHEAD({ getToken(1)->kind() == GT && ((MyToken*)getToken(1))->realKind == _RSIGNEDSHIFT} )
   ">" ">"
   )
 }

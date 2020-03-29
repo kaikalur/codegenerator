@@ -16,7 +16,7 @@ using namespace Basic;
 
 JJString ReadFileFully() {
 	JJString code;
-	code = "{{}}\n";
+	code = "}}\n";
 
 	return code;
 }

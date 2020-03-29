@@ -21,10 +21,10 @@ public:
 			}
 		}
 		if (token) {
-			token->beginLine = cs->getBeginLine();
-			token->beginColumn = cs->getBeginColumn();
-			token->endLine = cs->getEndLine();
-			token->endColumn = cs->getEndColumn();
+			token->beginLine() = cs->getBeginLine();
+			token->beginColumn() = cs->getBeginColumn();
+			token->endLine() = cs->getEndLine();
+			token->endColumn() = cs->getEndColumn();
 		}
 		return token;
 	}

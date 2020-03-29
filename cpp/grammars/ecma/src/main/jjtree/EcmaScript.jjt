@@ -1496,22 +1496,22 @@ TOKEN:
 	{
 		t = <DECIMAL_LITERAL> 
 		{
-			jjtThis->setDecimalValue(t->image);
+			jjtThis->setDecimalValue(t->image());
 		}
 	|
 		t = <HEX_INTEGER_LITERAL>
 		{
-			jjtThis->setHexValue(t->image);
+			jjtThis->setHexValue(t->image());
 		}
 	|
 		t = <STRING_LITERAL>
 		{
-			jjtThis->setStringValue(t->image);
+			jjtThis->setStringValue(t->image());
 		}
 	|
 		t = <BOOLEAN_LITERAL>
 		{
-			jjtThis->setBooleanValue(t->image);
+			jjtThis->setBooleanValue(t->image());
 		}
 	|
 		t = <NULL_LITERAL>
@@ -1521,7 +1521,7 @@ TOKEN:
 	| 
 		t = <REGULAR_EXPRESSION_LITERAL>
 		{
-			jjtThis->setRegexValue(t->image);
+			jjtThis->setRegexValue(t->image());
 		}
 	}
 
@@ -1533,7 +1533,7 @@ TOKEN:
 	{
 	  t=<IDENTIFIER_NAME>
 	  {
-	    jjtThis->setName(t->image);
+	    jjtThis->setName(t->image());
 	  }
 	}
 

@@ -95,7 +95,7 @@ void VarDeclaration() :
     "int" { jjtThis->type = INT; }
   )
   t = <IDENTIFIER> 
-  { jjtThis->name = t->image; }
+  { jjtThis->name = t->image(); }
 }
 
 /*
@@ -243,7 +243,7 @@ void Id() :
    Token* t;
 }
 {
-   t = <IDENTIFIER>  { jjtThis->name = t->image; }
+   t = <IDENTIFIER>  { jjtThis->name = t->image(); }
 }
 
 /** A literal. */
@@ -255,7 +255,7 @@ void Literal() #void :
  (
   t = <INTEGER_LITERAL>
     {
-       jjtThis->val = stoi(t->image);
+       jjtThis->val = stoi(t->image());
     }
  )#IntConstNode
 |
@@ -353,7 +353,7 @@ void ReadStatement() :
 { Token* t; }
 {
    "read" t = <IDENTIFIER>
-   { jjtThis->name = t->image; }
+   { jjtThis->name = t->image(); }
 }
 
 /** A write statement. */
@@ -361,7 +361,7 @@ void WriteStatement() :
 { Token* t; }
 {
    "write" t = <IDENTIFIER>
-   { jjtThis->name = t->image; }
+   { jjtThis->name = t->image(); }
 }
 
 TOKEN : /* IDENTIFIERS */
