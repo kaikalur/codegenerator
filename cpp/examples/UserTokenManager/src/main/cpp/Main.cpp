@@ -16,7 +16,7 @@ using namespace Basic;
 
 JJString ReadFileFully() {
 	JJString code;
-	code = "}}\n";
+	code = "{{}}\n";
 
 	return code;
 }
@@ -58,6 +58,7 @@ int main(int argc, char**argv) {
 			return 0;
 		}
 		TokenManager *scanner = new ::MatcherTokenManager(cs);
+		MyToken head;
 		Matcher parser(scanner);
 		parser.Input();
      	*output << "IDL Parser Version 0.1:  IDL file parsed successfully." << endl;

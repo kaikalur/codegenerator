@@ -291,12 +291,8 @@ Token * ${parserName}TokenManager::jjFillToken() {
 
 #if TOKEN_FACTORY
     t = ${TOKEN_FACTORY}::newToken(jjmatchedKind, curTokenImage);
-#elif BINARY_NEW_TOKEN
-    t = DefaultToken::newToken(jjmatchedKind, curTokenImage);
 #else
-   t = DefaultToken::newToken(jjmatchedKind);
-   t->kind() = jjmatchedKind;
-   t->image() = curTokenImage;
+    t = ${tokenClass}::newToken(jjmatchedKind, curTokenImage);
 #fi
 
 #if KEEP_LINE_COLUMN

@@ -47,6 +47,8 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     settings.put("superClass", ((superClass == null) || superClass.equals("")) ? "" : superClass);
     settings.put("noDfa", Options.getNoDfa());
     settings.put("generatedStates", tokenizerData.nfa.size());
+    settings.put("tokenClass", Options.getTokenClass());
+    settings.put("tokenInclude", Options.getTokenInclude());
 
     File file = new File(Options.getOutputDirectory(), tokenizerData.parserName + "TokenManager.cc");
     try {
@@ -56,11 +58,11 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
         codeGenerator.println("namespace " + Options.stringValue("NAMESPACE_OPEN"));
       }
 
-      codeGenerator.printTemplate(TokenManagerCodeGenerator.TokenManagerTemplate);
+      codeGenerator.printTemplate(TokenManagerTemplate);
 
       codeGenerator.switchToIncludeFile(); // remaining variables
 
-      codeGenerator.printTemplate(TokenManagerCodeGenerator.TokenManagerTemplateH, settings);
+      codeGenerator.printTemplate(TokenManagerTemplateH, settings);
       codeGenerator.switchToStaticsFile();
       codeGenerator.println("#include \"TokenManagerError.h\"");
 

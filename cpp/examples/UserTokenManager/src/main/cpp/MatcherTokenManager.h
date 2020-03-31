@@ -1,6 +1,8 @@
 #include "TokenManager.h"
 #include "MatcherConstants.h"
+#include "MyToken.h"
 using namespace Basic;
+using namespace FOO::BAR;
 
 class MatcherTokenManager : public Basic::TokenManager {
 public:
@@ -9,14 +11,14 @@ public:
 	virtual Basic::Token* getNextToken() {
 		Basic::Token* token = nullptr;
 		if (cs->endOfInput())
-			token =   new Basic::Token(Basic::_EOF, "EOF");
+			token =   new MyToken(Basic::_EOF, "EOF");
 		else {
 			JJChar jjchar = cs->readChar();
 			switch (jjchar) {
-			case '{': token = new Basic::Token(Basic::LBRACE, cs->getImage());  break;
-			case '}': token = new Basic::Token(Basic::RBRACE, cs->getImage()); break;
-			case '\n': token = new Basic::Token(Basic::NL, cs->getImage());  break;
-			case '\r': token = new Basic::Token(Basic::LF, cs->getImage());  break;
+			case '{': token = new MyToken(Basic::LBRACE, cs->getImage());  break;
+			case '}': token = new MyToken(Basic::RBRACE, cs->getImage()); break;
+			case '\n': token = new MyToken(Basic::NL, cs->getImage());  break;
+			case '\r': token = new MyToken(Basic::LF, cs->getImage());  break;
 
 			}
 		}

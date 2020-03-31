@@ -7,6 +7,7 @@
 #include "JavaParserTokenManager.h"
 #include "ParseException.h"
 #include "StreamReader.h"
+#include "DefaultToken.h"
 
 
 using namespace std;

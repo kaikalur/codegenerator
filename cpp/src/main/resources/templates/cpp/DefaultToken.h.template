@@ -65,10 +65,9 @@ private:
   void*	 _value;
 
 public:
-  DefaultToken();
-  DefaultToken(int kind);
-  DefaultToken(int kind, const JJString& image); 
-
+           DefaultToken();
+           DefaultToken(int kind);
+           DefaultToken(int kind, const JJString& image); 
   virtual ~DefaultToken();
 
   int& 				kind();	
@@ -93,7 +92,7 @@ public:
 
 
   /**
-   * Returns a new Token void *, by default. However, if you want, you
+   * Returns a new Token, by default. However, if you want, you
    * can create and return subclass objects based on the value of ofKind.
    * Simply add the cases to the switch for all those special cases.
    * For example, if you have a subclass of Token called IDToken that

@@ -4,6 +4,9 @@ options {
 	USER_TOKEN_MANAGER=true;
 	NAMESPACE="Basic";
 	DEBUG_PARSER=true;
+	TOKEN_CLASS="MyToken";
+	TOKEN_NAMESPACE="FOO::BAR";
+	TOKEN_INCLUDE="MyToken.h";
 }	
 PARSER_BEGIN(Matcher)
 static const int simple = 4;

@@ -45,7 +45,7 @@ public boolean generateCodeForDefaultToken(CodeGeneratorSettings settings) {
         builder.addOption(
       		  Options.USEROPTION__STATIC, 
       		  Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC,
-      		  Options.USEROPTION__CPP_INCLUDE_FOR_TOKEN, 
+      		  Options.USEROPTION__INCLUDE_FOR_TOKEN, 
       		  Options.USEROPTION__TOKEN_SUPER_CLASS);
 
         builder.printTemplate("/templates/cpp/DefaultToken.cc.template");

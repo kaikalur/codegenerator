@@ -13,18 +13,6 @@ using namespace std;
 using namespace EG4;
 
 JAVACC_STRING_TYPE ReadFileFully(char *file_name) {
-//	JAVACC_STRING_TYPE s;
-//#if WIDE_CHAR
-//	wifstream in;
-//#else
-//	ifstream in;
-//#endif
-//	in.open(file_name, ios::in);
-//	// Very inefficient.
-//	while (!in.eof()) {
-//		s += in.get();
-//	}
-//	return s;
 	return "(1 + 2) * (a + b);\n";
 }
 
