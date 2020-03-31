@@ -65,9 +65,6 @@
 									<projectsDirectory>examples</projectsDirectory>
 									<settingsFile>examples/settings.xml</settingsFile>
 									<cloneProjectsTo>${project.build.directory}/examples</cloneProjectsTo>
-									<pomExcludes>
-										<pomExclude>UserTokenManager/pom.xml</pomExclude>
-									</pomExcludes>
 								</configuration>
 							</execution>
 							<execution>
