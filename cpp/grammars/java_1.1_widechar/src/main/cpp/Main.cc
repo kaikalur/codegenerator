@@ -46,26 +46,20 @@ int main(int argc, char **argv) {
   JavaParser parser(scanner);
   parser.CompilationUnit();
   Node *root = (Node*)parser.jjtree.peekNode();
-#if 0
   if (root) {
     JJString buffer; 
-#if (JAVACC_CHAR_TYPE_SIZEOF != 1)
-   	root->dumpToBuffer(L" ", L"\n", &buffer);
-    wcout << buffer << "\n";
-    root->dump(L" ");
-#else
-    root->dumpToBuffer(" ", "\n", &buffer);
-    printf("%s\n", buffer.c_str());
-#endif
-	int  a;
-	const int ca = "";
+   	root->dumpToBuffer(JJSPACE, JAVACC_WIDE(\n), &buffer);
+    JAVACC_COUT << buffer << std::endl;
+    root->dump(JJSPACE);
+#if 0
+	JJString  a;
+	const JJString ca = L"";
 	const JJString* b = &a;
 	const JJString* const c = &a;
 	const JJString const * d = &a;
 
 	c = &s;
 	d = &s;
-
-  }
 #endif
+  }
 }
