@@ -196,12 +196,12 @@ class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
   public void printLiteralArray(String varName, String[] arr) {
     // First generate char array vars
     for (int i = 0; i < arr.length; i++) {
-      println("static const JJChar " + varName + "_arr_" + i + "[] = ");
+      println("static const JavaCC::JJChar " + varName + "_arr_" + i + "[] = ");
       printCharArray(arr[i]);
       println(";");
     }
 
-    println("static const JJString " + varName + "[] = {");
+    println("static const JavaCC::JJString " + varName + "[] = {");
     for (int i = 0; i < arr.length; i++) {
       print(varName + "_arr_" + i);
       if ((i + 1) < arr.length) {

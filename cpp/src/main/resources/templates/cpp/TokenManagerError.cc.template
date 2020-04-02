@@ -1,6 +1,5 @@
-#if NAMESPACE
-namespace ${NAMESPACE_OPEN}
-#fi
+namespace JavaCC 
+{
 
 
 JJString TokenManagerError::lexicalError(bool EOFSeen, int lexState, int errorLine, int errorColumn, const JJString& errorAfter, JJChar curChar) {
@@ -126,6 +125,4 @@ JJString addUnicodeEscapes(const JJString& str) {
 \#undef JJU
 \#undef JJM
 
-#if NAMESPACE
-${NAMESPACE_CLOSE}
-#fi
+}

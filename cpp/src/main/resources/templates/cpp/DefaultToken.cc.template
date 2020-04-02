@@ -1,6 +1,5 @@
-#if NAMESPACE
-namespace ${NAMESPACE_OPEN}
-#fi
+namespace JavaCC
+{
 
   DefaultToken::DefaultToken() :
   	_beginLine(0), _beginColumn(0), _endLine(0), _endColumn(0)
@@ -70,6 +69,4 @@ namespace ${NAMESPACE_OPEN}
   void*& 			DefaultToken::value() 				{ return _value; }
   const void* 		DefaultToken::value() const  		{ return _value; }
 
-#if NAMESPACE
-${NAMESPACE_CLOSE}
-#fi
+}

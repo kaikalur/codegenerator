@@ -1,19 +1,20 @@
 
 namespace {
-template <class T>
-void ArrayCopy(T* src, int src_offset, T* dest, int dest_offset, int len) {
- for (int i = 0; i < len; i++) {
-   dest[dest_offset + i] = src[src_offset + i];
- }
+  template <class T>
+  void ArrayCopy(T* src, int src_offset, T* dest, int dest_offset, int len) {
+   for (int i = 0; i < len; i++) {
+     dest[dest_offset + i] = src[src_offset + i];
+   }
+  }
 }
 
+namespace JavaCC {
 class StringReaderStream : public ReaderStream {
- public:
+public:
   StringReaderStream(const JJString& str) : str_(str), cur_(0), max_(str.size()) {}
   virtual size_t read(JJChar *bufptr, int offset, size_t len) {
     size_t count = str_.copy(bufptr + offset, len > max_ ? max_ : len, cur_);
-    cur_ += count;
-    max_ -= count;
+    cur_ += count; max_ -= count;
     return count;
   }
   virtual ~StringReaderStream() {}
@@ -21,16 +22,12 @@ class StringReaderStream : public ReaderStream {
     return max_ == 0;
   }
 
- private:
+private:
   const JJString str_;
   size_t cur_;
   size_t max_;
 };
-}
 
-#if NAMESPACE
-namespace ${NAMESPACE_OPEN}
-#fi
 void CharStream::ReInit(const JJString& str, int startline, int startcolumn, int buffersize) {
   StringReaderStream *stream = new StringReaderStream(str);
   ReInit(stream, startline, startcolumn, buffersize);
@@ -203,6 +200,4 @@ void CharStream::updateLineColumn(JJChar c) {
   bufcolumn[bufpos] = column;
 }
 
-#if NAMESPACE
-${NAMESPACE_CLOSE}
-#fi
+}

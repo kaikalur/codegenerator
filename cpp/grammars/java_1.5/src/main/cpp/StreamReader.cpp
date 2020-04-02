@@ -1,12 +1,12 @@
 #include <iostream>
 #include "JavaCC.h"
 
-class StreamReader : public ReaderStream {
+class StreamReader : public JavaCC::ReaderStream {
 public:
 	StreamReader(std::istream& is);
 	virtual ~StreamReader();
 
-	virtual size_t read(JJChar* buffer, int offset, size_t len);
+	virtual size_t read(JavaCC::JJChar* buffer, int offset, size_t len);
 	virtual bool   endOfInput();
 
 private:
@@ -20,7 +20,7 @@ StreamReader::StreamReader(std::istream& is) : is(is) {
 StreamReader::~StreamReader() {
 
 }
-size_t StreamReader::read(JJChar * buffer, int offset, size_t len) {
+size_t StreamReader::read(JavaCC::JJChar * buffer, int offset, size_t len) {
 	is.read(buffer + offset, len);
 	return is.gcount();
 }

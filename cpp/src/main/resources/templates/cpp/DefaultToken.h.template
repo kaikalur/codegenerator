@@ -8,9 +8,9 @@
 \#include "${INCLUDE_FOR_TOKEN}"
 #fi
 
-#if NAMESPACE
-namespace ${NAMESPACE_OPEN}
-#fi
+
+namespace JavaCC
+{
 
 /**
  * Describes the input token stream.
@@ -119,8 +119,6 @@ public:
 
 };
 
-#if NAMESPACE
-${NAMESPACE_CLOSE}
-#fi
+}
 
 \#endif

@@ -54,9 +54,10 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     try {
       codeGenerator = CppCodeBuilder.of(context, settings).setFile(file);
 
-      if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
-        codeGenerator.println("namespace " + Options.stringValue("NAMESPACE_OPEN"));
-      }
+//      if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
+//        codeGenerator.println("namespace " + Options.stringValue("NAMESPACE_OPEN"));
+//      }
+      codeGenerator.println("namespace JavaCC {");
 
       codeGenerator.printTemplate(TokenManagerTemplate);
 
@@ -82,7 +83,8 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
 
     if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
       codeGenerator.switchToMainFile();
-      codeGenerator.println(Options.stringValue("NAMESPACE_CLOSE"));
+//      codeGenerator.println(Options.stringValue("NAMESPACE_CLOSE"));
+      codeGenerator.println("}");
     }
 
     try {
@@ -330,7 +332,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
         }
         codeGenerator.print(")");
       } else {
-        codeGenerator.print("JJEMPTY");
+        codeGenerator.print("JavaCC::JJEMPTY");
       }
   }
   private void dumpMatchInfo(CppCodeBuilder codeGenerator, TokenizerData tokenizerData) {

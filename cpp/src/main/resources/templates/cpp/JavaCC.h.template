@@ -31,6 +31,8 @@
 
 \#define JAVACC_SIMPLE_STRING std::basic_string<char>
 
+namespace JavaCC {
+
 typedef JAVACC_CHAR_TYPE      JJChar;
 typedef JAVACC_STRING_TYPE    JJString;
 typedef JAVACC_SIMPLE_STRING  JJSimpleString;
@@ -39,6 +41,7 @@ static const JJChar JJEMPTY[] = { 0 };
 static const JJChar JJSPACE[] = { ' ', 0 };
 static const JJChar JJCOMMA[] = { ',', 0 };
 static const JJChar JJQUOTE[] = { '\'', 0 };
+static const JJChar JJNL[]    = { '\n', 0 };
 
 // Abstraction on stream classes to read a block of data into a buffer.
 class ReaderStream {
@@ -64,4 +67,6 @@ struct JJExit
     ~JJExit(){f();}
     T f;
 };
+
+}
 \#endif

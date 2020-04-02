@@ -3,9 +3,7 @@
 
 \#include "JavaCC.h"
 
-#if NAMESPACE
-namespace ${NAMESPACE_OPEN}
-#fi
+namespace JavaCC {
 
 /**
  * This class describes a character stream that maintains line and
@@ -241,9 +239,6 @@ protected:
   bool               deleteStream		= false;
 };
 
-#if NAMESPACE
-${NAMESPACE_CLOSE}
-#fi
-
+}
 
 \#endif

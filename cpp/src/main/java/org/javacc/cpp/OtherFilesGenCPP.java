@@ -52,14 +52,14 @@ class OtherFilesGenCPP {
 	  static void printTokenImages(CppCodeBuilder builder, Context context) {
 	      builder.println("  /** Literal token image. */");
 	      int cnt = 0;
-	      builder.println("  static const JJChar tokenImage_" + cnt + "[] = ");
+	      builder.println("  static const JavaCC::JJChar tokenImage_" + cnt + "[] = ");
 	      OtherFilesGenCPP.printCharArray(builder, "<EOF>");
 	      builder.println(";");
 
 	      for (TokenProduction tp : context.globals().rexprlist) {
 	        for (RegExprSpec res : tp.respecs) {
 	          RegularExpression re = res.rexp;
-	          builder.println("  static const JJChar tokenImage_" + ++cnt + "[] = ");
+	          builder.println("  static const JavaCC::JJChar tokenImage_" + ++cnt + "[] = ");
 	          if (re instanceof RStringLiteral) {
 	        	String image = ((RStringLiteral) re).image;
 	            OtherFilesGenCPP.printCharArray(builder, image);
@@ -75,7 +75,7 @@ class OtherFilesGenCPP {
 	        }
 	      }
 
-	      builder.println("  static const JJChar* const tokenImages[] = {");
+	      builder.println("  static const JavaCC::JJChar* const tokenImages[] = {");
 	      for (int i = 0; i <= cnt; i++) {
 	        builder.println("tokenImage_" + i + ", ");
 	      }
@@ -86,14 +86,14 @@ class OtherFilesGenCPP {
 	  static void printTokenLabels(CppCodeBuilder builder, Context context) {
 	      builder.println("  /** Literal token label. */");
 	      int cnt = 0;
-	      builder.println("  static const JJChar tokenLabel_" + cnt + "[] = ");
+	      builder.println("  static const JavaCC::JJChar tokenLabel_" + cnt + "[] = ");
 	      OtherFilesGenCPP.printCharArray(builder, "<EOF>");
 	      builder.println(";");
 
 	      for (TokenProduction tp : context.globals().rexprlist) {
 	        for (RegExprSpec res : tp.respecs) {
 	          RegularExpression re = res.rexp;
-	          builder.println("  static const JJChar tokenLabel_" + ++cnt + "[] = ");
+	          builder.println("  static const JavaCC::JJChar tokenLabel_" + ++cnt + "[] = ");
 	          if (re instanceof RStringLiteral) {
 	        	String label = ((RStringLiteral) re).label;
 	            OtherFilesGenCPP.printCharArray(builder, "<" + label + ">");
@@ -109,7 +109,7 @@ class OtherFilesGenCPP {
 	        }
 	      }
 
-	      builder.println("  static const JJChar* const tokenLabels[] = {");
+	      builder.println("  static const JavaCC::JJChar* const tokenLabels[] = {");
 	      for (int i = 0; i <= cnt; i++) {
 	        builder.println("tokenLabel_" + i + ", ");
 	      }

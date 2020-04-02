@@ -5,21 +5,21 @@
 #include "JavaParserConstants.h"
 
 namespace Java {
-		class MyToken : public DefaultToken {
+		class MyToken : public JavaCC::DefaultToken {
 		public:
-			MyToken(int kind, JJString image) : DefaultToken(kind, image) {
+			MyToken(int kind, JavaCC::JJString image) : JavaCC::DefaultToken(kind, image) {
 				this->mykind = kind;
 				this->myimage = image;
 			}
 			int realKind = GT;
 
-			static Token* newToken(int ofKind, JJString tokenImage) {
+			static Token* newToken(int ofKind, JavaCC::JJString tokenImage) {
 				return new MyToken(ofKind, tokenImage);
 			}
 
 		private:
-			int			mykind;
-			JJString	myimage;
+			int					mykind;
+			JavaCC::JJString	myimage;
 		};
 }
 #endif

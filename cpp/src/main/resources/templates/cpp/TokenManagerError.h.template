@@ -3,9 +3,8 @@
 
 \#include "JavaCC.h"
 
-#if NAMESPACE
-namespace ${NAMESPACE_OPEN}
-#fi
+namespace JavaCC
+{
 
 enum LexerErrors {
   LEXICAL_ERROR = 0,			// Lexical error occurred.
@@ -58,8 +57,5 @@ private:
 
 };
 
-#if NAMESPACE
-${NAMESPACE_CLOSE}
-#fi
-
+}
 \#endif

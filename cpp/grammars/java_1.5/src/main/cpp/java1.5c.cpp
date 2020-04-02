@@ -35,6 +35,7 @@ JJString ReadFileFully() {
 static void usage(int argc, const char** argv) {
 }
 using namespace Java;
+using namespace JavaCC;
 
 int main(int argc, const char** argv) {
 	istream*	input  = &cin;

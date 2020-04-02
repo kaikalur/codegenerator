@@ -100,10 +100,6 @@ std::vector<Node*>& Node::jjtChildren() {
 JJString Node::toString() const                       { return jjtNodeName[id]; }
 JJString Node::toString(const JJString& prefix) const { return prefix + toString(); }
 
-static const JJChar spaces[]   = { ' ', '\0' };
-static const JJChar newlines[] = { '\n', '\0' };
-static const JJString space    = spaces;
-static const JJString newline  = newlines;
 
 void Node::dumpToBuffer(const JJString& prefix, const JJString& separator, JJString* buffer) const {
     buffer->append(toString(prefix));
@@ -111,14 +107,14 @@ void Node::dumpToBuffer(const JJString& prefix, const JJString& separator, JJStr
     for (int i = 0; i < children.size(); ++i) {
       Node *n = (Node*)children[i];
       if (n != nullptr) {
-        n->dumpToBuffer(prefix + space, separator, buffer);
+        n->dumpToBuffer(prefix + JavaCC::JJSPACE, separator, buffer);
       }
     }
 }
   
 void Node::dump(const JJString& prefix) const {
     JJString *buffer = new JJString();
-    dumpToBuffer(prefix, newline, buffer);
+    dumpToBuffer(prefix, JavaCC::JJNL, buffer);
     for (int i = 0; i < buffer->size(); i++) {
       printf("%c", (*buffer)[i]);
     }

@@ -18,9 +18,8 @@
 \#include "${parserName}.h"
 #fi
 
-#if NAMESPACE
-namespace ${NAMESPACE_OPEN}
-#fi
+namespace JavaCC
+{
 
 class ${parserName}TokenManager 
 	: public TokenManager
@@ -50,7 +49,7 @@ private:
   JJString                  image = jjimage;
   int                       jjimageLen;
   int                       lengthOfMatch;
-  JJChar                    curChar;
+  JavaCC::JJChar            curChar;
   JAVACC_CHARSTREAM*        input_stream;
 
   int                       jjrounds[${stateSetSize}];
@@ -97,8 +96,6 @@ public:
   }
 };
 
-#if NAMESPACE
-${NAMESPACE_CLOSE}
-#fi
+}
 
 \#endif

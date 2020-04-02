@@ -57,7 +57,7 @@ namespace ${NAMESPACE_OPEN}
     retval += expected.toString();
     return retval;
 \#endif
-    return (JJChar*)"Parse exception";
+    return (JavaCC::JJChar*)"Parse exception";
   }
 
 \#define eol "\n"

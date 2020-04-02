@@ -5,9 +5,7 @@
 \#include "JavaCC.h"
 \#include "Token.h"
 
-#if NAMESPACE
-namespace ${NAMESPACE_OPEN}
-#fi
+namespace JavaCC {
 
 JJString addUnicodeEscapes(const JJString& str);
 
@@ -91,8 +89,5 @@ public:
 };
 #fi
 
-#if NAMESPACE
-${NAMESPACE_CLOSE}
-#fi
-
+}
 \#endif
