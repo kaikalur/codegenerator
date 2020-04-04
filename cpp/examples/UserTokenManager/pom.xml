@@ -48,6 +48,9 @@
 					<cpp>
 						<includePaths>
 							<includePath>
+								<path>${project.basedir}/src/main/cpp</path>
+							</includePath>
+							<includePath>
 								<path>${project.basedir}/target/generated-sources/cpp</path>
 							</includePath>
 						</includePaths>
