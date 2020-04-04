@@ -64,8 +64,10 @@
 								<configuration>
 									<projectsDirectory>examples</projectsDirectory>
 									<settingsFile>examples/settings.xml</settingsFile>
+<!-- 
 									<cloneProjectsTo>${project.build.directory}/examples</cloneProjectsTo>
-								</configuration>
+ -->
+ 								</configuration>
 							</execution>
 							<execution>
 								<id>integration-test-cpp-grammars</id>
@@ -76,8 +78,10 @@
 								<configuration>
 									<projectsDirectory>grammars</projectsDirectory>
 									<settingsFile>grammars/settings.xml</settingsFile>
+<!-- 
 									<cloneProjectsTo>${project.build.directory}/grammars</cloneProjectsTo>
-								</configuration>
+ -->
+ 								</configuration>
 							</execution>
 						</executions>
 					</plugin>
