@@ -142,7 +142,7 @@ class OtherFilesGenCPP {
       builder.println();
       builder.println("#include \"JavaCC.h\"");
       builder.println();
-      if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
+      if (Options.hasNamespace()) {
         builder.println("namespace " + Options.stringValue("NAMESPACE_OPEN"));
       }
 

@@ -192,8 +192,7 @@ final class NodeFiles {
       builder.println();
       builder.println("#include \"JavaCC.h\"");
 
-      boolean hasNamespace = Options.stringValue("NAMESPACE").length() > 0;
-      if (hasNamespace) {
+       if (Options.hasNamespace()) {
         builder.println("namespace " + Options.stringValue("NAMESPACE_OPEN"));
       }
 
@@ -217,7 +216,7 @@ final class NodeFiles {
       }
       builder.println("  };");
 
-      if (hasNamespace) {
+      if (Options.hasNamespace()) {
         builder.println(Options.stringValue("NAMESPACE_CLOSE"));
       }
       builder.println("#endif");
@@ -267,15 +266,14 @@ final class NodeFiles {
       builder.println("#include \"JavaCC.h\"");
       builder.println("#include \"" + JJTreeGlobals.parserName + "Tree.h" + "\"");
 
-      boolean hasNamespace = Options.stringValue("NAMESPACE").length() > 0;
-      if (hasNamespace) {
+      if (Options.hasNamespace()) {
         builder.println("namespace " + Options.stringValue("NAMESPACE_OPEN"));
       }
 
       NodeFiles.generateVisitorInterface(builder, context);
       NodeFiles.generateDefaultVisitor(builder, context);
 
-      if (hasNamespace) {
+      if (Options.hasNamespace()) {
         builder.println(Options.stringValue("NAMESPACE_CLOSE"));
       }
       builder.println("#endif");

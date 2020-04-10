@@ -159,7 +159,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("#include \"" + context.globals().cu_name + "Tree.h\"");
     }
 
-    if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
+    if (Options.hasNamespace()) {
       codeGenerator.println("namespace " + Options.stringValue("NAMESPACE_OPEN"));
     }
 
@@ -188,7 +188,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
 
     codeGenerator.switchToMainFile();
 
-    if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
+    if (Options.hasNamespace()) {
       codeGenerator.println("namespace " + Options.stringValue("NAMESPACE_OPEN"));
     }
 

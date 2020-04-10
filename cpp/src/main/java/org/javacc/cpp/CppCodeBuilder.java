@@ -74,13 +74,6 @@ class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
     String includeFileName = getFile().getName().replace(".cc", ".h");
     File includeFile = new File(getFile().getParentFile(), includeFileName);
 
-    // Finally enclose the whole thing in the namespace, if specified.
-    // if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
-    // includeBuffer.insert(0, "namespace " +
-    // Options.stringValue("NAMESPACE_OPEN") + "\n");
-    // includeBuffer.append(Options.stringValue("NAMESPACE_CLOSE") + "\n");
-    // }
-
     fixupLongLiterals(includeBuffer);
     store(includeFile, includeBuffer);
 
@@ -89,13 +82,6 @@ class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
     }
 
     mainBuffer.insert(0, staticsBuffer);
-
-    // Finally enclose the whole thing in the namespace, if specified.
-    // if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
-    // mainBuffer.insert(0, "namespace " + Options.stringValue("NAMESPACE_OPEN")
-    // + "\n");
-    // mainBuffer.append(Options.stringValue("NAMESPACE_CLOSE") + "\n");
-    // }
 
     mainBuffer.insert(0, "#include \"" + includeFileName + "\"\n");
 
@@ -109,8 +95,7 @@ class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
 
   void generateMethodDefHeader(String qualifiedModsAndRetType, String className, String nameAndParams,
       String exceptions) {
-    // for C++, we generate the signature in the header file and body in main
-    // file
+    // for C++, we generate the signature in the header file and body in main file
     includeBuffer.append(qualifiedModsAndRetType + " " + nameAndParams);
     // if (exceptions != null)
     // includeBuffer.append(" throw(" + exceptions + ")");

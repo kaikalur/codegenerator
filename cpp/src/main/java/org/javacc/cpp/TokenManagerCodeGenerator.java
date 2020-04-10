@@ -54,7 +54,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     try {
       codeGenerator = CppCodeBuilder.of(context, settings).setFile(file);
 
-      if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
+      if (Options.hasNamespace()) {
         codeGenerator.println("namespace " + Options.stringValue("NAMESPACE_OPEN"));
       }
 
