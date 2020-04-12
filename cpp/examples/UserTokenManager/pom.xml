@@ -36,13 +36,7 @@
 					<libraries>
 						<library>
 							<type>executable</type>
-							<run>false</run>
-							<args>
-								<arg>${project.basedir}/idl/Hello.idl</arg>
-								<arg>${project.basedir}/idl/idl.in</arg>
-								<arg>${project.basedir}/idl/idl.out</arg>
-								<arg>${project.basedir}/idl/idl.err</arg>
-							</args>
+							<run>true</run>
 						</library>
 					</libraries>
 					<cpp>
