@@ -131,22 +131,18 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("#include \"JavaCC.h\"");
     codeGenerator.println("#include \"CharStream.h\"");
     codeGenerator.println("#include \"Token.h\"");
-    if (Options.getTokenInclude().length() > 0) {
-        codeGenerator.println("#include \"" + Options.getTokenInclude() +"\"");
-    }
     codeGenerator.println("#include \"TokenManager.h\"");
-    if (Options.getUserTokenInclude().length() > 0) {
-        codeGenerator.println("#include \"" + Options.getUserTokenInclude() +"\"");
-    }
-    if (Options.getUserTokenManagerInclude().length() > 0) {
-    	codeGenerator.println("#include \"" + Options.getUserTokenManagerInclude() +" \"");
+    if (Options.getTokenInclude().isEmpty()) {
+        codeGenerator.println("#include \"DefaultToken.h\"");
+    } else {
+        codeGenerator.println("#include \"" + Options.getTokenInclude() +"\"");
     }
     printInclude(Options.getIncludeForParser());
 
-    if (Options.getUserTokenManagerConstantInclude().length() > 0) {
-      codeGenerator.println("#include \"" + Options.getUserTokenManagerConstantInclude() + "\"");
+    if (Options.getTokenConstants().isEmpty()) {
+        codeGenerator.println("#include \"" + context.globals().cu_name + "Constants.h\"");
     } else {
-      codeGenerator.println("#include \"" + context.globals().cu_name + "Constants.h\"");
+        codeGenerator.println("#include \"" + Options.getTokenConstants() + "\"");
     }
 
     if (context.globals().jjtreeGenerated) {
@@ -1149,7 +1145,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
                 int j1 = i / 32;
                 int j2 = i % 32;
                 tokenMask[j1] |= 1 << j2;
-                String s = context.globals().names_of_tokens.get(Integer.valueOf(i));
+                String s = addTokenNamespace(context.globals().names_of_tokens.get(Integer.valueOf(i)));
                 if (s == null) {
                   retval += i;
                 } else {
@@ -1459,12 +1455,12 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       if (e_nrw.label.equals("")) {
         Object label = context.globals().names_of_tokens.get(Integer.valueOf(e_nrw.ordinal));
         if (label != null) {
-          retval += "jj_consume_token(" + (String) label + tail;
+          retval += "jj_consume_token(" + addTokenNamespace((String) label + tail);
         } else {
           retval += "jj_consume_token(" + e_nrw.ordinal + tail;
         }
       } else {
-        retval += "jj_consume_token(" + e_nrw.label + tail;
+        retval += "jj_consume_token(" + addTokenNamespace(e_nrw.label + tail);
       }
 
       if (Options.booleanValue(Options.USEROPTION__CPP_STOP_ON_FIRST_ERROR)) {
@@ -1706,20 +1702,12 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     }
   }
 
-  private static String getUserTokenManagerConstantNamespace() {
-    String namespace = "";
-    if (Options.getUserTokenNamespace().length() > 0) {
-      namespace += Options.getUserTokenNamespace() + "::";
-    }
-    return namespace;
-  }
-
   private static String getTokenImages() {
-	    return getUserTokenManagerConstantNamespace() + "tokenImages";
+	    return addTokenNamespace("tokenImages");
 	  }
 
   private static String getTokenLabels() {
-	    return getUserTokenManagerConstantNamespace() + "tokenLabels";
+	    return addTokenNamespace("tokenLabels");
 	  }
 
   private void generate3R(Expansion e, Phase3Data inf) {
@@ -1747,12 +1735,12 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
         if (re.label.equals("")) {
           Object label = context.globals().names_of_tokens.get(Integer.valueOf(re.ordinal));
           if (label != null) {
-            jj_scan_token += "(" + getUserTokenManagerConstantNamespace() + (String) label + ")";
+            jj_scan_token += "(" + addTokenNamespace((String) label) + ")";
           } else {
             jj_scan_token += "(" + re.ordinal + ")";
           }
         } else {
-          jj_scan_token += "(" + getUserTokenManagerConstantNamespace() + re.label + ")";
+          jj_scan_token += "(" + addTokenNamespace(re.label) + ")";
         }
         internalNames.put(e, jj_scan_token);
         return;
@@ -1824,13 +1812,27 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       generate3R(e_nrw.getExpansion(), inf);
     }
   }
+  
+  private static String addTokenNamespace(String token) {
+	  if (token != null) {
+		  if (!Options.getTokenNamespace().isEmpty()) {
+			  token = Options.getTokenNamespace() + "::" + token;
+		  }
+	  }
+	  return token;
+  }
 
   private String getTokenType() {
 	  String type = "Token";
-	  if (Options.getTokenClass().length() > 0)
+	  if (Options.getTokenClass().isEmpty()) {
+		  type = "DefaultToken";
+	  } else {
 		  type = Options.getTokenClass();
-	  if (Options.getTokenNamespace().length() > 0) 
+	  }
+	  
+	  if (!Options.getTokenNamespace().isEmpty()) { 
 		  type = Options.getTokenNamespace() + "::" + type;
+	  }
 	  return type;
   }
 
@@ -1881,14 +1883,12 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       if (e_nrw.label.equals("")) {
         Object label = context.globals().names_of_tokens.get(Integer.valueOf(e_nrw.ordinal));
         if (label != null) {
-          codeGenerator.println("    if (jj_scan_token(" + ParserCodeGenerator.getUserTokenManagerConstantNamespace()
-          + (String) label + ")) " + genReturn(true));
+          codeGenerator.println("    if (jj_scan_token(" + addTokenNamespace((String) label) + ")) " + genReturn(true));
         } else {
           codeGenerator.println("    if (jj_scan_token(" + e_nrw.ordinal + ")) " + genReturn(true));
         }
       } else {
-        codeGenerator.println("    if (jj_scan_token(" + ParserCodeGenerator.getUserTokenManagerConstantNamespace()
-        + e_nrw.label + ")) " + genReturn(true));
+        codeGenerator.println("    if (jj_scan_token(" + addTokenNamespace(e_nrw.label) + ")) " + genReturn(true));
       }
       // codeGenerator.genCodeLine(" if (jj_la == 0 && jj_scanpos == jj_lastpos)
       // " + genReturn(false));
