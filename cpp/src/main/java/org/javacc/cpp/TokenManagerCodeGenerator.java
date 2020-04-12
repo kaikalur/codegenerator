@@ -47,8 +47,14 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     settings.put("superClass", ((superClass == null) || superClass.equals("")) ? "" : superClass);
     settings.put("noDfa", Options.getNoDfa());
     settings.put("generatedStates", tokenizerData.nfa.size());
-    settings.put("tokenClass", Options.getTokenClass());
-    settings.put("tokenInclude", Options.getTokenInclude());
+    if (Options.getTokenClass().isEmpty())
+    	settings.put("tokenClass", "DefaultToken");
+    else
+    	settings.put("tokenClass", Options.getTokenClass());
+    if (Options.getTokenInclude().isEmpty())
+    	settings.put("tokenInclude", "DefaultToken.h");
+    else
+    	settings.put("tokenInclude", Options.getTokenInclude());
 
     File file = new File(Options.getOutputDirectory(), tokenizerData.parserName + "TokenManager.cc");
     try {
