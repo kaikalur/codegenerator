@@ -39,6 +39,9 @@ class TokenCodeGenerator implements org.javacc.parser.TokenCodeGenerator {
 
 @Override
 public boolean generateCodeForDefaultToken(CodeGeneratorSettings settings) {
+	if (Options.getUserTokenManager()) {
+		return true;
+	}
     try (CppCodeBuilder builder = CppCodeBuilder.of(context, settings)) {
         builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "DefaultToken.cc"));
         builder.addTools(JavaCCGlobals.toolName);
