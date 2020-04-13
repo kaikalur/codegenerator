@@ -12,6 +12,7 @@
 #include "DumpVisitor.h"
 #include "Interpret.h"
 #include "StreamReader.h"
+#include "DefaultCharStream.h"
 using namespace std;
 
 JJString ReadFileFully() {
@@ -57,7 +58,7 @@ int main(int argc, char**argv) {
 			if (ifs.is_open() && ofs.is_open() && efs.is_open() && spl.is_open()) {
 				input = &ifs;	output = &ofs;	error = &efs;
 				sr = new StreamReader(spl);
-				cs = new CharStream(sr);
+				cs = new DefaultCharStream(sr);
 			}
 			else {
 				cerr << "cannot open spl or in or out or err file" << endl;
@@ -67,14 +68,14 @@ int main(int argc, char**argv) {
 		if (argc == 2) {
 			JJString s = ReadFileFully();
 			cout << s << endl;
-			cs = new CharStream(s.c_str(), s.size() - 1, 1, 1);
+			cs = new DefaultCharStream(s.c_str(), s.size() - 1, 1, 1);
 		}
 		else {
 			usage(argc, argv);
 			return 0;
 		}
 
-		SPLParserTokenManager *scanner = new SPLParserTokenManager(cs);
+		TokenManager *scanner = new SPLParserTokenManager(cs);
 		SPLParser parser(scanner);
 		parser.CompilationUnit();
 		Node* n = parser.rootNode();

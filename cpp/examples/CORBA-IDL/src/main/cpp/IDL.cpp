@@ -10,6 +10,7 @@
 #include "IDLParserTokenManager.h"
 #include "ParseException.h"
 #include "StreamReader.h"
+#include "DefaultCharStream.h"
 using namespace std;
 
 JJString ReadFileFully() {
@@ -52,7 +53,7 @@ int main(int argc, char**argv) {
 			if (ifs.is_open() && ofs.is_open() && efs.is_open() && spl.is_open()) {
 				input = &ifs;	output = &ofs;	error = &efs;
 				sr = new StreamReader(spl);
-				cs = new CharStream(sr);
+				cs = new DefaultCharStream(sr);
 			}
 			else {
 				cerr << "cannot open spl or in or out or err file" << endl;
@@ -62,13 +63,13 @@ int main(int argc, char**argv) {
 		if (argc == 1) {
 			JJString s = ReadFileFully();
 			*output << s << endl;
-			cs = new CharStream(s.c_str(), s.size() - 1, 1, 1);
+			cs = new DefaultCharStream(s.c_str(), s.size() - 1, 1, 1);
 		}
 		else {
 			usage(argc, argv);
 			return 0;
 		}
-		IDLParserTokenManager *scanner = new IDLParserTokenManager(cs);
+		TokenManager *scanner = new IDLParserTokenManager(cs);
 		IDLParser parser(scanner);
 		parser.specification();
      	*output << "IDL Parser Version 0.1:  IDL file parsed successfully." << endl;

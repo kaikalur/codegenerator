@@ -7,6 +7,7 @@
 #include "Parser.h"
 #include "ParseException.h"
 #include "ParserTokenManager.h"
+#include "DefaultCharStream.h"
 
 using namespace std;
 using namespace EG1;
@@ -18,8 +19,8 @@ JAVACC_STRING_TYPE ReadFileFully(char *file_name) {
 int main(int argc, char** argv) {
 	JAVACC_STRING_TYPE s = ReadFileFully(argv[1]);
 	try {
-		CharStream *stream = new CharStream(s.c_str(), s.size() - 1, 1, 1);
-		ParserTokenManager *scanner = new ParserTokenManager(stream);
+		CharStream *stream = new DefaultCharStream(s.c_str(), s.size() - 1, 1, 1);
+		TokenManager *scanner = new ParserTokenManager(stream);
 		Parser parser(scanner);
 		Node* n = parser.Start();
 		n->dump("");

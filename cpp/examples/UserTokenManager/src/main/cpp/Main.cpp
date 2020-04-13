@@ -9,6 +9,7 @@
 #include "ParseException.h"
 #include "StreamReader.h"
 #include "MatcherTokenManager.h"
+#include "DefaultCharStream.h"
 
 
 using namespace std;
@@ -24,9 +25,9 @@ static void usage(int argc, char**argv) {
 	cerr << "IDL" << " [ spl in out err ]" << endl;
 }
 int main(int argc, char**argv) {
-	istream*	input  = &cin;
+	istream*	input = &cin;
 	ostream*	output = &cout;
-	ostream*	error  = &cerr;
+	ostream*	error = &cerr;
 	ifstream	ifs;
 	ofstream	ofs;
 	ofstream	efs;
@@ -41,28 +42,30 @@ int main(int argc, char**argv) {
 			if (ifs.is_open() && ofs.is_open() && efs.is_open()) {
 				input = &ifs;	output = &ofs;	error = &efs;
 				sr = new StreamReader(ifs);
-				cs = new CharStream(sr);
+				cs = new DefaultCharStream(sr);
 			}
 			else {
 				cerr << "cannot open spl or in or out or err file" << endl;
 				return 8;
 			}
-		} else
-		if (argc == 1) {
-			JJString s = ReadFileFully();
-			*output << s << endl;
-			cs = new CharStream(s, 1, 1);
 		}
-		else {
-			usage(argc, argv);
-			return 0;
-		}
+		else
+			if (argc == 1) {
+				JJString s = ReadFileFully();
+				*output << s << endl;
+				cs = new DefaultCharStream(s, 1, 1);
+			}
+			else {
+				usage(argc, argv);
+				return 0;
+			}
 		TokenManager *scanner = new ::MatcherTokenManager(cs);
 		MyToken head;
 		Matcher parser(scanner);
 		parser.Input();
-     	*output << "IDL Parser Version 0.1:  IDL file parsed successfully." << endl;
-	} catch (const ParseException& e) {
+		*output << "IDL Parser Version 0.1:  IDL file parsed successfully." << endl;
+	}
+	catch (const ParseException& e) {
 		clog << e.expectedTokenSequences << endl;
 	}
 	catch (...) {

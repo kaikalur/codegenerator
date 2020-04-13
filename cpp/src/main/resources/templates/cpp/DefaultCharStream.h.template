@@ -1,7 +1,8 @@
-\#ifndef JAVACC_CHAR_STREAM_H
-\#define JAVACC_CHAR_STREAM_H
+\#ifndef JAVACC_DEFAULT_CHAR_STREAM_H
+\#define JAVACC_DEFAULT_CHAR_STREAM_H
 
 \#include "JavaCC.h"
+\#include "CharStream.h"
 
 #if NAMESPACE
 namespace ${NAMESPACE_OPEN}
@@ -24,7 +25,7 @@ namespace ${NAMESPACE_OPEN}
  
 static const int initialBufferSize = 4096;
 
-class CharStream {
+class DefaultCharStream : public CharStream {
 public:
   void setTabSize(int i) { tabSize = i; }
   int  getTabSize()      { return tabSize; }
@@ -155,7 +156,7 @@ public:
    */
   virtual void deleteBuffers();
 
-  virtual ~CharStream() {
+  virtual ~DefaultCharStream() {
     if (deleteStream) {
      delete inputStream;
     }
@@ -166,37 +167,37 @@ public:
     return inBuf == 0 && bufpos + 1 >= maxNextCharInd && inputStream->endOfInput();
   }
 
-  CharStream(const JJChar *buf, int sz, int startline, int startcolumn, int buffersize)
+  DefaultCharStream(const JJChar *buf, int sz, int startline, int startcolumn, int buffersize)
   {
 	ReInit(JJString(buf, sz), startline, startcolumn, buffersize);
   }
 
-  CharStream(const JJChar *buf, int sz, int startline, int startcolumn)
+  DefaultCharStream(const JJChar *buf, int sz, int startline, int startcolumn)
   {
     ReInit(JJString(buf, sz), startline, startcolumn, initialBufferSize);
   }
 
-  CharStream(const JJString& str, int startline, int startcolumn, int buffersize)
+  DefaultCharStream(const JJString& str, int startline, int startcolumn, int buffersize)
   {
     ReInit(str, startline, startcolumn, buffersize);
   }
 
-  CharStream(const JJString& str, int startline, int startcolumn)
+  DefaultCharStream(const JJString& str, int startline, int startcolumn)
   {
     ReInit(str, startline, startcolumn, initialBufferSize);
   }
 
-  CharStream(ReaderStream *input_stream, int startline, int startcolumn, int buffersize)
+  DefaultCharStream(ReaderStream *input_stream, int startline, int startcolumn, int buffersize)
   {
     ReInit(input_stream, startline, startcolumn, buffersize);
   }
 
-  CharStream(ReaderStream *input_stream, int startline, int startcolumn)
+  DefaultCharStream(ReaderStream *input_stream, int startline, int startcolumn)
   {
     ReInit(input_stream, startline, startcolumn, initialBufferSize);
   }
 
-  CharStream(ReaderStream *input_stream)
+  DefaultCharStream(ReaderStream *input_stream)
   {
     ReInit(input_stream, 1, 1, initialBufferSize);
   }

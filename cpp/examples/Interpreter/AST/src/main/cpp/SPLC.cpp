@@ -18,6 +18,7 @@ using namespace std;
 #include "JavaCC.h"
 #include "SPLParserTokenManager.h"
 #include "ParseException.h"
+#include "DefaultCharStream.h"
 
 JJString ReadFileFully(char *file_name) {
 	JJString code;
@@ -43,8 +44,8 @@ JJString ReadFileFully(char *file_name) {
 int main(int argc, char**argv) {
 	JJString s = ReadFileFully(argv[1]);
 	try {
-		CharStream *stream = new CharStream(s.c_str(), s.size() - 1, 1, 1);
-		SPLParserTokenManager *scanner = new SPLParserTokenManager(stream);
+		CharStream *stream = new DefaultCharStream(s.c_str(), s.size() - 1, 1, 1);
+		TokenManager *scanner = new SPLParserTokenManager(stream);
 		SPLParser parser(scanner);
 		parser.CompilationUnit();
 		Node* n = parser.rootNode();

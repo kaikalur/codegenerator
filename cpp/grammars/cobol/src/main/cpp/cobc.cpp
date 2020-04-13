@@ -7,6 +7,7 @@
 #include "CobolParserTokenManager.h"
 #include "ParseException.h"
 #include "StreamReader.h"
+#include "DefaultCharStream.h"
 
 using namespace std;
 
@@ -41,7 +42,7 @@ int main(int argc, const char** argv) {
 			if (ifs.is_open() && ofs.is_open() && efs.is_open() && spl.is_open()) {
 				input = &ifs;	output = &ofs;	error = &efs;
 				sr = new StreamReader(spl);
-				cs = new CharStream(sr);
+				cs = new DefaultCharStream(sr);
 			}
 			else {
 				cerr << "cannot open spl or in or out or err file" << endl;
@@ -51,14 +52,14 @@ int main(int argc, const char** argv) {
 		if (argc == 2) {
 			JJString s = ReadFileFully();
 			cout << s << endl;
-			cs = new CharStream(s.c_str(), s.size() - 1, 1, 1);
+			cs = new DefaultCharStream(s.c_str(), s.size() - 1, 1, 1);
 		}
 		else {
 			usage(argc, argv);
 			return 0;
 		}
 
-		CobolParserTokenManager *scanner = new CobolParserTokenManager(cs);
+		TokenManager *scanner = new CobolParserTokenManager(cs);
 		CobolParser parser(scanner);
 		parser.CompilationUnit();
 	} catch (const ParseException& e) {

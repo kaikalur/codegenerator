@@ -7,6 +7,7 @@
 #include "ParseException.h"
 #include "ParserTree.h"
 #include "ParserTokenManager.h"
+#include "DefaultCharStream.h"
 
 using namespace std;
 using namespace EG3;
@@ -19,8 +20,8 @@ int main(int argc, char** argv) {
 	cout << "Reading from standard input..." << endl;
 	JAVACC_STRING_TYPE s = ReadFileFully(argv[1]);
 	try {
-	CharStream *stream = new CharStream(s.c_str(), s.size() - 1, 1, 1);
-	ParserTokenManager *scanner = new ParserTokenManager(stream);
+	CharStream *stream = new DefaultCharStream(s.c_str(), s.size() - 1, 1, 1);
+	TokenManager *scanner = new ParserTokenManager(stream);
 	Parser parser(scanner);
 	ASTStart* n = parser.Start();
 	n->dump("");

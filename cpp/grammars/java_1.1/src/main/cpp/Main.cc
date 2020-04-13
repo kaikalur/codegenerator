@@ -10,6 +10,7 @@
 #include "JavaParserTokenManager.h"
 #include "ParseException.h"
 #include "StreamReader.h"
+#include "DefaultCharStream.h"
 
 using namespace java::parser;
 using namespace std;
@@ -48,7 +49,7 @@ int main(int argc, char **argv) {
 			if (ifs.is_open() && ofs.is_open() && efs.is_open() && spl.is_open()) {
 				input = &ifs;	output = &ofs;	error = &efs;
 				sr = new StreamReader(spl);
-				cs = new CharStream(sr);
+				cs = new DefaultCharStream(sr);
 			}
 			else {
 				cerr << "cannot open spl or in or out or err file" << endl;
@@ -58,19 +59,19 @@ int main(int argc, char **argv) {
 		if (argc == 2) {
 			spl.open(argv[1]);
 			sr = new StreamReader(spl);
-			cs = new CharStream(sr);
+			cs = new DefaultCharStream(sr);
 		} else
 		if (argc == 1) {
 			JJString s = ReadFileFully();
 			cout << s << endl;
-			cs = new CharStream(s.c_str(), s.size() - 1, 1, 1);
+			cs = new DefaultCharStream(s.c_str(), s.size() - 1, 1, 1);
 		}
 		else {
 			usage(argc, argv);
 			return 0;
 		}
 
-		JavaParserTokenManager *scanner = new JavaParserTokenManager(cs);
+		TokenManager *scanner = new JavaParserTokenManager(cs);
 		JavaParser parser(scanner);
 	    parser.setErrorHandler(new MyErrorHandler());
 	    parser.CompilationUnit();

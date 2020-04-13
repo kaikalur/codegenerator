@@ -1,6 +1,8 @@
 
 package org.javacc.cpp;
 
+import java.io.File;
+
 import org.javacc.jjtree.DefaultJJTreeVisitor;
 import org.javacc.jjtree.JJTreeContext;
 import org.javacc.parser.CodeGenerator;
@@ -9,8 +11,6 @@ import org.javacc.parser.Context;
 import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.Options;
 import org.javacc.parser.TokenizerData;
-
-import java.io.File;
 
 public class CppCodeGenerator implements CodeGenerator {
 
@@ -30,15 +30,23 @@ public class CppCodeGenerator implements CodeGenerator {
   @Override
   public final boolean generateHelpers(Context context, CodeGeneratorSettings settings, TokenizerData tokenizerData) {
     try {
-      try (CppCodeBuilder builder = CppCodeBuilder.of(context, settings)) {
-        builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "CharStream.cc"));
-        builder.addTools(JavaCCGlobals.toolName);
-        builder.addOption(Options.USEROPTION__STATIC, Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
+        try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(context, settings)) {
+            builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "CharStream.h"));
+            builder.addTools(JavaCCGlobals.toolName);
 
-        builder.printTemplate("/templates/cpp/CharStream.cc.template");
-        builder.switchToIncludeFile();
-        builder.printTemplate("/templates/cpp/CharStream.h.template");
-      }
+            builder.switchToIncludeFile();
+            builder.printTemplate("/templates/cpp/CharStream.h.template");
+          }
+
+        try (CppCodeBuilder builder = CppCodeBuilder.of(context, settings)) {
+            builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "DefaultCharStream.cc"));
+            builder.addTools(JavaCCGlobals.toolName);
+            builder.addOption(Options.USEROPTION__STATIC, Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
+
+            builder.printTemplate("/templates/cpp/DefaultCharStream.cc.template");
+            builder.switchToIncludeFile();
+            builder.printTemplate("/templates/cpp/DefaultCharStream.h.template");
+          }
 
       try (CppCodeBuilder builder = CppCodeBuilder.of(context, settings)) {
         builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "TokenManagerError.cc"));

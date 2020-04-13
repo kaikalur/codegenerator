@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 #include "JavaParserConstants.h"
-#include "CharStream.h"
+#include "DefaultCharStream.h"
 #include "JavaParser.h"
 #include "JavaParserTokenManager.h"
 #include "ErrorHandler.h"
@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
   else
 	s = ReadFileFully(argv[1]);
   std::wclog << s;
-  CharStream *stream = new CharStream(s.c_str(), s.size() - 1, 1, 1);
+  CharStream *stream = new DefaultCharStream(s.c_str(), s.size() - 1, 1, 1);
   JavaParserTokenManager *scanner = new JavaParserTokenManager(stream);
   JavaParser parser(scanner);
   parser.CompilationUnit();
