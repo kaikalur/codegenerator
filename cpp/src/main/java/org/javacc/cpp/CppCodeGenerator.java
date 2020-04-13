@@ -83,9 +83,7 @@ public class CppCodeGenerator implements CodeGenerator {
         		Options.USEROPTION__STATIC, 
         		Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC,
         		Options.USEROPTION__BUILD_PARSER,
-        		Options.USEROPTION__BUILD_TOKEN_MANAGER,
-        		Options.USEROPTION__CPP_USER_TOKEN_TYPE,
-        		Options.USEROPTION__CPP_USER_TOKEN_INCLUDE);
+        		Options.USEROPTION__BUILD_TOKEN_MANAGER);
 
         builder.printTemplate("/templates/cpp/ErrorHandler.h.template");
       }
