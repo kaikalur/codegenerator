@@ -12,6 +12,7 @@
 #include "StreamReader.h"
 #include "DefaultCharStream.h"
 using namespace std;
+using namespace IDL;
 
 JJString ReadFileFully() {
 	JJString code;
