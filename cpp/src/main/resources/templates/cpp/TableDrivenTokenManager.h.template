@@ -68,11 +68,14 @@ public:
   void CommonTokenAction(Token* token);
 #fi
 
-protected:
-  bool   moveToNextChar();
 #if TOKEN_MANAGER_USES_PARSER
+public:
+  void   setParser(void* parser);
+protected:	
   ${parserName}*   parser;
 #fi
+protected:
+  bool   moveToNextChar();
   
   void   ReInit(JAVACC_CHARSTREAM* stream, int lexState = 0);
   void   SwitchTo(int lexState);

@@ -1,3 +1,10 @@
+#if TOKEN_MANAGER_USES_PARSER
+void ${parserName}TokenManager::setParser(void* parser) {
+	this->parser = static_cast<${parserName}*>(parser);
+}
+#fi
+
+
 bool ${parserName}TokenManager::moveToNextChar() {
   if(input_stream->endOfInput())
     return false;
