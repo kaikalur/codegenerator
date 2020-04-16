@@ -98,8 +98,8 @@ int ${parserName}TokenManager::jjRunStringLiteralMatch() {
 #if DEBUG_TOKEN_MANAGER
         JAVACC_CLOG << JJSPACE << JJSPACE 
                     << JAVACC_WIDE(Currently matched the first:) << JJSPACE << jjmatchedPos << JJSPACE
-                    << JAVACC_WIDE(chars as kind:) << JJSPACE << stringLiterals[index + len]
-                    << JAVACC_WIDE(, with image:) << JJSPACE << addUnicodeEscapes(tokenImages[jjmatchedKind])
+                    << JAVACC_WIDE(chars as kind:) << JJSPACE << stringLiterals[index + len] << JJCOMMA
+                    << JAVACC_WIDE(with image:) << JJSPACE << addUnicodeEscapes(tokenImages[jjmatchedKind])
                     << std::endl;
 #fi
         if (!moveToNextChar()) {
