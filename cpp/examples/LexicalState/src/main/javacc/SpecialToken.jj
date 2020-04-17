@@ -29,7 +29,7 @@ TOKEN							:
 /*
  LineComment is a simgle line comment starting with '--' until the end of line or a matching '--'
  thus this line below is valid
- real code -- in a line comment -- real code - real code -- line comment
+ real code -- in-a-line-comment -- - real code - - real code --line-comment-
 */
 SPECIAL_TOKEN                   : { "--" : LineComment }
 <LineComment> SPECIAL_TOKEN     : { <(<NA> | "-" <NA> )* (<EOL> | "-" <EOL> | "-" "-")?> : DEFAULT }
