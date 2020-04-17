@@ -16,10 +16,7 @@ using namespace std;
 JJString ReadFileFully() {
 	JJString code;
 	code =
-"AA\n"
-"/* kk */\n"
 "DD -- ccc\n"
-"BB\n"
 "BB\n"
 ;
 	return code;
