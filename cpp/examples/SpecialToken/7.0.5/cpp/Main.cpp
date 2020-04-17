@@ -10,7 +10,7 @@
 #include "SpecialTokenTokenManager.h"
 #include "ParseException.h"
 #include "StreamReader.h"
-#include "DefaultCharStream.h"
+#include "CharStream.h"
 using namespace std;
 
 JJString ReadFileFully() {
@@ -47,7 +47,7 @@ int main(int argc, char**argv) {
 			if (ifs.is_open() && ofs.is_open() && efs.is_open() && spl.is_open()) {
 				input = &ifs;	output = &ofs;	error = &efs;
 				sr = new StreamReader(spl);
-				cs = new DefaultCharStream(sr);
+				cs = new CharStream(sr);
 			}
 			else {
 				cerr << "cannot open spl or in or out or err file" << endl;
@@ -57,7 +57,7 @@ int main(int argc, char**argv) {
 		if (argc == 1) {
 			JJString s = ReadFileFully();
 			*output << s << endl;
-			cs = new DefaultCharStream(s.c_str(), s.size() - 1, 1, 1);
+			cs = new CharStream(s.c_str(), s.size() - 1, 1, 1);
 		}
 		else {
 			usage(argc, argv);

@@ -9,22 +9,6 @@
 	<artifactId>SpecialToken</artifactId>
 	<packaging>nar</packaging>
 	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.javacc.plugin</groupId>
-					<artifactId>javacc-maven-plugin</artifactId>
-					<dependencies>
-						<dependency>
-							<groupId>net.java.dev.javacc</groupId>
-							<artifactId>javacc</artifactId>
-							<version>7.0.5</version>
-							<scope>runtime</scope>
-						</dependency>
-					</dependencies>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.javacc.plugin</groupId>
@@ -38,7 +22,6 @@
 						</goals>
 						<configuration>
 							<outputDirectory>target/generated-sources/cpp</outputDirectory>
-							<codeGenerator/>
 						</configuration>
 					</execution>
 				</executions>

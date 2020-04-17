@@ -1,6 +1,7 @@
 options {
 	DEBUG_PARSER=true;
 	DEBUG_TOKEN_MANAGER=false;
+  OUTPUT_LANGUAGE = "c++";
 }
 PARSER_BEGIN(SpecialToken)
 PARSER_END(SpecialToken)
