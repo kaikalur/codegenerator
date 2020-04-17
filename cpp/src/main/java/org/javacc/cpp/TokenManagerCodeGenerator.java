@@ -34,7 +34,8 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     String superClass = (String) settings.get(Options.USEROPTION__TOKEN_MANAGER_SUPER_CLASS);
     settings.putAll(Options.getOptions());
     settings.put("maxOrdinal", tokenizerData.allMatches.size());
-    settings.put("maxLexStates", tokenizerData.lexStateNames.length);
+    settings.put("firstLexState", tokenizerData.lexStateNames[0]);
+    settings.put("lastLexState", tokenizerData.lexStateNames[tokenizerData.lexStateNames.length - 1]);
     settings.put("nfaSize", tokenizerData.nfa.size());
     settings.put("charsVectorSize", ((Character.MAX_VALUE >> 6) + 1));
     settings.put("stateSetSize", tokenizerData.nfa.size());
@@ -425,8 +426,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     codeGenerator.printLiteralArray("lexStateNames", tokenizerData.lexStateNames);
   }
 
-  private void dumpLexicalActions(Map<Integer, TokenizerData.MatchInfo> allMatches, TokenizerData.MatchType matchType,
-      String kindString, CppCodeBuilder codeGenerator) {
+  private void dumpLexicalActions(Map<Integer, TokenizerData.MatchInfo> allMatches, TokenizerData.MatchType matchType, String kindString, CppCodeBuilder codeGenerator) {
     codeGenerator.println("  switch(" + kindString + ") {");
     for (int i : allMatches.keySet()) {
       TokenizerData.MatchInfo matchInfo = allMatches.get(i);

@@ -54,7 +54,7 @@ void ${parserName}TokenManager::ReInit(JAVACC_CHARSTREAM* stream, int lexState)
 /** Switch to specified lex state. */
 void ${parserName}TokenManager::SwitchTo(int lexState)
 {
-    if (lexState >= 1 || lexState < 0) {
+    if (lexState > ${lastLexState} || lexState < ${firstLexState}) {
       JJString message;
       message += JAVACC_WIDE(Error: Ignoring invalid lexical state : );
       message += lexState; message += JAVACC_WIDE(. State unchanged.);
