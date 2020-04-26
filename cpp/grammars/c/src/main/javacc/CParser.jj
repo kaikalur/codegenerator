@@ -42,7 +42,7 @@
 
   */
 options {
-	INCLUDE_FOR_PARSER="ParsingStack.h";
+	PARSER_INCLUDE="ParsingStack.h";
 }
 
 PARSER_BEGIN(CParser)
