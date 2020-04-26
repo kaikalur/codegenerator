@@ -15,13 +15,13 @@
 \#define JAVACC_CIN  std::cin
 \#define JAVACC_COUT std::cout
 \#define JAVACC_CERR std::cerr
-\#define JAVACC_CLOG std::clog
+\#define JAVACC_CLOG std::cout
 \#define JAVACC_WIDE(x) #x
 \#else
 \#define JAVACC_CIN  std::wcin
 \#define JAVACC_COUT std::wcout
 \#define JAVACC_CERR std::wcerr
-\#define JAVACC_CLOG std::wclog
+\#define JAVACC_CLOG std::wcout
 \#define JAVACC_WIDE(x) L#x
 \#endif
 
