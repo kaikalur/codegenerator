@@ -174,8 +174,8 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
     }
 
     int vectorIndex = curChar >> 6;
-    // unsigned long long bitpattern = (1L << (curChar & 0x37));
-    unsigned long long bitpattern = (1ULL << (curChar & 077)) & 0x7fffffe07fffffeULL;
+    unsigned long long bitpattern = (1ULL << (curChar & 0x3f));
+    // unsigned long long bitpattern = (1ULL << (curChar & 077)) & 0x7fffffe07fffffeULL;
     do {
       int state = stateSet[--cnt];
 #if DEBUG_TOKEN_MANAGER
