@@ -4,10 +4,6 @@
 \#include "JavaCC.h"
 \#include "Token.h"
 
-#if INCLUDE_FOR_TOKEN
-\#include "${INCLUDE_FOR_TOKEN}"
-#fi
-
 #if NAMESPACE
 namespace ${NAMESPACE_OPEN}
 #fi
@@ -16,11 +12,7 @@ namespace ${NAMESPACE_OPEN}
  * Describes the input token stream.
  */
 
-class DefaultToken
-  : public Token 
-#if TOKEN_SUPER_CLASS
-  , public ${TOKEN_SUPER_CLASS}
-#fi
+class DefaultToken : public Token 
 {
 private:
   /**
