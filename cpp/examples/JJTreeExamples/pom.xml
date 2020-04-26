@@ -18,12 +18,4 @@
 		<module>eg3</module>
 		<module>eg4</module>
 	</modules>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>com.github.maven-nar</groupId>
-				<artifactId>nar-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
 </project>
