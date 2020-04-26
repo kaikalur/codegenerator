@@ -29,21 +29,31 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-options {
+ /* JavaCC 7 options
+ options {
   JAVA_UNICODE_ESCAPE = true;
   NAMESPACE = "java::parser";
   TOKEN_MANAGER_SUPER_CLASS = "MyTm";
-  INCLUDE_FOR_TOKEN_MANAGER = "MyTm.h";
+  TOKEN_MANAGER_INCLUDE = "MyTm.h";
+  PARSER_INCLUDE = "MyParser.h";
   PARSER_SUPER_CLASS = "MyParser";
-  INCLUDE_FOR_PARSER = "MyParser.h";
   TOKEN_SUPER_CLASS = "TokenBase";
-  INCLUDE_FOR_TOKEN = "TokenBase.h";
+  TOKEN_INCLUDE = "TokenBase.h";
   DEBUG_PARSER = true;
   //DEBUG_TOKEN_MANAGER = true;
   //DEBUG_LOOKAHEAD = true;
-  COMMON_TOKEN_ACTION = true;
-  TOKEN_MANAGER_USES_PARSER = true;
-  BUILD_TOKEN_MANAGER = true;
+}
+ */
+/* JavaCC 8 options
+*/
+options {
+  JAVA_UNICODE_ESCAPE = true;
+  NAMESPACE = "java::parser";
+  //COMMON_TOKEN_ACTION = true;
+  //TOKEN_MANAGER_USES_PARSER = true;
+  DEBUG_PARSER = true;
+  //DEBUG_TOKEN_MANAGER = true;
+  //DEBUG_LOOKAHEAD = true;
 }
 
 PARSER_BEGIN(JavaParser)
@@ -51,21 +61,20 @@ PARSER_BEGIN(JavaParser)
 PARSER_END(JavaParser)
 
 TOKEN_MGR_DECLS : {
-	int braceCount = 0;
+	const int braceCount = 0;
 	int bracketCount = 0;
 	int parenthesisCount = 0;
 	int stringSize;
 	int linesCommentCount = 0;
 
-	int foo(const JJString& i) {
-		return 0;
-	}
 
+/*
 	void JavaParserTokenManager::CommonTokenAction(Token* token) {
 		if (parser) {
 			int i = 2;
 		}
 	}
+*/
 }
 
 /* WHITE SPACE */

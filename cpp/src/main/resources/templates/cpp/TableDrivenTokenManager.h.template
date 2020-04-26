@@ -10,9 +10,6 @@
 \#include "TokenManager.h"
 \#include "${parserName}Constants.h"
 
-#if INCLUDE_FOR_TOKEN_MANAGER
-\#include "${INCLUDE_FOR_TOKEN_MANAGER}"
-#fi
 
 #if TOKEN_MANAGER_USES_PARSER
 \#include "${parserName}.h"
@@ -24,9 +21,6 @@ namespace ${NAMESPACE_OPEN}
 
 class ${parserName}TokenManager 
 	: public TokenManager
-#if TOKEN_MANAGER_SUPER_CLASS
- 	, public ${TOKEN_MANAGER_SUPER_CLASS}
-#fi
  {
 public:
 \#ifndef JAVACC_CHARSTREAM
@@ -93,11 +87,8 @@ private:
   Token* jjFillToken();
 
 public:
-  void setErrorHandler(TokenManagerErrorHandler* eh) {
-      if (delete_eh) delete errorHandler, errorHandler = nullptr;
-      delete_eh = false;  // We don't delete stuff passed in.
-      errorHandler = eh;
-  }
+  void   lexicalError();
+  void   setErrorHandler(TokenManagerErrorHandler* eh);
 };
 
 #if NAMESPACE

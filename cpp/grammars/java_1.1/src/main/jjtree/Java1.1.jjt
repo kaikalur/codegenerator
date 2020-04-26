@@ -29,17 +29,28 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+/* JavaCC 7 options
+options {
+  JAVA_UNICODE_ESCAPE = true;
+  OUTPUT_LANGUAGE = "c++";
+  NAMESPACE = "java::parser";
+  TOKEN_MANAGER_SUPER_CLASS = "MyTm";
+  TOKEN_MANAGER_INCLUDE = "MyTm.h";
+  PARSER_INCLUDE = "MyParser.h";
+  PARSER_SUPER_CLASS = "MyParser";
+  TOKEN_EXTENDS = "TokenBase";
+  TOKEN_INCLUDE = "TokenBase.h";
+}
+*/
+
+/* JavaCC 8 options
+*/
 options {
   JAVA_UNICODE_ESCAPE = true;
   NAMESPACE = "java::parser";
-  TOKEN_MANAGER_SUPER_CLASS = "MyTm";
-  INCLUDE_FOR_TOKEN_MANAGER = "MyTm.h";
-  PARSER_SUPER_CLASS = "MyParser";
-  INCLUDE_FOR_PARSER = "MyParser.h";
-  TOKEN_SUPER_CLASS = "TokenBase";
-  INCLUDE_FOR_TOKEN = "TokenBase.h";
+  DEBUG_PARSER=true;
+//  DEBUG_LOOKAHEAD=true;
 }
-
 PARSER_BEGIN(JavaParser)
 
 PARSER_END(JavaParser)

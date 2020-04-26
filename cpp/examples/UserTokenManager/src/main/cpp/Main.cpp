@@ -35,7 +35,7 @@ int main(int argc, char**argv) {
 	CharStream *	cs = nullptr;
 
 	try {
-		if (argc == 5) {
+		if (argc == 4) {
 			ifs.open(argv[2]);
 			ofs.open(argv[3]);
 			efs.open(argv[4]);

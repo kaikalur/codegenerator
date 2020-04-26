@@ -11,6 +11,7 @@
 #include "ParseException.h"
 #include "StreamReader.h"
 #include "DefaultCharStream.h"
+#include "MyErrorHandler.h"
 
 using namespace java::parser;
 using namespace std;

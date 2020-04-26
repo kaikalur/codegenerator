@@ -22,8 +22,8 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
   private static final String TokenManagerTemplate  = "/templates/cpp/TableDrivenTokenManager.cc.template";
   private static final String TokenManagerTemplateH = "/templates/cpp/TableDrivenTokenManager.h.template";
 
-  private final Context context;
-  private CppCodeBuilder      codeGenerator;
+  private final Context 	context;
+  private CppCodeBuilder    codeGenerator;
 
   TokenManagerCodeGenerator(Context context) {
     this.context = context;
@@ -427,6 +427,13 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
   }
 
   private void dumpLexicalActions(Map<Integer, TokenizerData.MatchInfo> allMatches, TokenizerData.MatchType matchType, String kindString, CppCodeBuilder codeGenerator) {
+    switch(matchType) {
+    case SKIP: break;
+    //codeGenerator.println("  if (curLexState == DEFAULT || curLexState == " + {");	  
+    case SPECIAL_TOKEN: break;
+    default: break;
+    
+    }
     codeGenerator.println("  switch(" + kindString + ") {");
     for (int i : allMatches.keySet()) {
       TokenizerData.MatchInfo matchInfo = allMatches.get(i);

@@ -1,21 +1,3 @@
-#if TOKEN_MANAGER_USES_PARSER
-void ${parserName}TokenManager::setParser(void* parser) {
-	this->parser = static_cast<${parserName}*>(parser);
-}
-#fi
-
-
-bool ${parserName}TokenManager::moveToNextChar() {
-  if(input_stream->endOfInput())
-    return false;
-
-  curChar = input_stream->readChar();
-#if IGNORE_CASE
-  curChar = towlower(curChar);
-#fi
-  return true;
-}
-
 ${decls}
 
 /** Constructor. */
@@ -61,6 +43,17 @@ void ${parserName}TokenManager::SwitchTo(int lexState)
       throw new TokenManagerError(message, INVALID_LEXICAL_STATE);
     } else
       curLexState = lexState;
+}
+
+bool ${parserName}TokenManager::moveToNextChar() {
+  if(input_stream->endOfInput())
+    return false;
+
+  curChar = input_stream->readChar();
+#if IGNORE_CASE
+  curChar = towlower(curChar);
+#fi
+  return true;
 }
 
 #if !NO_DFA
@@ -457,3 +450,17 @@ Token * ${parserName}TokenManager::getNextToken() {
     }
   }
 }
+#if TOKEN_MANAGER_USES_PARSER
+void ${parserName}TokenManager::setParser(void* parser) {
+	this->parser = static_cast<${parserName}*>(parser);
+}
+#fi
+void ${parserName}TokenManager::lexicalError() {
+	std::clog << "Lexical error encountered." << std::endl;
+}
+void ${parserName}TokenManager::setErrorHandler(TokenManagerErrorHandler* eh) {
+    if (delete_eh) delete errorHandler, errorHandler = nullptr;
+    delete_eh = false;  // We don't delete stuff passed in.
+    errorHandler = eh;
+}
+
