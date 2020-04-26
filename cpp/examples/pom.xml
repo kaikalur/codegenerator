@@ -24,6 +24,11 @@
 	<profiles>
 		<profile>
 			<id>jcc8</id>
+			<activation>
+				<file>
+					<exists>${basedir}/src/main/javacc</exists>
+				</file>
+			</activation>
 			<build>
 				<pluginManagement>
 					<plugins>
@@ -97,6 +102,11 @@
 		</profile>
 		<profile>
 			<id>jjt8</id>
+			<activation>
+				<file>
+					<exists>${basedir}/src/main/jjtree</exists>
+				</file>
+			</activation>
 			<build>
 				<pluginManagement>
 					<plugins>
