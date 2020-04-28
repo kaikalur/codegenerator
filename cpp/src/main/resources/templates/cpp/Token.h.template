@@ -3,10 +3,7 @@
 
 \#include "JavaCC.h"
 
-
-#if NAMESPACE
-namespace ${NAMESPACE_OPEN}
-#fi
+namespace JavaCC {
 
 /**
  * Describes the input token stream.
@@ -66,8 +63,8 @@ public:
   virtual const JJString& 	toString() = 0;
 };
 
-#if NAMESPACE
-${NAMESPACE_CLOSE}
-#fi
+}
+
+using JavaCC::Token;
 
 \#endif
