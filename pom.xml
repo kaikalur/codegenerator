@@ -18,9 +18,11 @@
 
 	<modules>
 		<module>cpp</module>
+<!-- 
 		<module>csharp</module>
 		<module>java</module>
-	</modules>
+ -->
+ 	</modules>
 
 	<dependencies>
 		<dependency>
