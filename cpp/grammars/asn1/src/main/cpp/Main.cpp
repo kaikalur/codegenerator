@@ -63,7 +63,7 @@ int main(int argc, char**argv) {
 			}
 		TokenManager* scanner = new AsnParserTokenManager(cs);
 		AsnParser parser(scanner);
-		parser.Input();
+		parser.ModuleDefinitionList();
 		*output << "Parser Version 0.1:  IDL file parsed successfully." << endl;
 	}
 	catch (const ParseException& e) {
