@@ -32,8 +32,8 @@ options {
 	STATIC = false;
 	COMMON_TOKEN_ACTION = false;
 	TOKEN_FACTORY = "MyToken";
-	INCLUDE_FOR_TOKEN_MANAGER="MyToken.h";
-	INCLUDE_FOR_PARSER="Parser.jjh";
+	TOKEN_INCLUDE="MyToken.h";
+	PARSER_INCLUDE="Parser.jjh";
 	NAMESPACE="Java";
 	DEBUG_PARSER=true;
 //	DEBUG_TOKEN_MANAGER=true;

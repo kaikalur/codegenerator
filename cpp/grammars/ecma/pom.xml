@@ -11,49 +11,6 @@
 	<name>JavaCC grammars C++  ECMA</name>
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.javacc.plugin</groupId>
-				<artifactId>javacc-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>jcc</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>jjtree-javacc</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>target/generated-sources/cpp</outputDirectory>
-							<nodeDirectory>src/main/cpp</nodeDirectory>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>com.github.maven-nar</groupId>
-				<artifactId>nar-maven-plugin</artifactId>
-				<extensions>true</extensions>
-				<configuration>
-					<libraries>
-						<library>
-							<type>executable</type>
-							<run>true</run>
-						</library>
-					</libraries>
-					<cpp>
-						<includePaths>
-							<includePath>
-								<path>${project.basedir}/src/main/cpp</path>
-							</includePath>
-							<includePath>
-								<path>${project.basedir}/target/generated-sources/cpp</path>
-							</includePath>
-							<includePath>
-								<path>${project.basedir}/target/generated-sources/jjtree</path>
-							</includePath>
-						</includePaths>
-					</cpp>
-				</configuration>
-			</plugin>
 <!-- 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

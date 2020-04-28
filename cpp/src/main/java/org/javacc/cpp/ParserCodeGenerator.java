@@ -137,7 +137,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     } else {
         codeGenerator.println("#include \"" + Options.getTokenInclude() +"\"");
     }
-    printInclude(Options.getIncludeForParser());
+    printInclude(Options.getParserInclude());
 
     if (Options.getTokenConstants().isEmpty()) {
         codeGenerator.println("#include \"" + context.globals().cu_name + "Constants.h\"");
@@ -703,8 +703,8 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "trace_call(const char *s)");
       codeGenerator.println("  {");
       codeGenerator.println("    if (trace_enabled()) {");
-      codeGenerator.println("      for (int no = 0; no < indent; no++) { std::clog << \" \"; }");
-      codeGenerator.println("      std::clog << \"Call:   \" << s << std::endl;");
+      codeGenerator.println("      for (int no = 0; no < indent; no++) { JAVACC_CLOG << JJSPACE; }");
+      codeGenerator.println("      JAVACC_CLOG << \"Call:   \" << s << std::endl;");
       codeGenerator.println("    }");
       codeGenerator.println("    indent += 2;");
       codeGenerator.println("  }");
@@ -715,8 +715,8 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("  {");
       codeGenerator.println("    indent -= 2;");
       codeGenerator.println("    if (trace_enabled()) {");
-      codeGenerator.println("      for (int no = 0; no < indent; no++) { std::clog << \" \"; }");
-      codeGenerator.println("      std::clog << \"Return: \" << s << std::endl;");
+      codeGenerator.println("      for (int no = 0; no < indent; no++) { JAVACC_CLOG << JJSPACE; }");
+      codeGenerator.println("      JAVACC_CLOG << \"Return: \" << s << std::endl;");
       codeGenerator.println("    }");
       codeGenerator.println("  }");
       codeGenerator.println("");

@@ -3,12 +3,18 @@
 #include <iostream>
 #include <string>
 #include <stdlib.h>
+#if		defined(JJ7)
+#define CHARSTREAM CharStream
+#include "CharStream.h"
+#elif	defined(JJ8)
+#define CHARSTREAM DefaultCharStream
+#include "DefaultCharStream.h"
+#endif
 
 #include "JavaParserConstants.h"
-#include "DefaultCharStream.h"
 #include "JavaParser.h"
 #include "JavaParserTokenManager.h"
-#include "ErrorHandler.h"
+#include "MyErrorHandler.h"
 
 using namespace java::parser;
 using namespace std;
@@ -40,26 +46,18 @@ int main(int argc, char **argv) {
 	s = readHelloWorld();
   else
 	s = ReadFileFully(argv[1]);
-  std::wclog << s;
-  CharStream *stream = new DefaultCharStream(s.c_str(), s.size() - 1, 1, 1);
+  std::wcout << s;
+  CharStream *stream = new CHARSTREAM(s.c_str(), s.size() - 1, 1, 1);
   JavaParserTokenManager *scanner = new JavaParserTokenManager(stream);
   JavaParser parser(scanner);
   parser.CompilationUnit();
   Node *root = (Node*)parser.jjtree.peekNode();
+#if 0
   if (root) {
     JJString buffer; 
    	root->dumpToBuffer(JJSPACE, JAVACC_WIDE(\n), &buffer);
-    JAVACC_COUT << buffer << std::endl;
+    std::wcout << buffer << std::endl;
     root->dump(JJSPACE);
-#if 0
-	JJString  a;
-	const JJString ca = L"";
-	const JJString* b = &a;
-	const JJString* const c = &a;
-	const JJString const * d = &a;
-
-	c = &s;
-	d = &s;
-#endif
   }
+#endif
 }

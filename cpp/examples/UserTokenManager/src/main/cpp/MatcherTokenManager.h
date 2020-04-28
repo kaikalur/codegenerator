@@ -29,6 +29,8 @@ public:
 		}
 		return token;
 	}
+	virtual void lexicalError() {
+	}
 private:
 	Basic::CharStream* cs;
 };

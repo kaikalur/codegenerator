@@ -17,7 +17,7 @@
 				<artifactId>javacc-maven-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>jcc-eg2</id>
+						<id>jjt8jjt</id>
 						<phase>generate-sources</phase>
 						<goals>
 							<goal>jjtree-javacc</goal>
@@ -36,7 +36,7 @@
 				<extensions>true</extensions>
 				<executions>
 					<execution>
-						<id>compile-eg2</id>
+						<id>default-nar-compile</id>
 						<goals>
 							<goal>nar-compile</goal>
 						</goals>

@@ -67,6 +67,9 @@
 <!-- 
 									<cloneProjectsTo>${project.build.directory}/examples</cloneProjectsTo>
  -->
+ 								<pomExcludes>
+ 									<pomExclude>MailProcessing/pom.xml</pomExclude>
+ 								</pomExcludes>
  								</configuration>
 							</execution>
 							<execution>

@@ -13,23 +13,6 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.javacc.plugin</groupId>
-				<artifactId>javacc-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>jcc</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>jjtree-javacc</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.basedir}/target/generated-sources/cpp</outputDirectory>
-							<nodeDirectory>${project.basedir}/src/main/cpp</nodeDirectory>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>com.github.maven-nar</groupId>
 				<artifactId>nar-maven-plugin</artifactId>
 				<extensions>true</extensions>
@@ -52,22 +35,9 @@
 								<arg>${project.basedir}/spl/odd/odd.err</arg>
 							</args>
  -->
-  						</library>
+						</library>
 					</libraries>
-					<cpp>
-						<includePaths>
-							<includePath>
-								<path>${project.basedir}/src/main/cpp</path>
-							</includePath>
-							<includePath>
-								<path>${project.basedir}/target/generated-sources/cpp</path>
-							</includePath>
-							<includePath>
-								<path>${project.basedir}/target/generated-sources/jjtree</path>
-							</includePath>
-						</includePaths>
-					</cpp>
- 				</configuration>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -88,7 +58,8 @@
 								<condition property="files.match">
 									<filesmatch file1="${project.basedir}/spl/calc/calc.out" file2="${project.basedir}/spl/calc/calc.ref" />
 								</condition>
-								<fail unless="files.match" message="${project.basedir}/spl/calc/calc.out does not match ${project.basedir}/spl/calc/calc.ref!" />
+								<fail unless="files.match"
+									message="${project.basedir}/spl/calc/calc.out does not match ${project.basedir}/spl/calc/calc.ref!" />
 							</target>
 						</configuration>
 					</execution>

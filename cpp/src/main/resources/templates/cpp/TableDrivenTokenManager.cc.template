@@ -1,21 +1,3 @@
-#if TOKEN_MANAGER_USES_PARSER
-void ${parserName}TokenManager::setParser(void* parser) {
-	this->parser = static_cast<${parserName}*>(parser);
-}
-#fi
-
-
-bool ${parserName}TokenManager::moveToNextChar() {
-  if(input_stream->endOfInput())
-    return false;
-
-  curChar = input_stream->readChar();
-#if IGNORE_CASE
-  curChar = towlower(curChar);
-#fi
-  return true;
-}
-
 ${decls}
 
 /** Constructor. */
@@ -54,13 +36,24 @@ void ${parserName}TokenManager::ReInit(JAVACC_CHARSTREAM* stream, int lexState)
 /** Switch to specified lex state. */
 void ${parserName}TokenManager::SwitchTo(int lexState)
 {
-    if (lexState >= 1 || lexState < 0) {
+    if (lexState > ${lastLexState} || lexState < ${firstLexState}) {
       JJString message;
       message += JAVACC_WIDE(Error: Ignoring invalid lexical state : );
       message += lexState; message += JAVACC_WIDE(. State unchanged.);
       throw new TokenManagerError(message, INVALID_LEXICAL_STATE);
     } else
       curLexState = lexState;
+}
+
+bool ${parserName}TokenManager::moveToNextChar() {
+  if(input_stream->endOfInput())
+    return false;
+
+  curChar = input_stream->readChar();
+#if IGNORE_CASE
+  curChar = towlower(curChar);
+#fi
+  return true;
 }
 
 #if !NO_DFA
@@ -98,8 +91,8 @@ int ${parserName}TokenManager::jjRunStringLiteralMatch() {
 #if DEBUG_TOKEN_MANAGER
         JAVACC_CLOG << JJSPACE << JJSPACE 
                     << JAVACC_WIDE(Currently matched the first:) << JJSPACE << jjmatchedPos << JJSPACE
-                    << JAVACC_WIDE(chars as kind:) << JJSPACE << stringLiterals[index + len]
-                    << JAVACC_WIDE(, with image:) << JJSPACE << addUnicodeEscapes(tokenImages[jjmatchedKind])
+                    << JAVACC_WIDE(chars as kind:) << JJSPACE << stringLiterals[index + len] << JJCOMMA
+                    << JAVACC_WIDE(with image:) << JJSPACE << addUnicodeEscapes(tokenImages[jjmatchedKind])
                     << std::endl;
 #fi
         if (!moveToNextChar()) {
@@ -174,8 +167,8 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
     }
 
     int vectorIndex = curChar >> 6;
-    // unsigned long long bitpattern = (1L << (curChar & 0x37));
-    unsigned long long bitpattern = (1ULL << (curChar & 077)) & 0x7fffffe07fffffeULL;
+    unsigned long long bitpattern = (1ULL << (curChar & 0x3f));
+    // unsigned long long bitpattern = (1ULL << (curChar & 077)) & 0x7fffffe07fffffeULL;
     do {
       int state = stateSet[--cnt];
 #if DEBUG_TOKEN_MANAGER
@@ -457,3 +450,17 @@ Token * ${parserName}TokenManager::getNextToken() {
     }
   }
 }
+#if TOKEN_MANAGER_USES_PARSER
+void ${parserName}TokenManager::setParser(void* parser) {
+	this->parser = static_cast<${parserName}*>(parser);
+}
+#fi
+void ${parserName}TokenManager::lexicalError() {
+	std::clog << "Lexical error encountered." << std::endl;
+}
+void ${parserName}TokenManager::setErrorHandler(TokenManagerErrorHandler* eh) {
+    if (delete_eh) delete errorHandler, errorHandler = nullptr;
+    delete_eh = false;  // We don't delete stuff passed in.
+    errorHandler = eh;
+}
+
