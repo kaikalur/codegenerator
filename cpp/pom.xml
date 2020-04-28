@@ -8,11 +8,11 @@
 		<version>8.0.0-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.javacc.codegen</groupId>
+	<groupId>org.javacc.kampbell</groupId>
 	<artifactId>cpp</artifactId>
 
-	<name>JavaCC default c++ code generator</name>
-	<description>JavaCC default c++ code generator</description>
+	<name>JavaCC Kampbell c++ code generator</name>
+	<description>JavaCC Kampbell c++ code generator</description>
 	<profiles>
 		<profile>
 			<id>run-its</id>
