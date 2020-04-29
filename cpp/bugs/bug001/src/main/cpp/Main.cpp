@@ -4,7 +4,7 @@
 #include <string>
 
 #include "JavaCC.h"
-#include "Bug001ParserTokenManager.h"
+#include "TyperTokenManager.h"
 #include "ParseException.h"
 #include "StreamReader.h"
 #if		defined(JJ8)
@@ -14,28 +14,23 @@
 #include "CharStream.h"
 #define CHARSTREAM CharStream
 #endif
-#include "Bug001Parser.h"
+#include "Typer.h"
 
 using namespace std;
-using namespace bug001;
+using namespace ASN1::Typer;
 
 JJString ReadFileFully() {
 	JJString code;
-	code =
-"{\n" 
-"	iso org(3) 2 foo\n"
-"}\n";
-
+	code = "ModuleTestEmpty-00 { iso org(3) } DEFINITIONS ::= BEGIN END";	
 	return code;
 }
 static void usage(int argc, char**argv) {
-	cerr << "Parser" << " [ spl in out err ]" << endl;
+	cerr << "Parser" << " [ in out err ]" << endl;
 }
 int main(int argc, char**argv) {
 	istream*	input  = &cin;
 	ostream*	output = &cout;
 	ostream*	error  = &cerr;
-	ifstream	spl;
 	ifstream	ifs;
 	ofstream	ofs;
 	ofstream	efs;
@@ -44,7 +39,6 @@ int main(int argc, char**argv) {
 
 	try {
 		if (argc == 5) {
-			spl.open(argv[1]);
 			ifs.open(argv[2]);
 			ofs.open(argv[3]);
 			efs.open(argv[4]);
@@ -67,9 +61,9 @@ int main(int argc, char**argv) {
 			usage(argc, argv);
 			return 0;
 		}
-		TokenManager *scanner = new Bug001ParserTokenManager(cs);
-		Bug001Parser parser(scanner);
-		parser.DefinitiveIdentifier();
+		TokenManager *scanner = new TyperTokenManager(cs);
+		Typer parser(scanner);
+		parser.ModuleDefinitionList();
      	*output << "Parser Version 0.1:  file parsed successfully." << endl;
 	} catch (const ParseException& e) {
 		clog << e.expectedTokenSequences << endl;
@@ -77,7 +71,6 @@ int main(int argc, char**argv) {
 	catch (...) {
 
 	}
-	if (spl.is_open()) spl.close();
 	if (ifs.is_open()) ifs.close();
 	if (ofs.is_open()) ofs.close();
 	if (efs.is_open()) efs.close();
@@ -86,32 +79,3 @@ int main(int argc, char**argv) {
 
 	return 0;
 }
-/*
-public static void main(String args[]) {
-    Parser parser;
-    if (args.length == 0) {
-      System.out.println("Parser Version 0.1:  Reading from standard input . . .");
-      parser = new Parser(System.in);
-    } else if (args.length == 1) {
-      System.out.println("Parser Version 0.1:  Reading from file " + args[0] + " . . .");
-      try {
-        parser = new Parser(new java.io.FileInputStream(args[0]));
-      } catch (java.io.FileNotFoundException e) {
-        System.out.println("Parser Version 0.1:  File " + args[0] + " not found.");
-        return;
-      }
-    } else {
-      System.out.println("Parser Version 0.1:  Usage is one of:");
-      System.out.println("         java Parser < inputfile");
-      System.out.println("OR");
-      System.out.println("         java Parser inputfile");
-      return;
-    }
-    try {
-      parser.specification();
-      System.out.println("Parser Version 0.1:  file parsed successfully.");
-    } catch (ParseException e) {
-      System.out.println("Parser Version 0.1:  Encountered errors during parse.");
-    }
-  }
-  */
