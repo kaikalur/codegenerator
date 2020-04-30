@@ -3,12 +3,12 @@
 #include "MyTokenConstants.h"
 using namespace FOO::BAR;
 
-class MatcherTokenManager : public Basic::TokenManager {
+class MatcherTokenManager : public TokenManager {
 public:
 	MatcherTokenManager(Basic::CharStream* cs) : cs(cs) {
 	}
-	virtual Basic::Token* getNextToken() {
-		Basic::Token* token = nullptr;
+	virtual Token* getNextToken() {
+		Token* token = nullptr;
 		if (cs->endOfInput())
 			token =   new MyToken(_EOF, "EOF");
 		else {

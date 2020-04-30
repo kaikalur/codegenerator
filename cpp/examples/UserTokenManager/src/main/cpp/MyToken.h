@@ -15,7 +15,7 @@ namespace FOO {
 		 */
 
 		class MyToken
-			: public Basic::Token
+			: public Token
 		{
 		private:
 			/**
