@@ -1,7 +1,7 @@
 options {
 SANITY_CHECK=true;
 DEBUG_PARSER=true;
-DEBUG_TOKEN_MANAGER=false;
+DEBUG_TOKEN_MANAGER=true;
 DEBUG_LOOKAHEAD=false;
 STATIC=false;
 //COMMON_TOKEN_ACTION = true;
@@ -353,13 +353,36 @@ void Symbol() : {} {
    Reference() (  <LBRACE> skipbrace() <RBRACE> )?
 }
 void Reference() : {} {
-   ( LOOKAHEAD(2)  typereference() | LOOKAHEAD(2)  valuereference() | LOOKAHEAD(2)  objectclassreference() | LOOKAHEAD(2)  objectreference() |  objectsetreference() )
+	( LOOKAHEAD(2)  
+      typereference() 
+	| LOOKAHEAD(2)  
+	  valuereference()
+	| LOOKAHEAD(2)  
+	  objectclassreference()
+	| LOOKAHEAD(2)  
+	  objectreference() 
+	| objectsetreference() 
+	)
 }
 void AssignmentList() : {} {
    (  Assignment() )+
 }
 void Assignment() : {} {
-   ( LOOKAHEAD(2)  TypeAssignment() | LOOKAHEAD(2)  ValueAssignment() | LOOKAHEAD(3)  ValueSetTypeAssignment() |  ObjectClassAssignment() | LOOKAHEAD(3)  ObjectAssignment() | LOOKAHEAD(2)  ObjectSetAssignment() | LOOKAHEAD(2)  ParameterizedAssignment() |  XMLValueAssignment() )
+	( LOOKAHEAD(2)
+      TypeAssignment()
+	| LOOKAHEAD(2)
+	  ValueAssignment()
+	| LOOKAHEAD(3)
+	  ValueSetTypeAssignment() 
+	| ObjectClassAssignment()
+	| LOOKAHEAD(3)
+	  ObjectAssignment()
+	| LOOKAHEAD(2)  
+	  ObjectSetAssignment()
+	| LOOKAHEAD(2) 
+	  ParameterizedAssignment()
+	| XMLValueAssignment() 
+	)
 }
 void AssignSign() : {} {
    <ASSIGN>

@@ -21,7 +21,7 @@ using namespace ASN1::Typer;
 
 JJString ReadFileFully() {
 	JJString code;
-	code = "ModuleTestEmpty-00 { iso org(3) } DEFINITIONS ::= BEGIN END";	
+	code = "ModuleTestEmpty-00 { iso org(3) } DEFINITIONS ::= BEGIN END\n";	
 	return code;
 }
 static void usage(int argc, char**argv) {
@@ -42,9 +42,9 @@ int main(int argc, char**argv) {
 			ifs.open(argv[2]);
 			ofs.open(argv[3]);
 			efs.open(argv[4]);
-			if (ifs.is_open() && ofs.is_open() && efs.is_open() && spl.is_open()) {
+			if (ifs.is_open() && ofs.is_open() && efs.is_open()) {
 				input = &ifs;	output = &ofs;	error = &efs;
-				sr = new StreamReader(spl);
+				sr = new StreamReader(ifs);
 				cs = new CHARSTREAM(sr);
 			}
 			else {
