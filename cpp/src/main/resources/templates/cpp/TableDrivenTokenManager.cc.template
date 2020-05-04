@@ -18,7 +18,7 @@ void ${parserName}TokenManager::ReInit(JAVACC_CHARSTREAM* stream, int lexState)
     for (int i = 0; i < ${nfaSize}; i++) {
       int ind = 0;
       // We originally generate something like RLE for the static arrays and
-      // we actually expannd them here.
+      // we actually expand them here.
       for (int j = 0; j < (int) jjCharData[i][0]; j += 2) {
         for (int k = 0; k < (int) jjCharData[i][j + 1]; k++) {
           jjChars[i][ind++] = jjCharData[i][j + 2];
@@ -127,10 +127,14 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
     return curPos;
   }
 
+  int stateSet[${generatedStates}];
+  int newStateSet[${generatedStates}];
+  int moved[${generatedStates}];
+  
   // We have an array indexed by the NFA state number to roughly indicate
-  // the input position so when the input reaches part 0x7fffffff (which
+  // the input position so when the input reaches part IntMax (which
   // should be extremely rare), we need to reset them all back to zero.
-  if (++moveIndex == 0x7fffffff) {
+  if (++moveIndex == IntMax) {
     for (int i = 0; i < ${generatedStates}; i++) moved[i] = 0;
     moveIndex = 1;
   }
@@ -160,8 +164,8 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
     JAVACC_CLOG << JJSPACE << JJSPACE << JAVACC_WIDE(Current character:) << JJSPACE << JJQUOTE << (char)curChar << JJQUOTE << std::endl;
 #fi
     int newCnt = 0;
-    int kind = 0x7fffffff;
-    if (++moveIndex == 0x7fffffff) {
+    int kind = IntMax;
+    if (++moveIndex == IntMax) {
       for (int i = 0; i < ${generatedStates}; i++) moved[i] = 0;
       moveIndex = 1;
     }
@@ -173,7 +177,7 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
       int state = stateSet[--cnt];
 #if DEBUG_TOKEN_MANAGER
       JAVACC_CLOG<< JAVACC_WIDE(Looking to move from state: ) << JJSPACE << state << JJSPACE << JAVACC_WIDE(for:) << JJSPACE
-                 << (jjmatchKinds[state] != 0x7fffffff
+                 << (jjmatchKinds[state] != IntMax
                     ? addUnicodeEscapes(tokenImages[jjmatchKinds[state]]) : JAVACC_WIDE( <UNKNOWN>))
                  << std::endl;
 #fi
@@ -202,13 +206,13 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
       }
     } while (cnt > 0);
 
-    if (kind != 0x7fffffff) {
+    if (kind != IntMax) {
       // We found a match. So remember the kind and position of the match.
       jjmatchedKind = kind;
       jjmatchedPos = curPos;
       // Reset the kind to max value so we can contine looking for a longer
       // match.
-      kind = 0x7fffffff;
+      kind = IntMax;
     }
 
     // Swap the current and next state sets.
@@ -349,7 +353,7 @@ Token * ${parserName}TokenManager::getNextToken() {
     jjimageLen = 0;
 
     for (;;) {
-      jjmatchedKind = 0x7fffffff;
+      jjmatchedKind = IntMax;
       jjmatchedPos = 0;
 #if !NO_DFA
       lastReadPosition = jjRunStringLiteralMatch();
@@ -365,7 +369,7 @@ Token * ${parserName}TokenManager::getNextToken() {
 #fi
       }
 
-      if (jjmatchedKind != 0x7fffffff) {
+      if (jjmatchedKind != IntMax) {
         // We have a match!
   
         // Put back any characters looked ahead.
@@ -419,7 +423,7 @@ Token * ${parserName}TokenManager::getNextToken() {
           curLexState = jjnewLexState[jjmatchedKind];
         }
         lastReadPosition = 0;
-        jjmatchedKind = 0x7fffffff;
+        jjmatchedKind = IntMax;
         do {
           curChar = input_stream->readChar();
 #if IGNORE_CASE

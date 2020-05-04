@@ -1192,7 +1192,14 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
         internalNames.put(la.getLaExpansion(), "_" + context.globals().jj2index);
         internalIndexes.put(la.getLaExpansion(), context.globals().jj2index);
         phase2list.add(la);
-        retval += "jj_2" + internalNames.get(la.getLaExpansion()) + "(" + la.getAmount() + ")";
+        String amount;
+        if (la.getAmount() == Integer.MAX_VALUE) {
+        	amount = "IntMax";
+        } else {
+        	amount = Integer.toString(la.getAmount());
+        }
+        
+        retval += "jj_2" + internalNames.get(la.getLaExpansion()) + "(" + amount + ")";
         if (la.getActionTokens().size() != 0) {
           // In addition, there is also a semantic lookahead. So concatenate
           // the semantic check with the syntactic one.

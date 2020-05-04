@@ -261,7 +261,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
       }
       // TODO(sreeni) : Fix this mess.
       if (tmp == null) {
-        codeGenerator.print(Integer.MAX_VALUE);
+        codeGenerator.print("IntMax");
         continue;
       }
       codeGenerator.print(tmp.kind);

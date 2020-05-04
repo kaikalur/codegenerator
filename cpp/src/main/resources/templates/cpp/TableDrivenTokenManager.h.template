@@ -33,11 +33,7 @@ private:
   int jjmatchedPos;
   int jjmatchedKind;
 
-  int stateSet[${generatedStates}];
-  int newStateSet[${generatedStates}];
-  int moved[${generatedStates}];
   int moveIndex;
-  
   unsigned long long        jjChars[${nfaSize}][${charsVectorSize}];
     
   JJString                  jjimage;

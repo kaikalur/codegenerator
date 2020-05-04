@@ -1,6 +1,7 @@
 \#ifndef JAVACC_JAVACC_H
 \#define JAVACC_JAVACC_H
 
+\#include <climits>
 \#include <string>
 \#include <memory>
 \#include <cassert>
@@ -24,6 +25,14 @@
 \#define JAVACC_CLOG std::wcout
 \#define JAVACC_WIDE(x) L#x
 \#endif
+
+constexpr   signed int       IntMax              = std::numeric_limits<signed int>::max();
+constexpr   signed long      LongMax             = std::numeric_limits<signed long>::max();
+constexpr   signed long long LongLongMax         = std::numeric_limits<signed long long>::max();
+
+constexpr unsigned int       UnsignedIntMax      = std::numeric_limits<unsigned int>::max();
+constexpr unsigned long      UnsignedLongMax     = std::numeric_limits<unsigned long>::max();
+constexpr unsigned long long UnsignedLongLongMax = std::numeric_limits<unsigned long long>::max();
 
 \#ifndef JAVACC_STRING_TYPE
 \#define JAVACC_STRING_TYPE   std::basic_string<JAVACC_CHAR_TYPE>
