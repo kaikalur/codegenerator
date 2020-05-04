@@ -170,9 +170,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("");
 
 
-    String superClass = Options.stringValue(Options.USEROPTION__PARSER_SUPER_CLASS);
-    codeGenerator.genClassStart("", context.globals().cu_name, new String[] {},
-        superClass == null ? new String[0] : new String[] { "public " + superClass });
+    codeGenerator.genClassStart("", context.globals().cu_name, new String[] {}, new String[0]);
 
     codeGenerator.switchToMainFile();
     if (context.globals().cu_to_insertion_point_2.size() != 0) {
@@ -270,9 +268,6 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("public: ");
     codeGenerator.generateMethodDefHeader(" ", context.globals().cu_name,
         context.globals().cu_name + "(TokenManager* tokenManager)");
-    if (superClass != null) {
-      codeGenerator.println(" : " + superClass + "()");
-    }
     codeGenerator.println("{");
     codeGenerator.println("    head = nullptr;");
     codeGenerator.println("    ReInit(tokenManager);");
