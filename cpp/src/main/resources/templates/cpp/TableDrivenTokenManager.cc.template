@@ -15,12 +15,13 @@ void ${parserName}TokenManager::ReInit(JAVACC_CHARSTREAM* stream, int lexState)
     errorHandler = nullptr;
     delete_eh = false;
 
+	memset(jjChars, 0, sizeof(jjChars));
     for (int i = 0; i < ${nfaSize}; i++) {
       int ind = 0;
       // We originally generate something like RLE for the static arrays and
       // we actually expand them here.
-      for (int j = 0; j < (int) jjCharData[i][0]; j += 2) {
-        for (int k = 0; k < (int) jjCharData[i][j + 1]; k++) {
+      for (int j = 0; j < jjCharData[i][0]; j += 2) {
+        for (int k = 0; k < jjCharData[i][j + 1]; k++) {
           jjChars[i][ind++] = jjCharData[i][j + 2];
         }
       }
