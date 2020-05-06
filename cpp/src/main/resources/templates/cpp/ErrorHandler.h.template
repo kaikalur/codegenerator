@@ -37,12 +37,13 @@ public:
   // last         - the last token successfully parsed.
   // unexpected   - the token at which the error occurs.
   // production   - the production in which this error occurs.
-  virtual void handleParseError(const Token* last, const Token* unexpected, const JJString& production, ${PARSER_NAME}* parser) {
+  virtual void handleParseError(const Token* last, const Token* unexpected, const JJSimpleString& production, ${PARSER_NAME}* parser) {
     error_count++;
+    const JJString& work = production;
     JAVACC_CLOG 
         << JAVACC_WIDE(Encountered:) << JJSPACE << JJQUOTE << addUnicodeEscapes(unexpected->image()) << JJQUOTE << JJSPACE 
-        << JAVACC_WIDE(at) << JJSPACE << unexpected->beginLine() << JAVACC_WIDE(:) << unexpected->beginColumn() 
-        << JAVACC_WIDE(while parsing:) << JJSPACE << production << std::endl;
+        << JAVACC_WIDE(at) << JJSPACE << unexpected->beginLine() << JAVACC_WIDE(:) << unexpected->beginColumn()  << JJSPACE 
+        << JAVACC_WIDE(while parsing:) << JJSPACE << work << std::endl;
   }
       
   virtual int getErrorCount() {
