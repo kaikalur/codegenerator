@@ -430,7 +430,10 @@ void ValueSet() : {} {
    <LBRACE> skipbrace() <RBRACE>
 }
 void Type() : {} {
-  LOOKAHEAD(3)  BuiltinType() ( LOOKAHEAD(2)  Constraint() )* ReferencedType() ( LOOKAHEAD(2)  Constraint() )* ConstrainedType()
+	( LOOKAHEAD(3)  BuiltinType()  ( LOOKAHEAD(2)  Constraint() )* 
+	| ReferencedType() ( LOOKAHEAD(2)  Constraint() )* 
+	| ConstrainedType()
+	)
 }
 void ConstrainedType() : {} {
    TypeWithConstraint()
@@ -462,13 +465,30 @@ void NamedType() : {} {
    (  identifier() |  valuereference() ) Type()
 }
 void ReferencedType() : {} {
-   ( LOOKAHEAD(3)  DefinedType() | LOOKAHEAD(3)  UsefulType() | LOOKAHEAD(3)  SelectionType() | LOOKAHEAD(3)  TypeFromObject() |  ValueSetFromObjects() )
+	( LOOKAHEAD(3)  DefinedType() 
+	| LOOKAHEAD(3)  UsefulType() 
+	| LOOKAHEAD(3)  SelectionType() 
+	| LOOKAHEAD(3)  TypeFromObject() 
+	|  ValueSetFromObjects() 
+	)
 }
 void Value() : {} {
-  LOOKAHEAD(2)  BuiltinValue() ReferencedValue()
+  ( LOOKAHEAD(2)  BuiltinValue() | ReferencedValue())
 }
 void BuiltinValue() : {} {
-   ( LOOKAHEAD(3)  BitStringValue() |  BooleanValue() | LOOKAHEAD(3)  CharacterStringValue() | LOOKAHEAD(3)  ChoiceValue() |  IntegerValue() |  NullValue() |  OctetStringValue() | LOOKAHEAD(2)  SequenceValue() | LOOKAHEAD(2)  SequenceOfValue() | LOOKAHEAD(2)  SetValue() | LOOKAHEAD(2)  SetOfValue() |  EnumeratedValue() )
+	( LOOKAHEAD(3)  BitStringValue() 
+	|  BooleanValue() 
+	| LOOKAHEAD(3)  CharacterStringValue() 
+	| LOOKAHEAD(3)  ChoiceValue() 
+	| IntegerValue() 
+	| NullValue() 
+	| OctetStringValue() 
+	| LOOKAHEAD(2)  SequenceValue() 
+	| LOOKAHEAD(2)  SequenceOfValue() 
+	| LOOKAHEAD(2)  SetValue() 
+	| LOOKAHEAD(2)  SetOfValue() 
+	| EnumeratedValue() 
+	)
 }
 void XMLValue() : {} {
    ( LOOKAHEAD(3)  XMLBuiltinValue() |  XMLObjectClassFieldValue() )
@@ -477,7 +497,7 @@ void XMLBuiltinValue() : {} {
    ( LOOKAHEAD(3)  XMLBitStringValue() | LOOKAHEAD(3)  XMLBooleanValue() | LOOKAHEAD(3)  XMLCharacterStringValue() | LOOKAHEAD(3)  XMLChoiceValue() | LOOKAHEAD(3)  XMLEmbeddedPDVValue() | LOOKAHEAD(3)  XMLEnumeratedValue() | LOOKAHEAD(3)  XMLExternalValue() | LOOKAHEAD(3)  XMLIntegerValue() | LOOKAHEAD(3)  XMLNullValue() | LOOKAHEAD(3)  XMLObjectIdentifierValue() | LOOKAHEAD(3)  XMLOctetStringValue() | LOOKAHEAD(3)  XMLRealValue() | LOOKAHEAD(3)  XMLRelativeOIDValue() | LOOKAHEAD(3)  XMLSequenceValue() | LOOKAHEAD(3)  XMLSequenceOfValue() | LOOKAHEAD(3)  XMLSetValue() |  XMLSetOfValue() )
 }
 void ReferencedValue() : {} {
-  LOOKAHEAD(3)  DefinedValue() ValueFromObject()
+  ( LOOKAHEAD(3)  DefinedValue()  | ValueFromObject())
 }
 void NamedValue() : {} {
    identifier() Value()
@@ -528,7 +548,7 @@ void Enumeration() : {} {
    EnumerationItem() ( LOOKAHEAD(2)  "," EnumerationItem() )*
 }
 void EnumerationItem() : {} {
-  LOOKAHEAD(2)  NamedNumber() identifier()
+  (LOOKAHEAD(2)  NamedNumber() | identifier())
 }
 void EnumeratedValue() : {} {
    identifier()
@@ -576,7 +596,7 @@ void XMLBitStringValue() : {} {
    (  <BSTRING> | LOOKAHEAD(3)  XMLTypedValue() |  XMLIdentifierList() )
 }
 void XMLIdentifierList() : {} {
-   "<" "&" identifier() "/>" (  "<" "&" identifier() "/>" )*
+   "<" "&" identifier() "/>" (LOOKAHEAD(2)  "<" "&" identifier() "/>" )*
 }
 void OctetStringType() : {} {
    <OCTET> <STRING>
@@ -615,7 +635,7 @@ void XMLSequenceValue() : {} {
    XMLComponentValueList()
 }
 void XMLComponentValueList() : {} {
-   XMLNamedValue() (  XMLNamedValue() )*
+   XMLNamedValue() ( LOOKAHEAD(2)  XMLNamedValue() )*
 }
 void SequenceOfType() : {} {
    <SEQUENCE> <OF> TypeOrNamedType()
@@ -633,7 +653,7 @@ void XMLSequenceOfValue() : {} {
    ( LOOKAHEAD(3)  XMLValueList() | LOOKAHEAD(3)  XMLDelimitedItemList() |  XMLSpaceSeparatedList() )
 }
 void XMLValueList() : {} {
-   (  XMLValueOr() )+
+   (LOOKAHEAD(2)  XMLValueOr() )+
 }
 void XMLValueOr() : {} {
    "<" "&" NonParameterizedTypeName() "/>"
@@ -642,7 +662,7 @@ void XMLSpaceSeparatedList() : {} {
    (  XMLValueOr() )+
 }
 void XMLDelimitedItemList() : {} {
-   (  XMLDelimitedItem() )+
+   ( LOOKAHEAD(2)  XMLDelimitedItem() )+
 }
 void XMLDelimitedItem() : {} {
    "<" "&" ( LOOKAHEAD(3)  NonParameterizedTypeName() ">" XMLValue() "</" "&" NonParameterizedTypeName() ">" |  identifier() ">" XMLValue() "</" "&" identifier() ">" )
@@ -825,13 +845,13 @@ void ComponentRelationConstraint() : {} {
    <LBRACE> skipbrace() <RBRACE> <LBRACE> skipbrace() <RBRACE>
 }
 void ContentsConstraint() : {} {
-   <CONTAINING> Type() (  <ENCODED> <BY> Value() )? <ENCODED> <BY> Value()
+   <CONTAINING> Type() ( LOOKAHEAD(2)  <ENCODED> <BY> Value() )? <ENCODED> <BY> Value()
 }
 void ExceptionSpec() : {} {
    "!" ExceptionIdentification()
 }
 void ExceptionIdentification() : {} {
-   (     SignedNumber() | DefinedValue() | LOOKAHEAD(3)  Type() ":" Value() )
+   (     LOOKAHEAD(3) SignedNumber() | LOOKAHEAD(3) DefinedValue() |  Type() ":" Value() )
 }
 void SubtypeElements() : {} {
    (  InnerTypeConstraints() |  ValueRange() |  PermittedAlphabet() |  SizeConstraint() |  PatternConstraint() )
@@ -1018,7 +1038,7 @@ void Setting() : {} {
    Value()
 }
 void DefinedObjectSet() : {} {
-  LOOKAHEAD(2)  ExternalObjectSetReference() objectsetreference()
+  ( LOOKAHEAD(2)  ExternalObjectSetReference() | objectsetreference())
 }
 void ExternalObjectSetReference() : {} {
    modulereference() "." objectsetreference()
@@ -1033,7 +1053,7 @@ void ObjectClassFieldType() : {} {
    DefinedObjectClass() "." FieldName()
 }
 void ObjectClassFieldValue() : {} {
-  LOOKAHEAD(3)  OpenTypeFieldVal() FixedTypeFieldVal()
+  ( LOOKAHEAD(3)  OpenTypeFieldVal() | FixedTypeFieldVal())
 }
 void OpenTypeFieldVal() : {} {
    Type() ":" Value()
@@ -1042,7 +1062,7 @@ void FixedTypeFieldVal() : {} {
   LOOKAHEAD(2)  ReferencedValue() BuiltinValue()
 }
 void XMLObjectClassFieldValue() : {} {
-  LOOKAHEAD(3)  XMLOpenTypeFieldVal() XMLFixedTypeFieldVal()
+  (LOOKAHEAD(3)  XMLOpenTypeFieldVal() | XMLFixedTypeFieldVal())
 }
 void XMLOpenTypeFieldVal() : {} {
    XMLTypedValue()
