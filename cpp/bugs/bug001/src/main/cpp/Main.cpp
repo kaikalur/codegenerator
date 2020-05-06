@@ -7,6 +7,9 @@
 #include "TyperTokenManager.h"
 #include "ParseException.h"
 #include "StreamReader.h"
+#if !defined(JJ8) && !defined(JJ7)
+#define JJ8
+#endif
 #if		defined(JJ8)
 #include "DefaultCharStream.h"
 #define CHARSTREAM DefaultCharStream
@@ -25,7 +28,7 @@ JJString ReadFileFully() {
 	return code;
 }
 static void usage(int argc, char**argv) {
-	cerr << "Parser" << " [ in out err ]" << endl;
+	cerr << "Parser" << " [ in [ out [ err ] ] ]" << endl;
 }
 int main(int argc, char**argv) {
 	istream*	input  = &cin;
@@ -38,18 +41,26 @@ int main(int argc, char**argv) {
 	CharStream *	cs = nullptr;
 
 	try {
-		if (argc == 5) {
-			ifs.open(argv[2]);
-			ofs.open(argv[3]);
-			efs.open(argv[4]);
-			if (ifs.is_open() && ofs.is_open() && efs.is_open()) {
-				input = &ifs;	output = &ofs;	error = &efs;
+		if (argc > 1) {
+			switch(argc) {
+				case 4: efs.open(argv[3]);
+				case 3: ofs.open(argv[2]);
+				case 2: ifs.open(argv[1]);
+			}
+			if (ifs.is_open()) {
+				input = &ifs;
 				sr = new StreamReader(ifs);
 				cs = new CHARSTREAM(sr);
 			}
 			else {
-				cerr << "cannot open spl or in or out or err file" << endl;
+				cerr << "cannot open in file" << endl;
 				return 8;
+			}
+			if (ofs.is_open()) {
+				output = &ofs;
+			}
+			if (efs.is_open()) {
+				error = &efs;
 			}
 		} else
 		if (argc == 1) {
