@@ -24,7 +24,9 @@ using namespace ASN1::Typer;
 
 JJString ReadFileFully() {
 	JJString code;
-	code = "ModuleTestEmpty-00 { iso org(3) } DEFINITIONS ::= BEGIN END\n";	
+	code = 
+		"-- OK: Everything is fine\n"
+		"ModuleTestEmpty-00 { iso org(3) } DEFINITIONS ::= BEGIN END\n";	
 	return code;
 }
 static void usage(int argc, char**argv) {
