@@ -73,7 +73,8 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
       codeGenerator.switchToStaticsFile();
       codeGenerator.println("#include \"TokenManagerError.h\"");
 
-      dumpDfaTables(codeGenerator, tokenizerData);
+      if(!Options.getNoDfa())
+      	dumpDfaTables(codeGenerator, tokenizerData);
       dumpNfaTables(codeGenerator, tokenizerData);
       dumpMatchInfo(codeGenerator, tokenizerData);
     } catch (IOException ioe) {
