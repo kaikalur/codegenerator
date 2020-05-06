@@ -83,8 +83,9 @@ private:
   Token* jjFillToken();
 
 public:
-  void   lexicalError();
-  void   setErrorHandler(TokenManagerErrorHandler* eh);
+  void                        	    lexicalError();
+  void                        		setErrorHandler(TokenManagerErrorHandler* eh);
+  const TokenManagerErrorHandler*   getErrorHandler() const;
 };
 
 #if NAMESPACE

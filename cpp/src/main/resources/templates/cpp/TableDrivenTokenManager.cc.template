@@ -468,4 +468,7 @@ void ${parserName}TokenManager::setErrorHandler(TokenManagerErrorHandler* eh) {
     delete_eh = false;  // We don't delete stuff passed in.
     errorHandler = eh;
 }
+const TokenManagerErrorHandler*   ${parserName}TokenManager::getErrorHandler() const {
+	return errorHandler;
+}
 

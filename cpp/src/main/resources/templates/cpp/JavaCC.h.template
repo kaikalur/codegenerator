@@ -49,6 +49,7 @@ static const JJChar JJSPACE[] = { ' ', 0 };
 static const JJChar JJCOMMA[] = { ',', 0 };
 static const JJChar JJQUOTE[] = { '\'', 0 };
 
+
 // Abstraction on stream classes to read a block of data into a buffer.
 class ReaderStream {
 public:
@@ -73,4 +74,5 @@ struct JJExit
     ~JJExit(){f();}
     T f;
 };
+
 \#endif
