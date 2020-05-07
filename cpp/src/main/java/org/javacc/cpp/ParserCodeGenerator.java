@@ -149,7 +149,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("#include \"JJT" + context.globals().cu_name + "State.h\"");
     }
 
-    codeGenerator.println("#include \"ErrorHandler.h\"");
+    codeGenerator.println("#include \"DefaultErrorHandler.h\"");
 
     if (context.globals().jjtreeGenerated) {
       codeGenerator.println("#include \"" + context.globals().cu_name + "Tree.h\"");
@@ -286,7 +286,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.generateMethodDefHeader("void", context.globals().cu_name, "ReInit(TokenManager* tokenManager)");
     codeGenerator.println("{");
     codeGenerator.println("    clear();");
-    codeGenerator.println("    errorHandler = new ErrorHandler();");
+    codeGenerator.println("    errorHandler = new DefaultErrorHandler();");
     codeGenerator.println("    delete_eh = true;");
     codeGenerator.println("    hasError = false;");
     codeGenerator.println("    token_source = tokenManager;");

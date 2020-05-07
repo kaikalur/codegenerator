@@ -72,6 +72,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
       codeGenerator.printTemplate(TokenManagerTemplateH, settings);
       codeGenerator.switchToStaticsFile();
       codeGenerator.println("#include \"TokenManagerError.h\"");
+      codeGenerator.println("#include \"DefaultErrorHandler.h\"");
 
       if(!Options.getNoDfa())
       	dumpDfaTables(codeGenerator, tokenizerData);

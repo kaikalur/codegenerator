@@ -84,6 +84,21 @@ public class CppCodeGenerator implements CodeGenerator {
         builder.printTemplate("/templates/cpp/JavaCC.h.template");
       }
 
+      try (CppCodeBuilder builder = CppCodeBuilder.of(context, settings)) {
+          builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "DefaultErrorHandler.cc"));
+          builder.addTools(JavaCCGlobals.toolName);
+          builder.addOption(Options.USEROPTION__STATIC, Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
+          builder.addOption(
+          		Options.USEROPTION__STATIC, 
+          		Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC,
+          		Options.USEROPTION__BUILD_PARSER,
+          		Options.USEROPTION__BUILD_TOKEN_MANAGER);
+
+          builder.printTemplate("/templates/cpp/DefaultErrorHandler.cc.template");
+          builder.switchToIncludeFile();
+          builder.printTemplate("/templates/cpp/DefaultErrorHandler.h.template");
+        }
+
       try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(context, settings)) {
         builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "ErrorHandler.h"));
         builder.addTools(JavaCCGlobals.toolName);
