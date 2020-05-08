@@ -76,13 +76,17 @@ struct JJExit
 };
 
 \#define OUT_OF_RANGE 0x0A
-template<int upper, typename T>
-class Array {
-	T array[upper];
+template<int size, typename T>
+struct Array {
+	T array[size];
 public:
-	Array() {memset(array, 0, sizeof(array));}
 	T &operator[](size_t index) {
-		if (index >= sizeof(array)/sizeof(T))
+		if (index >= size)
+			throw OUT_OF_RANGE;
+		return array[index];
+	}
+	const T &operator[](size_t index) const {
+		if (index >= size)
 			throw OUT_OF_RANGE;
 		return array[index];
 	}

@@ -128,9 +128,9 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
     return curPos;
   }
 
-  int stateSet[${generatedStates}];
-  int newStateSet[${generatedStates}];
-  int moved[${generatedStates}];
+  Array<${generatedStates}, int> stateSet;
+  Array<${generatedStates}, int> newStateSet;
+  Array<${generatedStates}, int> moved;
   
   // We have an array indexed by the NFA state number to roughly indicate
   // the input position so when the input reaches part IntMax (which
@@ -182,8 +182,9 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
                     ? addUnicodeEscapes(tokenImages[jjmatchKinds[state]]) : JAVACC_WIDE( <UNKNOWN>))
                  << std::endl;
 #fi
-      if ((jjChars[state][vectorIndex] & bitpattern) != 0L) {
-        // Current input character can move this NFA state. So add all the
+	  bool canMoveThisNFAState = (jjChars[state][vectorIndex] & bitpattern) != 0L;
+	  if (canMoveThisNFAState) {
+         // Current input character can move this NFA state. So add all the
         // next states of the current states for use with the next input char.
         for (int idx = 0; idx < jjnextStateSet[state][0]; idx++) {
           int newState = jjnextStateSet[state][idx + 1];

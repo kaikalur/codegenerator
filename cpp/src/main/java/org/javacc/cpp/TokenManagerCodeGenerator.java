@@ -193,7 +193,10 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
       }
     }
 
-    codeGenerator.println("static const long long jjCharData[][" + (length + 1) + "] = {");
+    codeGenerator.print("static const Array<");
+    codeGenerator.print(length + 1);
+    codeGenerator.println(", long long> jjCharData[] = {");
+    
     for (int i = 0; i < nfa.size(); i++) {
       TokenizerData.NfaState tmp = nfa.get(i);
       if (i > 0) {
@@ -233,6 +236,9 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
       length = Math.max(length, tmp.compositeStates.size());
     }
     codeGenerator.println("static const int jjcompositeState[][" + length + "] = {");
+//    codeGenerator.print("static const Array<");
+//    codeGenerator.print(length);
+//    codeGenerator.println(", int> jjcompositeState[] = {");
     for (int i = 0; i < nfa.size(); i++) {
       TokenizerData.NfaState tmp = nfa.get(i);
       if (i > 0) {
@@ -279,7 +285,9 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
       }
       length = Math.max(length, tmp.nextStates.size());
     }
-    codeGenerator.println("static const int jjnextStateSet[][" + (length + 1) + "] = {");
+    codeGenerator.print("static const Array<");
+    codeGenerator.print(length + 1);
+    codeGenerator.println(", int> jjnextStateSet[] = {");
     for (int i = 0; i < nfa.size(); i++) {
       TokenizerData.NfaState tmp = nfa.get(i);
       if (i > 0) {
