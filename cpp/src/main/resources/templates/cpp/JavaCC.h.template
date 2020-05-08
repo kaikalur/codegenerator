@@ -75,4 +75,25 @@ struct JJExit
     T f;
 };
 
+\#define OUT_OF_RANGE 0x0A
+template<int upper, typename T>
+class Array {
+	T array[upper];
+public:
+	Array() {memset(array, 0, sizeof(array));}
+	T &operator[](size_t index) {
+		if (index >= sizeof(array)/sizeof(T))
+			throw OUT_OF_RANGE;
+		return array[index];
+	}
+};
+
+#if NAMESPACE
+namespace ${NAMESPACE_OPEN}
+#fi
+JJString addUnicodeEscapes(const JJString& str);
+#if NAMESPACE
+${NAMESPACE_CLOSE}
+#fi
+
 \#endif

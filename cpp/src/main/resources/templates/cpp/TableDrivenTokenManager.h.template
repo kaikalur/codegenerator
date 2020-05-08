@@ -34,8 +34,7 @@ private:
   int jjmatchedKind;
 
   int moveIndex;
-  unsigned long long        jjChars[${nfaSize}][${charsVectorSize}];
-    
+  Array<${nfaSize}, Array<${charsVectorSize}, unsigned long long>>        jjChars;//[${nfaSize}][${charsVectorSize}];
   JJString                  jjimage;
   JJString                  image = jjimage;
   int                       jjimageLen;
@@ -45,8 +44,6 @@ private:
 
   int                       jjrounds[${stateSetSize}];
   int                       jjstateSet[2 * ${stateSetSize}];
-  TokenManagerErrorHandler* errorHandler;
-  bool 						delete_eh;
 
 public: 
   ${parserName}TokenManager(JAVACC_CHARSTREAM* stream, int lexState = 0);
@@ -84,8 +81,6 @@ private:
 
 public:
   void                        	    lexicalError();
-  void                        		setErrorHandler(TokenManagerErrorHandler* eh);
-  const TokenManagerErrorHandler*   getErrorHandler() const;
 };
 
 #if NAMESPACE

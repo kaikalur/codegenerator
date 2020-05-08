@@ -1,5 +1,6 @@
 ${decls}
 
+
 /** Constructor. */
 ${parserName}TokenManager::${parserName}TokenManager(JAVACC_CHARSTREAM* stream, int lexState)
 {
@@ -15,7 +16,6 @@ void ${parserName}TokenManager::ReInit(JAVACC_CHARSTREAM* stream, int lexState)
     errorHandler = nullptr;
     delete_eh = false;
 
-	memset(jjChars, 0, sizeof(jjChars));
     for (int i = 0; i < ${nfaSize}; i++) {
       int ind = 0;
       // We originally generate something like RLE for the static arrays and
@@ -31,7 +31,7 @@ void ${parserName}TokenManager::ReInit(JAVACC_CHARSTREAM* stream, int lexState)
     curLexState = defaultLexState;
     input_stream = stream;
     SwitchTo(lexState);
-    errorHandler = new TokenManagerErrorHandler();
+    errorHandler = new DefaultTokenManagerErrorHandler();
 }
 
 /** Switch to specified lex state. */
@@ -450,7 +450,7 @@ Token * ${parserName}TokenManager::getNextToken() {
       if (!EOFSeen) {
         error_after = lastReadPosition <= 1 ? JJEMPTY : input_stream->getImage();
       }
-      errorHandler->lexicalError(EOFSeen, curLexState, error_line, error_column, error_after, curChar, this);
+      errorHandler->lexicalError(EOFSeen, curLexState, error_line, error_column, error_after, curChar);
       goto EOFLoop;
     }
   }
@@ -462,13 +462,5 @@ void ${parserName}TokenManager::setParser(void* parser) {
 #fi
 void ${parserName}TokenManager::lexicalError() {
 	std::clog << "Lexical error encountered." << std::endl;
-}
-void ${parserName}TokenManager::setErrorHandler(TokenManagerErrorHandler* eh) {
-    if (delete_eh) delete errorHandler, errorHandler = nullptr;
-    delete_eh = false;  // We don't delete stuff passed in.
-    errorHandler = eh;
-}
-const TokenManagerErrorHandler*   ${parserName}TokenManager::getErrorHandler() const {
-	return errorHandler;
 }
 

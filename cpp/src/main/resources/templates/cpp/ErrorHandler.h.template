@@ -4,17 +4,13 @@
 \#include "JavaCC.h"
 \#include "Token.h"
 
-#if NAMESPACE
-namespace ${NAMESPACE_OPEN}
-#fi
-
-JJString addUnicodeEscapes(const JJString& str);
+namespace JavaCC {
 
 #if BUILD_PARSER
-class ${PARSER_NAME};
+//  class ${PARSER_NAME};
 class ErrorHandler {
-  friend class ${PARSER_NAME}TokenManager;
-  friend class ${PARSER_NAME};
+//  friend class ${PARSER_NAME}TokenManager;
+//  friend class ${PARSER_NAME};
 public:
              ErrorHandler() {}
     virtual ~ErrorHandler() {}
@@ -23,15 +19,15 @@ public:
   // expectedKind  - token kind that the parser was trying to consume.
   // expectedToken - the image of the token - tokenImages[expectedKind].
   // actual        - the actual token that the parser got instead.
-  virtual void handleUnexpectedToken(int expectedKind, const JJString& expectedImage, const JJString& expectedLabel, const Token* actual, ${PARSER_NAME}* parser) = 0;
+  virtual void handleUnexpectedToken(int expectedKind, const JJString& expectedImage, const JJString& expectedLabel, const Token* actual) = 0;
       
       
   // Called when the parser cannot continue parsing.
   // last         - the last token successfully parsed.
   // unexpected   - the token at which the error occurs.
   // production   - the production in which this error occurs.
-  virtual void handleParseError(const Token* last, const Token* unexpected, const JJSimpleString& production, ${PARSER_NAME}* parser) = 0;
-  virtual void handleOtherError(const JJString& message, ${PARSER_NAME}* parser) = 0;
+  virtual void handleParseError(const Token* last, const Token* unexpected, const JJSimpleString& production) = 0;
+  virtual void handleOtherError(const JJString& message) = 0;
   virtual int  getErrorCount() const { return error_count; }
 
 protected:
@@ -41,9 +37,9 @@ protected:
 #fi
 
 #if BUILD_TOKEN_MANAGER
-class ${PARSER_NAME}TokenManager;
+//  class ${PARSER_NAME}TokenManager;
 class TokenManagerErrorHandler {
-  friend class ${PARSER_NAME}TokenManager;
+//  friend class ${PARSER_NAME}TokenManager;
 public:
   virtual ~TokenManagerErrorHandler() {}
     
@@ -58,8 +54,8 @@ public:
   //    errorAfter  : prefix that was seen before this error occurred
   //    curchar     : the offending character
   //
-  virtual void lexicalError(bool EOFSeen, int lexState, int errorLine, int errorColumn, JJString errorAfter, JJChar curChar, ${PARSER_NAME}TokenManager* tokenManager) = 0;
-  virtual void lexicalError(const JJString& errorMessage, ${PARSER_NAME}TokenManager* tokenManager) = 0;
+  virtual void lexicalError(bool EOFSeen, int lexState, int errorLine, int errorColumn, JJString errorAfter, JJChar curChar) = 0;
+  virtual void lexicalError(const JJString& errorMessage) = 0;
   virtual int  getErrorCount() const { return error_count; }
 
 protected:
@@ -67,8 +63,12 @@ protected:
 };
 #fi
 
-#if NAMESPACE
-${NAMESPACE_CLOSE}
+}
+#if BUILD_PARSER
+using JavaCC::ErrorHandler;
+#fi
+#if BUILD_TOKEN_MANAGER
+using JavaCC::TokenManagerErrorHandler;
 #fi
 
 \#endif
