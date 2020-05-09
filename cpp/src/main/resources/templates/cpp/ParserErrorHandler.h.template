@@ -16,15 +16,15 @@ public:
   // expectedKind  - token kind that the parser was trying to consume.
   // expectedToken - the image of the token - tokenImages[expectedKind].
   // actual        - the actual token that the parser got instead.
-  virtual void handleUnexpectedToken(int expectedKind, const JJString& expectedImage, const JJString& expectedLabel, const Token* actual) = 0;
+  virtual void unexpectedToken(int expectedKind, const JJString& expectedImage, const JJString& expectedLabel, const Token* actual) = 0;
       
       
   // Called when the parser cannot continue parsing.
   // last         - the last token successfully parsed.
   // unexpected   - the token at which the error occurs.
   // production   - the production in which this error occurs.
-  virtual void handleParseError(const Token* last, const Token* unexpected, const JJSimpleString& production) = 0;
-  virtual void handleOtherError(const JJString& message) = 0;
+  virtual void parseError(const Token* last, const Token* unexpected, const JJSimpleString& production) = 0;
+  virtual void otherError(const JJString& message) = 0;
           int  getErrorCount() const { return error_count; }
 
 protected:

@@ -379,7 +379,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     if (!Options.getStackLimit().equals("")) {
       codeGenerator.println("    if(kind != -1 && (jj_stack_error || jj_stack_check(false))) {");
       codeGenerator.println("      if (!jj_stack_error) {");
-      codeGenerator.println("        errorHandler->handleOtherError(\"Stack overflow while trying to parse\");");
+      codeGenerator.println("        errorHandler->otherError(\"Stack overflow while trying to parse\");");
       codeGenerator.println("        jj_stack_error=true;");
       codeGenerator.println("      }");
       codeGenerator.println("      return jj_consume_token(-1);");
@@ -432,7 +432,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("    const JJString& label = kind >= 0 ? " + getTokenLabels() + "[kind] : "
             + ParserCodeGenerator.getTokenLabels() + "[0];");
     codeGenerator.println(
-        "    errorHandler->handleUnexpectedToken(kind, image, label, getToken(1));");
+        "    errorHandler->unexpectedToken(kind, image, label, getToken(1));");
     if (!Options.getStackLimit().equals("")) {
       codeGenerator.println("    }");
     }
@@ -449,7 +449,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
         codeGenerator.println("    if(kind != -1 && (jj_stack_error || jj_stack_check(false))) {");
         codeGenerator.println("      if (!jj_stack_error) {");
         codeGenerator
-        .println("        errorHandler->handleOtherError(\"Stack overflow while trying to parse\");");
+        .println("        errorHandler->otherError(\"Stack overflow while trying to parse\");");
         codeGenerator.println("        jj_stack_error=true;");
         codeGenerator.println("      }");
         codeGenerator.println("      return jj_consume_token(-1);");
@@ -1357,7 +1357,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("  jj_depth_error = true;");
       codeGenerator.println("  jj_consume_token(-1);");
       codeGenerator
-      .println("  errorHandler->handleParseError(token, getToken(1), __FUNCTION__), hasError = true;");
+      .println("  errorHandler->parseError(token, getToken(1), __FUNCTION__), hasError = true;");
       if (!voidReturn) {
         codeGenerator.println("  return __ERROR_RET__;"); // Non-recoverable
         // error
@@ -1511,7 +1511,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       conds = new Lookahead[e_nrw.getChoices().size()];
       actions = new String[e_nrw.getChoices().size() + 1];
       actions[e_nrw.getChoices().size()] = "\n" + "jj_consume_token(-1);\n"
-          + "errorHandler->handleParseError(token, getToken(1), __FUNCTION__), hasError = true;"
+          + "errorHandler->parseError(token, getToken(1), __FUNCTION__), hasError = true;"
           + (Options.booleanValue(Options.USEROPTION__CPP_STOP_ON_FIRST_ERROR) ? "return __ERROR_RET__;\n" : "");
 
       // In previous line, the "throw" never throws an exception since the

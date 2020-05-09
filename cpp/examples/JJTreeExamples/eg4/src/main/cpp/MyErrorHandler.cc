@@ -14,11 +14,11 @@ MyErrorHandler::MyErrorHandler() {
 
 MyErrorHandler::~MyErrorHandler() {
 }
-void MyErrorHandler::handleUnexpectedToken(int expectedKind, const JJString& expectedImage, const JJString& expectedLabel, const Token* actual) {
+void MyErrorHandler::unexpectedToken(int expectedKind, const JJString& expectedImage, const JJString& expectedLabel, const Token* actual) {
 }
-void MyErrorHandler::handleParseError(const Token* last, const Token* unexpected, const JJSimpleString& production) {
+void MyErrorHandler::parseError(const Token* last, const Token* unexpected, const JJSimpleString& production) {
 }
-void MyErrorHandler::handleOtherError(const JJString& message) {
+void MyErrorHandler::otherError(const JJString& message) {
 }
 
 } /* namespace EG4 */

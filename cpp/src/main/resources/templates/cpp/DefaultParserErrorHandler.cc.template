@@ -27,7 +27,7 @@ static std::wstring to_wstring(const std::string& str)
 }
 \#endif
 
-void DefaultParserErrorHandler::handleUnexpectedToken(int expectedKind, const JJString& expectedImage, const JJString& expectedLabel, const Token* actual) {
+void DefaultParserErrorHandler::unexpectedToken(int expectedKind, const JJString& expectedImage, const JJString& expectedLabel, const Token* actual) {
 	error_count++;
 	JAVACC_CLOG 
        << JAVACC_WIDE(Expecting) << JJSPACE << addUnicodeEscapes(expectedLabel) << JAVACC_WIDE(:) << JJQUOTE << addUnicodeEscapes(expectedImage) << JJQUOTE
@@ -36,7 +36,7 @@ void DefaultParserErrorHandler::handleUnexpectedToken(int expectedKind, const JJ
 }
       
       
-void DefaultParserErrorHandler::handleParseError(const Token* last, const Token* unexpected, const JJSimpleString& production) {
+void DefaultParserErrorHandler::parseError(const Token* last, const Token* unexpected, const JJSimpleString& production) {
     error_count++;
 \#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
     const JJString& work = production;
@@ -49,7 +49,7 @@ void DefaultParserErrorHandler::handleParseError(const Token* last, const Token*
         << JAVACC_WIDE(while parsing:) << JJSPACE << work << std::endl;
 }
       
-void DefaultParserErrorHandler::handleOtherError(const JJString& message) {
+void DefaultParserErrorHandler::otherError(const JJString& message) {
     JAVACC_CLOG << JAVACC_WIDE(Error:) << JJSPACE  << message << std::endl;
 }
 
