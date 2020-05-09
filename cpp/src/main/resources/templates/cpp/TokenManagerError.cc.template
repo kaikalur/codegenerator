@@ -46,6 +46,9 @@ TokenManagerError::TokenManagerError(bool EOFSeen, int lexState, int errorLine, 
 }
 TokenManagerError::~TokenManagerError() { 
 }
+#if NAMESPACE
+${NAMESPACE_CLOSE}
+#fi
 
 // i < 16 - guaranteed
 static char hexChar(int i) {
@@ -126,6 +129,3 @@ JJString addUnicodeEscapes(const JJString& str) {
 \#undef JJU
 \#undef JJM
 
-#if NAMESPACE
-${NAMESPACE_CLOSE}
-#fi

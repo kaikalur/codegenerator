@@ -2,13 +2,13 @@ ${decls}
 
 
 /** Constructor. */
-${parserName}TokenManager::${parserName}TokenManager(JAVACC_CHARSTREAM* stream, int lexState)
+${parserName}TokenManager::${parserName}TokenManager(CharStream* stream, int lexState)
 {
     ReInit(stream, lexState);
 }
 
 /** Reinitialise parser. */
-void ${parserName}TokenManager::ReInit(JAVACC_CHARSTREAM* stream, int lexState)
+void ${parserName}TokenManager::ReInit(CharStream* stream, int lexState)
 {
     defaultLexState = ${defaultLexState};
     curLexState = ${defaultLexState};

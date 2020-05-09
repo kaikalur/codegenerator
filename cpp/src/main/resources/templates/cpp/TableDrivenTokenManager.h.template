@@ -6,7 +6,7 @@
 #if tokenInclude
 \#include "${tokenInclude}"
 #fi
-\#include "ErrorHandler.h"
+\#include "ParserErrorHandler.h"
 \#include "TokenManager.h"
 \#include "${parserName}Constants.h"
 
@@ -23,9 +23,6 @@ class ${parserName}TokenManager
 	: public TokenManager
  {
 public:
-\#ifndef JAVACC_CHARSTREAM
-\#define JAVACC_CHARSTREAM CharStream
-\#endif
 
 private:
   int defaultLexState;
@@ -40,13 +37,15 @@ private:
   int                       jjimageLen;
   int                       lengthOfMatch;
   JJChar                    curChar;
-  JAVACC_CHARSTREAM*        input_stream;
+  CharStream*        		input_stream;
+  bool 						delete_eh = false;
+  TokenManagerErrorHandler* errorHandler = nullptr;
 
   int                       jjrounds[${stateSetSize}];
   int                       jjstateSet[2 * ${stateSetSize}];
 
 public: 
-  ${parserName}TokenManager(JAVACC_CHARSTREAM* stream, int lexState = 0);
+  ${parserName}TokenManager(CharStream* stream, int lexState = 0);
   virtual ~${parserName}TokenManager() {}
 
   Token* getNextToken();
@@ -64,7 +63,7 @@ protected:
 protected:
   bool   moveToNextChar();
   
-  void   ReInit(JAVACC_CHARSTREAM* stream, int lexState = 0);
+  void   ReInit(CharStream* stream, int lexState = 0);
   void   SwitchTo(int lexState);
 
 

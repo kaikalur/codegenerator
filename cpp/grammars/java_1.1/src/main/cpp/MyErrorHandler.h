@@ -1,11 +1,11 @@
 #ifndef MY_ERROR_HANDLER
 #define MY_ERROR_HANDLER
 
-#include "ErrorHandler.h"
+#include "ParserErrorHandler.h"
 
 namespace java { namespace parser {
 
-class MyErrorHandler: public ErrorHandler {
+class MyErrorHandler: public ParserErrorHandler {
 public:
 	MyErrorHandler() {}
 	virtual ~MyErrorHandler() {}

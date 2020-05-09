@@ -1,10 +1,12 @@
+#if BUILD_PARSER
+      
 \#if (JAVACC_CHAR_TYPE_SIZEOF != 1)
 \#include <codecvt>
 \#include <locale>
 \#endif
 \#include "JavaCC.h"
 \#include "Token.h"
-\#include "DefaultErrorHandler.h"
+\#include "DefaultParserErrorHandler.h"
 
 #if NAMESPACE
 namespace ${NAMESPACE_OPEN}
@@ -25,9 +27,7 @@ static std::wstring to_wstring(const std::string& str)
 }
 \#endif
 
-#if BUILD_PARSER
-      
-void DefaultErrorHandler::handleUnexpectedToken(int expectedKind, const JJString& expectedImage, const JJString& expectedLabel, const Token* actual) {
+void DefaultParserErrorHandler::handleUnexpectedToken(int expectedKind, const JJString& expectedImage, const JJString& expectedLabel, const Token* actual) {
 	error_count++;
 	JAVACC_CLOG 
        << JAVACC_WIDE(Expecting) << JJSPACE << addUnicodeEscapes(expectedLabel) << JAVACC_WIDE(:) << JJQUOTE << addUnicodeEscapes(expectedImage) << JJQUOTE
@@ -36,7 +36,7 @@ void DefaultErrorHandler::handleUnexpectedToken(int expectedKind, const JJString
 }
       
       
-void DefaultErrorHandler::handleParseError(const Token* last, const Token* unexpected, const JJSimpleString& production) {
+void DefaultParserErrorHandler::handleParseError(const Token* last, const Token* unexpected, const JJSimpleString& production) {
     error_count++;
 \#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
     const JJString& work = production;
@@ -49,23 +49,12 @@ void DefaultErrorHandler::handleParseError(const Token* last, const Token* unexp
         << JAVACC_WIDE(while parsing:) << JJSPACE << work << std::endl;
 }
       
-void DefaultErrorHandler::handleOtherError(const JJString& message) {
+void DefaultParserErrorHandler::handleOtherError(const JJString& message) {
     JAVACC_CLOG << JAVACC_WIDE(Error:) << JJSPACE  << message << std::endl;
 }
-#fi
 
-#if BUILD_TOKEN_MANAGER
-void DefaultTokenManagerErrorHandler::lexicalError(bool EOFSeen, int lexState, int errorLine, int errorColumn, JJString errorAfter, JJChar curChar) {
-    JAVACC_CLOG 
-      << JAVACC_WIDE(Lexical error at)  << JJSPACE << errorLine << JAVACC_WIDE(:) << errorColumn << JAVACC_WIDE(.)
-      << JAVACC_WIDE( Encountered:)  << JJSPACE << curChar <<JAVACC_WIDE( after:)  << JJSPACE << errorAfter << JAVACC_WIDE(.) << std::endl;
-}
-      
-void DefaultTokenManagerErrorHandler::lexicalError(const JJString& errorMessage) {
-    JAVACC_CLOG << errorMessage << std::endl;
-}
-#fi
 
 #if NAMESPACE
 ${NAMESPACE_CLOSE}
+#fi
 #fi

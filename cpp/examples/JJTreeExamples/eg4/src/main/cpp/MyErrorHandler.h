@@ -7,11 +7,11 @@
 
 #ifndef MYERRORHANDLER_H_
 #define MYERRORHANDLER_H_
-#include "ErrorHandler.h"
+#include "ParserErrorHandler.h"
 
 namespace EG4 {
 
-class MyErrorHandler : public ErrorHandler {
+class MyErrorHandler : public ParserErrorHandler {
 public:
 	MyErrorHandler();
 	virtual ~MyErrorHandler();

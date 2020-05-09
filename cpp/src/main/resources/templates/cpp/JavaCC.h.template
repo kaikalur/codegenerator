@@ -92,12 +92,5 @@ public:
 	}
 };
 
-#if NAMESPACE
-namespace ${NAMESPACE_OPEN}
-#fi
 JJString addUnicodeEscapes(const JJString& str);
-#if NAMESPACE
-${NAMESPACE_CLOSE}
-#fi
-
 \#endif

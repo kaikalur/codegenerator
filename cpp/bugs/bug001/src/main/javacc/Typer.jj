@@ -1059,7 +1059,7 @@ void OpenTypeFieldVal() : {} {
    Type() ":" Value()
 }
 void FixedTypeFieldVal() : {} {
-  LOOKAHEAD(2)  ReferencedValue() BuiltinValue()
+  (LOOKAHEAD(2)  ReferencedValue() | BuiltinValue())
 }
 void XMLObjectClassFieldValue() : {} {
   (LOOKAHEAD(3)  XMLOpenTypeFieldVal() | XMLFixedTypeFieldVal())
