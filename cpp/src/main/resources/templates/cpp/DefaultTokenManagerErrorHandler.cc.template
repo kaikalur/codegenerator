@@ -12,13 +12,13 @@ namespace ${NAMESPACE_OPEN}
 #fi
 
 void DefaultTokenManagerErrorHandler::lexicalError(bool EOFSeen, int lexState, int errorLine, int errorColumn, JJString errorAfter, JJChar curChar) {
-    JAVACC_CLOG 
-      << JAVACC_WIDE(Lexical error at)  << JJSPACE << errorLine << JAVACC_WIDE(:) << errorColumn << JAVACC_WIDE(.)
-      << JAVACC_WIDE( Encountered:)  << JJSPACE << curChar <<JAVACC_WIDE( after:)  << JJSPACE << errorAfter << JAVACC_WIDE(.) << std::endl;
+    JJLOG 
+      << JJWIDE(Lexical error at)  << JJSPACE << errorLine << JJWIDE(:) << errorColumn << JJWIDE(.)
+      << JJWIDE( Encountered:)  << JJSPACE << curChar <<JJWIDE( after:)  << JJSPACE << errorAfter << JJWIDE(.) << std::endl;
 }
       
 void DefaultTokenManagerErrorHandler::lexicalError(const JJString& errorMessage) {
-    JAVACC_CLOG << errorMessage << std::endl;
+    JJLOG << errorMessage << std::endl;
 }
 
 #if NAMESPACE

@@ -29,10 +29,10 @@ static std::wstring to_wstring(const std::string& str)
 
 void DefaultParserErrorHandler::unexpectedToken(int expectedKind, const JJString& expectedImage, const JJString& expectedLabel, const Token* actual) {
 	error_count++;
-	JAVACC_CLOG 
-       << JAVACC_WIDE(Expecting) << JJSPACE << addUnicodeEscapes(expectedLabel) << JAVACC_WIDE(:) << JJQUOTE << addUnicodeEscapes(expectedImage) << JJQUOTE
-       << JJSPACE << JAVACC_WIDE(at) << JJSPACE << actual->beginLine() << JAVACC_WIDE(:) << actual->beginColumn() << JJSPACE 
-       << JAVACC_WIDE(but got) << JJSPACE << JJQUOTE << addUnicodeEscapes(actual->image()) << JJQUOTE << std::endl;
+	JJLOG 
+       << JJWIDE(Expecting) << JJSPACE << addUnicodeEscapes(expectedLabel) << JJWIDE(:) << JJQUOTE << addUnicodeEscapes(expectedImage) << JJQUOTE
+       << JJSPACE << JJWIDE(at) << JJSPACE << actual->beginLine() << JJWIDE(:) << actual->beginColumn() << JJSPACE 
+       << JJWIDE(but got) << JJSPACE << JJQUOTE << addUnicodeEscapes(actual->image()) << JJQUOTE << std::endl;
 }
       
       
@@ -43,14 +43,14 @@ void DefaultParserErrorHandler::parseError(const Token* last, const Token* unexp
 \#else
     const JJString& work = to_wstring(production);
 \#endif
-    JAVACC_CLOG 
-        << JAVACC_WIDE(Encountered:) << JJSPACE << JJQUOTE << addUnicodeEscapes(unexpected->image()) << JJQUOTE << JJSPACE 
-        << JAVACC_WIDE(at) << JJSPACE << unexpected->beginLine() << JAVACC_WIDE(:) << unexpected->beginColumn()  << JJSPACE 
-        << JAVACC_WIDE(while parsing:) << JJSPACE << work << std::endl;
+    JJLOG 
+        << JJWIDE(Encountered:) << JJSPACE << JJQUOTE << addUnicodeEscapes(unexpected->image()) << JJQUOTE << JJSPACE 
+        << JJWIDE(at) << JJSPACE << unexpected->beginLine() << JJWIDE(:) << unexpected->beginColumn()  << JJSPACE 
+        << JJWIDE(while parsing:) << JJSPACE << work << std::endl;
 }
       
 void DefaultParserErrorHandler::otherError(const JJString& message) {
-    JAVACC_CLOG << JAVACC_WIDE(Error:) << JJSPACE  << message << std::endl;
+    JJLOG << JJWIDE(Error:) << JJSPACE  << message << std::endl;
 }
 
 

@@ -592,7 +592,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("   {");
       if (Options.getErrorReporting()) {
           codeGenerator.println(
-                  "      JAVACC_CERR << JAVACC_WIDE(Parse error at : ) << token->beginLine() << JAVACC_WIDE(:) << token->beginColumn() << JAVACC_WIDE( after token: ) << addUnicodeEscapes(token->image()) << JAVACC_WIDE( encountered: ) << addUnicodeEscapes(getToken(1)->image()) << std::endl;");
+                  "      JJERR << JJWIDE(Parse error at : ) << token->beginLine() << JJWIDE(:) << token->beginColumn() << JJWIDE( after token: ) << addUnicodeEscapes(token->image()) << JJWIDE( encountered: ) << addUnicodeEscapes(getToken(1)->image()) << std::endl;");
       }
       codeGenerator.println("   }");
       /*
@@ -646,10 +646,10 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("   {");
       if (Options.getErrorReporting()) {
           codeGenerator.println(
-                  "      JAVACC_CERR << "
-                  + "JAVACC_WIDE(Parse error at : ) << token->beginLine() << JAVACC_WIDE(:) "
-                  + "<< token->beginColumn() << JAVACC_WIDE( after token: ) << addUnicodeEscapes(token->image())"
-                  + " << JAVACC_WIDE( encountered: ) << addUnicodeEscapes(getToken(1)->image()) << std::endl;");
+                  "      JJERR << "
+                  + "JJWIDE(Parse error at : ) << token->beginLine() << JJWIDE(:) "
+                  + "<< token->beginColumn() << JJWIDE( after token: ) << addUnicodeEscapes(token->image())"
+                  + " << JJWIDE( encountered: ) << addUnicodeEscapes(getToken(1)->image()) << std::endl;");
       }
       codeGenerator.println("   }");
       /*
@@ -701,8 +701,8 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "trace_call(const char *s)");
       codeGenerator.println("  {");
       codeGenerator.println("    if (trace_enabled()) {");
-      codeGenerator.println("      for (int no = 0; no < indent; no++) { JAVACC_CLOG << JJSPACE; }");
-      codeGenerator.println("      JAVACC_CLOG << \"Call:   \" << s << std::endl;");
+      codeGenerator.println("      for (int no = 0; no < indent; no++) { JJLOG << JJSPACE; }");
+      codeGenerator.println("      JJLOG << \"Call:   \" << s << std::endl;");
       codeGenerator.println("    }");
       codeGenerator.println("    indent += 2;");
       codeGenerator.println("  }");
@@ -713,8 +713,8 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("  {");
       codeGenerator.println("    indent -= 2;");
       codeGenerator.println("    if (trace_enabled()) {");
-      codeGenerator.println("      for (int no = 0; no < indent; no++) { JAVACC_CLOG << JJSPACE; }");
-      codeGenerator.println("      JAVACC_CLOG << \"Return: \" << s << std::endl;");
+      codeGenerator.println("      for (int no = 0; no < indent; no++) { JJLOG << JJSPACE; }");
+      codeGenerator.println("      JJLOG << \"Return: \" << s << std::endl;");
       codeGenerator.println("    }");
       codeGenerator.println("  }");
       codeGenerator.println("");
@@ -723,12 +723,12 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "trace_token(const Token* token, const char* where)");
       codeGenerator.println("  {");
       codeGenerator.println("    if (trace_enabled()) {");
-      codeGenerator.println("      for (int no = 0; no < indent; no++) { JAVACC_CLOG << JJSPACE; }");
-      codeGenerator.print("      JAVACC_CLOG << JAVACC_WIDE(Consumed token: ) << addUnicodeEscapes(");
+      codeGenerator.println("      for (int no = 0; no < indent; no++) { JJLOG << JJSPACE; }");
+      codeGenerator.print("      JJLOG << JJWIDE(Consumed token: ) << addUnicodeEscapes(");
       codeGenerator.print(getTokenLabels());
       codeGenerator.println("[token->kind()]) << JJCOMMA << JJSPACE << JJQUOTE << addUnicodeEscapes(token->image()) << JJQUOTE;");
       codeGenerator.println(
-              "      JAVACC_CLOG << JJSPACE << JAVACC_WIDE(at) << JJSPACE << token->beginLine() << JAVACC_WIDE(:) << token->beginColumn() << *where << std::endl;");
+              "      JJLOG << JJSPACE << JJWIDE(at) << JJSPACE << token->beginLine() << JJWIDE(:) << token->beginColumn() << *where << std::endl;");
       codeGenerator.println("    }");
       codeGenerator.println("  }");
       codeGenerator.println("");
@@ -737,12 +737,12 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "trace_scan(const Token* token, int t2)");
       codeGenerator.println("  {");
       codeGenerator.println("    if (trace_enabled()) {");
-      codeGenerator.println("      for (int no = 0; no < indent; no++) { JAVACC_CLOG << JJSPACE; }");
-      codeGenerator.print("      JAVACC_CLOG << JAVACC_WIDE(Visited  token: ) << addUnicodeEscapes(");
+      codeGenerator.println("      for (int no = 0; no < indent; no++) { JJLOG << JJSPACE; }");
+      codeGenerator.print("      JJLOG << JJWIDE(Visited  token: ) << addUnicodeEscapes(");
       codeGenerator.print(getTokenLabels());
       codeGenerator.println("[token->kind()]) << JJCOMMA << JJSPACE << JJQUOTE << addUnicodeEscapes(token->image()) << JJQUOTE;");
       codeGenerator.println(
-          "      JAVACC_CLOG << JJSPACE << JAVACC_WIDE(at) << JJSPACE << token->beginLine() << JAVACC_WIDE(:) << token->beginColumn() << JJCOMMA << JJSPACE << JAVACC_WIDE(Expected token: ) << addUnicodeEscapes("
+          "      JJLOG << JJSPACE << JJWIDE(at) << JJSPACE << token->beginLine() << JJWIDE(:) << token->beginColumn() << JJCOMMA << JJSPACE << JJWIDE(Expected token: ) << addUnicodeEscapes("
               + getTokenLabels() + "[t2]) << std::endl;");
       codeGenerator.println("    }");
       codeGenerator.println("  }");
