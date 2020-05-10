@@ -90,6 +90,12 @@ public:
 			throw OUT_OF_RANGE;
 		return array[index];
 	}
+	void* base() {
+		return this->array;
+	}
+	const void* base() const {
+		return this->array;
+	}
 };
 
 JJString addUnicodeEscapes(const JJString& str);

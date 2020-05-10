@@ -16,6 +16,8 @@ void ${parserName}TokenManager::ReInit(CharStream* stream, int lexState)
     errorHandler = nullptr;
     delete_eh = false;
 
+	memset(jjChars.base(), 0, sizeof(jjChars));
+ 
     for (int i = 0; i < ${nfaSize}; i++) {
       int ind = 0;
       // We originally generate something like RLE for the static arrays and
