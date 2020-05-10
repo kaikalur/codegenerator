@@ -85,6 +85,7 @@ int ${parserName}TokenManager::jjRunStringLiteralMatch() {
           break;
         }
       } while(curPos < len);
+      
       if (curPos == len) {
         jjmatchedKind = (int) stringLiterals[index + len + (ignoreCase * len)];
         jjmatchedPos = curPos;
@@ -464,4 +465,8 @@ void ${parserName}TokenManager::setParser(void* parser) {
 void ${parserName}TokenManager::lexicalError() {
 	std::clog << "Lexical error encountered." << std::endl;
 }
+const  TokenManagerErrorHandler* ${parserName}TokenManager::getErrorHandler() const {
+  return errorHandler;
+}
+
 

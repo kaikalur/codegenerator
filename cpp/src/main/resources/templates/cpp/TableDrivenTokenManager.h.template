@@ -19,11 +19,8 @@
 namespace ${NAMESPACE_OPEN}
 #fi
 
-class ${parserName}TokenManager 
-	: public TokenManager
- {
-public:
-
+class ${parserName}TokenManager : public TokenManager
+{
 private:
   int defaultLexState;
   int curLexState = ${defaultLexState};
@@ -49,14 +46,12 @@ public:
   virtual ~${parserName}TokenManager() {}
 
   Token* getNextToken();
-
 #if COMMON_TOKEN_ACTION
   void CommonTokenAction(Token* token);
 #fi
-
 #if TOKEN_MANAGER_USES_PARSER
-public:
   void   setParser(void* parser);
+
 protected:	
   ${parserName}*   parser;
 #fi
@@ -79,7 +74,8 @@ private:
   Token* jjFillToken();
 
 public:
-  void                        	    lexicalError();
+  void	 lexicalError();
+  const  TokenManagerErrorHandler*	 getErrorHandler() const;
 };
 
 #if NAMESPACE

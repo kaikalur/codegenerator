@@ -194,10 +194,13 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.switchToIncludeFile();
     codeGenerator.println("");
     codeGenerator.println("public: ");
-    codeGenerator.println("  void setErrorHandler(ParserErrorHandler *eh) {");
+    codeGenerator.println("  void setErrorHandler(ParserErrorHandler* eh) {");
     codeGenerator.println("    if (delete_eh) delete errorHandler;");
     codeGenerator.println("    errorHandler = eh;");
     codeGenerator.println("    delete_eh = false;");
+    codeGenerator.println("  }");
+    codeGenerator.println("  const ParserErrorHandler* getErrorHandler() {");
+    codeGenerator.println("    return errorHandler;");
     codeGenerator.println("  }");
     codeGenerator.println("");
     codeGenerator.println("  TokenManager*          token_source = nullptr;");
