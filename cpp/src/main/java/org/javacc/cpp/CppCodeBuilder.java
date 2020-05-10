@@ -3,6 +3,7 @@ package org.javacc.cpp;
 
 import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.Context;
+import org.javacc.parser.Options;
 import org.javacc.utils.CodeBuilder;
 
 import java.io.File;
@@ -58,7 +59,11 @@ class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
    * array of super interfaes
    */
   void genClassStart(String mod, String name, String[] superClasses, String[] superInterfaces) {
-    print("class " + name);
+    print("class ");
+    if (!Options.getParserAttribute().isEmpty()) {
+    	print(Options.getParserAttribute() + " ");
+    }
+    print(name);
     if ((superClasses.length > 0) || (superInterfaces.length > 0)) {
       print(" : ");
     }

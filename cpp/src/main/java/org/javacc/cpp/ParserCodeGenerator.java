@@ -159,7 +159,11 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("namespace " + Options.stringValue("NAMESPACE_OPEN"));
     }
 
-    codeGenerator.println("  struct JJCalls {");
+    codeGenerator.print("  struct ");
+    if (!Options.getParserAttribute().isEmpty()) {
+    	codeGenerator.print(Options.getParserAttribute() + " ");
+    }
+    codeGenerator.println("JJCalls {");
     codeGenerator.println("    int        gen;");
     codeGenerator.println("    int        arg;");
     codeGenerator.println("    JJCalls*   next;");
