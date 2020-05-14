@@ -16,8 +16,11 @@ void ${parserName}TokenManager::ReInit(CharStream* stream, int lexState)
     errorHandler = nullptr;
     delete_eh = false;
 
+#if CPP_USE_ARRAY
 	memset(jjChars.base(), 0, sizeof(jjChars));
- 
+#else
+	memset(jjChars, 0, sizeof(jjChars));
+#fi 
     for (int i = 0; i < ${nfaSize}; i++) {
       int ind = 0;
       // We originally generate something like RLE for the static arrays and
@@ -131,10 +134,15 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
     return curPos;
   }
 
+#if CPP_USE_ARRAY
   Array<${generatedStates}, int> stateSet;
   Array<${generatedStates}, int> newStateSet;
   Array<${generatedStates}, int> moved;
-  
+#else
+  int stateSet[${generatedStates}];
+  int newStateSet[${generatedStates}];
+  int moved[${generatedStates}];
+#fi
   // We have an array indexed by the NFA state number to roughly indicate
   // the input position so when the input reaches part IntMax (which
   // should be extremely rare), we need to reset them all back to zero.

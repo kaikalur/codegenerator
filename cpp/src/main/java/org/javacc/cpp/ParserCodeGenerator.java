@@ -90,7 +90,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
    * "phase3done" any more. But this has not been removed yet.
    */
 
-  private final Context                   context;
+  private final Context                 context;
   private CppCodeBuilder                codeGenerator;
 
   private final Map<Expansion, String>  internalNames   = new HashMap<>();
@@ -128,6 +128,9 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("#ifndef " + guard);
     codeGenerator.println("#define " + guard);
     codeGenerator.println();
+    
+    //insertAPIMacro(codeGenerator, parserData.parserName.toUpperCase());
+    
     codeGenerator.println("#include \"JavaCC.h\"");
     codeGenerator.println("#include \"CharStream.h\"");
     codeGenerator.println("#include \"Token.h\"");
@@ -830,7 +833,73 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("};");
   }
 
-  @Override
+  private void insertAPIMacro(CppCodeBuilder codeGenerator, String parserName) {
+	  	codeGenerator.println("#define TYPER_NO_AUTOMATIC_LIBS");
+		codeGenerator.println("//");
+		codeGenerator.println("// Ensure that " + parserName + "_STATIC is default unless " + parserName + "_DLL is defined");
+		codeGenerator.println("//");
+		codeGenerator.println("#if defined(_WIN32) && defined(_DLL)");
+		codeGenerator.println("	#if !defined(" + parserName + "_DLL) && !defined(" + parserName + "_STATIC)");
+		codeGenerator.println("		#define " + parserName + "_STATIC");
+		codeGenerator.println("	#endif");
+		codeGenerator.println("#endif");
+		codeGenerator.println("");
+		codeGenerator.println("#if defined(_MSC_VER)");
+		codeGenerator.println("	#if defined(" + parserName + "_DLL)");
+		codeGenerator.println("		#if defined(_DEBUG)");
+		codeGenerator.println("			#define " + parserName + "_LIB_SUFFIX \"d.lib\"");
+		codeGenerator.println("		#else");
+		codeGenerator.println("			#define " + parserName + "_LIB_SUFFIX \".lib\"");
+		codeGenerator.println("		#endif");
+		codeGenerator.println("	#elif defined(_DLL)");
+		codeGenerator.println("		#if defined(_DEBUG)");
+		codeGenerator.println("			#define " + parserName + "_LIB_SUFFIX \"MDd.lib\"");
+		codeGenerator.println("		#else");
+		codeGenerator.println("			#define " + parserName + "_LIB_SUFFIX \"Md.lib\"");
+		codeGenerator.println("		#endif");
+		codeGenerator.println("	#else");
+		codeGenerator.println("		#if defined(_DEBUG)");
+		codeGenerator.println("			#define " + parserName + "_LIB_SUFFIX \"MTd.lib\"");
+		codeGenerator.println("		#else");
+		codeGenerator.println("			#define " + parserName + "_LIB_SUFFIX \"Mt.lib\"");
+		codeGenerator.println("		#endif");
+		codeGenerator.println("	#endif");
+		codeGenerator.println("#endif");
+		codeGenerator.println("");
+		codeGenerator.println("//");
+		codeGenerator.println("// The following block is the standard way of creating macros which make exporting");
+		codeGenerator.println("// from a DLL simpler. All files within this DLL are compiled with the " + parserName + "_EXPORTS");
+		codeGenerator.println("// symbol defined on the command line. this symbol should not be defined on any project");
+		codeGenerator.println("// that uses this DLL. This way any other project whose source files include this file see");
+		codeGenerator.println("// " + parserName + "_API functions as being imported from a DLL, wheras this DLL sees symbols");
+		codeGenerator.println("// defined with this macro as being exported.");
+		codeGenerator.println("//");
+		codeGenerator.println("#if defined(_WIN32) && defined(" + parserName + "_DLL)");
+		codeGenerator.println("	#if defined(" + parserName + "_EXPORTS)");
+		codeGenerator.println("		#define " + parserName + "_API __declspec(dllexport)");
+		codeGenerator.println("	#else");
+		codeGenerator.println("		#define " + parserName + "_API __declspec(dllimport)");
+		codeGenerator.println("	#endif");
+		codeGenerator.println("#endif");
+		codeGenerator.println("");
+		codeGenerator.println("");
+		codeGenerator.println("#if !defined(" + parserName + "_API)");
+		codeGenerator.println("	#define " + parserName + "_API");
+		codeGenerator.println("#endif");
+		codeGenerator.println("");
+		codeGenerator.println("");
+		codeGenerator.println("//");
+		codeGenerator.println("// Automatically link " + parserName + " library.");
+		codeGenerator.println("//");
+		codeGenerator.println("#if defined(_MSC_VER)");
+		codeGenerator.println("	#if !defined(" + parserName + "_NO_AUTOMATIC_LIBS) && !defined(" + parserName + "_EXPORTS)");
+		codeGenerator.println("		#pragma comment(lib, \"" + parserName + "\" " + parserName + "_LIB_SUFFIX)");
+		codeGenerator.println("	#endif");
+		codeGenerator.println("#endif");
+		codeGenerator.println("");
+  }
+
+@Override
   public void finish(CodeGeneratorSettings settings, ParserData parserData) {
     if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
       codeGenerator.println(Options.stringValue("NAMESPACE_CLOSE"));

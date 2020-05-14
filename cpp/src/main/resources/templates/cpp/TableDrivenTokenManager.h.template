@@ -28,7 +28,11 @@ private:
   int jjmatchedKind;
 
   int moveIndex;
+#if CPP_USE_ARRAY
   Array<${nfaSize}, Array<${charsVectorSize}, unsigned long long>>        jjChars;//[${nfaSize}][${charsVectorSize}];
+#else
+  unsigned long long		jjChars[${nfaSize}][${charsVectorSize}];
+#fi
   JJString                  jjimage;
   JJString                  image = jjimage;
   int                       jjimageLen;
