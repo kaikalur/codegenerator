@@ -44,7 +44,7 @@ final class NodeFiles {
       builder.addOption("MULTI", "NODE_USES_PARSER", "VISITOR", "TRACK_TOKENS", "NODE_PREFIX", "NODE_EXTENDS",
           "NODE_FACTORY", Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
 
-      if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
+      if (Options.stringValue(Options.USEROPTION__CPP_NAMESPACE).length() > 0) {
         builder.println("namespace " + Options.stringValue("NAMESPACE_OPEN"));
       }
 
@@ -53,7 +53,7 @@ final class NodeFiles {
             CodeGeneratorSettings.create().set("NODE_TYPE", node));
       }
 
-      if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
+      if (Options.stringValue(Options.USEROPTION__CPP_NAMESPACE).length() > 0) {
         builder.println(Options.stringValue("NAMESPACE_CLOSE"));
       }
     } catch (IOException e) {
@@ -73,7 +73,7 @@ final class NodeFiles {
       List<String> nodeIds = ASTNodeDescriptor.getNodeIds();
       List<String> nodeNames = ASTNodeDescriptor.getNodeNames();
 
-      if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
+      if (Options.stringValue(Options.USEROPTION__CPP_NAMESPACE).length() > 0) {
         builder.println("namespace " + Options.stringValue("NAMESPACE_OPEN"));
       }
       builder.println("public class " + NodeFiles.nodeConstants());
@@ -94,7 +94,7 @@ final class NodeFiles {
       builder.println("  };");
 
       builder.println("}");
-      if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
+      if (Options.stringValue(Options.USEROPTION__CPP_NAMESPACE).length() > 0) {
         builder.println(Options.stringValue("NAMESPACE_CLOSE"));
       }
     } catch (IOException e) {
@@ -117,7 +117,7 @@ final class NodeFiles {
 
       List<String> nodeNames = ASTNodeDescriptor.getNodeNames();
 
-      if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
+      if (Options.stringValue(Options.USEROPTION__CPP_NAMESPACE).length() > 0) {
         builder.println("namespace " + Options.stringValue("NAMESPACE_OPEN"));
       }
       builder.println("public interface " + NodeFiles.visitorClass());
@@ -143,7 +143,7 @@ final class NodeFiles {
         }
       }
       builder.println("}");
-      if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
+      if (Options.stringValue(Options.USEROPTION__CPP_NAMESPACE).length() > 0) {
         builder.println(Options.stringValue("NAMESPACE_CLOSE"));
       }
     } catch (IOException e) {
@@ -177,7 +177,7 @@ final class NodeFiles {
 
       List<String> nodeNames = ASTNodeDescriptor.getNodeNames();
 
-      if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
+      if (Options.stringValue(Options.USEROPTION__CPP_NAMESPACE).length() > 0) {
         builder.println("namespace " + Options.stringValue("NAMESPACE_OPEN"));
       }
       builder.println("public class " + NodeFiles.defaultVisitorClass() + " : " + NodeFiles.visitorClass() + "{");
@@ -213,7 +213,7 @@ final class NodeFiles {
         }
       }
       builder.println("}");
-      if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
+      if (Options.stringValue(Options.USEROPTION__CPP_NAMESPACE).length() > 0) {
         builder.println(Options.stringValue("NAMESPACE_CLOSE"));
       }
     } catch (IOException e) {

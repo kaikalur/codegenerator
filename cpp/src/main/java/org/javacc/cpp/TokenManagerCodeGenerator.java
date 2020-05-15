@@ -89,7 +89,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
       return;
     }
 
-    if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
+    if (Options.stringValue(Options.USEROPTION__CPP_NAMESPACE).length() > 0) {
       codeGenerator.switchToMainFile();
       codeGenerator.println(Options.stringValue("NAMESPACE_CLOSE"));
     }
