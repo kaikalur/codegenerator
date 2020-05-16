@@ -31,8 +31,9 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
 
   @Override
   public void generateCode(CodeGeneratorSettings settings, TokenizerData tokenizerData) {
-    String superClass = (String) settings.get(Options.USEROPTION__TOKEN_MANAGER_SUPER_CLASS);
     settings.putAll(Options.getOptions());
+    settings.put(Options.NONUSER_OPTION__PARSER_NAME_UPPER_CASE, tokenizerData.parserName.toUpperCase());
+
     settings.put("maxOrdinal", tokenizerData.allMatches.size());
     settings.put("firstLexState", tokenizerData.lexStateNames[0]);
     settings.put("lastLexState", tokenizerData.lexStateNames[tokenizerData.lexStateNames.length - 1]);
@@ -45,7 +46,6 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     settings.put("charStreamName", Options.getCharStreamName());
     settings.put("defaultLexState", tokenizerData.defaultLexState);
     settings.put("decls", tokenizerData.decls);
-    settings.put("superClass", ((superClass == null) || superClass.equals("")) ? "" : superClass);
     settings.put("noDfa", Options.getNoDfa());
     settings.put("generatedStates", tokenizerData.nfa.size());
     if (Options.getTokenClass().isEmpty())

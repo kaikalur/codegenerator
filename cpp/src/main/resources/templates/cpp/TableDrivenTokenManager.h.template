@@ -1,6 +1,9 @@
-\#ifndef JAVACC_${parserName}_TOKEN_MANAGER_H
-\#define JAVACC_${parserName}_TOKEN_MANAGER_H
+\#ifndef JAVACC_${PARSER_NAME_UPPER_CASE}_TOKEN_MANAGER_H
+\#define JAVACC_${PARSER_NAME_UPPER_CASE}_TOKEN_MANAGER_H
 
+#if LIBRARY
+\#include "ImportExport.h"
+#fi
 \#include "JavaCC.h"
 \#include "CharStream.h"
 #if tokenInclude
@@ -19,7 +22,11 @@
 namespace ${NAMESPACE_OPEN}
 #fi
 
+#if LIBRARY
+class ${PARSER_NAME_UPPER_CASE}_API ${parserName}TokenManager : public TokenManager
+#else
 class ${parserName}TokenManager : public TokenManager
+#fi
 {
 private:
   int defaultLexState;

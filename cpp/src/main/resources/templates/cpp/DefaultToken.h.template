@@ -1,6 +1,9 @@
 \#ifndef JAVACC_DEFAULT_TOKEN_H
 \#define JAVACC_DEFAULT_TOKEN_H
 
+#if LIBRARY
+\#include "ImportExport.h"
+#fi
 \#include "JavaCC.h"
 \#include "Token.h"
 
@@ -12,7 +15,11 @@ namespace ${NAMESPACE_OPEN}
  * Describes the input token stream.
  */
 
+#if LIBRARY
+class ${PARSER_NAME_UPPER_CASE}_API DefaultToken : public Token 
+#else
 class DefaultToken : public Token 
+#fi
 {
 private:
   /**

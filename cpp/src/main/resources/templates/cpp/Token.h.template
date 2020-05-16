@@ -1,6 +1,9 @@
 \#ifndef JAVACC_TOKEN_H
 \#define JAVACC_TOKEN_H
 
+#if LIBRARY
+\#include "ImportExport.h"
+#fi
 \#include "JavaCC.h"
 
 
@@ -10,8 +13,11 @@ namespace JavaCC {
  * Describes the input token stream.
  */
 
-class Token
-{
+#if LIBRARY
+class ${PARSER_NAME_UPPER_CASE}_API Token {
+#else
+class Token {
+#fi
 public:
            Token() {}
   virtual ~Token() {}

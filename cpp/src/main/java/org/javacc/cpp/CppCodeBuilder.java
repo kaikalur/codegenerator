@@ -60,8 +60,8 @@ class CppCodeBuilder extends CodeBuilder<CppCodeBuilder> {
    */
   void genClassStart(String mod, String name, String[] superClasses, String[] superInterfaces) {
     print("class ");
-    if (!Options.getParserAttribute().isEmpty()) {
-    	print(Options.getParserAttribute() + " ");
+    if (!Options.getLibrary().isEmpty()) {
+    	print(name.toUpperCase() + "_API ");
     }
     print(name);
     if ((superClasses.length > 0) || (superInterfaces.length > 0)) {

@@ -77,13 +77,22 @@ public class CppCodeGenerator implements CodeGenerator {
       }
 
       try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(context, settings)) {
-        builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "JavaCC.h"));
-        builder.addTools(JavaCCGlobals.toolName);
-        builder.addOption(Options.USEROPTION__STATIC, Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
+          builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "JavaCC.h"));
+          builder.addTools(JavaCCGlobals.toolName);
+          builder.addOption(Options.USEROPTION__STATIC, Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
 
-        builder.printTemplate("/templates/cpp/JavaCC.h.template");
+          builder.printTemplate("/templates/cpp/JavaCC.h.template");
+        }
+
+      if (!Options.getLibrary().isEmpty()) {
+    	  try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(context, settings)) {
+    		builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "ImportExport.h"));
+          	builder.addTools(JavaCCGlobals.toolName);
+            builder.addOption(Options.USEROPTION__CPP_LIBRARY); 
+          	builder.printTemplate("/templates/cpp/ImportExport.h.template");
+    	  }
       }
-
+      
       try (CppCodeBuilder builder = CppCodeBuilder.of(context, settings)) {
           builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "DefaultParserErrorHandler.cc"));
           builder.addTools(JavaCCGlobals.toolName);

@@ -1,6 +1,9 @@
 \#ifndef JAVACC_DEFAULT_CHAR_STREAM_H
 \#define JAVACC_DEFAULT_CHAR_STREAM_H
 
+#if LIBRARY
+\#include "ImportExport.h"
+#fi
 \#include "JavaCC.h"
 \#include "CharStream.h"
 
@@ -23,9 +26,13 @@ namespace ${NAMESPACE_OPEN}
  * operation.
  */
  
-static const int initialBufferSize = 4096;
+static constexpr int InitialBufferSize = 4096;
 
+#if LIBRARY
+class ${PARSER_NAME_UPPER_CASE}_API DefaultCharStream : public CharStream {
+#else
 class DefaultCharStream : public CharStream {
+#fi
 public:
   void setTabSize(int i) { tabSize = i; }
   int  getTabSize()      { return tabSize; }
@@ -174,7 +181,7 @@ public:
 
   DefaultCharStream(const JJChar *buf, int sz, int startline, int startcolumn)
   {
-    ReInit(JJString(buf, sz), startline, startcolumn, initialBufferSize);
+    ReInit(JJString(buf, sz), startline, startcolumn, InitialBufferSize);
   }
 
   DefaultCharStream(const JJString& str, int startline, int startcolumn, int buffersize)
@@ -184,7 +191,7 @@ public:
 
   DefaultCharStream(const JJString& str, int startline, int startcolumn)
   {
-    ReInit(str, startline, startcolumn, initialBufferSize);
+    ReInit(str, startline, startcolumn, InitialBufferSize);
   }
 
   DefaultCharStream(ReaderStream *input_stream, int startline, int startcolumn, int buffersize)
@@ -194,28 +201,28 @@ public:
 
   DefaultCharStream(ReaderStream *input_stream, int startline, int startcolumn)
   {
-    ReInit(input_stream, startline, startcolumn, initialBufferSize);
+    ReInit(input_stream, startline, startcolumn, InitialBufferSize);
   }
 
   DefaultCharStream(ReaderStream *input_stream)
   {
-    ReInit(input_stream, 1, 1, initialBufferSize);
+    ReInit(input_stream, 1, 1, InitialBufferSize);
   }
 
   virtual void ReInit(ReaderStream *input_stream, int startline, int startcolumn, int buffersize);
 
   virtual void ReInit(ReaderStream *input_stream, int startline, int startcolumn) {
-    ReInit(input_stream, startline, startcolumn, initialBufferSize);
+    ReInit(input_stream, startline, startcolumn, InitialBufferSize);
   }
 
   virtual void ReInit(ReaderStream *input_stream) {
-    ReInit(input_stream, 1, 1, initialBufferSize);
+    ReInit(input_stream, 1, 1, InitialBufferSize);
   }
 
   virtual void ReInit(const JJString& str, int startline, int startcolumn, int buffersize);
 
   virtual void ReInit(const JJString& str, int startline, int startcolumn) {
-    ReInit(str, startline, startcolumn, initialBufferSize);
+    ReInit(str, startline, startcolumn, InitialBufferSize);
   }
 
   virtual void adjustBeginLineColumn(int newLine, int newCol);
