@@ -31,6 +31,13 @@ class StringReaderStream : public ReaderStream {
 #if NAMESPACE
 namespace ${NAMESPACE_OPEN}
 #fi
+DefaultCharStream::~DefaultCharStream() {
+  if (deleteStream) {
+   delete inputStream;
+  }
+  deleteBuffers();
+}
+
 void DefaultCharStream::ReInit(const JJString& str, int startline, int startcolumn, int buffersize) {
   StringReaderStream *stream = new StringReaderStream(str);
   ReInit(stream, startline, startcolumn, buffersize);
@@ -58,6 +65,62 @@ void DefaultCharStream::ReInit(ReaderStream *input_stream, int startline, int st
   tokenBegin = inBuf = maxNextCharInd = 0;
   bufpos = -1;
   deleteStream = false;
+}
+
+void DefaultCharStream::backup(int amount) {
+  inBuf += amount; bufpos -= amount;
+  if (bufpos < 0) {
+    bufpos += bufsize;
+  }
+}
+
+JJChar DefaultCharStream::beginToken() {
+  tokenBegin = -1;
+  JJChar c = readChar();
+  tokenBegin = bufpos;
+  return c;
+}
+
+JJChar DefaultCharStream::readChar() {
+  if (inBuf > 0) {
+    --inBuf; ++bufpos;
+    if (bufpos == bufsize) {
+      bufpos = 0;
+    }
+    return buffer[bufpos];
+  }
+
+  ++bufpos;
+  if (bufpos >= maxNextCharInd) {
+    fillBuff();
+  }
+
+  JJChar c = buffer[bufpos];
+
+#if KEEP_LINE_COLUMN
+  if (trackLineColumn) {
+    updateLineColumn(c);
+  }
+#fi
+  return c;
+}
+
+JJString DefaultCharStream::getImage() {
+  if (bufpos >= tokenBegin)
+    return JJString(buffer + tokenBegin, bufpos - tokenBegin + 1);
+  else
+    return JJString(buffer + tokenBegin, bufsize - tokenBegin).append(buffer, bufpos + 1);
+}
+
+JJString DefaultCharStream::getSuffix(int len) {
+  if ((bufpos + 1) >= len) {
+    return JJString(buffer + bufpos - len + 1, len);
+  }
+  return JJString(buffer + bufsize - (len - bufpos - 1), len - bufpos - 1).append(buffer, bufpos + 1);
+}
+
+bool DefaultCharStream::endOfInput() {
+  return inBuf == 0 && bufpos + 1 >= maxNextCharInd && inputStream->endOfInput();
 }
 
 void DefaultCharStream::deleteBuffers() {

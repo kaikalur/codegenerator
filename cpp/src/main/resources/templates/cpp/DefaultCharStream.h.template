@@ -34,6 +34,8 @@ class ${PARSER_NAME_UPPER_CASE}_API DefaultCharStream : public CharStream {
 class DefaultCharStream : public CharStream {
 #fi
 public:
+  virtual ~DefaultCharStream();
+
   void setTabSize(int i) { tabSize = i; }
   int  getTabSize()      { return tabSize; }
 
@@ -62,6 +64,7 @@ public:
   virtual int getBeginColumn()   { return getBufcolumn(tokenBegin); }
   virtual int getBeginLine()     { return getBufline(tokenBegin); }
 #else
+public:
   virtual int getColumn()        { return -1; }
   virtual int getLine()          { return -1; }
   virtual int getEndColumn()     { return -1; }
@@ -79,54 +82,21 @@ public:
  * (longer) token. So, they will be used again as the prefix of the next
  * token and it is the implementation's responsibility to do this right.
  */
-  virtual inline void backup(int amount) {
-    inBuf += amount; bufpos -= amount;
-    if (bufpos < 0) {
-      bufpos += bufsize;
-    }
-  }
+  virtual void backup(int amount);
 
 /**
  * Returns the next character that marks the beginning of the next token.
  * All characters must remain in the buffer between two successive calls
  * to this method to implement backup correctly.
  */
-  virtual inline JJChar beginToken() {
-    tokenBegin = -1;
-    JJChar c = readChar();
-    tokenBegin = bufpos;
-    return c;
-  }
-
+  virtual JJChar beginToken();
 
 /**
  * Returns the next character from the selected input.  The method
  * of selecting the input is the responsibility of the class
  * implementing this class.
  */
-  virtual inline JJChar readChar() {
-    if (inBuf > 0) {
-      --inBuf; ++bufpos;
-      if (bufpos == bufsize) {
-        bufpos = 0;
-      }
-      return buffer[bufpos];
-    }
-
-    ++bufpos;
-    if (bufpos >= maxNextCharInd) {
-      fillBuff();
-    }
-
-    JJChar c = buffer[bufpos];
-
-#if KEEP_LINE_COLUMN
-    if (trackLineColumn) {
-      updateLineColumn(c);
-    }
-#fi
-    return c;
-  }
+  virtual JJChar readChar();
 
   virtual void expandBuff(bool wrapAround);
   virtual void fillBuff();
@@ -137,12 +107,7 @@ public:
    * anything that they want to. For example, for efficiency, one might decide
    * to just return NULL, which is a valid implementation.
    */
-  virtual JJString getImage() {
-    if (bufpos >= tokenBegin)
-      return JJString(buffer + tokenBegin, bufpos - tokenBegin + 1);
-    else
-      return JJString(buffer + tokenBegin, bufsize - tokenBegin).append(buffer, bufpos + 1);
-  }
+  virtual JJString getImage();
 
   /**
    * Returns an array of characters that make up the suffix of length 'len' for
@@ -150,12 +115,7 @@ public:
    * for use in actions in the case of MORE. A simple and inefficient
    * implementation of this is as follows :
    */
-  virtual JJString getSuffix(int len) {
-    if ((bufpos + 1) >= len) {
-      return JJString(buffer + bufpos - len + 1, len);
-    }
-    return JJString(buffer + bufsize - (len - bufpos - 1), len - bufpos - 1).append(buffer, bufpos + 1);
-  }
+  virtual JJString getSuffix(int len);
 
   /**
    * The lexer calls this function to indicate that it is done with the stream
@@ -163,16 +123,7 @@ public:
    */
   virtual void deleteBuffers();
 
-  virtual ~DefaultCharStream() {
-    if (deleteStream) {
-     delete inputStream;
-    }
-    deleteBuffers();
-  }
-
-  bool endOfInput() {
-    return inBuf == 0 && bufpos + 1 >= maxNextCharInd && inputStream->endOfInput();
-  }
+  bool endOfInput();
 
   DefaultCharStream(const JJChar *buf, int sz, int startline, int startcolumn, int buffersize)
   {
