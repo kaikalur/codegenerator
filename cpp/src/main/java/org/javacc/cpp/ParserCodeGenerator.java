@@ -682,12 +682,18 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.switchToIncludeFile();
     codeGenerator.println("private:");
     codeGenerator.println("  int  indent; // trace indentation");
-    codeGenerator.println("  bool trace = " + Options.getDebugParser() + "; // trace enabled if true");
+    codeGenerator.println("  bool trace = " + Options.getDebugParser() + ";");
+    codeGenerator.println("  bool trace_la = " + Options.getDebugLookahead() + ";" );
     codeGenerator.println("");
     codeGenerator.println("public:");
     codeGenerator.generateMethodDefHeader("  bool", context.globals().cu_name, "trace_enabled()");
     codeGenerator.println("  {");
     codeGenerator.println("    return trace;");
+    codeGenerator.println("  }");
+    codeGenerator.println("");
+    codeGenerator.generateMethodDefHeader("  bool", context.globals().cu_name, "trace_la_enabled()");
+    codeGenerator.println("  {");
+    codeGenerator.println("    return trace_la;");
     codeGenerator.println("  }");
     codeGenerator.println("");
     if (Options.getDebugParser()) {
@@ -744,7 +750,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.switchToIncludeFile();
       codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "trace_scan(const Token* token, int t2)");
       codeGenerator.println("  {");
-      codeGenerator.println("    if (trace_enabled()) {");
+      codeGenerator.println("    if (trace_la_enabled()) {");
       codeGenerator.println("      for (int no = 0; no < indent; no++) { JJLOG << JJSPACE; }");
       codeGenerator.print("      JJLOG << JJWIDE(Visited  token: ) << addUnicodeEscapes(");
       codeGenerator.print(getTokenLabels());
@@ -755,17 +761,66 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       codeGenerator.println("    }");
       codeGenerator.println("  }");
       codeGenerator.println("");
+      
     } else {
+        codeGenerator.switchToIncludeFile();
+        codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "enable_tracing()");
+        codeGenerator.println("  {");
+        codeGenerator.println("  }");
+        codeGenerator.switchToIncludeFile();
+        codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "disable_tracing()");
+        codeGenerator.println("  {");
+        codeGenerator.println("  }");
+        codeGenerator.println("");
+      }
+
+    if (Options.getDebugLookahead()) {
+        codeGenerator.switchToIncludeFile();
+        codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "enable_la_tracing()");
+        codeGenerator.println("{");
+        codeGenerator.println("    trace_la = true;");
+        codeGenerator.println("}");
+        codeGenerator.println("");
+
+        codeGenerator.switchToIncludeFile();
+        codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "disable_la_tracing()");
+        codeGenerator.println("{");
+        codeGenerator.println("    trace_la = false;");
+        codeGenerator.println("}");
+        codeGenerator.println("");
+
       codeGenerator.switchToIncludeFile();
-      codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "enable_tracing()");
+      codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "trace_la_call(const char *s)");
       codeGenerator.println("  {");
-      codeGenerator.println("  }");
-      codeGenerator.switchToIncludeFile();
-      codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "disable_tracing()");
-      codeGenerator.println("  {");
+      codeGenerator.println("    if (trace_la_enabled()) {");
+      codeGenerator.println("      for (int no = 0; no < indent; no++) { JJLOG << JJSPACE; }");
+      codeGenerator.println("      JJLOG << \"Call:   \" << s << std::endl;");
+      codeGenerator.println("    }");
+      codeGenerator.println("    indent += 2;");
       codeGenerator.println("  }");
       codeGenerator.println("");
-    }
+
+      codeGenerator.switchToIncludeFile();
+      codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "trace_la_return(const char *s)");
+      codeGenerator.println("  {");
+      codeGenerator.println("    indent -= 2;");
+      codeGenerator.println("    if (trace_la_enabled()) {");
+      codeGenerator.println("      for (int no = 0; no < indent; no++) { JJLOG << JJSPACE; }");
+      codeGenerator.println("      JJLOG << \"Return: \" << s << std::endl;");
+      codeGenerator.println("    }");
+      codeGenerator.println("  }");
+      codeGenerator.println("");
+    } else {
+        codeGenerator.switchToIncludeFile();
+        codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "enable_la_tracing()");
+        codeGenerator.println("  {");
+        codeGenerator.println("  }");
+        codeGenerator.switchToIncludeFile();
+        codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "disable_la_tracing()");
+        codeGenerator.println("  {");
+        codeGenerator.println("  }");
+        codeGenerator.println("");
+      }
 
     if ((context.globals().jj2index != 0) && Options.getErrorReporting()) {
       codeGenerator.generateMethodDefHeader("  void", context.globals().cu_name, "jj_rescan_token()");
@@ -1704,7 +1759,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     String retval = value ? "true" : "false";
     if (Options.getDebugLookahead() && (jj3_expansion != null)) {
       String tracecode =
-          "trace_return(\"" + codeGenerator.escapeToUnicode(((NormalProduction) jj3_expansion.parent).getLhs())
+          "trace_la_return(\"" + codeGenerator.escapeToUnicode(((NormalProduction) jj3_expansion.parent).getLhs())
           + "(LOOKAHEAD " + (value ? "FAILED" : "SUCCEEDED") + ")\");";
       if (Options.getErrorReporting()) {
         tracecode = "if (!jj_rescan) " + tracecode;
@@ -1716,12 +1771,12 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
   }
 
   private static String getTokenImages() {
-        return addTokenNamespace("tokenImages");
-      }
+    return addTokenNamespace("tokenImages");
+  }
 
   private static String getTokenLabels() {
-        return addTokenNamespace("tokenLabels");
-      }
+    return addTokenNamespace("tokenLabels");
+  }
 
   private void generate3R(Expansion e, Phase3Data inf) {
     Expansion seq = e;
@@ -1884,7 +1939,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
         if (Options.getErrorReporting()) {
           codeGenerator.print("if (!jj_rescan) ");
         }
-        codeGenerator.println("trace_call(\"" + codeGenerator.escapeToUnicode(((NormalProduction) e.parent).getLhs())
+        codeGenerator.println("trace_la_call(\"" + codeGenerator.escapeToUnicode(((NormalProduction) e.parent).getLhs())
         + "(LOOKING AHEAD...)\");");
         jj3_expansion = e;
       } else {
