@@ -9,7 +9,6 @@ TOKEN_MANAGER_USES_PARSER=true;
 NAMESPACE="ASN1::Typer";
 NO_DFA=false;
 //PARSER_INCLUDE="Typer.jjh";
-//PARSER_ATTRIBUTE="TYPER_API";
 }
 PARSER_BEGIN(Typer)
 PARSER_END(Typer)
@@ -83,32 +82,19 @@ TOKEN_MGR_DECLS :
   int linesCommentCount = 0;
 }
 
-SKIP:{" "|"\t"|"\n"|"\r"|"\f"
-}
-
-SKIP:{"/*"{linesCommentCount=1;}:LinesComment
-}
-
-<LinesComment>SKIP:{"/*"{linesCommentCount+=1;}
-}
-
-<LinesComment>SKIP:{"*/"{linesCommentCount-=1;SwitchTo(linesCommentCount==0?DEFAULT:LinesComment);}
-}
-
-<LinesComment>SKIP:{<~[]>
-}
+SKIP:{" "|"\t"|"\n"|"\r"|"\f"}
+SKIP:{"/*"{linesCommentCount=1;}:LinesComment}
+<LinesComment>SKIP:{"/*"{linesCommentCount+=1;}}
+<LinesComment>SKIP:{"*/"{linesCommentCount-=1;SwitchTo(linesCommentCount==0?DEFAULT:LinesComment);}}
+<LinesComment>SKIP:{<~[]>}
 
 TOKEN:
-{
-<#NA:~["-","\r","\n"]>
-|<#EOL:("\n"|"\r"|"\r\n")>
+{ <#NA:~["-","\r","\n"]>
+| <#EOL:("\n"|"\r"|"\r\n")>
 }
 
-SPECIAL_TOKEN:{"--":LineComment
-}
-
-<LineComment>SPECIAL_TOKEN:{<(<NA>|"-"<NA>)*(<EOL>|"-"<EOL>|"-""-")?>:DEFAULT
-}
+SPECIAL_TOKEN:{"--":LineComment}
+<LineComment>SPECIAL_TOKEN:{<(<NA>|"-"<NA>)*(<EOL>|"-"<EOL>|"-""-")?>:DEFAULT}
 
 TOKEN:
 {<DBLLBRACKET:"[[">
