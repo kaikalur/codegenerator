@@ -31,12 +31,78 @@ class StringReaderStream : public ReaderStream {
 #if NAMESPACE
 namespace ${NAMESPACE_OPEN}
 #fi
+DefaultCharStream::DefaultCharStream(const JJChar *buf, int sz, int startline, int startcolumn, int buffersize)
+{
+  ReInit(JJString(buf, sz), startline, startcolumn, buffersize);
+}
+
+DefaultCharStream::DefaultCharStream(const JJChar *buf, int sz, int startline, int startcolumn)
+{
+  ReInit(JJString(buf, sz), startline, startcolumn, InitialBufferSize);
+}
+
+DefaultCharStream::DefaultCharStream(const JJString& str, int startline, int startcolumn, int buffersize)
+{
+  ReInit(str, startline, startcolumn, buffersize);
+}
+
+DefaultCharStream::DefaultCharStream(const JJString& str, int startline, int startcolumn)
+{
+  ReInit(str, startline, startcolumn, InitialBufferSize);
+}
+
+DefaultCharStream::DefaultCharStream(ReaderStream *input_stream, int startline, int startcolumn, int buffersize)
+{
+  ReInit(input_stream, startline, startcolumn, buffersize);
+}
+
+DefaultCharStream::DefaultCharStream(ReaderStream *input_stream, int startline, int startcolumn)
+{
+  ReInit(input_stream, startline, startcolumn, InitialBufferSize);
+}
+
+DefaultCharStream::DefaultCharStream(ReaderStream *input_stream)
+{
+  ReInit(input_stream, 1, 1, InitialBufferSize);
+}
+
+void DefaultCharStream::ReInit(const JJString& str, int startline, int startcolumn) {
+  ReInit(str, startline, startcolumn, InitialBufferSize);
+}
+
 DefaultCharStream::~DefaultCharStream() {
   if (deleteStream) {
    delete inputStream;
   }
   deleteBuffers();
 }
+
+
+void DefaultCharStream::ReInit(ReaderStream *input_stream, int startline, int startcolumn) {
+  ReInit(input_stream, startline, startcolumn, InitialBufferSize);
+}
+ 
+void DefaultCharStream::ReInit(ReaderStream *input_stream) {
+  ReInit(input_stream, 1, 1, InitialBufferSize);
+} 
+
+#if KEEP_LINE_COLUMN
+int DefaultCharStream::getBufcolumn(int pos) {
+  if (trackLineColumn && pos>=0) {
+    return bufcolumn[pos];
+  } else {
+    return -1;
+  }
+}
+
+int DefaultCharStream::getBufline(int pos) {
+  if (trackLineColumn && pos>=0) {
+    return bufline[pos];
+  } else {
+    return -1;
+  }
+}
+#fi
 
 void DefaultCharStream::ReInit(const JJString& str, int startline, int startcolumn, int buffersize) {
   StringReaderStream *stream = new StringReaderStream(str);

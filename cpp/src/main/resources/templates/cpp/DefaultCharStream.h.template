@@ -36,45 +36,21 @@ class DefaultCharStream : public CharStream {
 public:
   virtual ~DefaultCharStream();
 
-  void setTabSize(int i) { tabSize = i; }
-  int  getTabSize()      { return tabSize; }
+  DefaultCharStream(const JJChar *buf, int sz, int startline, int startcolumn, int buffersize);
+  DefaultCharStream(const JJChar *buf, int sz, int startline, int startcolumn);
+  DefaultCharStream(const JJString& str, int startline, int startcolumn, int buffersize);
+  DefaultCharStream(const JJString& str, int startline, int startcolumn);
 
-#if KEEP_LINE_COLUMN
-private:
-  int getBufcolumn(int pos) {
-    if (trackLineColumn && pos>=0) {
-      return bufcolumn[pos];
-    } else {
-      return -1;
-    }
-  }
-  int getBufline(int pos) {
-    if (trackLineColumn && pos>=0) {
-      return bufline[pos];
-    } else {
-      return -1;
-    }
-  }
+  DefaultCharStream(ReaderStream *input_stream, int startline, int startcolumn, int buffersize);
+  DefaultCharStream(ReaderStream *input_stream, int startline, int startcolumn);
+  DefaultCharStream(ReaderStream *input_stream);
+  
+  virtual void ReInit(ReaderStream *input_stream, int startline, int startcolumn, int buffersize);
+  virtual void ReInit(ReaderStream *input_stream, int startline, int startcolumn);
+  virtual void ReInit(ReaderStream *input_stream);
 
-public:
-  virtual int getColumn()        { return getBufcolumn(bufpos); }
-  virtual int getLine()          { return getBufline(bufpos); }
-  virtual int getEndColumn()     { return getBufcolumn(bufpos); }
-  virtual int getEndLine()       { return getBufline(bufpos); }
-  virtual int getBeginColumn()   { return getBufcolumn(tokenBegin); }
-  virtual int getBeginLine()     { return getBufline(tokenBegin); }
-#else
-public:
-  virtual int getColumn()        { return -1; }
-  virtual int getLine()          { return -1; }
-  virtual int getEndColumn()     { return -1; }
-  virtual int getEndLine()       { return -1; }
-  virtual int getBeginColumn()   { return -1; }
-  virtual int getBeginLine()     { return -1; }
-#fi
-
-  virtual bool getTrackLineColumn()         { return trackLineColumn; }
-  virtual void setTrackLineColumn(bool val) { trackLineColumn = val; }
+  virtual void ReInit(const JJString& str, int startline, int startcolumn, int buffersize);
+  virtual void ReInit(const JJString& str, int startline, int startcolumn);
 
 /**
  * Backs up the input stream by amount steps. Lexer calls this method if it
@@ -124,59 +100,37 @@ public:
   virtual void deleteBuffers();
 
   bool endOfInput();
+  void setTabSize(int i) 		{ tabSize = i; }
+  int  getTabSize()      		{ return tabSize; }
 
-  DefaultCharStream(const JJChar *buf, int sz, int startline, int startcolumn, int buffersize)
-  {
-	ReInit(JJString(buf, sz), startline, startcolumn, buffersize);
-  }
 
-  DefaultCharStream(const JJChar *buf, int sz, int startline, int startcolumn)
-  {
-    ReInit(JJString(buf, sz), startline, startcolumn, InitialBufferSize);
-  }
-
-  DefaultCharStream(const JJString& str, int startline, int startcolumn, int buffersize)
-  {
-    ReInit(str, startline, startcolumn, buffersize);
-  }
-
-  DefaultCharStream(const JJString& str, int startline, int startcolumn)
-  {
-    ReInit(str, startline, startcolumn, InitialBufferSize);
-  }
-
-  DefaultCharStream(ReaderStream *input_stream, int startline, int startcolumn, int buffersize)
-  {
-    ReInit(input_stream, startline, startcolumn, buffersize);
-  }
-
-  DefaultCharStream(ReaderStream *input_stream, int startline, int startcolumn)
-  {
-    ReInit(input_stream, startline, startcolumn, InitialBufferSize);
-  }
-
-  DefaultCharStream(ReaderStream *input_stream)
-  {
-    ReInit(input_stream, 1, 1, InitialBufferSize);
-  }
-
-  virtual void ReInit(ReaderStream *input_stream, int startline, int startcolumn, int buffersize);
-
-  virtual void ReInit(ReaderStream *input_stream, int startline, int startcolumn) {
-    ReInit(input_stream, startline, startcolumn, InitialBufferSize);
-  }
-
-  virtual void ReInit(ReaderStream *input_stream) {
-    ReInit(input_stream, 1, 1, InitialBufferSize);
-  }
-
-  virtual void ReInit(const JJString& str, int startline, int startcolumn, int buffersize);
-
-  virtual void ReInit(const JJString& str, int startline, int startcolumn) {
-    ReInit(str, startline, startcolumn, InitialBufferSize);
-  }
 
   virtual void adjustBeginLineColumn(int newLine, int newCol);
+#if KEEP_LINE_COLUMN
+private:
+  int getBufcolumn(int pos) ;
+  int getBufline(int pos);
+
+public:
+  virtual int getColumn()        { return getBufcolumn(bufpos); }
+  virtual int getLine()          { return getBufline(bufpos); }
+  virtual int getEndColumn()     { return getBufcolumn(bufpos); }
+  virtual int getEndLine()       { return getBufline(bufpos); }
+  virtual int getBeginColumn()   { return getBufcolumn(tokenBegin); }
+  virtual int getBeginLine()     { return getBufline(tokenBegin); }
+#else
+public:
+  virtual int getColumn()        { return -1; }
+  virtual int getLine()          { return -1; }
+  virtual int getEndColumn()     { return -1; }
+  virtual int getEndLine()       { return -1; }
+  virtual int getBeginColumn()   { return -1; }
+  virtual int getBeginLine()     { return -1; }
+#fi
+
+  virtual bool getTrackLineColumn()         { return trackLineColumn; }
+  virtual void setTrackLineColumn(bool val) { trackLineColumn = val; }
+
 
 protected:
   virtual void updateLineColumn(JJChar c);
