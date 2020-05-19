@@ -1,7 +1,7 @@
 options {
 SANITY_CHECK=true;
 DEBUG_PARSER=true;
-DEBUG_TOKEN_MANAGER=false;
+DEBUG_TOKEN_MANAGER=true;
 DEBUG_LOOKAHEAD=false;
 STATIC=false;
 //COMMON_TOKEN_ACTION = true;
@@ -89,7 +89,7 @@ SKIP:{"/*"{linesCommentCount=1;}:LinesComment}
 <LinesComment>SKIP:{<~[]>}
 
 TOKEN:
-{ <#NA:~["-","\r","\n"]>
+{ <#NA:~["\r","\n"]>
 | <#EOL:("\n"|"\r"|"\r\n")>
 }
 

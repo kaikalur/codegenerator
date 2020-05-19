@@ -25,6 +25,16 @@ using namespace ASN1::Typer;
 JJString ReadFileFully() {
 	JJString code;
 	code = 
+#if 1
+"-- 32-bit.\n"
+"-- 32- -bit.\n"
+"-- 32- -bit-\n"
+"-- ddd -- Mod\n"
+"DEFINITIONS ::=\n"
+"BEGIN\n"
+"END\n"
+
+#else
 "\r\n"
 "-- OK: Everything is fine\r\n"
 "\r\n"
@@ -57,6 +67,7 @@ JJString ReadFileFully() {
 "\r\n"
 
 "END\r\n"
+#endif
 ;
 	return code;
 }
@@ -105,7 +116,8 @@ int main(int argc, char**argv) {
 			usage(argc, argv);
 			return 0;
 		}
-		TokenManager *scanner = new TyperTokenManager(cs);
+		TyperTokenManager *scanner = new TyperTokenManager(cs);
+		scanner->disable_tracing();
 		Typer parser(scanner);
 
 		parser.ModuleDefinitionList();
