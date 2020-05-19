@@ -83,8 +83,12 @@ private:
 
   int    jjMoveNfa(int startState, int curPos);
   Token* jjFillToken();
-
+  bool	 trace = false;
+  
 public:
+  bool	 trace_enabled() const;
+  void	 enable_tracing();
+  void   disable_tracing();
   void	 lexicalError();
   const  TokenManagerErrorHandler*	 getErrorHandler() const;
 };
