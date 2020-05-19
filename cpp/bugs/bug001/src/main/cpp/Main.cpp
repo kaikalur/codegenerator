@@ -39,7 +39,7 @@ JJString ReadFileFully() {
 "BEGIN\r\n"
 "\r\n"
 "	alpha INTEGER ::= 1\r\n"
-/*
+
 "	Type1 ::= INTEGER { alpha(2) }\r\n"
 "	Type2 ::= INTEGER { alpha(3), beta(alpha) }\r\n"
 "	gamma Type2 ::= beta	-- equals 1 --\r\n"
@@ -50,12 +50,12 @@ JJString ReadFileFully() {
 "	 *  The following are for post-fix checking by the check_fixer.\r\n"
 "	 * It will be able to pick-up these values if the file is parseable,\r\n"
 "	 * even if it contains some semantic errors.\r\n"
-"	 \r\n"
+"	 */\r\n"
 "\r\n"
 "	check-gamma INTEGER ::= 1	-- check value\r\n"
 "	check-delta INTEGER ::= 3	-- check value\r\n"
 "\r\n"
-*/
+
 "END\r\n"
 ;
 	return code;

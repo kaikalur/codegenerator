@@ -442,9 +442,9 @@ void BuiltinType() : {} {
      OctetStringType()  |
      RealType()  |
      RelativeOIDType()  |
-     LOOKAHEAD(2147483647)  SequenceOfType() |
+     LOOKAHEAD(<SEQUENCE > <OF >)  SequenceOfType() |
       SequenceType() |
-      LOOKAHEAD(2147483647) SetOfType()  |
+      LOOKAHEAD(<SET > <OF >) SetOfType()  |
       SetType()  |
       TaggedType()
     )
