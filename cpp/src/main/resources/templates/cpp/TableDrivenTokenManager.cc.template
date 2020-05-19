@@ -4,9 +4,6 @@ ${decls}
 /** Constructor. */
 ${parserName}TokenManager::${parserName}TokenManager(CharStream* stream, int lexState)
 {
-#if DEBUG_TOKEN_MANAGER
-	trace = true;
-#fi
     ReInit(stream, lexState);
 }
 
@@ -507,21 +504,6 @@ void ${parserName}TokenManager::setParser(void* parser) {
 	this->parser = static_cast<${parserName}*>(parser);
 }
 #fi
-
-bool ${parserName}TokenManager::trace_enabled() const {
-	return trace;
-}
-void ${parserName}TokenManager::enable_tracing() {
-#if DEBUG_TOKEN_MANAGER
-	trace = true;
-#fi
-}
-void ${parserName}TokenManager::disable_tracing() {
-#if DEBUG_TOKEN_MANAGER
-	trace = false;
-#fi
-}
-
 
 void ${parserName}TokenManager::lexicalError() {
 	std::clog << "Lexical error encountered." << std::endl;
