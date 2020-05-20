@@ -5,8 +5,8 @@
     <artifactId>codegen</artifactId>
     <version>8.0.0-SNAPSHOT</version>
   </parent>
-  <groupId>org.javacc.codegen.cpp</groupId>
-  <artifactId>it</artifactId>
+  <groupId>org.javacc.codegen.it</groupId>
+  <artifactId>java</artifactId>
   <packaging>pom</packaging>
 	<profiles>
 		<profile>
@@ -31,8 +31,8 @@
 								</dependency>
 								<dependency>
 									<groupId>org.javacc.codegen</groupId>
-									<artifactId>cpp</artifactId>
-									<version>${javacc.cpp}</version>
+									<artifactId>java</artifactId>
+									<version>${javacc.java}</version>
 									<scope>runtime</scope>
 								</dependency>
 							</dependencies>
@@ -51,39 +51,12 @@
 									<goal>javacc</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>${project.basedir}/target/generated-sources/cpp</outputDirectory>
+									<outputDirectory>${project.basedir}/target/generated-sources/java</outputDirectory>
 									<sourceDirectory>${project.basedir}/src/main/javacc</sourceDirectory>
-									<codeGenerator>c++</codeGenerator>
+									<codeGenerator>java</codeGenerator>
 								</configuration>
 							</execution>
 						</executions>
-					</plugin>
-					<plugin>
-						<groupId>com.github.maven-nar</groupId>
-						<artifactId>nar-maven-plugin</artifactId>
-						<extensions>true</extensions>
-						<configuration>
-							<libraries>
-								<library>
-									<type>executable</type>
-									<run>true</run>
-								</library>
-							</libraries>
-							<cpp>
-								<debug>false</debug>
-								<defines>
-									<define>JJ8</define>
-								</defines>
-								<includePaths>
-									<includePath>
-										<path>${project.basedir}/src/main/cpp</path>
-									</includePath>
-									<includePath>
-										<path>${project.basedir}/target/generated-sources/cpp</path>
-									</includePath>
-								</includePaths>
-							</cpp>
-						</configuration>
 					</plugin>
 				</plugins>
 			</build>
@@ -110,8 +83,8 @@
 								</dependency>
 								<dependency>
 									<groupId>org.javacc.codegen</groupId>
-									<artifactId>cpp</artifactId>
-									<version>${javacc.cpp}</version>
+									<artifactId>java</artifactId>
+									<version>${javacc.java}</version>
 									<scope>runtime</scope>
 								</dependency>
 							</dependencies>
@@ -130,43 +103,13 @@
 									<goal>jjtree-javacc</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>${project.basedir}/target/generated-sources/cpp</outputDirectory>
+									<outputDirectory>${project.basedir}/target/generated-sources/java</outputDirectory>
 									<sourceDirectory>${project.basedir}/src/main/jjtree</sourceDirectory>
-									<nodeDirectory>${project.basedir}/src/main/cpp</nodeDirectory>
-									<codeGenerator>c++</codeGenerator>
+									<nodeDirectory>${project.basedir}/src/main/java</nodeDirectory>
+									<codeGenerator>java</codeGenerator>
 								</configuration>
 							</execution>
 						</executions>
-					</plugin>
-					<plugin>
-						<groupId>com.github.maven-nar</groupId>
-						<artifactId>nar-maven-plugin</artifactId>
-						<extensions>true</extensions>
-						<configuration>
-							<libraries>
-								<library>
-									<type>executable</type>
-									<run>true</run>
-								</library>
-							</libraries>
-							<cpp>
-								<debug>false</debug>
-								<defines>
-									<define>JJ8</define>
-								</defines>
-								<includePaths>
-									<includePath>
-										<path>${project.basedir}/src/main/cpp</path>
-									</includePath>
-									<includePath>
-										<path>${project.basedir}/target/generated-sources/cpp</path>
-									</includePath>
-									<includePath>
-										<path>${project.basedir}/target/generated-sources/jjtree</path>
-									</includePath>
-								</includePaths>
-							</cpp>
-						</configuration>
 					</plugin>
 				</plugins>
 			</build>
@@ -188,8 +131,8 @@
 								</dependency>
 								<dependency>
 									<groupId>org.javacc.codegen</groupId>
-									<artifactId>cpp</artifactId>
-									<version>${javacc.cpp}</version>
+									<artifactId>java</artifactId>
+									<version>${javacc.java}</version>
 									<scope>runtime</scope>
 								</dependency>
 							</dependencies>
@@ -208,42 +151,12 @@
 									<goal>jjtree-javacc</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>${project.basedir}/target/generated-sources/cpp</outputDirectory>
+									<outputDirectory>${project.basedir}/target/generated-sources/java</outputDirectory>
 									<sourceDirectory>${project.basedir}/src/main/jjtree</sourceDirectory>
-									<codeGenerator>c++</codeGenerator>
+									<codeGenerator>java</codeGenerator>
 								</configuration>
 							</execution>
 						</executions>
-					</plugin>
-					<plugin>
-						<groupId>com.github.maven-nar</groupId>
-						<artifactId>nar-maven-plugin</artifactId>
-						<extensions>true</extensions>
-						<configuration>
-							<libraries>
-								<library>
-									<type>executable</type>
-									<run>true</run>
-								</library>
-							</libraries>
-							<cpp>
-								<defines>
-									<define>JJ8</define>
-									<define>JAVACC_CHAR_TYPE=wchar_t</define>
-								</defines>
-								<includePaths>
-									<includePath>
-										<path>${project.basedir}/src/main/cpp</path>
-									</includePath>
-									<includePath>
-										<path>${project.basedir}/target/generated-sources/cpp</path>
-									</includePath>
-									<includePath>
-										<path>${project.basedir}/target/generated-sources/jjtree</path>
-									</includePath>
-								</includePaths>
-							</cpp>
-						</configuration>
 					</plugin>
 				</plugins>
 			</build>
@@ -279,37 +192,11 @@
 									<goal>javacc</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/generated-sources/cpp</outputDirectory>
-									<outputLanguage>c++</outputLanguage>
+									<outputDirectory>target/generated-sources/java</outputDirectory>
+									<outputLanguage>java</outputLanguage>
 								</configuration>
 							</execution>
 						</executions>
-					</plugin>
-					<plugin>
-						<groupId>com.github.maven-nar</groupId>
-						<artifactId>nar-maven-plugin</artifactId>
-						<extensions>true</extensions>
-						<configuration>
-							<libraries>
-								<library>
-									<type>executable</type>
-									<run>true</run>
-								</library>
-							</libraries>
-							<cpp>
-								<defines>
-									<define>JJ7</define>
-								</defines>
-								<includePaths>
-									<includePath>
-										<path>${project.basedir}/src/main/cpp</path>
-									</includePath>
-									<includePath>
-										<path>${project.basedir}/target/generated-sources/cpp</path>
-									</includePath>
-								</includePaths>
-							</cpp>
-						</configuration>
 					</plugin>
 				</plugins>
 			</build>
@@ -345,39 +232,11 @@
 									<goal>javacc</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/generated-sources/cpp</outputDirectory>
-									<outputLanguage>c++</outputLanguage>
+									<outputDirectory>target/generated-sources/java</outputDirectory>
+									<outputLanguage>java</outputLanguage>
 								</configuration>
 							</execution>
 						</executions>
-					</plugin>
-					<plugin>
-						<groupId>com.github.maven-nar</groupId>
-						<artifactId>nar-maven-plugin</artifactId>
-						<extensions>true</extensions>
-						<configuration>
-							<libraries>
-								<library>
-									<type>executable</type>
-									<run>true</run>
-								</library>
-							</libraries>
-							<cpp>
-								<defines>
-									<define>JJ7</define>
-									<define>WIDE_CHAR</define>
-									<define>JAVACC_CHAR_TYPE=wchar_t</define>
-								</defines>
-								<includePaths>
-									<includePath>
-										<path>${project.basedir}/src/main/cpp</path>
-									</includePath>
-									<includePath>
-										<path>${project.basedir}/target/generated-sources/cpp</path>
-									</includePath>
-								</includePaths>
-							</cpp>
-						</configuration>
 					</plugin>
 				</plugins>
 			</build>
@@ -413,40 +272,11 @@
 									<goal>jjtree-javacc</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/generated-sources/cpp</outputDirectory>
-									<outputLanguage>c++</outputLanguage>
+									<outputDirectory>target/generated-sources/java</outputDirectory>
+									<outputLanguage>java</outputLanguage>
 								</configuration>
 							</execution>
 						</executions>
-					</plugin>
-					<plugin>
-						<groupId>com.github.maven-nar</groupId>
-						<artifactId>nar-maven-plugin</artifactId>
-						<extensions>true</extensions>
-						<configuration>
-							<libraries>
-								<library>
-									<type>executable</type>
-									<run>true</run>
-								</library>
-							</libraries>
-							<cpp>
-								<defines>
-									<define>JJ7</define>
-								</defines>
-								<includePaths>
-									<includePath>
-										<path>${project.basedir}/src/main/cpp</path>
-									</includePath>
-									<includePath>
-										<path>${project.basedir}/target/generated-sources/cpp</path>
-									</includePath>
-									<includePath>
-										<path>${project.basedir}/target/generated-sources/jjtree</path>
-									</includePath>
-								</includePaths>
-							</cpp>
-						</configuration>
 					</plugin>
 				</plugins>
 			</build>
@@ -483,42 +313,11 @@
 									<goal>jjtree-javacc</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/generated-sources/cpp</outputDirectory>
-									<outputLanguage>c++</outputLanguage>
+									<outputDirectory>target/generated-sources/java</outputDirectory>
+									<outputLanguage>java</outputLanguage>
 								</configuration>
 							</execution>
 						</executions>
-					</plugin>
-					<plugin>
-						<groupId>com.github.maven-nar</groupId>
-						<artifactId>nar-maven-plugin</artifactId>
-						<extensions>true</extensions>
-						<configuration>
-							<libraries>
-								<library>
-									<type>executable</type>
-									<run>true</run>
-								</library>
-							</libraries>
-							<cpp>
-								<defines>
-									<define>JJ7</define>
-									<define>WIDE_CHAR</define>
-									<define>JAVACC_CHAR_TYPE=wchar_t</define>
-								</defines>
-								<includePaths>
-									<includePath>
-										<path>${project.basedir}/src/main/cpp</path>
-									</includePath>
-									<includePath>
-										<path>${project.basedir}/target/generated-sources/cpp</path>
-									</includePath>
-									<includePath>
-										<path>${project.basedir}/target/generated-sources/jjtree</path>
-									</includePath>
-								</includePaths>
-							</cpp>
-						</configuration>
 					</plugin>
 				</plugins>
 			</build>

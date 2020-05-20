@@ -26,14 +26,16 @@ JJString ReadFileFully() {
 	JJString code;
 	code = 
 #if 1
-"-- 32-bit.\n"
-"-- 32- -bit.\n"
-"-- 32- -bit-\n"
-"-- ddd -- Mod\n"
-"DEFINITIONS ::=\n"
+//"-- 32-bit.\n"
+//"-- 32- -bit.\n"
+//"-- 32- -bit-\n"
+//"-- ddd -- Mod\n"
+//"-- no-de --\n"
+" M DEFINITIONS ::=\n"
 "BEGIN\n"
+"IMPORTS -- n-o --;\n"
 "END\n"
-
+;
 #else
 "\r\n"
 "-- OK: Everything is fine\r\n"
@@ -68,7 +70,7 @@ JJString ReadFileFully() {
 
 "END\r\n"
 #endif
-;
+
 	return code;
 }
 static void usage(int argc, char**argv) {

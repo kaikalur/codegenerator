@@ -5,22 +5,24 @@ DEBUG_TOKEN_MANAGER=true;
 DEBUG_LOOKAHEAD=false;
 STATIC=false;
 //COMMON_TOKEN_ACTION = true;
-TOKEN_MANAGER_USES_PARSER=true;
-NAMESPACE="ASN1::Typer";
+//TOKEN_MANAGER_USES_PARSER=true;
+//NAMESPACE="ASN1::Typer";
 NO_DFA=false;
 //PARSER_INCLUDE="Typer.jjh";
 }
 PARSER_BEGIN(Typer)
+class Typer {
+}
 PARSER_END(Typer)
 
-CODE_RULE
+JAVACODE
 void skipbracket() {
-  Token* tok;
+  Token tok;
   int nesting = 1;
   while (true) {
     tok = getToken(1);
-    if (tok->kind() == LBRACKET) nesting++;
-    if (tok->kind() == RBRACKET) {
+    if (tok.kind == LBRACKET) nesting++;
+    if (tok.kind == RBRACKET) {
       nesting--;
          if (nesting == 0) break;
     }
@@ -28,14 +30,14 @@ void skipbracket() {
   }
 }
 
-CODE_RULE
+JAVACODE
 void skipparen() {
-  Token* tok;
+  Token tok;
   int nesting = 1;
   while (true) {
     tok = getToken(1);
-    if (tok->kind() == LPAREN) nesting++;
-    if (tok->kind() == RPAREN) {
+    if (tok.kind == LPAREN) nesting++;
+    if (tok.kind == RPAREN) {
       nesting--;
          if (nesting == 0) break;
     }
@@ -43,15 +45,15 @@ void skipparen() {
   }
 }
 
-CODE_RULE
+JAVACODE
 void skipparen2(int from, int to) {
-  Token* tok;
+  Token tok;
   int nesting = 1;
   while (true) {
     tok = getToken(1);
-    if (tok->kind() == from) tok->kind() = to;
-    if (tok->kind() == LPAREN) nesting++;
-    if (tok->kind() == RPAREN) {
+    if (tok.kind == from) tok.kind = to;
+    if (tok.kind == LPAREN) nesting++;
+    if (tok.kind == RPAREN) {
       nesting--;
          if (nesting == 0) break;
     }
@@ -59,14 +61,14 @@ void skipparen2(int from, int to) {
   }
 }
 
-CODE_RULE
+JAVACODE
 void skipbrace() {
-  Token* tok;
+  Token tok;
   int nesting = 1;
   while (true) {
     tok = getToken(1);
-    if (tok->kind() == LBRACE) nesting++;
-    if (tok->kind() == RBRACE) {
+    if (tok.kind == LBRACE) nesting++;
+    if (tok.kind == RBRACE) {
       nesting--;
          if (nesting == 0) break;
     }
