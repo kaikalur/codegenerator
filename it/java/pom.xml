@@ -289,7 +289,6 @@
 						<plugin>
 							<groupId>org.javacc.plugin</groupId>
 							<artifactId>javacc-maven-plugin</artifactId>
-							<version>3.0.1-SNAPSHOT</version>
 							<dependencies>
 								<dependency>
 									<groupId>net.java.dev.javacc</groupId>

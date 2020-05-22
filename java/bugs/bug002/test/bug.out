@@ -1,0 +1,11 @@
+Call: EnumerationItem
+  Consumed token: <"{" at line 1 column 1>
+  Call: NamedNumber(LOOKING AHEAD...)
+    Visited token: <<IDENTIFIANT>: "c" at line 1 column 2>; Expected token: <<IDENTIFIANT>>
+  Return: NamedNumber(LOOKAHEAD SUCCEEDED)
+  Call: NamedNumber
+    Call: identifier
+      Consumed token: <<IDENTIFIANT>: "c" at line 1 column 2>
+    Return: identifier
+  Return: NamedNumber
+Return: EnumerationItem

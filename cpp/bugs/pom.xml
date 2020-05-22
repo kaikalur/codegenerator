@@ -16,5 +16,6 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>bug001</module>
+		<module>bug002</module>
 	</modules>
 </project>
