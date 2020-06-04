@@ -44,6 +44,8 @@ public class Bug {
 }
 PARSER_END(Bug)
 
+SKIP 						: { " " | "\t" | "\n" | "\r"  | "\f" }
+
 TOKEN:
 {
  <LBRACKET:"[">
