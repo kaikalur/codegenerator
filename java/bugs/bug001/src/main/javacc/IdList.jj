@@ -52,7 +52,7 @@ SPECIAL_TOKEN				: {"--":LineComment}
 
 TOKEN :
 {
-  < Id: ["a"-"z","A"-"Z"] ( ["a"-"z","A"-"Z","0"-"9"] )* > { System.out.println(matchedToken.toString()); }
+  < Id: ["a"-"z","A"-"Z"] ( ["a"-"z","A"-"Z","0"-"9", "-"] )* > { System.out.println(matchedToken.toString()); }
 }
 
 void Input() :
