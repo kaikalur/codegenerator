@@ -24,43 +24,8 @@ using namespace std;
 JJString ReadFileFully() {
 	JJString code;
 	code = 
-#if 1
-"{c}\n"
+"{ c }\n"
 ;
-#else
-"\r\n"
-"-- OK: Everything is fine\r\n"
-"\r\n"
-"-- iso.org.dod.internet.private.enterprise (1.3.6.1.4.1)\r\n"
-"-- .spelio.software.asn1c.test (9363.1.5.1)\r\n"
-"-- .10\r\n"
-"\r\n"
-"ModuleTestInt-10\r\n"
-"	{ iso org(3) dod(6) internet (1) private(4) enterprise(1)\r\n"
-"		spelio(9363) software(1) asn1c(5) test(1) 10 }\r\n"
-"	DEFINITIONS ::=\r\n"
-"BEGIN\r\n"
-"\r\n"
-"	alpha INTEGER ::= 1\r\n"
-
-"	Type1 ::= INTEGER { alpha(2) }\r\n"
-"	Type2 ::= INTEGER { alpha(3), beta(alpha) }\r\n"
-"	gamma Type2 ::= beta	-- equals 1 --\r\n"
-"	delta Type2 ::= alpha	-- equals 3 --\r\n"
-"\r\n"
-
-"	/*\r\n"
-"	 *  The following are for post-fix checking by the check_fixer.\r\n"
-"	 * It will be able to pick-up these values if the file is parseable,\r\n"
-"	 * even if it contains some semantic errors.\r\n"
-"	 */\r\n"
-"\r\n"
-"	check-gamma INTEGER ::= 1	-- check value\r\n"
-"	check-delta INTEGER ::= 3	-- check value\r\n"
-"\r\n"
-
-"END\r\n"
-#endif
 
 	return code;
 }

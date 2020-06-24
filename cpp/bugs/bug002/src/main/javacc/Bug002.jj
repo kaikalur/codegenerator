@@ -2,7 +2,7 @@ options {
 SANITY_CHECK=true;
 DEBUG_PARSER=true;
 //DEBUG_TOKEN_MANAGER=true;
-DEBUG_LOOKAHEAD=false;
+DEBUG_LOOKAHEAD=true;
 STATIC=false;
 NO_DFA=false;
 }
@@ -230,10 +230,12 @@ TOKEN:{
 
 void EnumerationItem()  	: {  } 
 { 
+	<LBRACE>
 	( LOOKAHEAD(2)
       NamedNumber()
 	| identifier()
 	)
+	<RBRACE>
 }
 void NamedNumber() : 
 { }

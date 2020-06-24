@@ -2012,7 +2012,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
           // codeGenerator.genCodeLine("jj_3" + nested_seq.internal_name + "())
           // {");
           // codeGenerator.println(genjj_3Call(nested_seq) + ") {");
-          codeGenerator.println("!" + genjj_3Call(nested_seq) + ") " + genReturn(false));
+          codeGenerator.println(genjj_3Call(nested_seq) + ") {");
           codeGenerator.println("    jj_scanpos = xsp;");
         } else {
           // codeGenerator.genCodeLine("jj_3" + nested_seq.internal_name + "())
@@ -2022,11 +2022,11 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
           // jj_lastpos) " + genReturn(false));
         }
       }
-      // for (int i = 1; i < e_nrw.getChoices().size(); i++) {
-      // // codeGenerator.genCodeLine(" } else if (jj_la == 0 && jj_scanpos ==
-      // // jj_lastpos) " + genReturn(false));
-      // codeGenerator.println(" }");
-      // }
+       for (int i = 1; i < e_nrw.getChoices().size(); i++) {
+       // codeGenerator.genCodeLine(" } else if (jj_la == 0 && jj_scanpos ==
+       // jj_lastpos) " + genReturn(false));
+         codeGenerator.println(" }");
+       }
     } else if (e instanceof Sequence) {
       Sequence e_nrw = (Sequence) e;
       // We skip the first element in the following iteration since it is the
