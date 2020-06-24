@@ -1,10 +1,10 @@
 options {
-SANITY_CHECK=true;
+SANITY_CHECK=false;
 DEBUG_PARSER=true;
 DEBUG_TOKEN_MANAGER=false;
 DEBUG_LOOKAHEAD=true;
 STATIC=false;
-NO_DFA=false;
+//NO_DFA=false;
 }
 PARSER_BEGIN(Bug)
 import java.io.FileInputStream;
