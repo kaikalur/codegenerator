@@ -20,16 +20,16 @@
 						<goals>
 							<goal>run</goal>
 						</goals>
-						<configuration><skip>true</skip>
+						<configuration>
 							<target unless="maven.test.skip">
-								<available file="${project.basedir}/idl/idl.out" property="isActualAvailable" />
-								<fail unless="isActualAvailable" message="${project.basedir}/idl/idl.out does not exist!" />
-								<available file="${project.basedir}/idl/idl.ref" property="isExpectedAvailable" />
-								<fail unless="isExpectedAvailable" message="${project.basedir}/idl/idl.ref does not exist!" />
+								<available file="${project.basedir}/test/bug.out" property="isActualAvailable" />
+								<fail unless="isActualAvailable" message="${project.basedir}/test/bug.out does not exist!" />
+								<available file="${project.basedir}/test/bug.ref" property="isExpectedAvailable" />
+								<fail unless="isExpectedAvailable" message="${project.basedir}/test/bug.ref does not exist!" />
 								<condition property="files.match">
-									<filesmatch file1="${project.basedir}/idl/idl.out" file2="${project.basedir}/idl/idl.ref" />
+									<filesmatch file1="${project.basedir}/test/bug.out" file2="${project.basedir}/test/bug.ref" />
 								</condition>
-								<fail unless="files.match" message="${project.basedir}/idl/idl.out does not match ${project.basedir}/idl/idl.ref!" />
+								<fail unless="files.match" message="${project.basedir}/test/bug.out does not match ${project.basedir}/test/bug.ref!" />
 							</target>
 						</configuration>
 					</execution>

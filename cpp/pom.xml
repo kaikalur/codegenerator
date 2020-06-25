@@ -56,6 +56,18 @@
 						</configuration>
 						<executions>
 							<execution>
+								<id>integration-test-cpp-bugs</id>
+								<goals>
+									<goal>install</goal>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<projectsDirectory>bugs</projectsDirectory>
+									<settingsFile>bugs/settings.xml</settingsFile>
+ 								</configuration>
+							</execution>
+
+							<execution>
 								<id>integration-test-cpp-examples</id>
 								<goals>
 									<goal>install</goal>
@@ -64,9 +76,6 @@
 								<configuration>
 									<projectsDirectory>examples</projectsDirectory>
 									<settingsFile>examples/settings.xml</settingsFile>
-<!-- 
-									<cloneProjectsTo>${project.build.directory}/examples</cloneProjectsTo>
- -->
  								<pomExcludes>
  									<pomExclude>MailProcessing/pom.xml</pomExclude>
  								</pomExcludes>
@@ -81,9 +90,6 @@
 								<configuration>
 									<projectsDirectory>grammars</projectsDirectory>
 									<settingsFile>grammars/settings.xml</settingsFile>
-<!-- 
-									<cloneProjectsTo>${project.build.directory}/grammars</cloneProjectsTo>
- -->
  								</configuration>
 							</execution>
 						</executions>
@@ -92,5 +98,4 @@
 			</build>
 		</profile>
 	</profiles>
-
 </project>
