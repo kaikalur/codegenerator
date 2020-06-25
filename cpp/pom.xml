@@ -76,9 +76,9 @@
 								<configuration>
 									<projectsDirectory>examples</projectsDirectory>
 									<settingsFile>examples/settings.xml</settingsFile>
- 								<pomExcludes>
- 									<pomExclude>MailProcessing/pom.xml</pomExclude>
- 								</pomExcludes>
+	 								<pomExcludes>
+	 									<pomExclude>MailProcessing/pom.xml</pomExclude>
+	 								</pomExcludes>
  								</configuration>
 							</execution>
 							<execution>
@@ -90,6 +90,9 @@
 								<configuration>
 									<projectsDirectory>grammars</projectsDirectory>
 									<settingsFile>grammars/settings.xml</settingsFile>
+	 								<pomExcludes>
+	 									<pomExclude>cobol/pom.xml</pomExclude>
+	 								</pomExcludes>
  								</configuration>
 							</execution>
 						</executions>
