@@ -15,6 +15,9 @@
 
 	<name>JavaCC code generator</name>
 
+	<properties>
+		<root>${basedir}/..</root>
+	</properties>
 
 	<modules>
 		<module>cpp</module>

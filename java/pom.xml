@@ -13,6 +13,10 @@
 
 	<name>JavaCC default java code generator</name>
 	<description>JavaCC default java code generator</description>
+	<properties>
+		<root>${basedir}/../..</root>
+	</properties>
+
 	<profiles>
 		<profile>
 			<id>run-its</id>
