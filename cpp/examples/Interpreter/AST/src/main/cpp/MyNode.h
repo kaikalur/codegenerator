@@ -33,11 +33,6 @@
 #include <stack>
 #include <memory>
 #include <stdexcept>
-using std::runtime_error;
-using std::string;
-using std::map;
-using std::stack;
-using std::unique_ptr;
 /**
  * Specialised node.
  */
@@ -45,14 +40,14 @@ class Node;
 class MyNode {
 	/** Symbol table */
 protected:
-	static map<string, Node*> symtab;
+	static std::map<std::string, Node*> symtab;
 
 	/** Stack for calculations. */
-	static stack<Node*> stack;
+	static std::stack<Node*> stack;
 
 public:
 	virtual void interpret() {
-		throw runtime_error("unsupported operation"); // It better not come here.
+		throw std::runtime_error("unsupported operation"); // It better not come here.
 	}
 
 /*

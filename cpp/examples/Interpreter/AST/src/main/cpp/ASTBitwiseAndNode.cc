@@ -4,6 +4,7 @@
 #include "ASTBitwiseAndNode.h"
 #include "Boolean.h"
 #include "Integer.h"
+using namespace std;
 
   
   ASTBitwiseAndNode::ASTBitwiseAndNode(int id) : Node(id) {
