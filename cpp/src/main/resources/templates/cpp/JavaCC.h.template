@@ -2,6 +2,7 @@
 \#define JAVACC_JAVACC_H
 
 \#include <climits>
+\#include <cstring>
 \#include <string>
 \#include <memory>
 \#include <cassert>
