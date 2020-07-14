@@ -17,9 +17,9 @@ void ${parserName}TokenManager::ReInit(CharStream* stream, int lexState)
     delete_eh = false;
 
 #if CPP_USE_ARRAY
-	memset(jjChars.base(), 0, sizeof(jjChars));
+	std::memset(jjChars.base(), 0, sizeof(jjChars));
 #else
-	memset(jjChars, 0, sizeof(jjChars));
+	std::memset(jjChars, 0, sizeof(jjChars));
 #fi 
     for (int i = 0; i < ${nfaSize}; i++) {
       int ind = 0;
