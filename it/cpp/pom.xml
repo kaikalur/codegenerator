@@ -26,13 +26,13 @@
 								<dependency>
 									<groupId>org.javacc</groupId>
 									<artifactId>core</artifactId>
-									<version>${javacc.core}</version>
+									<version>${project.version}</version>
 									<scope>runtime</scope>
 								</dependency>
 								<dependency>
 									<groupId>org.javacc.codegen</groupId>
 									<artifactId>cpp</artifactId>
-									<version>${javacc.cpp}</version>
+									<version>${project.version}</version>
 									<scope>runtime</scope>
 								</dependency>
 							</dependencies>

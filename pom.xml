@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -17,6 +16,10 @@
 
 	<properties>
 		<root>${basedir}/..</root>
+		<javacc.core>8.0.0-SNAPSHOT</javacc.core>
+		<javacc.java>8.0.0-SNAPSHOT</javacc.java>
+		<javacc.cpp>8.0.0-SNAPSHOT</javacc.cpp>
+		<javacc.csharp>8.0.0-SNAPSHOT</javacc.csharp>
 	</properties>
 
 	<modules>
@@ -29,6 +32,7 @@
 		<dependency>
 			<groupId>org.javacc</groupId>
 			<artifactId>core</artifactId>
+			<version>${javacc.core}</version>
 		</dependency>
 	</dependencies>
 </project>
