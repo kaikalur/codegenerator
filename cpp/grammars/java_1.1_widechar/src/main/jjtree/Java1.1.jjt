@@ -1708,10 +1708,6 @@ void TryStatement() :
 {
   <ILLEGAL_CHAR: ~[]> {
    		int i = 10;
-#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-   		std::cerr << "error: "   << matchedToken->kind << std::endl;
-#else
-   		std::wcerr << L"error: " << matchedToken->kind << std::endl;
-#endif
+		JJERR << JJWIDE(error: ) << matchedToken->kind() << std::endl;
 	}
 }
