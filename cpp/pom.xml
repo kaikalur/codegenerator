@@ -18,6 +18,30 @@
 	</properties>
 	<profiles>
 		<profile>
+			<id>Windows</id>
+			<activation>
+				<os>
+					<family>Windows</family>
+				</os>
+			</activation>
+			<properties>
+				<suffix>exe</suffix>
+				<bigobj>bigobj</bigobj>
+			</properties>
+		</profile>
+		<profile>
+			<id>Linux</id>
+			<activation>
+				<os>
+					<family>Linux</family>
+				</os>
+			</activation>
+			<properties>
+				<suffix>sh</suffix>
+				<bigobj></bigobj>
+			</properties>
+		</profile>
+		<profile>
 			<id>run-its</id>
 			<activation>
 				<property>
@@ -52,7 +76,7 @@
 						<configuration>
 							<failIfNoProjects>true</failIfNoProjects>
 							<ignoreFailures>false</ignoreFailures>
-							<streamLogs>true</streamLogs>
+							<streamLogs>false</streamLogs>
 							<debug>false</debug>
 							<postBuildHookScript>verify.bsh</postBuildHookScript>
 							<localRepositoryPath>local-repo</localRepositoryPath>

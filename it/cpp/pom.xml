@@ -82,6 +82,9 @@
 										<path>${project.basedir}/target/generated-sources/cpp</path>
 									</includePath>
 								</includePaths>
+								<options>
+									<option>${bigobj}</option>
+								</options>
 							</cpp>
 						</configuration>
 					</plugin>
@@ -165,6 +168,9 @@
 										<path>${project.basedir}/target/generated-sources/jjtree</path>
 									</includePath>
 								</includePaths>
+								<options>
+									<option>${bigobj}</option>
+								</options>
 							</cpp>
 						</configuration>
 					</plugin>
@@ -243,6 +249,9 @@
 										<path>${project.basedir}/target/generated-sources/jjtree</path>
 									</includePath>
 								</includePaths>
+								<options>
+									<option>${bigobj}</option>
+								</options>
 							</cpp>
 						</configuration>
 					</plugin>
@@ -309,6 +318,9 @@
 										<path>${project.basedir}/target/generated-sources/cpp</path>
 									</includePath>
 								</includePaths>
+								<options>
+									<option>${bigobj}</option>
+								</options>
 							</cpp>
 						</configuration>
 					</plugin>
@@ -377,6 +389,9 @@
 										<path>${project.basedir}/target/generated-sources/cpp</path>
 									</includePath>
 								</includePaths>
+								<options>
+									<option>${bigobj}</option>
+								</options>
 							</cpp>
 						</configuration>
 					</plugin>
@@ -446,6 +461,9 @@
 										<path>${project.basedir}/target/generated-sources/jjtree</path>
 									</includePath>
 								</includePaths>
+								<options>
+									<option>${bigobj}</option>
+								</options>
 							</cpp>
 						</configuration>
 					</plugin>
@@ -517,6 +535,9 @@
 										<path>${project.basedir}/target/generated-sources/jjtree</path>
 									</includePath>
 								</includePaths>
+								<options>
+									<option>${bigobj}</option>
+								</options>
 							</cpp>
 						</configuration>
 					</plugin>
