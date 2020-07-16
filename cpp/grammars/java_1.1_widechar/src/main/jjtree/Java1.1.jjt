@@ -68,13 +68,6 @@ TOKEN_MGR_DECLS : {
 	int linesCommentCount = 0;
 
 
-/*
-	void JavaParserTokenManager::CommonTokenAction(Token* token) {
-		if (parser) {
-			int i = 2;
-		}
-	}
-*/
 }
 
 /* WHITE SPACE */
