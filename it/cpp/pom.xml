@@ -210,6 +210,7 @@
 								<configuration>
 									<outputDirectory>${project.basedir}/target/generated-sources/cpp</outputDirectory>
 									<sourceDirectory>${project.basedir}/src/main/jjtree</sourceDirectory>
+									<nodeDirectory>${project.basedir}/src/main/cpp</nodeDirectory>
 									<codeGenerator>c++</codeGenerator>
 								</configuration>
 							</execution>
