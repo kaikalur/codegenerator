@@ -125,7 +125,7 @@
 								</includePaths>
 								<options>
 									<option>${bigobj}</option>
-									<option>std=${std}</option>
+									<option>-std=${std}</option>
 								</options>
 							</cpp>
 						</configuration>
@@ -212,7 +212,7 @@
 								</includePaths>
 								<options>
 									<option>${bigobj}</option>
-									<option>std=${std}</option>
+									<option>-std=${std}</option>
 								</options>
 							</cpp>
 						</configuration>
@@ -294,7 +294,7 @@
 								</includePaths>
 								<options>
 									<option>${bigobj}</option>
-									<option>std=${std}</option>
+									<option>-std=${std}</option>
 								</options>
 							</cpp>
 						</configuration>
@@ -364,7 +364,7 @@
 								</includePaths>
 								<options>
 									<option>${bigobj}</option>
-									<option>std=${std}</option>
+									<option>-std=${std}</option>
 								</options>
 							</cpp>
 						</configuration>
@@ -436,7 +436,7 @@
 								</includePaths>
 								<options>
 									<option>${bigobj}</option>
-									<option>std=${std}</option>
+									<option>-std=${std}</option>
 								</options>
 							</cpp>
 						</configuration>
@@ -509,7 +509,7 @@
 								</includePaths>
 								<options>
 									<option>${bigobj}</option>
-									<option>std=${std}</option>
+									<option>-std=${std}</option>
 								</options>
 							</cpp>
 						</configuration>
@@ -584,7 +584,7 @@
 								</includePaths>
 								<options>
 									<option>${bigobj}</option>
-									<option>std=${std}</option>
+									<option>-std=${std}</option>
 								</options>
 							</cpp>
 						</configuration>
