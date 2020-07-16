@@ -18,30 +18,6 @@
 	</properties>
 	<profiles>
 		<profile>
-			<id>Windows</id>
-			<activation>
-				<os>
-					<family>Windows</family>
-				</os>
-			</activation>
-			<properties>
-				<suffix>exe</suffix>
-				<bigobj>bigobj</bigobj>
-			</properties>
-		</profile>
-		<profile>
-			<id>Linux</id>
-			<activation>
-				<os>
-					<family>Linux</family>
-				</os>
-			</activation>
-			<properties>
-				<suffix>sh</suffix>
-				<bigobj></bigobj>
-			</properties>
-		</profile>
-		<profile>
 			<id>run-its</id>
 			<activation>
 				<property>
@@ -91,6 +67,9 @@
 								<configuration>
 									<projectsDirectory>bugs</projectsDirectory>
 									<settingsFile>bugs/settings.xml</settingsFile>
+									<pomExcludes>
+										<pomExclude>bug001/pom.xml</pomExclude>
+									</pomExcludes>
  								</configuration>
 							</execution>
 

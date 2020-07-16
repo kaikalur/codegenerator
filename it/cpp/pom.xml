@@ -1,13 +1,14 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>org.javacc</groupId>
-    <artifactId>codegen</artifactId>
-    <version>8.0.0-SNAPSHOT</version>
-  </parent>
-  <groupId>org.javacc.codegen.it</groupId>
-  <artifactId>cpp</artifactId>
-  <packaging>pom</packaging>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.javacc</groupId>
+		<artifactId>codegen</artifactId>
+		<version>8.0.0-SNAPSHOT</version>
+	</parent>
+	<groupId>org.javacc.codegen.it</groupId>
+	<artifactId>cpp</artifactId>
+	<packaging>pom</packaging>
 	<profiles>
 		<profile>
 			<id>Windows</id>
@@ -19,6 +20,7 @@
 			<properties>
 				<suffix>exe</suffix>
 				<bigobj>bigobj</bigobj>
+				<std></std>
 			</properties>
 		</profile>
 		<profile>
@@ -31,8 +33,23 @@
 			<properties>
 				<suffix>sh</suffix>
 				<bigobj></bigobj>
+				<std>c++17</std>
 			</properties>
 		</profile>
+		<profile>
+			<id>MacOS</id>
+			<activation>
+				<os>
+					<family>mac</family>
+				</os>
+			</activation>
+			<properties>
+				<suffix>sh</suffix>
+				<bigobj></bigobj>
+				<std>c++17</std>
+			</properties>
+		</profile>
+
 		<profile>
 			<id>jcc8</id>
 			<activation>
@@ -108,6 +125,7 @@
 								</includePaths>
 								<options>
 									<option>${bigobj}</option>
+									<option>std=${std}</option>
 								</options>
 							</cpp>
 						</configuration>
@@ -194,6 +212,7 @@
 								</includePaths>
 								<options>
 									<option>${bigobj}</option>
+									<option>std=${std}</option>
 								</options>
 							</cpp>
 						</configuration>
@@ -275,6 +294,7 @@
 								</includePaths>
 								<options>
 									<option>${bigobj}</option>
+									<option>std=${std}</option>
 								</options>
 							</cpp>
 						</configuration>
@@ -344,6 +364,7 @@
 								</includePaths>
 								<options>
 									<option>${bigobj}</option>
+									<option>std=${std}</option>
 								</options>
 							</cpp>
 						</configuration>
@@ -415,6 +436,7 @@
 								</includePaths>
 								<options>
 									<option>${bigobj}</option>
+									<option>std=${std}</option>
 								</options>
 							</cpp>
 						</configuration>
@@ -487,6 +509,7 @@
 								</includePaths>
 								<options>
 									<option>${bigobj}</option>
+									<option>std=${std}</option>
 								</options>
 							</cpp>
 						</configuration>
@@ -561,6 +584,7 @@
 								</includePaths>
 								<options>
 									<option>${bigobj}</option>
+									<option>std=${std}</option>
 								</options>
 							</cpp>
 						</configuration>
