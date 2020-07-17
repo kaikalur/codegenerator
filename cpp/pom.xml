@@ -52,7 +52,7 @@
 						<configuration>
 							<failIfNoProjects>true</failIfNoProjects>
 							<ignoreFailures>false</ignoreFailures>
-							<streamLogs>false</streamLogs>
+							<streamLogs>true</streamLogs>
 							<debug>false</debug>
 							<postBuildHookScript>verify.bsh</postBuildHookScript>
 							<localRepositoryPath>local-repo</localRepositoryPath>
@@ -67,7 +67,7 @@
 								<configuration>
 									<projectsDirectory>bugs</projectsDirectory>
 									<settingsFile>bugs/settings.xml</settingsFile>
-									<pomExcludes>
+									<pomExcludes><!-- FIXME -->
 										<pomExclude>bug001/pom.xml</pomExclude>
 									</pomExcludes>
  								</configuration>
