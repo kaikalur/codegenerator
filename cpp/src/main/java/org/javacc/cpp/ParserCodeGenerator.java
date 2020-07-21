@@ -143,10 +143,10 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     }
     printInclude(Options.getParserInclude());
 
-    if (Options.getTokenConstants().isEmpty()) {
+    if (Options.getTokenConstantsInclude().isEmpty()) {
         codeGenerator.println("#include \"" + context.globals().cu_name + "Constants.h\"");
     } else {
-        codeGenerator.println("#include \"" + Options.getTokenConstants() + "\"");
+        codeGenerator.println("#include \"" + Options.getTokenConstantsInclude() + "\"");
     }
 
     if (context.globals().jjtreeGenerated) {
@@ -1883,8 +1883,8 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
   
   private static String addTokenNamespace(String token) {
       if (token != null) {
-          if (!Options.getTokenNamespace().isEmpty()) {
-              token = Options.getTokenNamespace() + "::" + token;
+          if (!Options.getTokenConstantsNamespace().isEmpty()) {
+              token = Options.getTokenConstantsNamespace() + "::" + token;
           }
       }
       return token;

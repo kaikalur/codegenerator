@@ -2,6 +2,7 @@
 #include "MyToken.h"
 #include "MyTokenConstants.h"
 using namespace FOO::BAR;
+using namespace BAR::BAZ;
 
 class MatcherTokenManager : public TokenManager {
 public:
