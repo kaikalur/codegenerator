@@ -1,12 +1,15 @@
-\#ifndef JAVACC_${parserName}_TOKEN_MANAGER_H
-\#define JAVACC_${parserName}_TOKEN_MANAGER_H
+\#ifndef JAVACC_${PARSER_NAME_UPPER_CASE}_TOKEN_MANAGER_H
+\#define JAVACC_${PARSER_NAME_UPPER_CASE}_TOKEN_MANAGER_H
 
+#if LIBRARY
+\#include "ImportExport.h"
+#fi
 \#include "JavaCC.h"
 \#include "CharStream.h"
 #if tokenInclude
 \#include "${tokenInclude}"
 #fi
-\#include "ErrorHandler.h"
+\#include "ParserErrorHandler.h"
 \#include "TokenManager.h"
 \#include "${parserName}Constants.h"
 
@@ -19,59 +22,54 @@
 namespace ${NAMESPACE_OPEN}
 #fi
 
-class ${parserName}TokenManager 
-	: public TokenManager
- {
-public:
-\#ifndef JAVACC_CHARSTREAM
-\#define JAVACC_CHARSTREAM CharStream
-\#endif
-
+#if LIBRARY
+class ${PARSER_NAME_UPPER_CASE}_API ${parserName}TokenManager : public TokenManager
+#else
+class ${parserName}TokenManager : public TokenManager
+#fi
+{
 private:
   int defaultLexState;
   int curLexState = ${defaultLexState};
   int jjmatchedPos;
   int jjmatchedKind;
 
-  int stateSet[${generatedStates}];
-  int newStateSet[${generatedStates}];
-  int moved[${generatedStates}];
   int moveIndex;
-  
-  unsigned long long        jjChars[${nfaSize}][${charsVectorSize}];
-    
+#if CPP_USE_ARRAY
+  Array<${nfaSize}, Array<${charsVectorSize}, unsigned long long>>        jjChars;//[${nfaSize}][${charsVectorSize}];
+#else
+  unsigned long long		jjChars[${nfaSize}][${charsVectorSize}];
+#fi
   JJString                  jjimage;
   JJString                  image = jjimage;
   int                       jjimageLen;
   int                       lengthOfMatch;
   JJChar                    curChar;
-  JAVACC_CHARSTREAM*        input_stream;
+  CharStream*        		input_stream;
+  bool 						delete_eh = false;
+  TokenManagerErrorHandler* errorHandler = nullptr;
 
   int                       jjrounds[${stateSetSize}];
   int                       jjstateSet[2 * ${stateSetSize}];
-  TokenManagerErrorHandler* errorHandler;
-  bool 						delete_eh;
 
 public: 
-  ${parserName}TokenManager(JAVACC_CHARSTREAM* stream, int lexState = 0);
+  ${parserName}TokenManager(CharStream* stream, int lexState = 0);
   virtual ~${parserName}TokenManager() {}
 
   Token* getNextToken();
-
 #if COMMON_TOKEN_ACTION
   void CommonTokenAction(Token* token);
 #fi
-
 #if TOKEN_MANAGER_USES_PARSER
-public:
   void   setParser(void* parser);
+
 protected:	
   ${parserName}*   parser;
 #fi
 protected:
   bool   moveToNextChar();
   
-  void   ReInit(JAVACC_CHARSTREAM* stream, int lexState = 0);
+  void   ReInit(CharStream* stream, int lexState = 0);
   void   SwitchTo(int lexState);
 
 
@@ -85,10 +83,10 @@ private:
 
   int    jjMoveNfa(int startState, int curPos);
   Token* jjFillToken();
-
+  
 public:
-  void   lexicalError();
-  void   setErrorHandler(TokenManagerErrorHandler* eh);
+  void	 lexicalError();
+  const  TokenManagerErrorHandler*	 getErrorHandler() const;
 };
 
 #if NAMESPACE

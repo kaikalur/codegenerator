@@ -77,15 +77,39 @@ public class CppCodeGenerator implements CodeGenerator {
       }
 
       try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(context, settings)) {
-        builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "JavaCC.h"));
-        builder.addTools(JavaCCGlobals.toolName);
-        builder.addOption(Options.USEROPTION__STATIC, Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
+          builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "JavaCC.h"));
+          builder.addTools(JavaCCGlobals.toolName);
+          builder.addOption(Options.USEROPTION__STATIC, Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
 
-        builder.printTemplate("/templates/cpp/JavaCC.h.template");
+          builder.printTemplate("/templates/cpp/JavaCC.h.template");
+        }
+
+      if (!Options.getLibrary().isEmpty()) {
+    	  try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(context, settings)) {
+    		builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "ImportExport.h"));
+          	builder.addTools(JavaCCGlobals.toolName);
+            builder.addOption(Options.USEROPTION__CPP_LIBRARY); 
+          	builder.printTemplate("/templates/cpp/ImportExport.h.template");
+    	  }
       }
+      
+      try (CppCodeBuilder builder = CppCodeBuilder.of(context, settings)) {
+          builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "DefaultParserErrorHandler.cc"));
+          builder.addTools(JavaCCGlobals.toolName);
+          builder.addOption(Options.USEROPTION__STATIC, Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
+          builder.addOption(
+          		Options.USEROPTION__STATIC, 
+          		Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC,
+          		Options.USEROPTION__BUILD_PARSER,
+          		Options.USEROPTION__BUILD_TOKEN_MANAGER);
+
+          builder.printTemplate("/templates/cpp/DefaultParserErrorHandler.cc.template");
+          builder.switchToIncludeFile();
+          builder.printTemplate("/templates/cpp/DefaultParserErrorHandler.h.template");
+        }
 
       try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(context, settings)) {
-        builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "ErrorHandler.h"));
+        builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "ParserErrorHandler.h"));
         builder.addTools(JavaCCGlobals.toolName);
         builder.addOption(
         		Options.USEROPTION__STATIC, 
@@ -93,11 +117,39 @@ public class CppCodeGenerator implements CodeGenerator {
         		Options.USEROPTION__BUILD_PARSER,
         		Options.USEROPTION__BUILD_TOKEN_MANAGER);
 
-        builder.printTemplate("/templates/cpp/ErrorHandler.h.template");
+        builder.printTemplate("/templates/cpp/ParserErrorHandler.h.template");
+      }
+
+      try (CppCodeBuilder builder = CppCodeBuilder.of(context, settings)) {
+          builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "DefaultTokenManagerErrorHandler.cc"));
+          builder.addTools(JavaCCGlobals.toolName);
+          builder.addOption(Options.USEROPTION__STATIC, Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
+          builder.addOption(
+          		Options.USEROPTION__STATIC, 
+          		Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC,
+          		Options.USEROPTION__BUILD_PARSER,
+          		Options.USEROPTION__BUILD_TOKEN_MANAGER);
+
+          builder.printTemplate("/templates/cpp/DefaultTokenManagerErrorHandler.cc.template");
+          builder.switchToIncludeFile();
+          builder.printTemplate("/templates/cpp/DefaultTokenManagerErrorHandler.h.template");
+        }
+
+      try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(context, settings)) {
+        builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "TokenManagerErrorHandler.h"));
+        builder.addTools(JavaCCGlobals.toolName);
+        builder.addOption(
+        		Options.USEROPTION__STATIC, 
+        		Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC,
+        		Options.USEROPTION__BUILD_PARSER,
+        		Options.USEROPTION__BUILD_TOKEN_MANAGER);
+
+        builder.printTemplate("/templates/cpp/TokenManagerErrorHandler.h.template");
       }
 
       OtherFilesGenCPP.start(context, tokenizerData);
     } catch (Exception e) {
+    	e.printStackTrace();
       return false;
     }
 

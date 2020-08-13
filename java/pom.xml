@@ -13,6 +13,10 @@
 
 	<name>JavaCC default java code generator</name>
 	<description>JavaCC default java code generator</description>
+	<properties>
+		<root>${basedir}/../..</root>
+	</properties>
+
 	<profiles>
 		<profile>
 			<id>run-its</id>
@@ -56,6 +60,21 @@
 						</configuration>
 						<executions>
 							<execution>
+								<id>integration-test-java-bugs</id>
+								<goals>
+									<goal>install</goal>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<projectsDirectory>bugs</projectsDirectory>
+									<settingsFile>bugs/settings.xml</settingsFile>
+									<pomExcludes>
+										<pomExclude>bug001/pom.xml</pomExclude>
+									</pomExcludes>
+								</configuration>
+							</execution>
+
+							<execution>
 								<id>integration-test-java-examples</id>
 								<goals>
 									<goal>install</goal>
@@ -64,7 +83,6 @@
 								<configuration>
 									<projectsDirectory>examples</projectsDirectory>
 									<settingsFile>examples/settings.xml</settingsFile>
-									<cloneProjectsTo>${project.build.directory}/examples</cloneProjectsTo>
 									<pomExcludes>
 										<pomExclude>GUIParsing/pom.xml</pomExclude>
 									</pomExcludes>
@@ -79,9 +97,9 @@
 								<configuration>
 									<projectsDirectory>grammars</projectsDirectory>
 									<settingsFile>grammars/settings.xml</settingsFile>
-									<cloneProjectsTo>${project.build.directory}/grammars</cloneProjectsTo>
 									<pomExcludes>
 										<pomExclude>asn1/pom.xml</pomExclude>
+	 									<pomExclude>cobol/pom.xml</pomExclude>
 									</pomExcludes>
 								</configuration>
 							</execution>

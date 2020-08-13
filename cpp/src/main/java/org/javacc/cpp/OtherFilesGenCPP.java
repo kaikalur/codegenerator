@@ -165,7 +165,7 @@ class OtherFilesGenCPP {
       printTokenImages(builder, context);
       printTokenLabels(builder, context);
       
-      if (Options.stringValue(Options.USEROPTION__NAMESPACE).length() > 0) {
+      if (Options.stringValue(Options.USEROPTION__CPP_NAMESPACE).length() > 0) {
         builder.println(Options.stringValue("NAMESPACE_CLOSE"));
       }
       builder.println("#endif");

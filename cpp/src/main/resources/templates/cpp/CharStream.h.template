@@ -1,6 +1,9 @@
 \#ifndef JAVACC_CHAR_STREAM_H
 \#define JAVACC_CHAR_STREAM_H
 
+#if LIBRARY
+\#include "ImportExport.h"
+#fi
 \#include "JavaCC.h"
 
 #if NAMESPACE
@@ -22,7 +25,11 @@ namespace ${NAMESPACE_OPEN}
  * operation.
  */
  
+#if LIBRARY
+class ${PARSER_NAME_UPPER_CASE}_API CharStream {
+#else
 class CharStream {
+#fi
 public:
   virtual ~CharStream() {}
 	

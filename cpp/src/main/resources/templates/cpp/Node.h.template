@@ -2,6 +2,9 @@
 \#define JAVACC_NODE_H
 
 \#include <vector>
+#if LIBRARY
+\#include "ImportExport.h"
+#fi
 \#include "JavaCC.h"
 \#include "Token.h"
 \#include "Tree.h"
@@ -19,10 +22,18 @@ class ${PARSER_NAME}Visitor;
 
 class ${PARSER_NAME};
 
+#if LIBRARY
+#if NODE_EXTENDS
+class ${PARSER_NAME_UPPER_CASE}_API Node : public ${NODE_EXTENDS}, public Tree {
+#else
+class ${PARSER_NAME_UPPER_CASE}_API Node : public Tree {
+#fi
+#else
 #if NODE_EXTENDS
 class Node : public ${NODE_EXTENDS}, public Tree {
 #else
 class Node : public Tree {
+#fi
 #fi
 protected: 
   std::vector<Node*> children;

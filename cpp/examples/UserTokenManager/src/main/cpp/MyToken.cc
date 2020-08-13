@@ -54,8 +54,13 @@ namespace FOO {
 		int& 					MyToken::endLine() { return _endLine; }
 		int& 					MyToken::endColumn() { return _endColumn; }
 		JJString& 				MyToken::image() { return _image; }
+<<<<<<< HEAD
 		Token*& 				MyToken::next() { return _next; }
 		Token*& 				MyToken::specialToken() { return _specialToken; }
+=======
+		Token*& 			MyToken::next() { return _next; }
+		Token*& 			MyToken::specialToken() { return _specialToken; }
+>>>>>>> refs/remotes/javacc/master
 
 		const int& 				MyToken::kind() const { return _kind; }
 		const int& 				MyToken::beginLine() const { return _beginLine; }
@@ -63,8 +68,13 @@ namespace FOO {
 		const int& 				MyToken::endLine() const { return _endLine; }
 		const int& 				MyToken::endColumn() const { return _endColumn; }
 		const JJString& 		MyToken::image() const { return _image; }
+<<<<<<< HEAD
 		const Token* 			MyToken::next() const { return _next; }
 		const Token*			MyToken::specialToken() const { return _specialToken; }
+=======
+		const Token* 	MyToken::next() const { return _next; }
+		const Token*		MyToken::specialToken() const { return _specialToken; }
+>>>>>>> refs/remotes/javacc/master
 
 		const JJString& 		MyToken::toString() { return _image; }
 

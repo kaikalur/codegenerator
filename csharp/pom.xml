@@ -14,4 +14,7 @@
 
 	<name>JavaCC default c# code generator</name>
 	<description>JavaCC default c# code generator</description>
+	<properties>
+		<root>${basedir}/../..</root>
+	</properties>
 </project>

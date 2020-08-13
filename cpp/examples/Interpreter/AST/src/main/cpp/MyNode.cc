@@ -6,6 +6,7 @@
  */
 
 #include "MyNode.h"
+using namespace std;
 
 map<string, Node*> MyNode::symtab;
 stack<Node*>  MyNode::stack;

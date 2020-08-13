@@ -49,7 +49,7 @@ options {
   JAVA_UNICODE_ESCAPE = true;
   NAMESPACE = "java::parser";
   DEBUG_PARSER=true;
-//  DEBUG_LOOKAHEAD=true;
+//DEBUG_LOOKAHEAD=true;
 }
 PARSER_BEGIN(JavaParser)
 

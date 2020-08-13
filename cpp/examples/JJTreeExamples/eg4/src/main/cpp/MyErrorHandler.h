@@ -7,14 +7,17 @@
 
 #ifndef MYERRORHANDLER_H_
 #define MYERRORHANDLER_H_
-#include "ErrorHandler.h"
+#include "ParserErrorHandler.h"
 
 namespace EG4 {
 
-class MyErrorHandler : public ErrorHandler {
+class MyErrorHandler : public ParserErrorHandler {
 public:
 	MyErrorHandler();
 	virtual ~MyErrorHandler();
+	virtual void unexpectedToken(int expectedKind, const JJString& expectedImage, const JJString& expectedLabel, const Token* actual);
+	virtual void parseError(const Token* last, const Token* unexpected, const JJSimpleString& production);
+	virtual void otherError(const JJString& message);
 };
 
 } /* namespace EG4 */

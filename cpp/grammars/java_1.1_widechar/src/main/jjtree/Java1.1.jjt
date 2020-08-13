@@ -68,13 +68,6 @@ TOKEN_MGR_DECLS : {
 	int linesCommentCount = 0;
 
 
-/*
-	void JavaParserTokenManager::CommonTokenAction(Token* token) {
-		if (parser) {
-			int i = 2;
-		}
-	}
-*/
 }
 
 /* WHITE SPACE */
@@ -1708,10 +1701,6 @@ void TryStatement() :
 {
   <ILLEGAL_CHAR: ~[]> {
    		int i = 10;
-#if (JAVACC_CHAR_TYPE_SIZEOF == 1)
-   		std::cerr << "error: "   << matchedToken->kind << std::endl;
-#else
-   		std::wcerr << L"error: " << matchedToken->kind << std::endl;
-#endif
+		JJERR << JJWIDE(error: ) << matchedToken->kind() << std::endl;
 	}
 }

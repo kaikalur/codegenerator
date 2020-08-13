@@ -1992,16 +1992,15 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
           codeGenerator.print("!jj_semLA || ");
         }
         if (i != (e_nrw.getChoices().size() - 1)) {
-          codeGenerator.println("!" + genjj_3Call(nested_seq) + ") " + genReturn(false));
-          // codeGenerator.println(genjj_3Call(nested_seq) + ") {");
+          codeGenerator.println(genjj_3Call(nested_seq) + ") {");
           codeGenerator.println("    jj_scanpos = xsp;");
         } else {
           codeGenerator.println(genjj_3Call(nested_seq) + ") " + genReturn(true));
         }
       }
-      // for (int i = 1; i < e_nrw.getChoices().size(); i++) {
-      // codeGenerator.println(" }");
-      // }
+       for (int i = 1; i < e_nrw.getChoices().size(); i++) {
+    	   codeGenerator.println(" }");
+       }
     } else if (e instanceof Sequence) {
       Sequence e_nrw = (Sequence) e;
       // We skip the first element in the following iteration since it is the

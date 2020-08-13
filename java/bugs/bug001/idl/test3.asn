@@ -1,0 +1,5 @@
+M DEFINITIONS ::=
+BEGIN
+IMPORTS -- n-o --;
+Type ::= INTEGER
+END

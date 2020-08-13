@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Node.h"
+using namespace std;
 
 
 class ASTReadStatement : public Node {

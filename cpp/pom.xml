@@ -11,8 +11,11 @@
 	<groupId>org.javacc.codegen</groupId>
 	<artifactId>cpp</artifactId>
 
-	<name>JavaCC Kampbell c++ code generator</name>
-	<description>JavaCC Kampbell c++ code generator</description>
+	<name>JavaCC default c++ code generator</name>
+	<description>JavaCC default c++ code generator</description>
+	<properties>
+		<root>${basedir}/../..</root>
+	</properties>
 	<profiles>
 		<profile>
 			<id>run-its</id>
@@ -56,6 +59,21 @@
 						</configuration>
 						<executions>
 							<execution>
+								<id>integration-test-cpp-bugs</id>
+								<goals>
+									<goal>install</goal>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<projectsDirectory>bugs</projectsDirectory>
+									<settingsFile>bugs/settings.xml</settingsFile>
+									<pomExcludes><!-- FIXME -->
+										<pomExclude>bug001/pom.xml</pomExclude>
+									</pomExcludes>
+ 								</configuration>
+							</execution>
+
+							<execution>
 								<id>integration-test-cpp-examples</id>
 								<goals>
 									<goal>install</goal>
@@ -64,12 +82,9 @@
 								<configuration>
 									<projectsDirectory>examples</projectsDirectory>
 									<settingsFile>examples/settings.xml</settingsFile>
-<!-- 
-									<cloneProjectsTo>${project.build.directory}/examples</cloneProjectsTo>
- -->
- 								<pomExcludes>
- 									<pomExclude>MailProcessing/pom.xml</pomExclude>
- 								</pomExcludes>
+	 								<pomExcludes>
+	 									<pomExclude>MailProcessing/pom.xml</pomExclude>
+	 								</pomExcludes>
  								</configuration>
 							</execution>
 							<execution>
@@ -81,9 +96,9 @@
 								<configuration>
 									<projectsDirectory>grammars</projectsDirectory>
 									<settingsFile>grammars/settings.xml</settingsFile>
-<!-- 
-									<cloneProjectsTo>${project.build.directory}/grammars</cloneProjectsTo>
- -->
+	 								<pomExcludes>
+	 									<pomExclude>cobol/pom.xml</pomExclude>
+	 								</pomExcludes>
  								</configuration>
 							</execution>
 						</executions>
@@ -92,5 +107,4 @@
 			</build>
 		</profile>
 	</profiles>
-
 </project>

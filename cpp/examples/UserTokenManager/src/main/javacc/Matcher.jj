@@ -7,7 +7,8 @@ options {
 	TOKEN_CLASS="MyToken";
 	TOKEN_NAMESPACE="FOO::BAR";
 	TOKEN_INCLUDE="MyToken.h";
-	TOKEN_CONSTANTS="MyTokenConstants.h";
+	TOKEN_CONSTANTS_INCLUDE="MyTokenConstants.h";
+	TOKEN_CONSTANTS_NAMESPACE="BAR::BAZ";
 }	
 PARSER_BEGIN(Matcher)
 static const int simple = 4;

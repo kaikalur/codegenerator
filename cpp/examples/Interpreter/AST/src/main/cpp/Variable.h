@@ -8,10 +8,9 @@
 #pragma once
 
 #include <string>
-using std::string;
 
 #include "Node.h"
-
+using namespace std;
 
 class Variable : public Node {
 public:
