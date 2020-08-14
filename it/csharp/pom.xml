@@ -19,8 +19,6 @@
 			</activation>
 			<properties>
 				<suffix>exe</suffix>
-				<bigobj>/bigobj</bigobj>
-				<std></std>
 			</properties>
 		</profile>
 		<profile>
@@ -32,8 +30,6 @@
 			</activation>
 			<properties>
 				<suffix>sh</suffix>
-				<bigobj></bigobj>
-				<std>-std=c++17</std>
 			</properties>
 		</profile>
 		<profile>
@@ -45,8 +41,6 @@
 			</activation>
 			<properties>
 				<suffix>sh</suffix>
-				<bigobj></bigobj>
-				<std>-std=c++17</std>
 			</properties>
 		</profile>
 
@@ -100,35 +94,37 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>com.github.maven-nar</groupId>
-						<artifactId>nar-maven-plugin</artifactId>
-						<extensions>true</extensions>
-						<configuration>
-							<libraries>
-								<library>
-									<type>executable</type>
-									<run>true</run>
-								</library>
-							</libraries>
-							<csharp>
-								<debug>false</debug>
-								<defines>
-									<define>JJ8</define>
-								</defines>
-								<includePaths>
-									<includePath>
-										<path>${project.basedir}/src/main/csharp</path>
-									</includePath>
-									<includePath>
-										<path>${project.basedir}/target/generated-sources/csharp</path>
-									</includePath>
-								</includePaths>
-								<options>
-									<option>${bigobj}</option>
-									<option>${std}</option>
-								</options>
-							</csharp>
-						</configuration>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>jcc8-dotnet-new</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<target>
+										<exec dir="${project.basedir}/target/generated-sources/csharp" executable="dotnet.exe">
+											<arg line="new console" />
+										</exec>
+									</target>
+								</configuration>
+							</execution>
+							<execution>
+								<id>jcc8-dotnet-build</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<target>
+										<exec dir="${project.basedir}/target/generated-sources/csharp" executable="dotnet.exe"  failonerror="true">
+											<arg line="build"/>
+										</exec>
+									</target>
+								</configuration>
+							</execution>
+						</executions>
 					</plugin>
 				</plugins>
 			</build>
@@ -183,40 +179,6 @@
 							</execution>
 						</executions>
 					</plugin>
-					<plugin>
-						<groupId>com.github.maven-nar</groupId>
-						<artifactId>nar-maven-plugin</artifactId>
-						<extensions>true</extensions>
-						<configuration>
-							<libraries>
-								<library>
-									<type>executable</type>
-									<run>true</run>
-								</library>
-							</libraries>
-							<csharp>
-								<debug>false</debug>
-								<defines>
-									<define>JJ8</define>
-								</defines>
-								<includePaths>
-									<includePath>
-										<path>${project.basedir}/src/main/csharp</path>
-									</includePath>
-									<includePath>
-										<path>${project.basedir}/target/generated-sources/csharp</path>
-									</includePath>
-									<includePath>
-										<path>${project.basedir}/target/generated-sources/jjtree</path>
-									</includePath>
-								</includePaths>
-								<options>
-									<option>${bigobj}</option>
-									<option>${std}</option>
-								</options>
-							</csharp>
-						</configuration>
-					</plugin>
 				</plugins>
 			</build>
 		</profile>
@@ -265,40 +227,6 @@
 							</execution>
 						</executions>
 					</plugin>
-					<plugin>
-						<groupId>com.github.maven-nar</groupId>
-						<artifactId>nar-maven-plugin</artifactId>
-						<extensions>true</extensions>
-						<configuration>
-							<libraries>
-								<library>
-									<type>executable</type>
-									<run>true</run>
-								</library>
-							</libraries>
-							<csharp>
-								<defines>
-									<define>JJ8</define>
-									<define>JAVACC_CHAR_TYPE=wchar_t</define>
-								</defines>
-								<includePaths>
-									<includePath>
-										<path>${project.basedir}/src/main/csharp</path>
-									</includePath>
-									<includePath>
-										<path>${project.basedir}/target/generated-sources/csharp</path>
-									</includePath>
-									<includePath>
-										<path>${project.basedir}/target/generated-sources/jjtree</path>
-									</includePath>
-								</includePaths>
-								<options>
-									<option>${bigobj}</option>
-									<option>${std}</option>
-								</options>
-							</csharp>
-						</configuration>
-					</plugin>
 				</plugins>
 			</build>
 		</profile>
@@ -338,36 +266,6 @@
 								</configuration>
 							</execution>
 						</executions>
-					</plugin>
-					<plugin>
-						<groupId>com.github.maven-nar</groupId>
-						<artifactId>nar-maven-plugin</artifactId>
-						<extensions>true</extensions>
-						<configuration>
-							<libraries>
-								<library>
-									<type>executable</type>
-									<run>true</run>
-								</library>
-							</libraries>
-							<csharp>
-								<defines>
-									<define>JJ7</define>
-								</defines>
-								<includePaths>
-									<includePath>
-										<path>${project.basedir}/src/main/csharp</path>
-									</includePath>
-									<includePath>
-										<path>${project.basedir}/target/generated-sources/csharp</path>
-									</includePath>
-								</includePaths>
-								<options>
-									<option>${bigobj}</option>
-									<option>${std}</option>
-								</options>
-							</csharp>
-						</configuration>
 					</plugin>
 				</plugins>
 			</build>
@@ -409,38 +307,6 @@
 							</execution>
 						</executions>
 					</plugin>
-					<plugin>
-						<groupId>com.github.maven-nar</groupId>
-						<artifactId>nar-maven-plugin</artifactId>
-						<extensions>true</extensions>
-						<configuration>
-							<libraries>
-								<library>
-									<type>executable</type>
-									<run>true</run>
-								</library>
-							</libraries>
-							<csharp>
-								<defines>
-									<define>JJ7</define>
-									<define>WIDE_CHAR</define>
-									<define>JAVACC_CHAR_TYPE=wchar_t</define>
-								</defines>
-								<includePaths>
-									<includePath>
-										<path>${project.basedir}/src/main/csharp</path>
-									</includePath>
-									<includePath>
-										<path>${project.basedir}/target/generated-sources/csharp</path>
-									</includePath>
-								</includePaths>
-								<options>
-									<option>${bigobj}</option>
-									<option>${std}</option>
-								</options>
-							</csharp>
-						</configuration>
-					</plugin>
 				</plugins>
 			</build>
 		</profile>
@@ -481,39 +347,6 @@
 							</execution>
 						</executions>
 					</plugin>
-					<plugin>
-						<groupId>com.github.maven-nar</groupId>
-						<artifactId>nar-maven-plugin</artifactId>
-						<extensions>true</extensions>
-						<configuration>
-							<libraries>
-								<library>
-									<type>executable</type>
-									<run>true</run>
-								</library>
-							</libraries>
-							<csharp>
-								<defines>
-									<define>JJ7</define>
-								</defines>
-								<includePaths>
-									<includePath>
-										<path>${project.basedir}/src/main/csharp</path>
-									</includePath>
-									<includePath>
-										<path>${project.basedir}/target/generated-sources/csharp</path>
-									</includePath>
-									<includePath>
-										<path>${project.basedir}/target/generated-sources/jjtree</path>
-									</includePath>
-								</includePaths>
-								<options>
-									<option>${bigobj}</option>
-									<option>${std}</option>
-								</options>
-							</csharp>
-						</configuration>
-					</plugin>
 				</plugins>
 			</build>
 		</profile>
@@ -553,41 +386,6 @@
 								</configuration>
 							</execution>
 						</executions>
-					</plugin>
-					<plugin>
-						<groupId>com.github.maven-nar</groupId>
-						<artifactId>nar-maven-plugin</artifactId>
-						<extensions>true</extensions>
-						<configuration>
-							<libraries>
-								<library>
-									<type>executable</type>
-									<run>true</run>
-								</library>
-							</libraries>
-							<csharp>
-								<defines>
-									<define>JJ7</define>
-									<define>WIDE_CHAR</define>
-									<define>JAVACC_CHAR_TYPE=wchar_t</define>
-								</defines>
-								<includePaths>
-									<includePath>
-										<path>${project.basedir}/src/main/csharp</path>
-									</includePath>
-									<includePath>
-										<path>${project.basedir}/target/generated-sources/csharp</path>
-									</includePath>
-									<includePath>
-										<path>${project.basedir}/target/generated-sources/jjtree</path>
-									</includePath>
-								</includePaths>
-								<options>
-									<option>${bigobj}</option>
-									<option>${std}</option>
-								</options>
-							</csharp>
-						</configuration>
 					</plugin>
 				</plugins>
 			</build>
