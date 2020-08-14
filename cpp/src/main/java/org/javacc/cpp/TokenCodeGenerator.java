@@ -20,9 +20,11 @@ class TokenCodeGenerator implements org.javacc.parser.TokenCodeGenerator {
   /**
    * The Token class generator.
    */
+  /*
   @Override
   public boolean generateCodeForToken(CodeGeneratorSettings settings) {
-    try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(context, settings)) {
+   try (CppCodeBuilder builder = CppCodeBuilder.ofHeader(context, settings)) {
+ 
         builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "Token.h"));
       builder.addTools(JavaCCGlobals.toolName);
       builder.addOption(
@@ -34,24 +36,25 @@ class TokenCodeGenerator implements org.javacc.parser.TokenCodeGenerator {
     } catch (IOException e) {
       return false;
     }
-    return true;
+	  return true;
   }
+*/
 
 @Override
-public boolean generateCodeForDefaultToken(CodeGeneratorSettings settings) {
-	if (Options.getUserTokenManager()) {
-		return true;
-	}
+public boolean generateCodeForToken(CodeGeneratorSettings settings) {
+//	if (Options.getUserTokenManager()) {
+//		return true;
+//	}
     try (CppCodeBuilder builder = CppCodeBuilder.of(context, settings)) {
-        builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "DefaultToken.cc"));
+        builder.setFile(new File((String) settings.get("OUTPUT_DIRECTORY"), "Token.cc"));
         builder.addTools(JavaCCGlobals.toolName);
         builder.addOption(
       		  Options.USEROPTION__STATIC, 
       		  Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC);
 
-        builder.printTemplate("/templates/cpp/DefaultToken.cc.template");
+        builder.printTemplate("/templates/cpp/Token.cc.template");
         builder.switchToIncludeFile();
-        builder.printTemplate("/templates/cpp/DefaultToken.h.template");
+        builder.printTemplate("/templates/cpp/Token.h.template");
       } catch (IOException e) {
         return false;
       }

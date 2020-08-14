@@ -49,11 +49,11 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     settings.put("noDfa", Options.getNoDfa());
     settings.put("generatedStates", tokenizerData.nfa.size());
     if (Options.getTokenClass().isEmpty())
-    	settings.put("tokenClass", "DefaultToken");
+    	settings.put("tokenClass", "Token");
     else
     	settings.put("tokenClass", Options.getTokenClass());
     if (Options.getTokenInclude().isEmpty())
-    	settings.put("tokenInclude", "DefaultToken.h");
+    	settings.put("tokenInclude", "Token.h");
     else
     	settings.put("tokenInclude", Options.getTokenInclude());
 

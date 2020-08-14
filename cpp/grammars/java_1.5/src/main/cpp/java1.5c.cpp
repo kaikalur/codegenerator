@@ -7,7 +7,7 @@
 #include "JavaParserTokenManager.h"
 #include "ParseException.h"
 #include "StreamReader.h"
-#include "DefaultToken.h"
+#include "Token.h"
 #include "DefaultCharStream.h"
 
 

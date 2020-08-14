@@ -31,9 +31,4 @@ class TokenCodeGenerator implements org.javacc.parser.TokenCodeGenerator {
     return true;
   }
 
-@Override
-public boolean generateCodeForDefaultToken(CodeGeneratorSettings settings) {
-	// TODO Auto-generated method stub
-	return true;
-}
 }

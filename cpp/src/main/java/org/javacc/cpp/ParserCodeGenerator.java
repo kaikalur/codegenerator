@@ -136,9 +136,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("#include \"CharStream.h\"");
     codeGenerator.println("#include \"Token.h\"");
     codeGenerator.println("#include \"TokenManager.h\"");
-    if (Options.getTokenInclude().isEmpty()) {
-        codeGenerator.println("#include \"DefaultToken.h\"");
-    } else {
+    if (!Options.getTokenInclude().isEmpty()) {
         codeGenerator.println("#include \"" + Options.getTokenInclude() +"\"");
     }
     printInclude(Options.getParserInclude());
@@ -1893,7 +1891,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
   private String getTokenType() {
       String type = "Token";
       if (Options.getTokenClass().isEmpty()) {
-          type = "DefaultToken";
+          type = "Token";
       } else {
           type = Options.getTokenClass();
       }

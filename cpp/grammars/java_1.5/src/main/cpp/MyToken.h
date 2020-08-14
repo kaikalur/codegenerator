@@ -1,13 +1,13 @@
 #ifndef MY_TOKEN
 #define MY_TOKEN
 #include "JavaCC.h"
-#include "DefaultToken.h"
+#include "Token.h"
 #include "JavaParserConstants.h"
 
 namespace Java {
-		class MyToken : public DefaultToken {
+		class MyToken : public Token {
 		public:
-			MyToken(int kind, JJString image) : DefaultToken(kind, image) {
+			MyToken(int kind, JJString image) : Token(kind, image) {
 				this->mykind = kind;
 				this->myimage = image;
 			}

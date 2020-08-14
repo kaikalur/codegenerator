@@ -1,10 +1,10 @@
 
 package org.javacc.java;
 
+import java.io.IOException;
+
 import org.javacc.parser.CodeGeneratorSettings;
 import org.javacc.parser.Context;
-
-import java.io.IOException;
 
 class TokenCodeGenerator implements org.javacc.parser.TokenCodeGenerator {
 
@@ -27,9 +27,4 @@ class TokenCodeGenerator implements org.javacc.parser.TokenCodeGenerator {
     return true;
   }
 
-@Override
-public boolean generateCodeForDefaultToken(CodeGeneratorSettings settings) {
-	// TODO Auto-generated method stub
-	return true;
-}
 }

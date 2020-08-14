@@ -3,73 +3,21 @@
 #include "MyToken.h"
 namespace FOO {
 	namespace BAR {
-		MyToken::MyToken() :
-			_beginLine(0), _beginColumn(0), _endLine(0), _endColumn(0)
+		MyToken::MyToken()
 		{
-			this->_kind = 0;
-			this->_next = nullptr;
-			this->_specialToken = nullptr;
 		}
 
-		MyToken::MyToken(int kind) :
-			_beginLine(0), _beginColumn(0), _endLine(0), _endColumn(0)
+		MyToken::MyToken(int kind) : Token(kind)
 		{
-			this->_kind = kind;
-			this->_next = nullptr;
-			this->_specialToken = nullptr;
 		}
 
-		MyToken::MyToken(int kind, const JJString& image)
-			: _beginLine(0), _beginColumn(0), _endLine(0), _endColumn(0)
+		MyToken::MyToken(int kind, const JJString& image)  : Token(kind, image)
 		{
-			this->_kind = kind;
-			this->_image = image;
-			this->_next = nullptr;
-			this->_specialToken = nullptr;
-		}
-
-		MyToken* MyToken::newToken(int kind, const JJString& image)
-		{
-			switch (kind)
-			{
-			default: return new MyToken(kind, image);
-			}
-		}
-
-		MyToken* MyToken::newToken(int kind)
-		{
-			return newToken(kind, JJString());
 		}
 
 		MyToken::~MyToken() {
-			if (_specialToken) delete _specialToken;
-			this->_kind = 0;
-			this->_next = nullptr;
-			this->_specialToken = nullptr;
 		}
 
-		int& 					MyToken::kind() { return _kind; }
-		int& 					MyToken::beginLine() { return _beginLine; }
-		int& 					MyToken::beginColumn() { return _beginColumn; }
-		int& 					MyToken::endLine() { return _endLine; }
-		int& 					MyToken::endColumn() { return _endColumn; }
-		JJString& 				MyToken::image() { return _image; }
-		Token*& 			MyToken::next() { return _next; }
-		Token*& 			MyToken::specialToken() { return _specialToken; }
-
-		const int& 				MyToken::kind() const { return _kind; }
-		const int& 				MyToken::beginLine() const { return _beginLine; }
-		const int& 				MyToken::beginColumn() const { return _beginColumn; }
-		const int& 				MyToken::endLine() const { return _endLine; }
-		const int& 				MyToken::endColumn() const { return _endColumn; }
-		const JJString& 		MyToken::image() const { return _image; }
-		const Token* 	MyToken::next() const { return _next; }
-		const Token*		MyToken::specialToken() const { return _specialToken; }
-
-		const JJString& 		MyToken::toString() { return _image; }
-
-		void*& 					MyToken::value() { return _value; }
-		const void* 			MyToken::value() const { return _value; }
 
 	}
 }
