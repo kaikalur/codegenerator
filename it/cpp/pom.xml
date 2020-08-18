@@ -20,7 +20,7 @@
 			<properties>
 				<suffix>exe</suffix>
 				<bigobj>/bigobj</bigobj>
-				<std></std>
+				<std>/std:c++14</std>
 			</properties>
 		</profile>
 		<profile>
@@ -33,7 +33,7 @@
 			<properties>
 				<suffix>sh</suffix>
 				<bigobj></bigobj>
-				<std>-std=c++17</std>
+				<std>-std=c++03</std>
 			</properties>
 		</profile>
 		<profile>
@@ -46,7 +46,7 @@
 			<properties>
 				<suffix>sh</suffix>
 				<bigobj></bigobj>
-				<std>-std=c++17</std>
+				<std>-std=c++03</std>
 			</properties>
 		</profile>
 

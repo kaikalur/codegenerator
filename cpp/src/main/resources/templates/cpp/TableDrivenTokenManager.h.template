@@ -41,13 +41,13 @@ private:
   unsigned long long		jjChars[${nfaSize}][${charsVectorSize}];
 #fi
   JJString                  jjimage;
-  JJString                  image = jjimage;
+  JJString                  image;
   int                       jjimageLen;
   int                       lengthOfMatch;
   JJChar                    curChar;
   CharStream*        		input_stream;
-  bool 						delete_eh = false;
-  TokenManagerErrorHandler* errorHandler = nullptr;
+  bool 						delete_eh;
+  TokenManagerErrorHandler* errorHandler;
 
   int                       jjrounds[${stateSetSize}];
   int                       jjstateSet[2 * ${stateSetSize}];

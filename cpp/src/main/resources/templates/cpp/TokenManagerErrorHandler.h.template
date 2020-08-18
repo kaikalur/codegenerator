@@ -9,6 +9,7 @@ namespace JavaCC {
 
 class TokenManagerErrorHandler {
 public:
+		   TokenManagerErrorHandler() : error_count(0) {}
   virtual ~TokenManagerErrorHandler() {}
     
 public:
@@ -27,7 +28,7 @@ public:
   		  int  getErrorCount() const { return error_count; }
 
 protected:
-  int error_count = 0;
+  int error_count;
 };
 
 }

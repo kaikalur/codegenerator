@@ -36,6 +36,7 @@ JJString TokenManagerError::getMessage() {
 }
 
 TokenManagerError::TokenManagerError() {
+  errorCode = -1;
 }
 TokenManagerError::TokenManagerError(const JJString & message, int reason) {
   errorCode = reason;

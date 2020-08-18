@@ -8,19 +8,28 @@
 namespace ${NAMESPACE_OPEN}
 #fi
 
-Node::Node(int id) : id(id)
+Node::Node(int id) 
+	: id(id), parser(nullptr), parent(nullptr), value(nullptr)
 #if NODE_EXTENDS
-   , ${NODE_EXTENDS}()
+   	, ${NODE_EXTENDS}()
 #fi
 {
+#if TRACK_TOKENS
+  firstToken = nullptr;
+  lastToken  = nullptr;
+#fi
 }
 
 Node::Node(${PARSER_NAME} *parser, int id) :
-     parser(parser), id(id) 
+	id(id), parser(parser), parent(nullptr), value(nullptr)
 #if NODE_EXTENDS
-   , ${NODE_EXTENDS}()
+	, ${NODE_EXTENDS}()
 #fi
 {
+#if TRACK_TOKENS
+  firstToken = nullptr;
+  lastToken  = nullptr;
+#fi
 }
 Node::~Node() {
     for (int i = 0; i < children.size(); ++i) {

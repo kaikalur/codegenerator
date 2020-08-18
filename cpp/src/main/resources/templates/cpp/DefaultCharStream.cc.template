@@ -31,42 +31,69 @@ class StringReaderStream : public ReaderStream {
 #if NAMESPACE
 namespace ${NAMESPACE_OPEN}
 #fi
+void DefaultCharStream::init() {
+  bufline        	= nullptr;
+  bufcolumn      	= nullptr;
+  buffer         	= nullptr;
+  bufpos			= 0;
+  bufsize			= 0;
+  tokenBegin		= 0;
+  column			= 0;
+  line				= 0;
+  prevCharIsCR		= false;
+  prevCharIsLF		= false;
+  available			= 0;
+  maxNextCharInd	= 0;
+  inBuf				= 0;
+  tabSize			= 8;
+  trackLineColumn	= true;
+  inputStream    	= nullptr;
+  deleteStream		= false;
+}
 DefaultCharStream::DefaultCharStream(const JJChar *buf, int sz, int startline, int startcolumn, int buffersize)
 {
+  init();
   ReInit(JJString(buf, sz), startline, startcolumn, buffersize);
 }
 
 DefaultCharStream::DefaultCharStream(const JJChar *buf, int sz, int startline, int startcolumn)
 {
+  init();
   ReInit(JJString(buf, sz), startline, startcolumn, InitialBufferSize);
 }
 
 DefaultCharStream::DefaultCharStream(const JJString& str, int startline, int startcolumn, int buffersize)
 {
+  init();
   ReInit(str, startline, startcolumn, buffersize);
 }
 
 DefaultCharStream::DefaultCharStream(const JJString& str, int startline, int startcolumn)
 {
+  init();
   ReInit(str, startline, startcolumn, InitialBufferSize);
 }
 
 DefaultCharStream::DefaultCharStream(ReaderStream *input_stream, int startline, int startcolumn, int buffersize)
 {
+  init();
   ReInit(input_stream, startline, startcolumn, buffersize);
 }
 
 DefaultCharStream::DefaultCharStream(ReaderStream *input_stream, int startline, int startcolumn)
 {
+  init();
   ReInit(input_stream, startline, startcolumn, InitialBufferSize);
 }
 
 DefaultCharStream::DefaultCharStream(ReaderStream *input_stream)
 {
+  init();
   ReInit(input_stream, 1, 1, InitialBufferSize);
 }
 
 void DefaultCharStream::ReInit(const JJString& str, int startline, int startcolumn) {
+  init();
   ReInit(str, startline, startcolumn, InitialBufferSize);
 }
 

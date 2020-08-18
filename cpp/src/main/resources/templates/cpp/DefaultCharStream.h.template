@@ -152,6 +152,9 @@ protected:
   bool               trackLineColumn	= true;
   ReaderStream*      inputStream    	= nullptr;
   bool               deleteStream		= false;
+
+private:
+  void  init();
 };
 
 #if NAMESPACE

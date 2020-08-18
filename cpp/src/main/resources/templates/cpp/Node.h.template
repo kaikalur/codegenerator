@@ -37,14 +37,14 @@ class Node : public Tree {
 #fi
 protected: 
   std::vector<Node*> children;
-  Node*              parent = nullptr;
-  void*              value  = nullptr;
+  Node*              parent;
+  void*              value;
 #if TRACK_TOKENS
-  Token*             firstToken = nullptr;
-  Token*             lastToken  = nullptr;
+  Token*             firstToken;
+  Token*             lastToken;
 #fi
-  ${PARSER_NAME}*    parser = nullptr;
-  int                id = 0;
+  ${PARSER_NAME}*    parser;
+  int                id;
 
 public: 
            Node(int id);

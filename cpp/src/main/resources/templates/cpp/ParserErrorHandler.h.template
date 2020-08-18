@@ -9,7 +9,7 @@ namespace JavaCC {
 
 class ParserErrorHandler {
 public:
-             ParserErrorHandler() {}
+             ParserErrorHandler() : error_count(0) {}
     virtual ~ParserErrorHandler() {}
       
   // Called when the parser encounters a different token when expecting to consume a specific kind of token.
@@ -28,7 +28,7 @@ public:
           int  getErrorCount() const { return error_count; }
 
 protected:
-  int error_count = 0;
+  int error_count;
       
 };
 }
