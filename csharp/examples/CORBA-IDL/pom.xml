@@ -9,7 +9,7 @@
 	<groupId>org.javacc.codegen.csharp.examples</groupId>
 	<artifactId>corba-idl</artifactId>
 	<name>JavaCC examples C++  CORBA-IDL</name>
-	<packaging>pom</packaging>
+	<packaging>jar</packaging>
 	<build>
 		<plugins>
 			<plugin>
