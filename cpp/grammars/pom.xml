@@ -7,7 +7,7 @@
 		<version>8.0.0-SNAPSHOT</version>
 		<relativePath>../../it/cpp</relativePath>
 	</parent>
-	<name>JavaCC grammars c++</name>
+	<name>JavaCC grammars C++</name>
 	<groupId>org.javacc.codegen.cpp</groupId>
 	<artifactId>grammars</artifactId>
 	<packaging>pom</packaging>

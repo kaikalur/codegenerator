@@ -9,8 +9,8 @@
 		<relativePath>../../it/java</relativePath>
 	</parent>
 
-	<name>JavaCC c++ examples</name>
-	<description>JavaCC c++ examples</description>
+	<name>JavaCC C# examples</name>
+	<description>JavaCC C# examples</description>
 	<groupId>org.javacc.codegen.java</groupId>
 	<artifactId>bugs</artifactId>
 	<packaging>pom</packaging>

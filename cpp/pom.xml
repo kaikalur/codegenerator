@@ -11,8 +11,8 @@
 	<groupId>org.javacc.codegen</groupId>
 	<artifactId>cpp</artifactId>
 
-	<name>JavaCC default c++ code generator</name>
-	<description>JavaCC default c++ code generator</description>
+	<name>JavaCC default C++ code generator</name>
+	<description>JavaCC default C++ code generator</description>
 	<properties>
 		<root>${basedir}/../..</root>
 	</properties>

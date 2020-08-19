@@ -86,7 +86,7 @@
 									<goal>javacc</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>${project.basedir}/target/generated-sources/csharp</outputDirectory>
+									<outputDirectory>${project.basedir}/target/generated-sources/java</outputDirectory>
 									<sourceDirectory>${project.basedir}/src/main/javacc</sourceDirectory>
 									<codeGenerator>c#</codeGenerator>
 								</configuration>
@@ -121,10 +121,10 @@
 								</goals>
 								<configuration>
 									<target>
-										<exec dir="${project.basedir}/target/generated-sources/csharp" executable="dotnet.exe">
+										<exec dir="${project.basedir}/target/generated-sources/java" executable="dotnet.exe">
 											<arg line="new classlib" />
 										</exec>
-										<exec dir="${project.basedir}/target/generated-sources/csharp" executable="dotnet.exe"  failonerror="true">
+										<exec dir="${project.basedir}/target/generated-sources/java" executable="dotnet.exe"  failonerror="true">
 											<arg line="build"/>
 										</exec>
 									</target>
@@ -178,13 +178,29 @@
 									<goal>jjtree-javacc</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>${project.basedir}/target/generated-sources/csharp</outputDirectory>
+									<outputDirectory>${project.basedir}/target/generated-sources/java</outputDirectory>
 									<sourceDirectory>${project.basedir}/src/main/jjtree</sourceDirectory>
-									<nodeDirectory>${project.basedir}/src/main/csharp</nodeDirectory>
+									<nodeDirectory>${project.basedir}/src/main/java</nodeDirectory>
 									<codeGenerator>c#</codeGenerator>
 								</configuration>
 							</execution>
 						</executions>
+					</plugin>
+					<plugin>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<version>3.8.1</version>
+						<configuration>
+							<compilerId>csharp</compilerId>
+							<verbose>true</verbose>
+							<fork>true</fork>
+						</configuration>
+						<dependencies>
+							<dependency>
+								<groupId>org.codehaus.plexus</groupId>
+								<artifactId>plexus-compiler-csharp</artifactId>
+								<version>2.8.3</version>
+							</dependency>
+						</dependencies>
 					</plugin>
 				</plugins>
 			</build>
@@ -226,13 +242,29 @@
 									<goal>jjtree-javacc</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>${project.basedir}/target/generated-sources/csharp</outputDirectory>
+									<outputDirectory>${project.basedir}/target/generated-sources/java</outputDirectory>
 									<sourceDirectory>${project.basedir}/src/main/jjtree</sourceDirectory>
-									<nodeDirectory>${project.basedir}/src/main/csharp</nodeDirectory>
+									<nodeDirectory>${project.basedir}/src/main/java</nodeDirectory>
 									<codeGenerator>c#</codeGenerator>
 								</configuration>
 							</execution>
 						</executions>
+					</plugin>
+					<plugin>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<version>3.8.1</version>
+						<configuration>
+							<compilerId>csharp</compilerId>
+							<verbose>true</verbose>
+							<fork>true</fork>
+						</configuration>
+						<dependencies>
+							<dependency>
+								<groupId>org.codehaus.plexus</groupId>
+								<artifactId>plexus-compiler-csharp</artifactId>
+								<version>2.8.3</version>
+							</dependency>
+						</dependencies>
 					</plugin>
 				</plugins>
 			</build>
@@ -268,8 +300,8 @@
 									<goal>javacc</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/generated-sources/csharp</outputDirectory>
-									<outputLanguage>c++</outputLanguage>
+									<outputDirectory>target/generated-sources/java</outputDirectory>
+									<outputLanguage>C#</outputLanguage>
 								</configuration>
 							</execution>
 						</executions>
@@ -308,8 +340,8 @@
 									<goal>javacc</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/generated-sources/csharp</outputDirectory>
-									<outputLanguage>c++</outputLanguage>
+									<outputDirectory>target/generated-sources/java</outputDirectory>
+									<outputLanguage>C#</outputLanguage>
 								</configuration>
 							</execution>
 						</executions>
@@ -348,8 +380,8 @@
 									<goal>jjtree-javacc</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/generated-sources/csharp</outputDirectory>
-									<outputLanguage>c++</outputLanguage>
+									<outputDirectory>target/generated-sources/java</outputDirectory>
+									<outputLanguage>C#</outputLanguage>
 								</configuration>
 							</execution>
 						</executions>
@@ -388,8 +420,8 @@
 									<goal>jjtree-javacc</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/generated-sources/csharp</outputDirectory>
-									<outputLanguage>c++</outputLanguage>
+									<outputDirectory>target/generated-sources/java</outputDirectory>
+									<outputLanguage>C#</outputLanguage>
 								</configuration>
 							</execution>
 						</executions>
