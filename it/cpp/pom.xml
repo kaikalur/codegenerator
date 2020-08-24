@@ -111,7 +111,7 @@
 								</library>
 							</libraries>
 							<cpp>
-								<debug>true</debug>
+								<debug>false</debug>
 								<defines>
 									<define>JJ8</define>
 								</defines>
