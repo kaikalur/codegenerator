@@ -20,7 +20,7 @@
 			<properties>
 				<suffix>exe</suffix>
 				<bigobj>/bigobj</bigobj>
-				<std>/std:c++14</std>
+				<std></std>
 			</properties>
 		</profile>
 		<profile>
@@ -111,7 +111,7 @@
 								</library>
 							</libraries>
 							<cpp>
-								<debug>false</debug>
+								<debug>true</debug>
 								<defines>
 									<define>JJ8</define>
 								</defines>
