@@ -21,6 +21,7 @@
 				<suffix>exe</suffix>
 				<bigobj>/bigobj</bigobj>
 				<std></std>
+				<cliargs>/FS</cliargs>
 			</properties>
 		</profile>
 		<profile>
@@ -34,6 +35,7 @@
 				<suffix>sh</suffix>
 				<bigobj></bigobj>
 				<std>-std=c++11</std>
+				<cliargs></cliargs>
 			</properties>
 		</profile>
 		<profile>
@@ -47,6 +49,7 @@
 				<suffix>sh</suffix>
 				<bigobj></bigobj>
 				<std>-std=c++11</std>
+				<cliargs></cliargs>
 			</properties>
 		</profile>
 
@@ -124,6 +127,7 @@
 									</includePath>
 								</includePaths>
 								<options>
+									<option>${cliargs}</option>
 									<option>${bigobj}</option>
 									<option>${std}</option>
 								</options>
@@ -211,6 +215,7 @@
 									</includePath>
 								</includePaths>
 								<options>
+									<option>${cliargs}</option>
 									<option>${bigobj}</option>
 									<option>${std}</option>
 								</options>
@@ -293,6 +298,7 @@
 									</includePath>
 								</includePaths>
 								<options>
+									<option>${cliargs}</option>
 									<option>${bigobj}</option>
 									<option>${std}</option>
 								</options>
@@ -363,6 +369,7 @@
 									</includePath>
 								</includePaths>
 								<options>
+									<option>${cliargs}</option>
 									<option>${bigobj}</option>
 									<option>${std}</option>
 								</options>
@@ -435,6 +442,7 @@
 									</includePath>
 								</includePaths>
 								<options>
+									<option>${cliargs}</option>
 									<option>${bigobj}</option>
 									<option>${std}</option>
 								</options>
@@ -508,6 +516,7 @@
 									</includePath>
 								</includePaths>
 								<options>
+									<option>${cliargs}</option>
 									<option>${bigobj}</option>
 									<option>${std}</option>
 								</options>
@@ -583,6 +592,7 @@
 									</includePath>
 								</includePaths>
 								<options>
+									<option>${cliargs}</option>
 									<option>${bigobj}</option>
 									<option>${std}</option>
 								</options>
