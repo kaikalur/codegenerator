@@ -52,7 +52,7 @@
 						<configuration>
 							<failIfNoProjects>true</failIfNoProjects>
 							<ignoreFailures>false</ignoreFailures>
-							<streamLogs>false</streamLogs>
+							<streamLogs>true</streamLogs>
 							<debug>false</debug>
 							<postBuildHookScript>verify.bsh</postBuildHookScript>
 							<localRepositoryPath>local-repo</localRepositoryPath>
