@@ -223,7 +223,11 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
           rep++;
         }
         codeGenerator.print(", ", rep + "LL, ");
-        codeGenerator.print("" + Long.toString(longs[k]) + "LL");
+        if (longs[k] == Long.MIN_VALUE) {
+            codeGenerator.print("LLONG_MIN");
+        } else {
+        	codeGenerator.print("" + Long.toString(longs[k]) + "LL");
+        }
         k += rep - 1;
       }
       codeGenerator.print("}");
