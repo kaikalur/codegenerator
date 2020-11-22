@@ -27,13 +27,7 @@
 \#define JJWIDE(x) L###x
 \#endif
 
-constexpr   signed int       IntMax              = INT_MAX;
-constexpr   signed long      LongMax             = LONG_MAX;
-constexpr   signed long long LongLongMax         = LLONG_MAX;
-
-constexpr unsigned int       UnsignedIntMax      = UINT_MAX;
-constexpr unsigned long      UnsignedLongMax     = ULONG_MAX;
-constexpr unsigned long long UnsignedLongLongMax = ULLONG_MAX;
+constexpr unsigned long long ALLBITSUP = 0xFFFFFFFFFFFFFFFF;
 
 \#ifndef JAVACC_STRING_TYPE
 \#define JAVACC_STRING_TYPE   std::basic_string<JAVACC_CHAR_TYPE>

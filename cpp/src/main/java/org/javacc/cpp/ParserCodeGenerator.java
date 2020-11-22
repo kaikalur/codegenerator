@@ -208,6 +208,12 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     codeGenerator.println("  const ParserErrorHandler* getErrorHandler() {");
     codeGenerator.println("    return errorHandler;");
     codeGenerator.println("  }");
+    codeGenerator.println("  static const JJChar* getTokenImage(int kind) {");
+    codeGenerator.println("    return kind >= 0 ? " + getTokenImages() + "[kind] : " + getTokenImages() + "[0];");
+    codeGenerator.println("  }");
+    codeGenerator.println("  static const JJChar* getTokenLabel(int kind) {");
+    codeGenerator.println("    return kind >= 0 ? " + getTokenLabels() + "[kind] : " + getTokenLabels() + "[0];");
+    codeGenerator.println("  }");
     codeGenerator.println("");
     codeGenerator.println("  TokenManager*          token_source = nullptr;");
     codeGenerator.println("  CharStream*            jj_input_stream = nullptr;");
@@ -436,12 +442,14 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     if (!Options.getStackLimit().equals("")) {
       codeGenerator.println("    if (!jj_stack_error) {");
     }
-    codeGenerator.println("    const JJString& image = kind >= 0 ? " + getTokenImages() + "[kind] : "
-            + ParserCodeGenerator.getTokenImages() + "[0];");
-    codeGenerator.println("    const JJString& label = kind >= 0 ? " + getTokenLabels() + "[kind] : "
-            + ParserCodeGenerator.getTokenLabels() + "[0];");
+    codeGenerator.println("    const JJString expectedImage = getTokenImage(kind);");
+    codeGenerator.println("    const JJString expectedLabel = getTokenLabel(kind);");
+
+    codeGenerator.println("    const Token*   actualToken   = getToken(1);");
+    codeGenerator.println("    const JJString actualImage   = getTokenImage(actualToken->kind());");
+    codeGenerator.println("    const JJString actualLabel   = getTokenLabel(actualToken->kind());");
     codeGenerator.println(
-        "    errorHandler->unexpectedToken(kind, image, label, getToken(1));");
+        "    errorHandler->unexpectedToken(expectedImage, expectedLabel, actualImage, actualLabel, actualToken);");
     if (!Options.getStackLimit().equals("")) {
       codeGenerator.println("    }");
     }
@@ -1258,7 +1266,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
         phase2list.add(la);
         String amount;
         if (la.getAmount() == Integer.MAX_VALUE) {
-            amount = "IntMax";
+            amount = "ALLBITSUP";
         } else {
             amount = Integer.toString(la.getAmount());
         }
