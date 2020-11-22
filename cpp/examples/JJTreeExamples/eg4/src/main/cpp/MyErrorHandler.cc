@@ -14,7 +14,7 @@ MyErrorHandler::MyErrorHandler() {
 
 MyErrorHandler::~MyErrorHandler() {
 }
-void MyErrorHandler::unexpectedToken(int expectedKind, const JJString& expectedImage, const JJString& expectedLabel, const Token* actual) {
+void MyErrorHandler::unexpectedToken(const JJString& expectedImage, const JJString& expectedLabel, const JJString& actualImage, const JJString& actualLabel, const Token* actualToken) {
 }
 void MyErrorHandler::parseError(const Token* last, const Token* unexpected, const JJSimpleString& production) {
 }

@@ -17,7 +17,7 @@ using namespace std;
 JJString ReadFileFully() {
 	JJString code;
 	code = 
-"ModuleTestEmpty-00 { iso org(3) }\n"
+"ModuleTestEmpty-00\n"
 "DEFINITIONS ::= BEGIN END\n"
 	;
 
