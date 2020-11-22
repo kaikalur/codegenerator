@@ -152,9 +152,9 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
   int moved[${generatedStates}];
 #fi
   // We have an array indexed by the NFA state number to roughly indicate
-  // the input position so when the input reaches part IntMax (which
+  // the input position so when the input reaches part INT_MAX (which
   // should be extremely rare), we need to reset them all back to zero.
-  if (++moveIndex == IntMax) {
+  if (++moveIndex == INT_MAX) {
     for (int i = 0; i < ${generatedStates}; i++) moved[i] = 0;
     moveIndex = 1;
   }
@@ -188,8 +188,8 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
     }
 #fi
     int newCnt = 0;
-    int kind = IntMax;
-    if (++moveIndex == IntMax) {
+    int kind = INT_MAX;
+    if (++moveIndex == INT_MAX) {
       for (int i = 0; i < ${generatedStates}; i++) moved[i] = 0;
       moveIndex = 1;
     }
@@ -202,7 +202,7 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
 #if DEBUG_TOKEN_MANAGER
       if (trace_enabled()) {
         JJLOG << JJWIDE(Looking to move from state: ) << JJSPACE << state << JJSPACE << JJWIDE(for:) << JJSPACE
-                 << (jjmatchKinds[state] != IntMax
+                 << (jjmatchKinds[state] != INT_MAX
                     ? addUnicodeEscapes(tokenImages[jjmatchKinds[state]]) : JJWIDE( <UNKNOWN>))
                  << std::endl;
         JJLOG << "state=" << state << " vectorindex=" << vectorIndex << " bitpattern=" << bitpattern 
@@ -237,13 +237,13 @@ int ${parserName}TokenManager::jjMoveNfa(int startState, int curPos) {
       }
     } while (cnt > 0);
 
-    if (kind != IntMax) {
+    if (kind != INT_MAX) {
       // We found a match. So remember the kind and position of the match.
       jjmatchedKind = kind;
       jjmatchedPos = curPos;
       // Reset the kind to max value so we can contine looking for a longer
       // match.
-      kind = IntMax;
+      kind = INT_MAX;
     }
 
     // Swap the current and next state sets.
@@ -390,7 +390,7 @@ Token * ${parserName}TokenManager::getNextToken() {
     jjimageLen = 0;
 
     for (;;) {
-      jjmatchedKind = IntMax;
+      jjmatchedKind = INT_MAX;
       jjmatchedPos = 0;
 #if !NO_DFA
       lastReadPosition = jjRunStringLiteralMatch();
@@ -408,7 +408,7 @@ Token * ${parserName}TokenManager::getNextToken() {
 #fi
       }
 
-      if (jjmatchedKind != IntMax) {
+      if (jjmatchedKind != INT_MAX) {
         // We have a match!
   
         // Put back any characters looked ahead.
@@ -468,7 +468,7 @@ Token * ${parserName}TokenManager::getNextToken() {
           curLexState = jjnewLexState[jjmatchedKind];
         }
         lastReadPosition = 0;
-        jjmatchedKind = IntMax;
+        jjmatchedKind = INT_MAX;
         do {
           curChar = input_stream->readChar();
 #if IGNORE_CASE
