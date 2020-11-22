@@ -18,8 +18,7 @@ public:
   // expectedKind  - token kind that the parser was trying to consume.
   // expectedToken - the image of the token - tokenImages[expectedKind].
   // actual        - the actual token that the parser got instead.
-  virtual void unexpectedToken(int expectedKind, const JJString& expectedImage, const JJString& expectedLabel, const Token* actual);
-      
+  virtual void unexpectedToken(const JJString& expectedImage, const JJString& expectedLabel, const JJString& actualImage, const JJString& actualLabel, const Token* actualToken);      
       
   // Called when the parser cannot continue parsing.
   // last         - the last token successfully parsed.

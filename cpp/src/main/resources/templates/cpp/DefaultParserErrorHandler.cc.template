@@ -27,12 +27,12 @@ static std::wstring to_wstring(const std::string& str)
 }
 \#endif
 
-void DefaultParserErrorHandler::unexpectedToken(int expectedKind, const JJString& expectedImage, const JJString& expectedLabel, const Token* actual) {
+void DefaultParserErrorHandler::unexpectedToken(const JJString& expectedImage, const JJString& expectedLabel, const JJString& actualImage, const JJString& actualLabel, const Token* actualToken) {
 	error_count++;
 	JJLOG 
        << JJWIDE(Expecting) << JJSPACE << addUnicodeEscapes(expectedLabel) << JJWIDE(:) << JJQUOTE << addUnicodeEscapes(expectedImage) << JJQUOTE
-       << JJSPACE << JJWIDE(at) << JJSPACE << actual->beginLine() << JJWIDE(:) << actual->beginColumn() << JJSPACE 
-       << JJWIDE(but got) << JJSPACE << JJQUOTE << addUnicodeEscapes(actual->image()) << JJQUOTE << std::endl;
+       << JJSPACE << JJWIDE(at) << JJSPACE << actualToken->beginLine() << JJWIDE(:) << actualToken->beginColumn() << JJSPACE 
+       << JJWIDE(but got) << JJSPACE << JJQUOTE << addUnicodeEscapes(actualImage) << JJQUOTE << std::endl;
 }
       
       
