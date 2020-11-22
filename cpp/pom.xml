@@ -97,6 +97,7 @@
 									<projectsDirectory>grammars</projectsDirectory>
 									<settingsFile>grammars/settings.xml</settingsFile>
 	 								<pomExcludes>
+	 									<pomExclude>asn1/pom.xml</pomExclude>
 	 									<pomExclude>cobol/pom.xml</pomExclude>
 	 								</pomExcludes>
  								</configuration>
