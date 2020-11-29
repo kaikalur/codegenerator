@@ -47,7 +47,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     settings.put("decls", tokenizerData.decls);
     settings.put("superClass", ((superClass == null) || superClass.equals("")) ? "" : " :  " + superClass);
     settings.put("noDfa", Options.getNoDfa());
-    if (Options.getNamespace() != null) {
+    if (Options.hasNamespace()) {
       settings.put("NAMESPACE", Options.getNamespace());
     }
     settings.put("generatedStates", tokenizerData.nfa.size());
@@ -55,9 +55,6 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     File file = new File(Options.getOutputDirectory(), tokenizerData.parserName + "TokenManager.cs");
     try {
       codeGenerator = GenericCodeBuilder.of(context, settings).setFile(file);
-      if (Options.getNamespace() != null) {
-        codeGenerator.println("namespace " + Options.getNamespace() + " {\n");
-      }
 
       generateConstantsClass(tokenizerData);
 
@@ -77,7 +74,7 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     // TODO(sreeni) : Fix this mess.
     codeGenerator.println("\n}");
 
-    if (Options.getNamespace() != null) {
+    if (Options.hasNamespace()) {
       codeGenerator.println("\n}");
     }
     if (!Options.getBuildTokenManager()) {
@@ -382,6 +379,10 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
   }
 
   private void generateConstantsClass(TokenizerData tokenizerData) {
+    if (Options.hasNamespace()) {
+      codeGenerator.println("namespace " + Options.getNamespace() + " {\n");
+    }
+
     codeGenerator.println("public class " + tokenizerData.parserName + "Constants {");
 
     codeGenerator.println("public const int EOF  = 0;");
@@ -416,5 +417,8 @@ class TokenManagerCodeGenerator implements org.javacc.parser.TokenManagerCodeGen
     }
 
     codeGenerator.println("};");
+    if (Options.hasNamespace()) {
+      codeGenerator.println("} \n");
+    }
   }
 }

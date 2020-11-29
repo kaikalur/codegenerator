@@ -123,11 +123,12 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
     String superClass = (String) settings.get(Options.USEROPTION__TOKEN_MANAGER_SUPER_CLASS);
     settings.put("parserName", parserData.parserName);
     settings.put("superClass", ((superClass == null) || superClass.equals("")) ? "" : " :  " + superClass);
-    if (Options.getNamespace() != null) {
+    if (Options.hasNamespace()) {
       settings.put("NAMESPACE", Options.getNamespace());
     }
     try {
-      if (Options.getNamespace() != null) {
+      if (Options.hasNamespace()) {
+System.err.println("**** namespace: " + Options.getNamespace());
         codeGenerator.println("namespace " + Options.getNamespace() + " {\n");
       }
 
@@ -148,7 +149,7 @@ class ParserCodeGenerator implements org.javacc.parser.ParserCodeGenerator {
       settings.put("numproductions", internalIndexes.size());
       codeGenerator.printTemplate(ParserCodeGenerator.parserTemplate);
       codeGenerator.println("\n}");
-      if (Options.getNamespace() != null) {
+      if (Options.hasNamespace()) {
         codeGenerator.println("\n}");
       }
       codeGenerator.close();
